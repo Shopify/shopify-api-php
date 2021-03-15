@@ -1,7 +1,7 @@
 # Shopify Admin API Library for PHP
 
 <!-- ![Build Status]() -->
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 This library provides support for PHP [Shopify](https://www.shopify.com) apps to access the [Shopify Admin API](https://shopify.dev/docs/admin-api), by making it easier to perform the following actions:
 

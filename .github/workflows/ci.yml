@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - '!main'
+  pull_request:
+    branches:
+      - main
+name: CI
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    env:
+      PHP_INI_VALUES: assert.exception=1, zend.assertions=1
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.0"
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Install PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v2, phpcs
+          coverage: xdebug
+          ini-values: ${{ env.PHP_INI_VALUES }}
+
+      - name: Install dependencies with composer
+        run: composer update --no-ansi --no-interaction --no-progress
+
+      - name: Run linter
+        run: composer lint
+
+      - name: Run tests
+        run: composer test

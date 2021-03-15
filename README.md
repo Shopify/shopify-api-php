@@ -15,13 +15,16 @@ This library can be used in any application that has a PHP backend, since it doe
 ## Developing this library
 
 After cloning the repository, composer can install the dependencies:
-
 ```
 composer install
 ```
 
-And you can run tests by running:
-
+To run tests:
 ```
 composer test
+```
+
+To run linter:
+```
+composer lint
 ```

@@ -11,3 +11,17 @@ This library provides support for PHP [Shopify](https://www.shopify.com) apps to
 - Registering/processing webhooks
 
 This library can be used in any application that has a PHP backend, since it doesn't rely on any specific framework—you can include it alongside your preferred stack and only use the features that you need to build your app.
+
+## Developing this library
+
+After cloning the repository, composer can install the dependencies:
+
+```
+composer install
+```
+
+And you can run tests by running:
+
+```
+composer test
+```

@@ -24,6 +24,12 @@ To run tests:
 composer test
 ```
 
+If you want to get a code coverage report from the tests, you can run `composer test_coverage`. You'll need to install the `php-xdebug` extension:
+
+```
+pecl install xdebug
+```
+
 To run linter:
 ```
 composer lint

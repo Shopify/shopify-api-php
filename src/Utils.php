@@ -27,7 +27,13 @@ final class Utils
     }
 
 
-    // Helper method to determine if a request is valid
+    /**
+     * Determines if request is valid by processing secret key through an HMAC-SHA256 hash function
+     *
+     * @param array $params array of parameters parsed from a URL
+     * @param string $secret the secret key associated with the app in the Partners Dashboard
+     * @return bool true if the generated hexdigest is equal to the hmac parameter, false otherwise
+     */
     public static function validateHmac(array $params, string $secret)
     {
         $hmac = $params['hmac'];

@@ -43,4 +43,16 @@ final class Utils
 
         return hash_equals($hmac, $computedHmac);
     }
+
+    /**
+     * Retrieves the query string arguments from a URL, if any
+     *
+     * @param string $url the url string with query parameters to be extracted
+     * @return array $params Array of key/value pairs representing the query parameters
+     */
+    public static function getQueryParams(string $url)
+    {
+        var_dump(parse_str(parse_url($url, PHP_URL_QUERY), $params));
+        return $params;
+    }
 }

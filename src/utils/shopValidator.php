@@ -1,6 +1,8 @@
 <?php
 
-namespace Shopify;
+declare(strict_types=1);
+
+namespace Shopify\Utils;
 
 /**
  * Validates .myshopify.com shop domain

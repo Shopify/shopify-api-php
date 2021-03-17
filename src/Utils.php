@@ -25,4 +25,16 @@ final class Utils
 
         return (ctype_alnum($substring[0]) && $substring[1] . '.' . $substring[2] == 'myshopify.com');
     }
+
+
+    // Helper method to determine if a request is valid
+    public static function validateHmac(array $params, string $secret)
+    {
+        $hmac = $params['hmac'];
+        unset($params['hmac']);
+
+        $computedHmac = hash_hmac('sha256', http_build_query($params), $secret);
+
+        return hash_equals($hmac, $computedHmac);
+    }
 }

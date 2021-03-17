@@ -52,7 +52,11 @@ final class Utils
      */
     public static function getQueryParams(string $url)
     {
-        var_dump(parse_str(parse_url($url, PHP_URL_QUERY), $params));
+        $queryString = parse_url($url, PHP_URL_QUERY);
+        if (empty($queryString)) {
+            return array();
+        }
+        var_dump(parse_str($queryString, $params));
         return $params;
     }
 }

@@ -8,6 +8,7 @@ use CurlHandle;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Clients\Http;
+use Shopify\Context;
 
 define('RUNNING_SHOPIFY_TESTS', 1);
 
@@ -19,6 +20,13 @@ class BaseTestCase extends TestCase
 
     public function setUp(): void
     {
+        // Initialize Context before each test
+        Context::initialize(
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'my-friends-cats',
+        );
         $this->requestDetails = [];
         $this->lastCheckedRequest = 0;
     }

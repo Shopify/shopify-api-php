@@ -10,22 +10,31 @@ namespace Shopify;
 final class Utils
 {
     /**
-     * Validates .myshopify.com shop domain
+     * Returns a sanitized Shopify shop domain
+     * 
+     * If the provided shop domain is invalid or could not be sanitized, returns null.
      *
-     * @param string $shop {domainName}.myshopify.com
-     * @return bool true if the domain is valid, false otherwise
+     * @param string $shopDomain a Shopify shop domain or hostname
+     * @param string $myshopifyDomain (optional) a custom Shopify domain
+     * @return string $name a sanitifized Shopify shop domain, null if the provided domain is invalid
      */
-    public static function validateShopDomain(string $shop)
+    public static function sanitizeShopDomain(string $shopDomain, string $myshopifyDomain='myshopify.com')
     {
-        $substring = explode('.', $shop);
-
-        if (count($substring) != 3) {
-            return false;
+        $name = trim(strtolower($shopDomain));
+        if ((strpos($name, $myshopifyDomain) == false) && (strpos($name, ".") == false))
+        {
+            $name .= ".{$myshopifyDomain}";
         }
+        $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
 
-        return (ctype_alnum($substring[0]) && $substring[1] . '.' . $substring[2] == 'myshopify.com');
+        if (preg_match('/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.(com|io)\z/', $name))
+        {
+            return $name;
+
+        } else {
+            return null;
+        }
     }
-
 
     /**
      * Determines if request is valid by processing secret key through an HMAC-SHA256 hash function
@@ -56,7 +65,7 @@ final class Utils
         if (empty($queryString)) {
             return array();
         }
-        var_dump(parse_str($queryString, $params));
+        parse_str($queryString, $params);
         return $params;
     }
 }

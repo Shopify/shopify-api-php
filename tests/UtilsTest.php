@@ -6,17 +6,37 @@ use PHPUnit\Framework\TestCase;
 
 final class UtilsTest extends TestCase
 {
-    public function testValidShops()
+    public function testSanitizeShopDomainOnGoodShopDomains()
     {
-        $this->assertEquals(true, Shopify\Utils::validateShopDomain('example.myshopify.com'));
-        $this->assertEquals(true, Shopify\Utils::validateShopDomain('asdf.myshopify.com'));
+        $this->assertEquals('my-shop.myshopify.com', Shopify\Utils::sanitizeShopDomain('my-shop'));
+        $this->assertEquals('my-shop.myshopify.com', Shopify\Utils::sanitizeShopDomain('MY-SHOP'));
+        $this->assertEquals('my-shop.myshopify.com', Shopify\Utils::sanitizeShopDomain('   My-ShOp   '));
+        $this->assertEquals('my-shop.myshopify.com', Shopify\Utils::sanitizeShopDomain('my-shop.myshopify.com'));
+        $this->assertEquals('my-shop.myshopify.com', Shopify\Utils::sanitizeShopDomain('http://my-shop.myshopify.com'));
+        $this->assertEquals('my-shop.myshopify.com', Shopify\Utils::sanitizeShopDomain('https://my-shop.myshopify.com'));
     }
 
-    public function testInvalidShops()
+    public function testSanitizeShopDomainOnBadShopDomains()
     {
-        $this->assertEquals(false, Shopify\Utils::validateShopDomain('myshopify.com'));
-        $this->assertEquals(false, Shopify\Utils::validateShopDomain('.myshopify.com'));
-        $this->assertEquals(false, Shopify\Utils::validateShopDomain('@#$%.myshopify.com'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('myshop.com'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('myshopify.com'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('shopify.com'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('my shop'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('store.myshopify.com.evil.com'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('/foo/bar'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('/foo.myshopify.io.evil.ru'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('%0a123.myshopify.io'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('foo.bar.myshopify.io'));
+    }
+
+    public function testSanitizeShopDomainOnCustomShopDomains()
+    {
+        $this->assertEquals('my-shop.myshopify.io', Shopify\Utils::sanitizeShopDomain('my-shop', 'myshopify.io'));
+        $this->assertEquals('my-shop.myshopify.io', Shopify\Utils::sanitizeShopDomain('my-shop.myshopify.io', 'myshopify.io'));
+        $this->assertEquals('my-shop.myshopify.io', Shopify\Utils::sanitizeShopDomain('http://my-shop.myshopify.io', 'myshopify.io'));
+        $this->assertEquals('my-shop.myshopify.io', Shopify\Utils::sanitizeShopDomain('https://my-shop.myshopify.io', 'myshopify.io'));
+        $this->assertEquals('my-shop.myshopify.io', Shopify\Utils::sanitizeShopDomain('https://my-shop.myshopify.io', 'myshopify.io'));
+        $this->assertEquals('my-shop.myshopify.io', Shopify\Utils::sanitizeShopDomain(' MY-SHOP ', 'myshopify.io'));
     }
 
     public function testValidHmac()

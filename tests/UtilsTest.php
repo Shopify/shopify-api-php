@@ -59,7 +59,7 @@ final class UtilsTest extends TestCase
         ));
     }
 
-    public function testGetQueryParams()
+    public function testGetValidQueryParams()
     {
         $params = array(
             "abc" => "def",
@@ -67,14 +67,13 @@ final class UtilsTest extends TestCase
             "name" => "joe",
             "foo" => "bar"
         );
-        $url = 'www.google.ca?abc=def&code=1234&name=joe&foo=bar';
-        $this->assertEquals($params, Shopify\Utils::getQueryParams($url));
+        $this->assertEquals($params, Shopify\Utils::getQueryParams('www.google.ca?abc=def&code=1234&name=joe&foo=bar'));
     }
 
-
-    public function testGetNonexistentQueryParams()
+    public function testGetBadQueryParams()
     {
-        $url = 'www.google.ca';
-        $this->assertEquals(array(), Shopify\Utils::getQueryParams($url));
+        $this->assertEquals(array(), Shopify\Utils::getQueryParams('google'));
+        $this->assertEquals(array(), Shopify\Utils::getQueryParams('www.google.ca'));
+        $this->assertEquals(array('asdf' => ''), Shopify\Utils::getQueryParams('www.google.ca?asdf'));
     }
 }

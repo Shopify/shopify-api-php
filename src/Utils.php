@@ -26,7 +26,7 @@ final class Utils
         }
         $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
 
-        if (preg_match('/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.(com|io)\z/', $name)) {
+        if (preg_match("/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.{$myshopifyDomain}\z/", $name)) {
             return $name;
         } else {
             return null;

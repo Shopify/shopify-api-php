@@ -27,6 +27,7 @@ final class UtilsTest extends TestCase
         $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('/foo.myshopify.io.evil.ru'));
         $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('%0a123.myshopify.io'));
         $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('foo.bar.myshopify.io'));
+        $this->assertEquals(null, Shopify\Utils::sanitizeShopDomain('https://my-shop.myshopify.com', 'myshopify.io'));
     }
 
     public function testSanitizeShopDomainOnCustomShopDomains()

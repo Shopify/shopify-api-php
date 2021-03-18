@@ -24,10 +24,14 @@ To run tests:
 composer test
 ```
 
-If you want to get a code coverage report from the tests, you can run `composer test_coverage`. You'll need to install the `php-xdebug` extension:
-
+If you want to get a code coverage report from the tests, you'll need to install the `php-xdebug` extension by running `pecl install xdebug`, and then run:
 ```
-pecl install xdebug
+composer test -- [--coverage-text|--coverage-html=<path>]
+```
+
+You may have to clear composer's autoload cache when namespaces change:
+```
+composer dump-autoload
 ```
 
 To run linter:

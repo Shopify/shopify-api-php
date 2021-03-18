@@ -11,26 +11,23 @@ final class Utils
 {
     /**
      * Returns a sanitized Shopify shop domain
-     * 
+     *
      * If the provided shop domain is invalid or could not be sanitized, returns null.
      *
      * @param string $shopDomain a Shopify shop domain or hostname
      * @param string $myshopifyDomain (optional) a custom Shopify domain
      * @return string $name a sanitifized Shopify shop domain, null if the provided domain is invalid
      */
-    public static function sanitizeShopDomain(string $shopDomain, string $myshopifyDomain='myshopify.com')
+    public static function sanitizeShopDomain(string $shopDomain, string $myshopifyDomain = 'myshopify.com')
     {
         $name = trim(strtolower($shopDomain));
-        if ((strpos($name, $myshopifyDomain) == false) && (strpos($name, ".") == false))
-        {
+        if ((strpos($name, $myshopifyDomain) == false) && (strpos($name, ".") == false)) {
             $name .= ".{$myshopifyDomain}";
         }
         $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
 
-        if (preg_match('/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.(com|io)\z/', $name))
-        {
+        if (preg_match('/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.(com|io)\z/', $name)) {
             return $name;
-
         } else {
             return null;
         }

@@ -21,7 +21,7 @@ final class Utils
     public static function sanitizeShopDomain(string $shopDomain, string $myshopifyDomain = 'myshopify.com')
     {
         $name = trim(strtolower($shopDomain));
-        if ((strpos($name, $myshopifyDomain) == false) && (strpos($name, ".") == false)) {
+        if ((strpos($name, $myshopifyDomain) === false) && (strpos($name, ".") === false)) {
             $name .= ".{$myshopifyDomain}";
         }
         $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
@@ -60,7 +60,7 @@ final class Utils
     {
         $queryString = parse_url($url, PHP_URL_QUERY);
         if (empty($queryString)) {
-            return array();
+            return [];
         }
         parse_str($queryString, $params);
         return $params;

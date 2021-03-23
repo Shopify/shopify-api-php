@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace Shopify;
 
 /**
- * Class to store a user/shop session
+ * Stores App information from logged in merchants so they can make authenticated requests to the Admin API.
  */
 class Session
 {
-    public function __construct(public string $shop, public ?string $accessToken = null)
+    public function __construct(
+        public string $shop,
+        public string $state,
+        public string $scope,
+        public ?string $expires,
+        public ?bool $isOnline,
+        public ?string $accessToken = null,
+    )
     {
     }
 

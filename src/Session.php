@@ -10,12 +10,12 @@ namespace Shopify;
 class Session
 {
     public function __construct(
-        public string $shop,
-        public string $state,
-        public string $scope,
-        public ?string $expires,
-        public ?bool $isOnline,
-        public ?string $accessToken = null,
+        protected string $shop,
+        protected string $state,
+        protected string $scope,
+        protected ?string $expires,
+        protected ?bool $isOnline,
+        protected ?string $accessToken = null,
     )
     {
     }

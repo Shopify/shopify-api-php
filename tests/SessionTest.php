@@ -3,11 +3,10 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use DateTime;
 
 final class SessionTest extends TestCase
 {
-    public function testSessionFunctions()
+    public function testSessionGetterAndSetterFunctions()
     {
         $session = new Shopify\Session('12345');
         $session->setShop('my-shop.myshopify.com');
@@ -22,5 +21,13 @@ final class SessionTest extends TestCase
         $this->assertEquals(new DateTime('January 25, 2021'), $session->getExpires());
         $this->assertEquals(true, $session->getIsOnline());
         $this->assertEquals('24ssdf243u2ohfd21', $session->getAccessToken());
+    }
+
+    public function testSessionDefaultValues()
+    {
+        $session = new Shopify\Session('12345');
+        $this->assertEquals(null, $session->getExpires());
+        $this->assertEquals(false, $session->getIsOnline());
+        $this->assertEquals(null, $session->getAccessToken());
     }
 }

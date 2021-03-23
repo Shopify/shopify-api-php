@@ -23,16 +23,33 @@ class BaseTestCase extends TestCase
     /**
      * Sets up a mocked HTTP client. Any responses given are returned in the order they are received.
      *
-     * @param array $responses Mock responses, built by buildMockHttpResponse
+     * @param array $responses Mock responses, built by buildMockHttpResponse. The test will expect the exact number of
+     *                         responses that are set up, and fail if it is not accurate.
      *
      * @return Http&MockObject
      */
     protected function getHttpClientWithMocks(array $responses = [])
     {
+        if (array_key_exists('statusCode', $responses)) {
+            $responses = [$responses];
+        }
+
         $mock = $this->getMockBuilder(Http::class)
             ->setConstructorArgs([$this->domain])
-            ->onlyMethods(['sendCurlRequest', 'setCurlOption'])
+            ->onlyMethods(['sendCurlRequest', 'setCurlOption', 'getCurlError', 'getDefaultRetrySeconds'])
             ->getMock();
+
+        $errorCheckResponses = [];
+        foreach ($responses as &$response) {
+            $error = $response['error'] ?? null;
+            if ($error) {
+                $errorCheckResponses[] = $error;
+            } else {
+                $errorCheckResponses[] = null;
+            }
+
+            unset($response['error']);
+        }
 
         $options = $values = [];
         $mock->method('setCurlOption')
@@ -48,35 +65,27 @@ class BaseTestCase extends TestCase
                 }),
             );
 
-        if (count($responses)) {
-            if (array_key_exists('statusCode', $responses)) {
-                $responses = [$responses];
-            }
 
-            $stub = $mock->expects($this->exactly(count($responses)))
-                ->method('sendCurlRequest')
-                ->with($this->callback(function () use (&$options, &$values) {
-                    $curlOptions = [];
-                    for ($i = 0; $i < count($options); $i++) {
-                        $curlOptions[$options[$i]] = $values[$i];
-                    }
+        $mock->expects($this->exactly(count($responses)))
+            ->method('sendCurlRequest')
+            ->with($this->callback(function () use (&$options, &$values) {
+                $curlOptions = [];
+                for ($i = 0; $i < count($options); $i++) {
+                    $curlOptions[$options[$i]] = $values[$i];
+                }
 
-                    $options = [];
-                    $values = [];
-                    $this->curlOptions[] = $curlOptions;
-                    return true;
-                }));
+                $options = [];
+                $values = [];
+                $this->curlOptions[] = $curlOptions;
+                return true;
+            }))
+            ->willReturnOnConsecutiveCalls(...$responses);
 
-            foreach ($responses as $response) {
-                $returnValue = [
-                    'statusCode' => $response['statusCode'],
-                    'headers' => $response['headers'],
-                    'body' => $response['body'],
-                ];
+        $mock->method('getCurlError')
+            ->willReturnOnConsecutiveCalls(...$errorCheckResponses);
 
-                $stub->willReturn($returnValue);
-            }
-        }
+        $mock->method('getDefaultRetrySeconds')
+            ->willReturn(0);
 
         return $mock;
     }
@@ -88,14 +97,16 @@ class BaseTestCase extends TestCase
      * @param string|array   $body       The body of the HTTP response
      * @param array          $headers    The headers expected in the response
      * @param string         $dataType   The data type of the response
+     * @param string         $error      The cURL error message to return
      *
      * @return array
      */
     protected function buildMockHttpResponse(
-        int $statusCode,
-        string | array $body,
+        int $statusCode = null,
+        string | array $body = null,
         array $headers = [],
         string $dataType = Http::DATA_TYPE_JSON,
+        string $error = null
     ): array {
         if ($body && !is_string($body)) {
             switch ($dataType) {
@@ -112,6 +123,7 @@ class BaseTestCase extends TestCase
             'statusCode' => $statusCode,
             'body' => $body,
             'headers' => $headers,
+            'error' => $error,
         ];
     }
 
@@ -122,18 +134,6 @@ class BaseTestCase extends TestCase
      * @param array $actualOptions   The options that were actually set for cURL
      */
     protected function assertCurlOptions(array $expectedOptions, array $actualOptions)
-    {
-        $this->cleanUpCurlOptions($expectedOptions, $actualOptions);
-        $this->assertEquals($expectedOptions, $actualOptions);
-    }
-
-    /**
-     * Recursively cleans up the curl options array to make sure we can compare them.
-     *
-     * @param array $expectedOptions The options that should have been set for cURL
-     * @param array $actualOptions   The options that were actually set for cURL
-     */
-    private function cleanUpCurlOptions(array &$expectedOptions, array &$actualOptions)
     {
         // Reformat the HTTP headers to make it easier to see where the values might be different
         if (isset($expectedOptions[CURLOPT_HTTPHEADER]) && isset($actualOptions[CURLOPT_HTTPHEADER])) {
@@ -149,7 +149,11 @@ class BaseTestCase extends TestCase
             $expectedOptions[CURLOPT_HTTPHEADER] = $parseHeaderArray($expectedOptions[CURLOPT_HTTPHEADER]);
             $actualOptions[CURLOPT_HTTPHEADER] = $parseHeaderArray($actualOptions[CURLOPT_HTTPHEADER]);
 
-            $this->cleanUpCurlOptions($expectedOptions[CURLOPT_HTTPHEADER], $actualOptions[CURLOPT_HTTPHEADER]);
+            foreach ($actualOptions[CURLOPT_HTTPHEADER] as $option => $value) {
+                if (!array_key_exists($option, $expectedOptions[CURLOPT_HTTPHEADER])) {
+                    unset($actualOptions[CURLOPT_HTTPHEADER][$option]);
+                }
+            }
         }
 
         foreach ($actualOptions as $option => $value) {
@@ -157,5 +161,7 @@ class BaseTestCase extends TestCase
                 unset($actualOptions[$option]);
             }
         }
+
+        $this->assertEquals($expectedOptions, $actualOptions);
     }
 }

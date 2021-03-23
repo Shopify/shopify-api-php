@@ -171,11 +171,67 @@ final class HttpTest extends BaseTestCase
         );
     }
 
-    public function testEmptyResponseThrowsError()
+    public function testRequestThrowsErrorOnCurlFailure()
     {
-        $client = $this->getHttpClientWithMocks($this->buildMockHttpResponse(200, ''));
+        $client = $this->getHttpClientWithMocks($this->buildMockHttpResponse(error: 'Test error!'));
 
         $this->expectException('\Shopify\Exception\HttpRequestException');
         $client->get(path: 'test/path');
+    }
+
+    public function testRetryLogicForAllRetriableCodes()
+    {
+        $client = $this->getHttpClientWithMocks([
+            $this->buildMockHttpResponse(429, headers: ['Retry-After' => 0]),
+            $this->buildMockHttpResponse(500),
+            $this->buildMockHttpResponse(200, $this->successResponse),
+        ]);
+
+        $expectedResponse = new HttpResponse();
+        $expectedResponse->statusCode = 200;
+        $expectedResponse->headers = [];
+        $expectedResponse->body = $this->successResponse;
+
+        $response = $client->get(path: 'test/path', tries: 3);
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function testRetryStopsAfterReachingTheLimit()
+    {
+        $client = $this->getHttpClientWithMocks([
+            $this->buildMockHttpResponse(500),
+            $this->buildMockHttpResponse(500),
+            $this->buildMockHttpResponse(500, headers: ['X-Is-Last-Test-Request' => true]),
+        ]);
+
+        $expectedResponse = new HttpResponse();
+        $expectedResponse->statusCode = 500;
+        $expectedResponse->headers = ['X-Is-Last-Test-Request' => true];
+        $expectedResponse->body = null;
+
+        $response = $client->get(path: 'test/path', tries: 3);
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function testRetryStopsOnNonRetriableError()
+    {
+        $client = $this->getHttpClientWithMocks([
+            $this->buildMockHttpResponse(500),
+            $this->buildMockHttpResponse(400, headers: ['X-Is-Last-Test-Request' => true]),
+        ]);
+
+        $expectedResponse = new HttpResponse();
+        $expectedResponse->statusCode = 400;
+        $expectedResponse->headers = ['X-Is-Last-Test-Request' => true];
+        $expectedResponse->body = null;
+
+        $response = $client->get(path: 'test/path', tries: 10);
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function testDefaultWaitTime()
+    {
+        $client = new Http($this->domain);
+        $this->assertEquals(1, $client->getDefaultRetrySeconds());
     }
 }

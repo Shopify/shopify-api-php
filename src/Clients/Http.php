@@ -17,9 +17,6 @@ class Http
     public const DATA_TYPE_JSON = 'application/json';
     public const DATA_TYPE_URL_ENCODED = 'application/x-www-form-urlencoded';
 
-    private const RETRIABLE_STATUS_CODES = [429, 500];
-    private const RETRY_DEFAULT_TIME = 1; // 1 second
-
     public function __construct(private string $domain)
     {
     }
@@ -29,17 +26,15 @@ class Http
      *
      * @param string $path    The URL path to request
      * @param array  $headers Any extra headers to send along with the request
-     * @param int|nulltries   How many times to attempt the request
      *
      * @return HttpResponse
      */
-    public function get(string $path, array $headers = [], ?int $tries = null): HttpResponse
+    public function get(string $path, array $headers = []): HttpResponse
     {
         return $this->request(
             path: $path,
             method: self::METHOD_GET,
             headers: $headers,
-            tries: $tries,
         );
     }
 
@@ -50,7 +45,6 @@ class Http
      * @param string|array $body     The body of the request
      * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
-     * @param int|null     $tries    How many times to attempt the request
      *
      * @return HttpResponse
      */
@@ -58,8 +52,7 @@ class Http
         string $path,
         string | array $body,
         string $dataType = self::DATA_TYPE_JSON,
-        array $headers = [],
-        ?int $tries = null
+        array $headers = []
     ): HttpResponse {
         return $this->request(
             path: $path,
@@ -67,7 +60,6 @@ class Http
             dataType: $dataType,
             body: $body,
             headers: $headers,
-            tries: $tries,
         );
     }
 
@@ -78,7 +70,6 @@ class Http
      * @param string|array $body     The body of the request
      * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
-     * @param int|null     $tries    How many times to attempt the request
      *
      * @return HttpResponse
      */
@@ -86,8 +77,7 @@ class Http
         string $path,
         string | array $body,
         string $dataType = self::DATA_TYPE_JSON,
-        array $headers = [],
-        ?int $tries = null
+        array $headers = []
     ): HttpResponse {
         return $this->request(
             path: $path,
@@ -95,7 +85,6 @@ class Http
             dataType: $dataType,
             body: $body,
             headers: $headers,
-            tries: $tries,
         );
     }
 
@@ -104,39 +93,26 @@ class Http
      *
      * @param string $path    The URL path to request
      * @param array  $headers Any extra headers to send along with the request
-     * @param int|nulltries   How many times to attempt the request
      *
      * @return HttpResponse
      */
-    public function delete(string $path, array $headers = [], ?int $tries = null): HttpResponse
+    public function delete(string $path, array $headers = []): HttpResponse
     {
         return $this->request(
             path: $path,
             method: self::METHOD_DELETE,
             headers: $headers,
-            tries: $tries,
         );
-    }
-
-    /**
-     * Returns the default amount of time to wait for between request retries.
-     *
-     * @return int
-     */
-    public function getDefaultRetrySeconds(): int
-    {
-        return self::RETRY_DEFAULT_TIME;
     }
 
     /**
      * Internally handles the logic for making requests.
      *
-     * @param string   $path     The path to query
-     * @param string   $method   The method to use
-     * @param string   $dataType The data type of the request
-     * @param string   $body     The request body to send
-     * @param array    $headers  Any extra headers to send along with the request
-     * @param int|null $tries    How many times to attempt the request
+     * @param string $path     The path to query
+     * @param string $method   The method to use
+     * @param string $dataType The data type of the request
+     * @param string $body     The request body to send
+     * @param array  $headers  Any extra headers to send along with the request
      *
      * @return HttpResponse
      */
@@ -145,10 +121,8 @@ class Http
         string $method,
         string $dataType = self::DATA_TYPE_JSON,
         string | array $body = null,
-        array $headers = [],
-        ?int $tries = null,
+        array $headers = []
     ): HttpResponse {
-        $maxTries = $tries ?? 1;
         $url = "{$this->domain}/$path";
 
         $ch = curl_init($url);
@@ -203,38 +177,23 @@ class Http
         }
         $this->setCurlOption($ch, CURLOPT_HTTPHEADER, $headerOpts);
 
-        $currentTries = 0;
-        do {
-            $currentTries++;
+        $curlResponse = $this->sendCurlRequest($ch);
+        if (!$curlResponse['body']) {
+            throw new HttpRequestException("HTTP request failed: " . curl_error($ch));
+        }
 
-            $curlResponse = $this->sendCurlRequest($ch);
-            if ($curlError = $this->getCurlError($ch)) {
-                throw new HttpRequestException("HTTP request failed: $curlError");
-            }
-
-            $response = new HttpResponse();
-            $response->statusCode = $curlResponse['statusCode'];
-            $response->headers = $curlResponse['headers'];
-            $response->body = '';
-
-            if ($curlResponse['body']) {
-                switch ($dataType) {
-                    case self::DATA_TYPE_JSON:
-                        $response->body = json_decode($curlResponse['body'], true);
-                        break;
-                    case self::DATA_TYPE_URL_ENCODED:
-                        parse_str($curlResponse['body'], $response->body);
-                        break;
-                }
-            }
-
-            if (in_array($curlResponse['statusCode'], self::RETRIABLE_STATUS_CODES)) {
-                $retryAfter = $curlResponse['headers']['Retry-After'] ?? $this->getDefaultRetrySeconds();
-                usleep($retryAfter * 1000000);
-            } else {
+        $response = new HttpResponse();
+        $response->statusCode = $curlResponse['statusCode'];
+        $response->headers = $curlResponse['headers'];
+        $response->body = '';
+        switch ($dataType) {
+            case self::DATA_TYPE_JSON:
+                $response->body = json_decode($curlResponse['body'], true);
                 break;
-            }
-        } while ($currentTries < $maxTries);
+            case self::DATA_TYPE_URL_ENCODED:
+                parse_str($curlResponse['body'], $response->body);
+                break;
+        }
 
         return $response;
     }
@@ -243,7 +202,7 @@ class Http
      * Sets the given option in the cURL resource.
      *
      * @param CurlHandle $ch     The curl resource
-     * @param int|null   $option The option to set
+     * @param int        $option The option to set
      * @param mixed      $value  The value for the option
      *
      * Note: this is only public so tests can override it.
@@ -302,22 +261,5 @@ class Http
             'headers' => $responseHeaders,
             'body' => $responseBody,
         ];
-    }
-
-    /**
-     * Retrieves the last error from the cURL resource.
-     *
-     * @param CurlHandle $ch     The curl resource
-     *
-     * Note: this is only public so tests can override it.
-     * @codeCoverageIgnore We can't test this method without making actual cURL requests
-     */
-    public function getCurlError(CurlHandle &$ch): ?string
-    {
-        if (defined('RUNNING_SHOPIFY_TESTS')) {
-            throw new \Exception("Attempted to make a real HTTP request while running tests!");
-        }
-
-        return curl_error($ch);
     }
 }

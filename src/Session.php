@@ -9,10 +9,7 @@ namespace Shopify;
  */
 class Session
 {
-    private $shop;
-    private $accessToken;
-
-    public function __construct(string $shop, ?string $accessToken = null)
+    public function __construct(public string $shop, public ?string $accessToken = null)
     {
     }
 

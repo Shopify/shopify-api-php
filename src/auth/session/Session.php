@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shopify;
+namespace Shopify\Auth\Session;
 
 use DateTime;
 

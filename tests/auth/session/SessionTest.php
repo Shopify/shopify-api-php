@@ -8,7 +8,7 @@ final class SessionTest extends TestCase
 {
     public function testSessionGetterAndSetterFunctions()
     {
-        $session = new Shopify\Session('12345');
+        $session = new Shopify\Auth\Session\Session('12345');
         $session->setShop('my-shop.myshopify.com');
         $session->setState('asdf1234');
         $session->setScope('read_products');
@@ -25,7 +25,7 @@ final class SessionTest extends TestCase
 
     public function testSessionDefaultValues()
     {
-        $session = new Shopify\Session('12345');
+        $session = new Shopify\Auth\Session\Session('12345');
         $this->assertEquals(null, $session->getExpires());
         $this->assertEquals(false, $session->getIsOnline());
         $this->assertEquals(null, $session->getAccessToken());

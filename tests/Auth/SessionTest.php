@@ -2,10 +2,16 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-use Shopify\Auth\Session;
+namespace ShopifyTest\Auth;
 
-final class SessionTest extends TestCase
+use DateTime;
+use Shopify\Auth\Session;
+use ShopifyTest\BaseTestCase;
+
+/**
+ * @covers \Shopify\Auth\Session
+ */
+final class SessionTest extends BaseTestCase
 {
     public function testSessionGetterAndSetterFunctions()
     {
@@ -31,5 +37,20 @@ final class SessionTest extends TestCase
         $this->assertEquals(null, $session->getExpires());
         $this->assertEquals(false, $session->getIsOnline());
         $this->assertEquals(null, $session->getAccessToken());
+    }
+
+    public function testSetExpiresValues()
+    {
+        $date = new DateTime('@' . strtotime('+1 day'));
+        $session = new Session('12345');
+
+        $session->setExpires((int)$date->format('U'));
+        $this->assertEquals($date, $session->getExpires());
+
+        $session->setExpires($date->format('c'));
+        $this->assertEquals($date, $session->getExpires());
+
+        $session->setExpires($date);
+        $this->assertEquals($date, $session->getExpires());
     }
 }

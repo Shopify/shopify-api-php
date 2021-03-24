@@ -33,7 +33,7 @@ final class HttpTest extends BaseTestCase
 
         $response = $client->get(path: 'test/path', headers: $headers);
         $this->assertEquals($expectedResponse, $response);
-        $this->assertCurlOptions([CURLOPT_HTTPHEADER => ['X-Test-Header: test_value']], $this->curlOptions[0]);
+        $this->assertHttpRequest("{$this->domain}/test/path", [CURLOPT_HTTPHEADER => ['X-Test-Header: test_value']]);
     }
 
     public function testPostRequest()
@@ -49,7 +49,8 @@ final class HttpTest extends BaseTestCase
         $bodyLength = strlen(json_encode($this->product1));
         $response = $client->post(path: 'test/path', body: $this->product1, headers: $headers);
         $this->assertEquals($expectedResponse, $response);
-        $this->assertCurlOptions(
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
             [
                 CURLOPT_HTTPHEADER => [
                     'X-Test-Header: test_value',
@@ -58,8 +59,7 @@ final class HttpTest extends BaseTestCase
                 ],
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => json_encode($this->product1),
-            ],
-            $this->curlOptions[0]
+            ]
         );
     }
 
@@ -75,13 +75,13 @@ final class HttpTest extends BaseTestCase
 
         $response = $client->put(path: 'test/path', body: $this->product1, headers: $headers);
         $this->assertEquals($expectedResponse, $response);
-        $this->assertCurlOptions(
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
             [
                 CURLOPT_HTTPHEADER => ['X-Test-Header: test_value'],
                 CURLOPT_CUSTOMREQUEST => "PUT",
                 CURLOPT_POSTFIELDS => json_encode($this->product1),
-            ],
-            $this->curlOptions[0]
+            ]
         );
     }
 
@@ -97,12 +97,12 @@ final class HttpTest extends BaseTestCase
 
         $response = $client->delete(path: 'test/path', headers: $headers);
         $this->assertEquals($expectedResponse, $response);
-        $this->assertCurlOptions(
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
             [
                 CURLOPT_HTTPHEADER => ['X-Test-Header: test_value'],
                 CURLOPT_CUSTOMREQUEST => "DELETE",
-            ],
-            $this->curlOptions[0]
+            ]
         );
     }
 
@@ -118,12 +118,12 @@ final class HttpTest extends BaseTestCase
 
         $response = $client->post(path: 'test/path', body: $body);
         $this->assertEquals($expectedResponse, $response);
-        $this->assertCurlOptions(
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
             [
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => $body,
-            ],
-            $this->curlOptions[0]
+            ]
         );
     }
 
@@ -141,12 +141,12 @@ final class HttpTest extends BaseTestCase
 
         $response = $client->post(path: 'test/path', body: $this->product1, dataType: Http::DATA_TYPE_URL_ENCODED);
         $this->assertEquals($expectedResponse, $response);
-        $this->assertCurlOptions(
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
             [
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => $body,
-            ],
-            $this->curlOptions[0]
+            ]
         );
     }
 
@@ -159,15 +159,15 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client->get(path: 'test/path');
-        $this->assertCurlOptions(
-            [CURLOPT_USERAGENT => "Shopify Admin API Library for PHP v{$version}"],
-            $this->curlOptions[0]
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
+            [CURLOPT_USERAGENT => "Shopify Admin API Library for PHP v{$version}"]
         );
 
         $client->get(path: 'test/path', headers: ['User-Agent' => "Extra user agent"]);
-        $this->assertCurlOptions(
-            [CURLOPT_USERAGENT => "Extra user agent | Shopify Admin API Library for PHP v{$version}"],
-            $this->curlOptions[1]
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
+            [CURLOPT_USERAGENT => "Extra user agent | Shopify Admin API Library for PHP v{$version}"]
         );
     }
 

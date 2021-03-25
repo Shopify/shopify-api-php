@@ -22,6 +22,11 @@ class Session
     {
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getShop()
     {
         return $this->shop;

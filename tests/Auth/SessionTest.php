@@ -16,6 +16,7 @@ final class SessionTest extends TestCase
         $session->setExpires('January 25, 2021');
         $session->setIsOnline(true);
         $session->setAccessToken('24ssdf243u2ohfd21');
+        $this->assertEquals('12345', $session->getId());
         $this->assertEquals('my-shop.myshopify.com', $session->getShop());
         $this->assertEquals('asdf1234', $session->getState());
         $this->assertEquals('read_products', $session->getScope());

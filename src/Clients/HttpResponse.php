@@ -8,5 +8,5 @@ class HttpResponse
 {
     public int $statusCode;
     public array $headers = [];
-    public string | array $body;
+    public string | array | null $body = null;
 }

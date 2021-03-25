@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Auth\Session;
+namespace Shopify\Auth;
 
 use DateTime;
 
@@ -67,9 +67,18 @@ class Session
         return $this->scope = $scope;
     }
 
-    public function setExpires(string $expires)
+    public function setExpires(string | int | DateTime $expires)
     {
-        $date = new DateTime($expires);
+        $date = null;
+        if ($expires) {
+            if (is_string($expires)) {
+                $date = new DateTime($expires);
+            } elseif (is_numeric($expires)) {
+                $date = new DateTime("@$expires");
+            } else {
+                $date = $expires;
+            }
+        }
         return $this->expires = $date;
     }
 

@@ -152,7 +152,7 @@ final class HttpTest extends BaseTestCase
 
     public function testUserAgent()
     {
-        $version = require_once dirname(__FILE__) . '/../../src/version.php';
+        $version = require dirname(__FILE__) . '/../../src/version.php';
         $client = $this->getHttpClientWithMocks([
             $this->buildMockHttpResponse(200, $this->successResponse),
             $this->buildMockHttpResponse(200, $this->successResponse),

@@ -165,7 +165,7 @@ class Http
                 break;
         }
 
-        $version = require_once dirname(__FILE__) . '/../version.php';
+        $version = require dirname(__FILE__) . '/../version.php';
         $userAgent = "Shopify Admin API Library for PHP v{$version}";
         if (isset($headers['User-Agent'])) {
             $userAgent = "{$headers['User-Agent']} | $userAgent";

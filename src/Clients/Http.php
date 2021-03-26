@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shopify\Clients;
 
 use CurlHandle;
+use Shopify\Context;
 use Shopify\Exception\HttpRequestException;
 
 class Http
@@ -166,12 +167,18 @@ class Http
         }
 
         $version = require dirname(__FILE__) . '/../version.php';
-        $userAgent = "Shopify Admin API Library for PHP v{$version}";
+        $userAgentParts = ["Shopify Admin API Library for PHP v{$version}"];
+
+        if (Context::$USER_AGENT_PREFIX) {
+            array_unshift($userAgentParts, Context::$USER_AGENT_PREFIX);
+        }
+
         if (isset($headers['User-Agent'])) {
-            $userAgent = "{$headers['User-Agent']} | $userAgent";
+            array_unshift($userAgentParts, $headers['User-Agent']);
             unset($headers['User-Agent']);
         }
-        $this->setCurlOption($ch, CURLOPT_USERAGENT, $userAgent);
+
+        $this->setCurlOption($ch, CURLOPT_USERAGENT, implode(' | ', $userAgentParts));
 
         if ($body) {
             if (is_string($body)) {

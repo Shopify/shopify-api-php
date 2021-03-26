@@ -6,6 +6,7 @@ namespace ShopifyTest\Clients;
 
 use Shopify\Clients\Http;
 use Shopify\Clients\HttpResponse;
+use Shopify\Context;
 use ShopifyTest\BaseTestCase;
 
 final class HttpTest extends BaseTestCase
@@ -156,6 +157,8 @@ final class HttpTest extends BaseTestCase
         $client = $this->getHttpClientWithMocks([
             $this->buildMockHttpResponse(200, $this->successResponse),
             $this->buildMockHttpResponse(200, $this->successResponse),
+            $this->buildMockHttpResponse(200, $this->successResponse),
+            $this->buildMockHttpResponse(200, $this->successResponse),
         ]);
 
         $client->get(path: 'test/path');
@@ -168,6 +171,20 @@ final class HttpTest extends BaseTestCase
         $this->assertHttpRequest(
             "{$this->domain}/test/path",
             [CURLOPT_USERAGENT => "Extra user agent | Shopify Admin API Library for PHP v{$version}"]
+        );
+
+        Context::$USER_AGENT_PREFIX = 'Test default user agent';
+
+        $client->get(path: 'test/path');
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
+            [CURLOPT_USERAGENT => "Test default user agent | Shopify Admin API Library for PHP v{$version}"]
+        );
+
+        $client->get(path: 'test/path', headers: ['User-Agent' => "Extra user agent"]);
+        $this->assertHttpRequest(
+            "{$this->domain}/test/path",
+            [CURLOPT_USERAGENT => "Extra user agent | Test default user agent | Shopify Admin API Library for PHP v{$version}"]
         );
     }
 

@@ -26,6 +26,10 @@ class BaseTestCase extends TestCase
             apiSecretKey: 'steffi',
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
+            apiVersion: 'unstable',
+            isEmbeddedApp: true,
+            isPrivateApp: false,
+            userAgentPrefix: '',
         );
         $this->requestDetails = [];
         $this->lastCheckedRequest = 0;

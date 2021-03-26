@@ -149,7 +149,7 @@ class Http
         ?int $tries = null,
     ): HttpResponse {
         $maxTries = $tries ?? 1;
-        $url = "{$this->domain}/$path";
+        $url = "https://{$this->domain}/$path";
 
         $ch = curl_init($url);
         $this->setCurlOption($ch, CURLOPT_RETURNTRANSFER, true);

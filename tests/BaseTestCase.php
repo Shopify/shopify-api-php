@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use CurlHandle;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Clients\Http;
@@ -13,11 +14,13 @@ define('RUNNING_SHOPIFY_TESTS', 1);
 class BaseTestCase extends TestCase
 {
     protected string $domain = 'test-shop.myshopify.io';
-    protected array $curlOptions;
+    protected array $requestDetails;
+    protected int $lastCheckedRequest;
 
     public function setUp(): void
     {
-        $this->curlOptions = [];
+        $this->requestDetails = [];
+        $this->lastCheckedRequest = 0;
     }
 
     /**
@@ -68,15 +71,18 @@ class BaseTestCase extends TestCase
 
         $mock->expects($this->exactly(count($responses)))
             ->method('sendCurlRequest')
-            ->with($this->callback(function () use (&$options, &$values) {
-                $curlOptions = [];
+            ->with($this->callback(function (CurlHandle $ch) use (&$options, &$values) {
+                $requestDetails = [
+                    'url' => curl_getinfo($ch, CURLINFO_EFFECTIVE_URL),
+                    'options' => [],
+                ];
                 for ($i = 0; $i < count($options); $i++) {
-                    $curlOptions[$options[$i]] = $values[$i];
+                    $requestDetails['options'][$options[$i]] = $values[$i];
                 }
 
                 $options = [];
                 $values = [];
-                $this->curlOptions[] = $curlOptions;
+                $this->requestDetails[] = $requestDetails;
                 return true;
             }))
             ->willReturnOnConsecutiveCalls(...$responses);
@@ -130,13 +136,23 @@ class BaseTestCase extends TestCase
     /**
      * Asserts that a cURL request has set all of the expected options.
      *
-     * @param array $expectedOptions The options that should have been set for cURL
-     * @param array $actualOptions   The options that were actually set for cURL
+     * @param string $address         The URL to which the request was made
+     * @param array  $expectedOptions The options that should have been set for cURL
      */
-    protected function assertCurlOptions(array $expectedOptions, array $actualOptions)
+    protected function assertHttpRequest(string $address, array $expectedOptions)
     {
+        $actualDetails = $this->requestDetails[$this->lastCheckedRequest++];
+
+        $expectedDetails = [
+            'url' => "https://{$address}",
+            'options' => $expectedOptions,
+        ];
+
         // Reformat the HTTP headers to make it easier to see where the values might be different
-        if (isset($expectedOptions[CURLOPT_HTTPHEADER]) && isset($actualOptions[CURLOPT_HTTPHEADER])) {
+        if (
+            isset($expectedDetails['options'][CURLOPT_HTTPHEADER]) &&
+            isset($actualDetails['options'][CURLOPT_HTTPHEADER])
+        ) {
             $parseHeaderArray = function (array $array) {
                 $return = [];
                 foreach ($array as $header) {
@@ -146,22 +162,26 @@ class BaseTestCase extends TestCase
                 return $return;
             };
 
-            $expectedOptions[CURLOPT_HTTPHEADER] = $parseHeaderArray($expectedOptions[CURLOPT_HTTPHEADER]);
-            $actualOptions[CURLOPT_HTTPHEADER] = $parseHeaderArray($actualOptions[CURLOPT_HTTPHEADER]);
+            $expectedDetails['options'][CURLOPT_HTTPHEADER] = $parseHeaderArray(
+                $expectedDetails['options'][CURLOPT_HTTPHEADER]
+            );
+            $actualDetails['options'][CURLOPT_HTTPHEADER] = $parseHeaderArray(
+                $actualDetails['options'][CURLOPT_HTTPHEADER]
+            );
 
-            foreach ($actualOptions[CURLOPT_HTTPHEADER] as $option => $value) {
-                if (!array_key_exists($option, $expectedOptions[CURLOPT_HTTPHEADER])) {
-                    unset($actualOptions[CURLOPT_HTTPHEADER][$option]);
+            foreach ($actualDetails['options'][CURLOPT_HTTPHEADER] as $option => $value) {
+                if (!array_key_exists($option, $expectedDetails['options'][CURLOPT_HTTPHEADER])) {
+                    unset($actualDetails['options'][CURLOPT_HTTPHEADER][$option]);
                 }
             }
         }
 
-        foreach ($actualOptions as $option => $value) {
-            if (!array_key_exists($option, $expectedOptions)) {
-                unset($actualOptions[$option]);
+        foreach ($actualDetails['options'] as $option => $value) {
+            if (!array_key_exists($option, $expectedDetails['options'])) {
+                unset($actualDetails['options'][$option]);
             }
         }
 
-        $this->assertEquals($expectedOptions, $actualOptions);
+        $this->assertEquals($expectedDetails, $actualDetails);
     }
 }

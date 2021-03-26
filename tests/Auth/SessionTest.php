@@ -8,9 +8,6 @@ use DateTime;
 use Shopify\Auth\Session;
 use ShopifyTest\BaseTestCase;
 
-/**
- * @covers \Shopify\Auth\Session
- */
 final class SessionTest extends BaseTestCase
 {
     public function testSessionGetterAndSetterFunctions()
@@ -22,6 +19,7 @@ final class SessionTest extends BaseTestCase
         $session->setExpires('January 25, 2021');
         $session->setIsOnline(true);
         $session->setAccessToken('24ssdf243u2ohfd21');
+
         $this->assertEquals('12345', $session->getId());
         $this->assertEquals('my-shop.myshopify.com', $session->getShop());
         $this->assertEquals('asdf1234', $session->getState());

@@ -16,12 +16,19 @@ final class ContextTest extends BaseTestCase
             apiSecretKey: 'steffi',
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
+            isPrivateApp: false,
         );
 
         $this->assertEquals('ash', Context::$API_KEY);
         $this->assertEquals('steffi', Context::$API_SECRET_KEY);
         $this->assertEquals(['sleepy', 'kitty'], Context::$SCOPES);
         $this->assertEquals('my-friends-cats', Context::$HOST_NAME);
+
+        // This should not trigger the exception
+        Context::throwIfUninitialized();
+
+        // This should not trigger the exception
+        Context::throwIfPrivateApp('Not supposed to happen!');
     }
 
     // Context with different values has been set up in BaseTestCase

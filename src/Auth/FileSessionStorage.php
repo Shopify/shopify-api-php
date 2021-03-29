@@ -21,7 +21,7 @@ class FileSessionStorage implements SessionStorage
 
     public function storeSession(Session $session): bool
     {
-        return file_put_contents($this->getPath($session->id), serialize($session));
+        return file_put_contents($this->getPath($session->getId()), serialize($session));
     }
 
     private function getPath(string $id)
@@ -29,7 +29,7 @@ class FileSessionStorage implements SessionStorage
         $path = context::$PATH;
         return "{$path}/{$id}";
     }
-    
+
     public function deleteSession(string $sessionId): bool
     {
         return true;

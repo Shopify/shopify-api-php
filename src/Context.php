@@ -33,6 +33,7 @@ class Context
      * @param bool $isEmbeddedApp       Whether the app is an embedded app, defaults to true
      * @param bool $isPrivateApp        Whether the app is a private app, defaults to false
      * @param string $userAgentPrefix   Prefix for user agent header sent with a request, defaults to empty string
+     * @param string $path              Path to store sessions
      */
     public static function initialize(
         string $apiKey,
@@ -74,7 +75,6 @@ class Context
         self::$IS_EMBEDDED_APP = $isEmbeddedApp;
         self::$IS_PRIVATE_APP = $isPrivateApp;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
-        self::$PATH = $path;
 
         self::$IS_INITIALIZED = true;
     }

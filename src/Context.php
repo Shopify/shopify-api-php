@@ -18,6 +18,7 @@ class Context
     public static bool $IS_EMBEDDED_APP;
     public static bool $IS_PRIVATE_APP;
     public static string $USER_AGENT_PREFIX;
+    public static string $PATH;
 
     private static bool $IS_INITIALIZED = false;
 
@@ -42,6 +43,7 @@ class Context
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
         string $userAgentPrefix = '',
+        string $path = '/tmp/php_sessions',
     ): void {
         // ensure required values given
         $requiredValues = [
@@ -72,6 +74,7 @@ class Context
         self::$IS_EMBEDDED_APP = $isEmbeddedApp;
         self::$IS_PRIVATE_APP = $isPrivateApp;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
+        self::$PATH = $path;
 
         self::$IS_INITIALIZED = true;
     }

@@ -14,19 +14,23 @@ final class Utils
      *
      * If the provided shop domain is invalid or could not be sanitized, returns null.
      *
-     * @param string $shopDomain a Shopify shop domain or hostname
-     * @param string $myshopifyDomain (optional) a custom Shopify domain
+     * @param string $shopDomain A Shopify shop domain or hostname
+     * @param string|null $myshopifyDomain A custom Shopify domain
+     *
      * @return string $name a sanitifized Shopify shop domain, null if the provided domain is invalid
      */
-    public static function sanitizeShopDomain(string $shopDomain, string $myshopifyDomain = 'myshopify.com')
+    public static function sanitizeShopDomain(string $shopDomain, ?string $myshopifyDomain = null)
     {
         $name = trim(strtolower($shopDomain));
-        if ((strpos($name, $myshopifyDomain) === false) && (strpos($name, ".") === false)) {
-            $name .= ".{$myshopifyDomain}";
+
+        $allowedDomainsRegexp = $myshopifyDomain ? "($myshopifyDomain)" : "(myshopify.com|myshopify.io)";
+
+        if (!preg_match($allowedDomainsRegexp, $name) && (strpos($name, ".") === false)) {
+            $name .= '.' . ($myshopifyDomain ?? 'myshopify.com');
         }
         $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
 
-        if (preg_match("/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.{$myshopifyDomain}\z/", $name)) {
+        if (preg_match("/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.{$allowedDomainsRegexp}\z/", $name)) {
             return $name;
         } else {
             return null;
@@ -42,7 +46,7 @@ final class Utils
      */
     public static function validateHmac(array $params, string $secret)
     {
-        $hmac = $params['hmac'];
+        $hmac = $params['hmac'] ?? '';
         unset($params['hmac']);
 
         $computedHmac = hash_hmac('sha256', http_build_query($params), $secret);

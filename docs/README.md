@@ -6,4 +6,6 @@ You can follow our getting started guide to learn how to use this library's comp
 
 - [Getting started](getting_started.md)
   - [Install dependencies](getting_started.md#install-dependencies)
+- [Performing OAuth](usage/oauth.md)
+  - [OAuth callback](usage/oauth.md#oauth-callback)
 - [Known issues and caveats](issues.md)

@@ -14,12 +14,14 @@ final class SessionStorageTest extends BaseTestCase
 
     public function setUp(): void
     {
-        $this->session = new Session($this->sessionId);
-        $this->session->setShop('test-shop.myshopify.io');
-        $this->session->setState('1234');
+        $this->session = new Session(
+            id: $this->sessionId,
+            shop: 'test-shop.myshopify.io',
+            state: '1234',
+            isOnline: true,
+        );
         $this->session->setScope('read_products');
         $this->session->setExpires(strtotime('+1 day'));
-        $this->session->setIsOnline(true);
         $this->session->setAccessToken('totally_real_access_token');
     }
 

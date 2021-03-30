@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Clients\Http;
 use Shopify\Context;
+use ShopifyTest\Auth\MockSessionStorage;
 
 define('RUNNING_SHOPIFY_TESTS', 1);
 
@@ -26,6 +27,7 @@ class BaseTestCase extends TestCase
             apiSecretKey: 'steffi',
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
             apiVersion: 'unstable',
             isEmbeddedApp: true,
             isPrivateApp: false,
@@ -151,7 +153,7 @@ class BaseTestCase extends TestCase
      * @param string $address         The URL to which the request was made
      * @param array  $expectedOptions The options that should have been set for cURL
      */
-    protected function assertHttpRequest(string $address, array $expectedOptions)
+    protected function assertHttpRequest(string $address, array $expectedOptions = [])
     {
         $actualDetails = $this->requestDetails[$this->lastCheckedRequest++];
 

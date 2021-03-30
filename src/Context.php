@@ -75,6 +75,7 @@ class Context
         self::$IS_EMBEDDED_APP = $isEmbeddedApp;
         self::$IS_PRIVATE_APP = $isPrivateApp;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
+        self::$PATH = $path;
 
         self::$IS_INITIALIZED = true;
     }

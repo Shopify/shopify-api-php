@@ -44,7 +44,7 @@ class Context
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
         string $userAgentPrefix = '',
-        string $path = '/tmp/php_sessions',
+        string $path = 'tmp/php_sessions',
     ): void {
         // ensure required values given
         $requiredValues = [

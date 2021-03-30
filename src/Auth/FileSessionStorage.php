@@ -21,17 +21,26 @@ class FileSessionStorage implements SessionStorage
 
     public function storeSession(Session $session): bool
     {
-        return file_put_contents($this->getPath($session->getId()), serialize($session));
+        return file_put_contents($this->getPath($session->getId()), serialize($session)) > 0;
     }
 
     private function getPath(string $id)
     {
-        $path = context::$PATH;
+        if (isset(Context::$PATH)) {  // FIXME: it's not getting the Context
+            $path = Context::$PATH;
+        } else {
+            $path = 'tmp/php_sessions';
+        }
         return "{$path}/{$id}";
     }
 
     public function deleteSession(string $sessionId): bool
     {
-        return true;
+        if (file_exists($this->getPath($sessionId))) {
+            unlink(realpath($this->getPath($sessionId)));
+            return true;
+        } else {
+            return true;
+        }
     }
 }

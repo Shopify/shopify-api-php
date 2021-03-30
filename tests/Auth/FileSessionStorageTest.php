@@ -12,6 +12,7 @@ final class FileSessionStorageTest extends BaseTestCase
 {
     private string $sessionId = 'test_session';
     private Session $session;
+    private FileSessionStorage $storage;
 
     public function setUp(): void
     {
@@ -24,10 +25,15 @@ final class FileSessionStorageTest extends BaseTestCase
         $this->session->setAccessToken('totally_real_access_token');
     }
 
+    public function testStoreSession()
+    {
+        $this->storage = new FileSessionStorage();
+        $this->assertEquals(true, $this->storage->storeSession($this->session));
+    }
+
     public function testDeleteSession()
     {
-        $storage = new FileSessionStorage();
-
-        $this->assertEquals(true, $storage->deleteSession($this->sessionId));
+        $this->storage = new FileSessionStorage();
+        $this->assertEquals(true, $this->storage->deleteSession($this->sessionId));
     }
 }

@@ -28,12 +28,15 @@ final class FileSessionStorageTest extends BaseTestCase
         $this->root = vfsStream::setup('sessions');
     }
 
-    public function testStoreAndDeleteSession()
+    public function testStoreLoadDeleteSession()
     {
-        $this->storage = new FileSessionStorage(vfsStream::url('sessions'));
-        $this->assertEquals(true, $this->storage->storeSession($this->session));
+        $storage = new FileSessionStorage(vfsStream::url('sessions'));
+        $this->assertTrue($storage->storeSession($this->session));
         $this->assertTrue($this->root->hasChild('test_session'));
-        $this->assertEquals(true, $this->storage->deleteSession($this->sessionId));
+
+        $this->assertEquals($this->session, $storage->loadSession($this->sessionId));
+
+        $this->assertTrue($storage->deleteSession($this->sessionId));
         $this->assertFalse($this->root->hasChild('test_session'));
     }
 }

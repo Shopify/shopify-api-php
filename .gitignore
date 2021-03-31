@@ -1,6 +1,3 @@
 .vscode
 .phpunit.cache
 /vendor/
-
-# file session storage files
-tmp/php_sessions/*

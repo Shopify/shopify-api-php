@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Shopify\Auth;
 
-use Shopify\Context;
 use Shopify\Auth\Session;
 use Shopify\Auth\SessionStorage;
 
 class FileSessionStorage implements SessionStorage
 {
+    public function __construct(private string $path='/tmp/shopify_api_sessions')
+    {
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+    }
+
     public function loadSession(string $id): ?Session
     {
         $path = $this->getPath($id);
@@ -26,21 +32,15 @@ class FileSessionStorage implements SessionStorage
 
     private function getPath(string $id)
     {
-        if (isset(Context::$PATH)) {  // FIXME: it's not getting the Context
-            $path = Context::$PATH;
-        } else {
-            $path = 'tmp/php_sessions';
-        }
-        return "{$path}/{$id}";
+        return "{$this->path}/{$id}";
     }
 
     public function deleteSession(string $sessionId): bool
     {
-        if (file_exists($this->getPath($sessionId))) {
-            unlink(realpath($this->getPath($sessionId)));
-            return true;
-        } else {
-            return true;
+        $path = $this->getPath($sessionId);
+        if (file_exists($path)) {
+            unlink(realpath($path));
         }
+        return true;
     }
 }

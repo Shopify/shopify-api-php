@@ -10,15 +10,14 @@ use Shopify\Exception\UninitializedContextException;
 
 class Context
 {
-    public static string $API_KEY;
-    public static string $API_SECRET_KEY;
-    public static array $SCOPES;
-    public static string $HOST_NAME;
-    public static string $API_VERSION;
-    public static bool $IS_EMBEDDED_APP;
-    public static bool $IS_PRIVATE_APP;
-    public static string $USER_AGENT_PREFIX;
-    public static string $PATH;
+    public static ?string $API_KEY = null;
+    public static ?string $API_SECRET_KEY = null;
+    public static ?array $SCOPES = null;
+    public static ?string $HOST_NAME = null;
+    public static ?string $API_VERSION = null;
+    public static bool $IS_EMBEDDED_APP = true;
+    public static bool $IS_PRIVATE_APP = false;
+    public static ?string $USER_AGENT_PREFIX = null;
 
     private static bool $IS_INITIALIZED = false;
 
@@ -44,7 +43,6 @@ class Context
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
         string $userAgentPrefix = '',
-        string $path = 'tmp/php_sessions',
     ): void {
         // ensure required values given
         $requiredValues = [
@@ -75,7 +73,6 @@ class Context
         self::$IS_EMBEDDED_APP = $isEmbeddedApp;
         self::$IS_PRIVATE_APP = $isPrivateApp;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
-        self::$PATH = $path;
 
         self::$IS_INITIALIZED = true;
     }

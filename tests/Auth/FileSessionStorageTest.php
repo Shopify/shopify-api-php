@@ -13,7 +13,6 @@ final class FileSessionStorageTest extends BaseTestCase
 {
     private string $sessionId = 'test_session';
     private Session $session;
-    private FileSessionStorage $storage;
 
     public function setUp(): void
     {
@@ -38,5 +37,18 @@ final class FileSessionStorageTest extends BaseTestCase
 
         $this->assertTrue($storage->deleteSession($this->sessionId));
         $this->assertFalse($this->root->hasChild('test_session'));
+    }
+
+    public function testCreateNewPath()
+    {
+        $this->assertFalse($this->root->hasChild('subdirectory'));
+        new FileSessionStorage(vfsStream::url('sessions/subdirectory'));
+        $this->assertTrue($this->root->hasChild('subdirectory'));
+    }
+
+    public function testLoadNonexistentSession()
+    {
+        $storage = new FileSessionStorage(vfsStream::url('sessions/subdirectory'));
+        $this->assertEquals(null, $storage->loadSession($this->sessionId));
     }
 }

@@ -10,16 +10,16 @@ use Shopify\Exception\UninitializedContextException;
 
 class Context
 {
-    public static ?string $API_KEY = null;
-    public static ?string $API_SECRET_KEY = null;
-    public static ?array $SCOPES = null;
-    public static ?string $HOST_NAME = null;
-    public static ?string $API_VERSION = null;
-    public static bool $IS_EMBEDDED_APP = true;
-    public static bool $IS_PRIVATE_APP = false;
-    public static ?string $USER_AGENT_PREFIX = null;
+    public static string $API_KEY;
+    public static string $API_SECRET_KEY;
+    public static array $SCOPES;
+    public static string $HOST_NAME;
+    public static string $API_VERSION;
+    public static bool $IS_EMBEDDED_APP;
+    public static bool $IS_PRIVATE_APP;
+    public static string $USER_AGENT_PREFIX;
 
-    private static bool $IS_INITIALIZED = false;
+    private static bool $IS_INITIALIZED;
 
     /**
      * Initializes Context object
@@ -32,7 +32,6 @@ class Context
      * @param bool $isEmbeddedApp       Whether the app is an embedded app, defaults to true
      * @param bool $isPrivateApp        Whether the app is a private app, defaults to false
      * @param string $userAgentPrefix   Prefix for user agent header sent with a request, defaults to empty string
-     * @param string $path              Path to store sessions
      */
     public static function initialize(
         string $apiKey,

@@ -9,7 +9,7 @@ use Shopify\Auth\SessionStorage;
 
 class FileSessionStorage implements SessionStorage
 {
-    public function __construct(private string $path='/tmp/shopify_api_sessions')
+    public function __construct(private string $path = '/tmp/shopify_api_sessions')
     {
         if (!is_dir($path)) {
             mkdir($path);
@@ -39,7 +39,7 @@ class FileSessionStorage implements SessionStorage
     {
         $path = $this->getPath($sessionId);
         if (file_exists($path)) {
-            unlink(realpath($path));
+            unlink($path);
         }
         return true;
     }

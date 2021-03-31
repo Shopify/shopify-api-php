@@ -7,6 +7,7 @@ namespace ShopifyTest\Auth;
 use Shopify\Auth\Session;
 use Shopify\Auth\FileSessionStorage;
 use ShopifyTest\BaseTestCase;
+use org\bovigo\vfs\vfsStream;
 
 final class FileSessionStorageTest extends BaseTestCase
 {
@@ -23,17 +24,16 @@ final class FileSessionStorageTest extends BaseTestCase
         $this->session->setExpires(strtotime('+1 day'));
         $this->session->setIsOnline(true);
         $this->session->setAccessToken('totally_real_access_token');
+
+        $this->root = vfsStream::setup('sessions');
     }
 
-    public function testStoreSession()
+    public function testStoreAndDeleteSession()
     {
-        $this->storage = new FileSessionStorage();
+        $this->storage = new FileSessionStorage(vfsStream::url('sessions'));
         $this->assertEquals(true, $this->storage->storeSession($this->session));
-    }
-
-    public function testDeleteSession()
-    {
-        $this->storage = new FileSessionStorage();
+        $this->assertTrue($this->root->hasChild('test_session'));
         $this->assertEquals(true, $this->storage->deleteSession($this->sessionId));
+        $this->assertFalse($this->root->hasChild('test_session'));
     }
 }

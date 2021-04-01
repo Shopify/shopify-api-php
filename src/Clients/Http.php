@@ -17,6 +17,8 @@ class Http
     public const DATA_TYPE_URL_ENCODED = 'application/x-www-form-urlencoded';
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
+    public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
+
     private const RETRIABLE_STATUS_CODES = [429, 500];
 
     public function __construct(private string $domain)
@@ -26,9 +28,10 @@ class Http
     /**
      * Makes a GET request to this client's domain.
      *
-     * @param string   $path    The URL path to request
-     * @param array    $headers Any extra headers to send along with the request
-     * @param int|null $tries   How many times to attempt the request
+     * @param string        $path    The URL path to request
+     * @param array         $headers Any extra headers to send along with the request
+     * @param array|null    $query   Parameters on a query to be added to the URL
+     * @param int|null      $tries   How many times to attempt the request
      *
      * @return HttpResponse
      * @throws \Shopify\Exception\HttpRequestException
@@ -51,6 +54,7 @@ class Http
      * @param string|array $body     The body of the request
      * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
+     * @param array|null   $query    Parameters on a query to be added to the URL
      * @param int|null     $tries    How many times to attempt the request
      *
      * @return HttpResponse
@@ -82,6 +86,7 @@ class Http
      * @param string|array $body     The body of the request
      * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
+     * @param array|null   $query    Parameters on a query to be added to the URL
      * @param int|null     $tries    How many times to attempt the request
      *
      * @return HttpResponse
@@ -109,9 +114,10 @@ class Http
     /**
      * Makes a DELETE request to this client's domain.
      *
-     * @param string   $path    The URL path to request
-     * @param array    $headers Any extra headers to send along with the request
-     * @param int|null $tries   How many times to attempt the request
+     * @param string        $path    The URL path to request
+     * @param array         $headers Any extra headers to send along with the request
+     * @param array|null    $query   Parameters on a query to be added to the URL
+     * @param int|null      $tries   How many times to attempt the request
      *
      * @return HttpResponse
      * @throws \Shopify\Exception\HttpRequestException
@@ -130,12 +136,13 @@ class Http
     /**
      * Internally handles the logic for making requests.
      *
-     * @param string            $path     The path to query
-     * @param string            $method   The method to use
-     * @param string            $dataType The data type of the request
-     * @param string|array|null $body     The request body to send
-     * @param array             $headers  Any extra headers to send along with the request
-     * @param int|null          $tries    How many times to attempt the request
+     * @param string     $path        The path to query
+     * @param string     $method      The method to use
+     * @param string     $dataType    The data type of the request
+     * @param string     $body        The request body to send
+     * @param array|null $query       Parameters on a query to be added to the URL
+     * @param array      $headers     Any extra headers to send along with the request
+     * @param int|null   $tries       How many times to attempt the request
      *
      * @return HttpResponse
      * @throws \Shopify\Exception\HttpRequestException
@@ -209,10 +216,11 @@ class Http
 
             $curlResponse = $transport->sendRequest();
 
+            $responseBody = $curlResponse['body'] ? json_decode($curlResponse['body'], true, JSON_THROW_ON_ERROR) : '';
             $response = new HttpResponse(
                 $curlResponse['statusCode'],
                 $curlResponse['headers'],
-                $this->parseResponseBody($curlResponse['body'], $dataType)
+                $responseBody
             );
 
             if (in_array($curlResponse['statusCode'], self::RETRIABLE_STATUS_CODES)) {
@@ -224,23 +232,5 @@ class Http
         } while ($currentTries < $maxTries);
 
         return $response;
-    }
-
-    private function parseResponseBody($body, string $dataType): mixed
-    {
-        $responseBody = '';
-        if ($body) {
-            switch ($dataType) {
-                case self::DATA_TYPE_GRAPHQL:
-                case self::DATA_TYPE_JSON:
-                    $responseBody = json_decode($body, true);
-                    break;
-                case self::DATA_TYPE_URL_ENCODED:
-                    $responseBody = [];
-                    parse_str($body, $responseBody);
-                    break;
-            }
-        }
-        return $responseBody;
     }
 }

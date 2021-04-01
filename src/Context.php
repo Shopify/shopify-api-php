@@ -19,7 +19,7 @@ class Context
     public static bool $IS_PRIVATE_APP;
     public static string $USER_AGENT_PREFIX;
 
-    private static bool $IS_INITIALIZED;
+    private static bool $IS_INITIALIZED = false;
 
     /**
      * Initializes Context object

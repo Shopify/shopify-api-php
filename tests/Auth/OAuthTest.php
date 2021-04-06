@@ -6,8 +6,9 @@ namespace ShopifyTest\Auth;
 
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
-use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Auth\AccessTokenOnlineUserInfo;
+use Shopify\Auth\OAuthCookie;
+use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
 
@@ -313,6 +314,103 @@ final class OAuthTest extends BaseTestCase
         $this->expectException('Shopify\Exception\HttpRequestException');
         $mockedOAuth->callback($mockCookies, $mockQuery);
         $this->assertHttpRequest("{$this->domain}/" . OAuth::ACCESS_TOKEN_POST_PATH, [CURLOPT_POST => true]);
+    }
+
+    public function testBeginFailsOnPrivateApp(){
+        Context::$IS_PRIVATE_APP = true;
+
+        $this->expectException('Shopify\Exception\PrivateAppException');
+        $oauth = new OAuth();
+        $oauth->begin('shopname', '/redirect', true);
+    }
+
+    public function testBeginFunctionReturnSProperUrlForOfflineAccess(){
+        $oauth = new OAuth();
+
+        $wasCallbackCalled = false;
+        $returnUrl = $oauth->begin(
+            'shopname',
+            '/redirect',
+            false,
+            function () use (&$wasCallbackCalled) {
+                $wasCallbackCalled = true;
+                return true;
+            }
+        );
+        $this->assertTrue($wasCallbackCalled);
+        $mySessionId = 'offline_shopname';
+        $generatedState = Context::$SESSION_STORAGE->loadSession($mySessionId)->getState();
+        $this->assertEquals(
+            "https://shopname/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=",
+            $returnUrl
+        );
+    }
+
+    public function testBeginFunctionReturnSProperUrlForOnlineAccess(){
+        $oauth = new OAuth();
+        $this->cookie = new OAuthCookie(
+            name: 'shopify_session_id',
+            value: bin2hex(random_bytes(40)),
+            expire: strtotime('+1 minute'),
+            secure: true,
+            httpOnly: true
+        );
+
+        $testCookieId = 'chocolate-chip-cookie';
+        $returnUrl = $oauth->begin(
+            'shopname',
+            '/redirect',
+            true,
+            function ($cookie) use (&$testCookieId) {
+                $testCookieId = $cookie->getValue();
+                return isset($testCookieId);
+            }
+        );
+        $this->assertTrue(isset($testCookieId));
+
+        $generatedState = Context::$SESSION_STORAGE->loadSession($testCookieId)->getState();
+        $this->assertEquals(
+            "https://shopname/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=per-user",
+            $returnUrl
+        );
+    }
+
+    public function testBeginRaisesErrorIfCookieNotSet(){
+        $oauth = new OAuth();
+        $this->expectException('Shopify\Exception\CookieSetException');
+
+        $wasCallbackCalled = false;
+        $oauth->begin(
+            'shopname',
+            '/redirect',
+            false,
+            function () use (&$wasCallbackCalled) {
+                $wasCallbackCalled = true;
+                return false;
+            }
+        );
+        $this->assertTrue($wasCallbackCalled);
+    }
+
+    public function testBeginWithoutsetCookieFunction(){
+        $oauth = new OAuth();
+        $storage = new MockSessionStorage();
+        Context::$SESSION_STORAGE = $storage;
+        $storage->failNextCalls('store');
+        $this->expectException('Shopify\Exception\SessionStorageException');
+
+        $returnUrl = $oauth->begin(
+            'shopname',
+            '/redirect',
+            false,
+            function() {return true;}
+        );
+        $mySessionId = 'offline_shopname';
+        $generatedState = Context::$SESSION_STORAGE->loadSession($mySessionId)->getState();
+        $this->assertEquals(
+            "https://shopname/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=",
+            $returnUrl
+        );
     }
 
     /**

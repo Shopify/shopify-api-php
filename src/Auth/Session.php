@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shopify\Auth;
 
 use DateTime;
+use Shopify\Context;
 
 /**
  * Stores App information from logged in merchants so they can make authenticated requests to the Admin API.
@@ -27,52 +28,52 @@ class Session
     ) {
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getShop()
+    public function getShop(): string
     {
         return $this->shop;
     }
 
-    public function getState()
+    public function getState(): string
     {
         return $this->state;
     }
 
-    public function getScope()
+    public function getScope(): string | null
     {
         return $this->scope;
     }
 
-    public function getExpires()
+    public function getExpires(): DateTime | null
     {
         return $this->expires;
     }
 
-    public function isOnline()
+    public function isOnline(): bool
     {
         return $this->isOnline;
     }
 
-    public function getAccessToken()
+    public function getAccessToken(): string | null
     {
         return $this->accessToken;
     }
 
-    public function getOnlineAccessInfo()
+    public function getOnlineAccessInfo(): AccessTokenOnlineUserInfo | null
     {
         return $this->onlineAccessInfo;
     }
 
-    public function setScope(string $scope)
+    public function setScope(string $scope): void
     {
-        return $this->scope = $scope;
+        $this->scope = $scope;
     }
 
-    public function setExpires(string | int | DateTime $expires)
+    public function setExpires(string | int | DateTime $expires): void
     {
         $date = null;
         if ($expires) {
@@ -84,17 +85,17 @@ class Session
                 $date = $expires;
             }
         }
-        return $this->expires = $date;
+        $this->expires = $date;
     }
 
-    public function setAccessToken(string $accessToken)
+    public function setAccessToken(string $accessToken): void
     {
-        return $this->accessToken = $accessToken;
+        $this->accessToken = $accessToken;
     }
 
-    public function setOnlineAccessInfo(AccessTokenOnlineUserInfo $onlineAccessInfo)
+    public function setOnlineAccessInfo(AccessTokenOnlineUserInfo $onlineAccessInfo): void
     {
-        return $this->onlineAccessInfo = $onlineAccessInfo;
+        $this->onlineAccessInfo = $onlineAccessInfo;
     }
 
     /**
@@ -118,5 +119,19 @@ class Session
         $newSession->onlineAccessInfo = $this->onlineAccessInfo;
 
         return $newSession;
+    }
+
+    /**
+     * Checks whether this session has all of the necessary settings to make requests to Shopify.
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        return (
+            Context::$SCOPES->equals($this->scope) &&
+            $this->accessToken &&
+            (!$this->expires || ($this->expires > new DateTime()))
+        );
     }
 }

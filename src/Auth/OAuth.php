@@ -73,7 +73,12 @@ class OAuth
             );
         }
 
-        $session = new Session($mySessionId);
+        $session = new Session(
+            id: $mySessionId,
+            shop: $shop,
+            isOnline: $isOnline,
+            state: bin2hex(random_bytes(40))
+        );
 
         if ($isOnline) {
             $session->setExpires(strtotime('+1 minute'));
@@ -81,10 +86,6 @@ class OAuth
         } else {
             $grantOptions = '';
         }
-
-        $session->setOnline($isOnline);
-        $session->setShop($shop);
-        $session->setState(bin2hex(random_bytes(40)));
 
         $sessionStored = Context::$SESSION_STORAGE->storeSession($session);
 

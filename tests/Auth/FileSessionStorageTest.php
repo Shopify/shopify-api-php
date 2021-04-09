@@ -30,27 +30,26 @@ final class FileSessionStorageTest extends BaseTestCase
         $this->session->setExpires(strtotime('+1 day'));
         $this->session->setAccessToken('totally_real_access_token');
 
+        $this->root = vfsStream::setup('sessions');
     }
 
     public function testStoreLoadDeleteSession()
     {
-        $root = vfsStream::setup('sessions');
         $storage = new FileSessionStorage(vfsStream::url('sessions'));
         $this->assertTrue($storage->storeSession($this->session));
-        $this->assertTrue($root->hasChild('test_session'));
+        $this->assertTrue($this->root->hasChild('test_session'));
 
         $this->assertEquals($this->session, $storage->loadSession($this->sessionId));
 
         $this->assertTrue($storage->deleteSession($this->sessionId));
-        $this->assertFalse($root->hasChild('test_session'));
+        $this->assertFalse($this->root->hasChild('test_session'));
     }
 
     public function testCreateNewPath()
     {
-        $root = vfsStream::setup('sessions');
-        $this->assertFalse($root->hasChild('subdirectory'));
+        $this->assertFalse($this->root->hasChild('subdirectory'));
         new FileSessionStorage(vfsStream::url('sessions/subdirectory'));
-        $this->assertTrue($root->hasChild('subdirectory'));
+        $this->assertTrue($this->root->hasChild('subdirectory'));
     }
 
     public function testLoadNonexistentSession()

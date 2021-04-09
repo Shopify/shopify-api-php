@@ -166,10 +166,10 @@ class OAuth
     /**
      * Builds a session id that can be loaded from JWTs from App Bridge
      *
-     * @param string $shop   The session's shop
-     * @param string $userId The session'd user
+     * @param string $shop       The session's shop
+     * @param string $userId|int The session's user
      */
-    public function getJwtSessionId(string $shop, string $userId): string
+    public function getJwtSessionId(string $shop, string | int $userId): string
     {
         return "{$shop}_{$userId}";
     }

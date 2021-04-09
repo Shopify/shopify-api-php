@@ -11,15 +11,20 @@ use DateTime;
  */
 class Session
 {
-    private string $shop;
-    private string $state;
-    private string $scope;
+    private ?string $scope = null;
     private ?DateTime $expires = null;
-    private ?bool $isOnline = false;
     private ?string $accessToken = null;
+    private ?AccessTokenOnlineUserInfo $onlineAccessInfo = null;
 
-    public function __construct(private string $id)
-    {
+    public function __construct(
+        // This is currently a bug until a new version of phpcs is released
+        // phpcs:disable
+        private string $id,
+        private string $shop,
+        private bool $isOnline,
+        private string $state,
+        // phpcs:enable
+    ) {
     }
 
     public function getId()
@@ -47,7 +52,7 @@ class Session
         return $this->expires;
     }
 
-    public function getIsOnline()
+    public function isOnline()
     {
         return $this->isOnline;
     }
@@ -57,14 +62,9 @@ class Session
         return $this->accessToken;
     }
 
-    public function setShop(string $shop)
+    public function getOnlineAccessInfo()
     {
-        return $this->shop = $shop;
-    }
-
-    public function setState(string $state)
-    {
-        return $this->state = $state;
+        return $this->onlineAccessInfo;
     }
 
     public function setScope(string $scope)
@@ -87,13 +87,36 @@ class Session
         return $this->expires = $date;
     }
 
-    public function setIsOnline(bool $isOnline)
-    {
-        return $this->isOnline = $isOnline;
-    }
-
     public function setAccessToken(string $accessToken)
     {
         return $this->accessToken = $accessToken;
+    }
+
+    public function setOnlineAccessInfo(AccessTokenOnlineUserInfo $onlineAccessInfo)
+    {
+        return $this->onlineAccessInfo = $onlineAccessInfo;
+    }
+
+    /**
+     * Creates a clone of the current session with a new id.
+     *
+     * @param string $newSessionId The id of the new session
+     *
+     * @return Session
+     */
+    public function clone(string $newSessionId): Session
+    {
+        $newSession = new Session(
+            id: $newSessionId,
+            shop: $this->shop,
+            state: $this->state,
+            isOnline: $this->isOnline,
+        );
+        $newSession->scope = $this->scope;
+        $newSession->expires = $this->expires;
+        $newSession->accessToken = $this->accessToken;
+        $newSession->onlineAccessInfo = $this->onlineAccessInfo;
+
+        return $newSession;
     }
 }

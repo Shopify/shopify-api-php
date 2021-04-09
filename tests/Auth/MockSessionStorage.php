@@ -9,27 +9,53 @@ use Shopify\Auth\SessionStorage;
 
 final class MockSessionStorage implements SessionStorage
 {
-    private array $calls = [];
     private array $testSessions = [];
+    private array $calls = [];
+    private array $scheduledFails = [
+        'store' => 0,
+        'load' => 0,
+        'delete' => 0,
+    ];
 
     public function storeSession(Session $session): bool
     {
+        $shouldSucceed = $this->shouldCallSucceed('store');
+
         $this->calls[] = ['store', $session];
-        $this->testSessions[$session->getId()] = $session;
-        return true;
+
+        if ($shouldSucceed) {
+            $this->testSessions[$session->getId()] = $session;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function loadSession(string $sessionId): Session | null
     {
+        $shouldSucceed = $this->shouldCallSucceed('load');
+
         $this->calls[] = ['load', $sessionId];
-        return $this->testSessions[$sessionId] ?? null;
+
+        if ($shouldSucceed) {
+            return $this->testSessions[$sessionId] ?? null;
+        } else {
+            return null;
+        }
     }
 
     public function deleteSession(string $sessionId): bool
     {
+        $shouldSucceed = $this->shouldCallSucceed('delete');
+
         $this->calls[] = ['delete', $sessionId];
-        unset($this->testSessions[$sessionId]);
-        return true;
+
+        if ($shouldSucceed) {
+            unset($this->testSessions[$sessionId]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -40,5 +66,33 @@ final class MockSessionStorage implements SessionStorage
     public function getCalls(): array
     {
         return $this->calls;
+    }
+
+    /**
+     * Tells this object that the next $amount calls to $method will fail.
+     *
+     * @param string $method The method to fail
+     * @param int    $amount How many calls will fail
+     */
+    public function failNextCalls(string $method, int $amount = 1): void
+    {
+        $this->scheduledFails[$method] = $amount;
+    }
+
+    /**
+     * Determines whether the current call for $method should fail.
+     *
+     * @param string $method The method to check
+     *
+     * @return bool
+     */
+    private function shouldCallSucceed(string $method): bool
+    {
+        if ($this->scheduledFails[$method]) {
+            $this->scheduledFails[$method]--;
+            return false;
+        }
+
+        return true;
     }
 }

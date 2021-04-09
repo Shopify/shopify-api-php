@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShopifyTest;
 
 use Shopify\Context;
+use ShopifyTest\Auth\MockSessionStorage;
 use ShopifyTest\BaseTestCase;
 
 final class ContextTest extends BaseTestCase
@@ -16,6 +17,7 @@ final class ContextTest extends BaseTestCase
             apiSecretKey: 'steffi',
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
             isPrivateApp: false,
         );
 
@@ -39,6 +41,7 @@ final class ContextTest extends BaseTestCase
             apiSecretKey: 'rocky',
             scopes: ['silly', 'doggo'],
             hostName: 'yay-for-doggos',
+            sessionStorage: new MockSessionStorage(),
         );
 
         $this->assertEquals('tuck', Context::$API_KEY);
@@ -58,6 +61,7 @@ final class ContextTest extends BaseTestCase
             apiSecretKey: '',
             scopes: [],
             hostName: '',
+            sessionStorage: new MockSessionStorage(),
         );
     }
 
@@ -81,6 +85,7 @@ final class ContextTest extends BaseTestCase
             apiSecretKey: 'steffi',
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
             isPrivateApp: true,
         );
         $this->expectException('\Shopify\Exception\PrivateAppException');

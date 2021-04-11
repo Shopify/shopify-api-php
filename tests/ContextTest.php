@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use Shopify\Clients\Transport;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
 use ShopifyTest\Auth\MockSessionStorage;

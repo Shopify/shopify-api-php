@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Shopify\Clients;
 
-use CurlHandle;
 use Shopify\Context;
-use Shopify\Exception\HttpRequestException;
 
 class Http
 {
@@ -19,7 +17,6 @@ class Http
     public const DATA_TYPE_URL_ENCODED = 'application/x-www-form-urlencoded';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
-    private const RETRY_DEFAULT_TIME = 1; // 1 second
 
     public function __construct(private string $domain)
     {
@@ -28,11 +25,12 @@ class Http
     /**
      * Makes a GET request to this client's domain.
      *
-     * @param string $path    The URL path to request
-     * @param array  $headers Any extra headers to send along with the request
-     * @param int|nulltries   How many times to attempt the request
+     * @param string   $path    The URL path to request
+     * @param array    $headers Any extra headers to send along with the request
+     * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
+     * @throws \Shopify\Exception\HttpRequestException
      */
     public function get(string $path, array $headers = [], ?int $tries = null): HttpResponse
     {
@@ -54,6 +52,7 @@ class Http
      * @param int|null     $tries    How many times to attempt the request
      *
      * @return HttpResponse
+     * @throws \Shopify\Exception\HttpRequestException
      */
     public function post(
         string $path,
@@ -82,6 +81,7 @@ class Http
      * @param int|null     $tries    How many times to attempt the request
      *
      * @return HttpResponse
+     * @throws \Shopify\Exception\HttpRequestException
      */
     public function put(
         string $path,
@@ -103,11 +103,12 @@ class Http
     /**
      * Makes a DELETE request to this client's domain.
      *
-     * @param string $path    The URL path to request
-     * @param array  $headers Any extra headers to send along with the request
-     * @param int|nulltries   How many times to attempt the request
+     * @param string   $path    The URL path to request
+     * @param array    $headers Any extra headers to send along with the request
+     * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
+     * @throws \Shopify\Exception\HttpRequestException
      */
     public function delete(string $path, array $headers = [], ?int $tries = null): HttpResponse
     {
@@ -120,26 +121,17 @@ class Http
     }
 
     /**
-     * Returns the default amount of time to wait for between request retries.
-     *
-     * @return int
-     */
-    public function getDefaultRetrySeconds(): int
-    {
-        return self::RETRY_DEFAULT_TIME;
-    }
-
-    /**
      * Internally handles the logic for making requests.
      *
-     * @param string   $path     The path to query
-     * @param string   $method   The method to use
-     * @param string   $dataType The data type of the request
-     * @param string   $body     The request body to send
-     * @param array    $headers  Any extra headers to send along with the request
-     * @param int|null $tries    How many times to attempt the request
+     * @param string            $path     The path to query
+     * @param string            $method   The method to use
+     * @param string            $dataType The data type of the request
+     * @param string|array|null $body     The request body to send
+     * @param array             $headers  Any extra headers to send along with the request
+     * @param int|null          $tries    How many times to attempt the request
      *
      * @return HttpResponse
+     * @throws \Shopify\Exception\HttpRequestException
      */
     private function request(
         string $path,
@@ -150,24 +142,13 @@ class Http
         ?int $tries = null,
     ): HttpResponse {
         $maxTries = $tries ?? 1;
-        $url = "https://{$this->domain}/$path";
+        $url = "https://$this->domain/$path";
 
-        $ch = curl_init($url);
-        $this->setCurlOption($ch, CURLOPT_RETURNTRANSFER, true);
-        switch ($method) {
-            case self::METHOD_POST:
-                $this->setCurlOption($ch, CURLOPT_POST, true);
-                break;
-            case self::METHOD_PUT:
-                $this->setCurlOption($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-                break;
-            case self::METHOD_DELETE:
-                $this->setCurlOption($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-                break;
-        }
+        Context::$TRANSPORT->initializeRequest($url);
+        Context::$TRANSPORT->setMethod($method);
 
         $version = require dirname(__FILE__) . '/../version.php';
-        $userAgentParts = ["Shopify Admin API Library for PHP v{$version}"];
+        $userAgentParts = ["Shopify Admin API Library for PHP v$version"];
 
         if (Context::$USER_AGENT_PREFIX) {
             array_unshift($userAgentParts, Context::$USER_AGENT_PREFIX);
@@ -178,22 +159,19 @@ class Http
             unset($headers['User-Agent']);
         }
 
-        $this->setCurlOption($ch, CURLOPT_USERAGENT, implode(' | ', $userAgentParts));
+        Context::$TRANSPORT->setUserAgent(implode(' | ', $userAgentParts));
 
         if ($body) {
             if (is_string($body)) {
                 $bodyString = $body;
             } else {
-                switch ($dataType) {
-                    case self::DATA_TYPE_JSON:
-                        $bodyString = json_encode($body);
-                        break;
-                    case self::DATA_TYPE_URL_ENCODED:
-                        $bodyString = http_build_query($body);
-                        break;
-                }
+                $bodyString = match ($dataType) {
+                    self::DATA_TYPE_JSON => json_encode($body),
+                    self::DATA_TYPE_URL_ENCODED => http_build_query($body),
+                };
             }
-            $this->setCurlOption($ch, CURLOPT_POSTFIELDS, $bodyString);
+
+            Context::$TRANSPORT->setBody($bodyString);
 
             $headers = array_merge(
                 [
@@ -206,18 +184,15 @@ class Http
 
         $headerOpts = [];
         foreach ($headers as $header => $headerValue) {
-            $headerOpts[] = "{$header}: {$headerValue}";
+            $headerOpts[] = "$header: $headerValue";
         }
-        $this->setCurlOption($ch, CURLOPT_HTTPHEADER, $headerOpts);
+        Context::$TRANSPORT->setHeader($headerOpts);
 
         $currentTries = 0;
         do {
             $currentTries++;
 
-            $curlResponse = $this->sendCurlRequest($ch);
-            if ($curlError = $this->getCurlError($ch)) {
-                throw new HttpRequestException("HTTP request failed: $curlError");
-            }
+            $curlResponse = Context::$TRANSPORT->sendRequest();
 
             $response = new HttpResponse();
             $response->statusCode = $curlResponse['statusCode'];
@@ -236,7 +211,7 @@ class Http
             }
 
             if (in_array($curlResponse['statusCode'], self::RETRIABLE_STATUS_CODES)) {
-                $retryAfter = $curlResponse['headers']['Retry-After'] ?? $this->getDefaultRetrySeconds();
+                $retryAfter = $curlResponse['headers']['Retry-After'] ?? Context::$RETRY_TIME_IN_SECONDS;
                 usleep($retryAfter * 1000000);
             } else {
                 break;
@@ -244,87 +219,5 @@ class Http
         } while ($currentTries < $maxTries);
 
         return $response;
-    }
-
-    /**
-     * Sets the given option in the cURL resource.
-     *
-     * @param CurlHandle $ch     The curl resource
-     * @param int|null   $option The option to set
-     * @param mixed      $value  The value for the option
-     *
-     * Note: this is only public so tests can override it.
-     * @codeCoverageIgnore We can't test this method without making actual cURL requests
-     */
-    public function setCurlOption(CurlHandle &$ch, int $option, mixed $value)
-    {
-        if (defined('RUNNING_SHOPIFY_TESTS')) {
-            throw new \Exception("Attempted to make a real HTTP request while running tests!");
-        }
-
-        curl_setopt($ch, $option, $value);
-    }
-
-    /**
-     * Actually fires the cURL request.
-     *
-     * @param CurlHandle $ch The curl resource
-     *
-     * @return array
-     *
-     * Note: this is only public so tests can override it.
-     * @codeCoverageIgnore We can't test this method without making actual cURL requests
-     */
-    public function sendCurlRequest(CurlHandle &$ch): ?array
-    {
-        if (defined('RUNNING_SHOPIFY_TESTS')) {
-            throw new \Exception("Attempted to make a real HTTP request while running tests!");
-        }
-
-        $responseHeaders = [];
-        $this->setCurlOption(
-            $ch,
-            CURLOPT_HEADERFUNCTION,
-            function ($curl, $header) use (&$responseHeaders) {
-                $len = strlen($header);
-                $header = explode(':', $header, 2);
-                if (count($header) < 2) {
-                    return $len;
-                }
-
-                $responseHeaders[strtolower(trim($header[0]))][] = trim($header[1]);
-
-                return $len;
-            }
-        );
-
-        $responseBody = curl_exec($ch);
-        if (!$responseBody) {
-            return null;
-        }
-
-        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        return [
-            'statusCode' => $statusCode,
-            'headers' => $responseHeaders,
-            'body' => $responseBody,
-        ];
-    }
-
-    /**
-     * Retrieves the last error from the cURL resource.
-     *
-     * @param CurlHandle $ch     The curl resource
-     *
-     * Note: this is only public so tests can override it.
-     * @codeCoverageIgnore We can't test this method without making actual cURL requests
-     */
-    public function getCurlError(CurlHandle &$ch): ?string
-    {
-        if (defined('RUNNING_SHOPIFY_TESTS')) {
-            throw new \Exception("Attempted to make a real HTTP request while running tests!");
-        }
-
-        return curl_error($ch);
     }
 }

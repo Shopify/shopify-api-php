@@ -1,3 +1,4 @@
 .vscode
 .phpunit.cache
 /vendor/
+.idea

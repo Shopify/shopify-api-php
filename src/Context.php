@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Shopify;
 
 use Shopify\Auth\SessionStorage;
+use Shopify\Clients\Curl;
+use Shopify\Clients\Transport;
 use Shopify\Auth\Scopes;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\PrivateAppException;
@@ -17,11 +19,12 @@ class Context
     public static Scopes $SCOPES;
     public static ?string $HOST_NAME = null;
     public static ?SessionStorage $SESSION_STORAGE = null;
+    public static ?Transport $TRANSPORT = null;
     public static ?string $API_VERSION = null;
     public static bool $IS_EMBEDDED_APP = true;
     public static bool $IS_PRIVATE_APP = false;
     public static ?string $USER_AGENT_PREFIX = null;
-
+    public static int $RETRY_TIME_IN_SECONDS = 1;
     private static bool $IS_INITIALIZED = false;
 
     /**
@@ -76,6 +79,7 @@ class Context
         self::$SCOPES = $authScopes;
         self::$HOST_NAME = $hostName;
         self::$SESSION_STORAGE = $sessionStorage;
+        self::$TRANSPORT = new Curl();
         self::$API_VERSION = $apiVersion;
         self::$IS_EMBEDDED_APP = $isEmbeddedApp;
         self::$IS_PRIVATE_APP = $isPrivateApp;

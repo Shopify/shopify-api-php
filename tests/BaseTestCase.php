@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
-use CurlHandle;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Clients\Http;
+use Shopify\Clients\Transport;
 use Shopify\Context;
+use Shopify\Exception\HttpRequestException;
 use ShopifyTest\Auth\MockSessionStorage;
 
 define('RUNNING_SHOPIFY_TESTS', 1);
@@ -33,91 +33,20 @@ class BaseTestCase extends TestCase
             isPrivateApp: false,
             userAgentPrefix: '',
         );
+        Context::$TRANSPORT = $this->createMock(Transport::class);
+        Context::$RETRY_TIME_IN_SECONDS = 0;
         $this->requestDetails = [];
         $this->lastCheckedRequest = 0;
     }
 
     /**
-     * Sets up a mocked HTTP client. Any responses given are returned in the order they are received.
-     *
-     * @param array $responses Mock responses, built by buildMockHttpResponse. The test will expect the exact number of
-     *                         responses that are set up, and fail if it is not accurate.
-     *
-     * @return Http&MockObject
-     */
-    protected function getHttpClientWithMocks(array $responses = [])
-    {
-        if (array_key_exists('statusCode', $responses)) {
-            $responses = [$responses];
-        }
-
-        $mock = $this->getMockBuilder(Http::class)
-            ->setConstructorArgs([$this->domain])
-            ->onlyMethods(['sendCurlRequest', 'setCurlOption', 'getCurlError', 'getDefaultRetrySeconds'])
-            ->getMock();
-
-        $errorCheckResponses = [];
-        foreach ($responses as &$response) {
-            $error = $response['error'] ?? null;
-            if ($error) {
-                $errorCheckResponses[] = $error;
-            } else {
-                $errorCheckResponses[] = null;
-            }
-
-            unset($response['error']);
-        }
-
-        $options = $values = [];
-        $mock->method('setCurlOption')
-            ->with(
-                $this->anything(),
-                $this->callback(function ($option) use (&$options) {
-                    $options[] = $option;
-                    return true;
-                }),
-                $this->callback(function ($value) use (&$values) {
-                    $values[] = $value;
-                    return true;
-                }),
-            );
-
-
-        $mock->expects($this->exactly(count($responses)))
-            ->method('sendCurlRequest')
-            ->with($this->callback(function (CurlHandle $ch) use (&$options, &$values) {
-                $requestDetails = [
-                    'url' => curl_getinfo($ch, CURLINFO_EFFECTIVE_URL),
-                    'options' => [],
-                ];
-                for ($i = 0; $i < count($options); $i++) {
-                    $requestDetails['options'][$options[$i]] = $values[$i];
-                }
-
-                $options = [];
-                $values = [];
-                $this->requestDetails[] = $requestDetails;
-                return true;
-            }))
-            ->willReturnOnConsecutiveCalls(...$responses);
-
-        $mock->method('getCurlError')
-            ->willReturnOnConsecutiveCalls(...$errorCheckResponses);
-
-        $mock->method('getDefaultRetrySeconds')
-            ->willReturn(0);
-
-        return $mock;
-    }
-
-    /**
      * Builds a mock HTTP response that can optionally also validate the parameters of the cURL call.
      *
-     * @param int            $statusCode The HTTP status code to return
-     * @param string|array   $body       The body of the HTTP response
-     * @param array          $headers    The headers expected in the response
-     * @param string         $dataType   The data type of the response
-     * @param string         $error      The cURL error message to return
+     * @param int|null          $statusCode The HTTP status code to return
+     * @param string|array|null $body       The body of the HTTP response
+     * @param array             $headers    The headers expected in the response
+     * @param string            $dataType   The data type of the response
+     * @param string|null       $error      The cURL error message to return
      *
      * @return array
      */
@@ -148,54 +77,98 @@ class BaseTestCase extends TestCase
     }
 
     /**
-     * Asserts that a cURL request has set all of the expected options.
-     *
-     * @param string $address         The URL to which the request was made
-     * @param array  $expectedOptions The options that should have been set for cURL
+     * @param string      $url       Requested URL
+     * @param string      $method    HTTP Method `PUT`, `POST`, `GET`, and `DELETE` supported
+     * @param string      $userAgent User Agent
+     * @param array       $headers   HTTP Headers
+     * @param array       $response  Associative array with keys `body`, `error`, `headers`, and `error`
+     * @param string|null $body      Request body
+     * @param string|null $error     Error
      */
-    protected function assertHttpRequest(string $address, array $expectedOptions = [])
-    {
-        $actualDetails = $this->requestDetails[$this->lastCheckedRequest++];
+    public function mockTransportWithExpectations(
+        string $url,
+        string $method,
+        string $userAgent,
+        array $headers,
+        array $response,
+        ?string $body = null,
+        ?string $error = null
+    ): void {
+        Context::$TRANSPORT = $this->createMock(Transport::class);
 
-        $expectedDetails = [
-            'url' => "https://{$address}",
-            'options' => $expectedOptions,
-        ];
+        Context::$TRANSPORT->expects($this->once())
+            ->method('initializeRequest')
+            ->with($this->equalTo($url));
 
-        // Reformat the HTTP headers to make it easier to see where the values might be different
-        if (
-            isset($expectedDetails['options'][CURLOPT_HTTPHEADER]) &&
-            isset($actualDetails['options'][CURLOPT_HTTPHEADER])
-        ) {
-            $parseHeaderArray = function (array $array) {
-                $return = [];
-                foreach ($array as $header) {
-                    $parts = explode(': ', $header, 2);
-                    $return[$parts[0]] = $parts[1];
-                }
-                return $return;
-            };
+        Context::$TRANSPORT->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo($method));
 
-            $expectedDetails['options'][CURLOPT_HTTPHEADER] = $parseHeaderArray(
-                $expectedDetails['options'][CURLOPT_HTTPHEADER]
-            );
-            $actualDetails['options'][CURLOPT_HTTPHEADER] = $parseHeaderArray(
-                $actualDetails['options'][CURLOPT_HTTPHEADER]
-            );
+        Context::$TRANSPORT->expects($this->once())
+            ->method('setUserAgent')
+            ->with($this->equalTo($userAgent));
 
-            foreach ($actualDetails['options'][CURLOPT_HTTPHEADER] as $option => $value) {
-                if (!array_key_exists($option, $expectedDetails['options'][CURLOPT_HTTPHEADER])) {
-                    unset($actualDetails['options'][CURLOPT_HTTPHEADER][$option]);
-                }
-            }
+        Context::$TRANSPORT->expects($this->once())
+            ->method('setHeader')
+            ->with($this->equalTo($headers));
+
+        if ($body) {
+            Context::$TRANSPORT->expects($this->once())
+                ->method('setBody')
+                ->with($this->equalTo($body));
+        } else {
+            Context::$TRANSPORT->expects($this->never())
+                ->method('setBody');
         }
 
-        foreach ($actualDetails['options'] as $option => $value) {
-            if (!array_key_exists($option, $expectedDetails['options'])) {
-                unset($actualDetails['options'][$option]);
-            }
+        if ($error) {
+            Context::$TRANSPORT->expects($this->once())
+                ->method('sendRequest')
+                ->will($this->throwException(new HttpRequestException()));
+        } else {
+            Context::$TRANSPORT->expects($this->once())
+                ->method('sendRequest')
+                ->willReturn($response);
         }
+    }
 
-        $this->assertEquals($expectedDetails, $actualDetails);
+    /**
+     * @param string $url       Requested URL
+     * @param string $method    HTTP Method `PUT`, `POST`, `GET`, and `DELETE` supported
+     * @param string $userAgent User Agent
+     * @param array  $headers   HTTP Headers
+     * @param array  $responses And array of associative arrays with keys `body`, `error`, `headers`, and `error`
+     */
+    public function mockTransportWithExpectationsWithoutBodyWithMultipleResponses(
+        string $url,
+        string $method,
+        string $userAgent,
+        array $headers,
+        array $responses
+    ): void {
+        Context::$TRANSPORT = $this->createMock(Transport::class);
+
+        Context::$TRANSPORT->expects($this->once())
+            ->method('initializeRequest')
+            ->with($this->equalTo($url));
+
+        Context::$TRANSPORT->expects($this->once())
+            ->method('setMethod')
+            ->with($this->equalTo($method));
+
+        Context::$TRANSPORT->expects($this->once())
+            ->method('setUserAgent')
+            ->with($this->equalTo($userAgent));
+
+        Context::$TRANSPORT->expects($this->once())
+            ->method('setHeader')
+            ->with($this->equalTo($headers));
+
+        Context::$TRANSPORT->expects($this->never())
+            ->method('setBody');
+
+        Context::$TRANSPORT->expects($this->exactly(count($responses)))
+            ->method('sendRequest')
+            ->willReturnOnConsecutiveCalls(...$responses);
     }
 }

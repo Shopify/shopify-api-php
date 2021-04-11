@@ -37,16 +37,32 @@ final class OAuthTest extends BaseTestCase
         'scope' => 'read_products',
     ];
 
+
     /**
      * @dataProvider validCallbackProvider
      */
-    public function testValidCallback($isOnline, $isEmbedded)
+    public function testValidCallback2($isOnline, $isEmbedded)
     {
+
         Context::$IS_EMBEDDED_APP = $isEmbedded;
 
         $this->createTestSession($isOnline);
 
-        $mockedOAuth = $this->prepareOAuthMock($isOnline);
+        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
+        $bodyLength = strlen($body);
+
+        $this->mockTransportWithExpectations(
+            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+            method: "POST",
+            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            headers: ['Content-Type: application/json',
+                "Content-Length: $bodyLength"
+            ],
+            response: $this->buildMockHttpResponse(200, $isOnline ? $this->onlineResponse : $this->offlineResponse),
+            body: $body
+        );
+
+        $mockedOAuth = new OAuth();
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -56,7 +72,6 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $mockedOAuth->callback($mockCookies, $mockQuery);
-        $this->assertHttpRequest("{$this->domain}/" . OAuth::ACCESS_TOKEN_POST_PATH, [CURLOPT_POST => true]);
 
         $jwtSessionId = $mockedOAuth->getJwtSessionId($this->domain, '1');
 
@@ -257,7 +272,21 @@ final class OAuthTest extends BaseTestCase
 
         $this->createTestSession(true);
 
-        $mockedOAuth = $this->prepareOAuthMock(true);
+        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
+        $bodyLength = strlen($body);
+
+        $this->mockTransportWithExpectations(
+            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+            method: "POST",
+            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            headers: ['Content-Type: application/json',
+                "Content-Length: $bodyLength"
+            ],
+            response: $this->buildMockHttpResponse(200, $this->onlineResponse),
+            body: $body
+        );
+
+        $mockedOAuth = new OAuth();
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -271,7 +300,6 @@ final class OAuthTest extends BaseTestCase
         $this->expectException('Shopify\Exception\SessionStorageException');
 
         $mockedOAuth->callback($mockCookies, $mockQuery);
-        $this->assertHttpRequest("{$this->domain}/" . OAuth::ACCESS_TOKEN_POST_PATH, [CURLOPT_POST => true]);
     }
 
     public function testThrowsIfSessionStoreFails()
@@ -282,7 +310,21 @@ final class OAuthTest extends BaseTestCase
 
         $this->createTestSession(true);
 
-        $mockedOAuth = $this->prepareOAuthMock(true);
+        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
+        $bodyLength = strlen($body);
+
+        $this->mockTransportWithExpectations(
+            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+            method: "POST",
+            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            headers: ['Content-Type: application/json',
+                "Content-Length: $bodyLength"
+            ],
+            response: $this->buildMockHttpResponse(200, $this->onlineResponse),
+            body: $body
+        );
+
+        $mockedOAuth = new OAuth();
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -296,14 +338,27 @@ final class OAuthTest extends BaseTestCase
         $this->expectException('Shopify\Exception\SessionStorageException');
 
         $mockedOAuth->callback($mockCookies, $mockQuery);
-        $this->assertHttpRequest("{$this->domain}/" . OAuth::ACCESS_TOKEN_POST_PATH, [CURLOPT_POST => true]);
     }
 
     public function testFailsIfTokenFetchFails()
     {
         $this->createTestSession(false);
 
-        $mockedOAuth = $this->prepareOAuthMock(failRequest: true);
+        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
+        $bodyLength = strlen($body);
+
+        $this->mockTransportWithExpectations(
+            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+            method: "POST",
+            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            headers: ['Content-Type: application/json',
+                "Content-Length: $bodyLength"
+            ],
+            response: $this->buildMockHttpResponse(500, ''),
+            body: $body
+        );
+
+        $mockedOAuth = new OAuth();
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -314,7 +369,6 @@ final class OAuthTest extends BaseTestCase
         ];
         $this->expectException('Shopify\Exception\HttpRequestException');
         $mockedOAuth->callback($mockCookies, $mockQuery);
-        $this->assertHttpRequest("{$this->domain}/" . OAuth::ACCESS_TOKEN_POST_PATH, [CURLOPT_POST => true]);
     }
 
     public function testBeginFailsOnPrivateApp()
@@ -436,39 +490,6 @@ final class OAuthTest extends BaseTestCase
         Context::$SESSION_STORAGE->storeSession($session);
 
         return $session;
-    }
-
-    /**
-     * Creates an OAuth object which is stubbed to not make real HTTP requests
-     *
-     * @param bool $isOnline    Whether the expected session is online
-     * @param bool $failRequest Whether the access token fetch request should fail
-     */
-    private function prepareOAuthMock(bool $isOnline = true, bool $failRequest = false): OAuth
-    {
-        if ($failRequest) {
-            $mockResponse = $this->buildMockHttpResponse(500, '');
-        } else {
-            $mockResponse = $this->buildMockHttpResponse(
-                200,
-                $isOnline ? $this->onlineResponse : $this->offlineResponse
-            );
-        }
-        $mockClient = $this->getHttpClientWithMocks([$mockResponse]);
-
-        /** @var MockObject|OAuth */
-        $mockedOAuth = $this->getMockBuilder(OAuth::class)
-            ->onlyMethods(['requestAccessToken'])
-            ->getMock();
-
-        $mockedOAuth->expects($this->once())
-            ->method('requestAccessToken')
-            ->with($this->anything(), $this->anything())
-            ->willReturnCallback(function ($realClient, $body) use ($mockClient) {
-                return $mockClient->post(path: OAuth::ACCESS_TOKEN_POST_PATH, body: $body);
-            });
-
-        return $mockedOAuth;
     }
 
     /**

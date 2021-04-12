@@ -15,7 +15,7 @@ This library can be used in any application that has a PHP backend, since it doe
 # Requirements
 
 To follow these usage guides, you will need to:
-- have a basic understanding of [PHP](https://php.net)
+- have a basic understanding of [PHP](https://www.php.net/)
 - have a Shopify Partner account and development store
 - _OR_ have a test store where you can create a private app
 - have a private or custom app already set up in your test store or partner account

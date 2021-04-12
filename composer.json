@@ -37,5 +37,8 @@
     "scripts": {
         "test": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --color",
         "lint": "./vendor/bin/phpcs --standard=PSR12 src"
+    },
+    "require": {
+        "ramsey/uuid": "^4.1"
     }
 }

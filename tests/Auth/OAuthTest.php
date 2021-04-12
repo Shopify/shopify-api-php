@@ -11,6 +11,7 @@ use Shopify\Auth\OAuthCookie;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
+use Ramsey\Uuid\Uuid;
 
 final class OAuthTest extends BaseTestCase
 {
@@ -350,7 +351,7 @@ final class OAuthTest extends BaseTestCase
         $oauth = new OAuth();
         $this->cookie = new OAuthCookie(
             name: 'shopify_session_id',
-            value: bin2hex(random_bytes(40)),
+            value: Uuid::uuid4()->toString(),
             expire: strtotime('+1 minute'),
             secure: true,
             httpOnly: true

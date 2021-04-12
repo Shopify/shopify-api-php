@@ -15,6 +15,7 @@ use Shopify\Exception\SessionStorageException;
 use Shopify\Exception\CookieSetException;
 use Shopify\Utils;
 use Shopify\Auth\OAuthCookie;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Provides methods to perform OAuth with Shopify.
@@ -42,7 +43,7 @@ class OAuth
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp("OAuth is not allowed for private apps");
 
-        $mySessionId = $isOnline ? bin2hex(random_bytes(40)) : $this->getOfflineSessionId($shop);
+        $mySessionId = $isOnline ? Uuid::uuid4()->toString() : $this->getOfflineSessionId($shop);
 
         $cookie = new OAuthCookie(
             name: self::SESSION_ID_COOKIE_NAME,
@@ -77,7 +78,7 @@ class OAuth
             id: $mySessionId,
             shop: $shop,
             isOnline: $isOnline,
-            state: bin2hex(random_bytes(40))
+            state: Uuid::uuid4()->toString()
         );
 
         if ($isOnline) {

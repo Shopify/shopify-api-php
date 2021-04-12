@@ -357,7 +357,6 @@ final class OAuthTest extends BaseTestCase
             httpOnly: true
         );
 
-        $testCookieId = 'chocolate-chip-cookie';
         $returnUrl = $oauth->begin(
             'shopname',
             '/redirect',

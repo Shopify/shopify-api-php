@@ -20,27 +20,27 @@ class OAuthCookie
     ) {
     }
 
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getExpire()
+    public function getExpire(): int
     {
         return $this->expire;
     }
 
-    public function isSecure()
+    public function isSecure(): bool
     {
         return $this->secure;
     }
 
-    public function isHttpOnly()
+    public function isHttpOnly(): bool
     {
         return $this->httpOnly;
     }

@@ -392,7 +392,7 @@ final class OAuthTest extends BaseTestCase
         $this->assertTrue($wasCallbackCalled);
     }
 
-    public function testBeginWithoutsetCookieFunction(){
+    public function testBeginWithoutSetCookieFunction(){
         $oauth = new OAuth();
         $storage = new MockSessionStorage();
         Context::$SESSION_STORAGE = $storage;

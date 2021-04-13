@@ -28,18 +28,23 @@ class OAuth
     /**
      * Initializes a session and cookie for the OAuth process, and returns the authorization url
      *
-     * @param string $shop                      A Shopify shop domain or hostname
-     * @param string $redirectPath              Redirect path for callback
-     * @param string $isOnline                  Whether or not the session is online
-     * @param null|callable $setCookieFunction  An optional override for setting cookie in response
+     * @param string        $shop              A Shopify shop domain or hostname
+     * @param string        $redirectPath      Redirect path for callback
+     * @param bool          $isOnline          Whether or not the session is online
+     * @param null|callable $setCookieFunction An optional override for setting cookie in response
+     *
      * @return string The URL for OAuth redirection
+     * @throws \Shopify\Exception\CookieSetException
+     * @throws \Shopify\Exception\PrivateAppException
+     * @throws \Shopify\Exception\SessionStorageException
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public function begin(
         string $shop,
         string $redirectPath,
         bool $isOnline,
         ?callable $setCookieFunction = null
-    ) {
+    ): string {
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp("OAuth is not allowed for private apps");
 

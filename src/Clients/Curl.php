@@ -11,9 +11,7 @@ class Curl implements Transport
     private CurlHandle $ch;
 
     /**
-     * @return array|null Associative array with keys `body`, `error`, `headers`, and `error`
-     * @throws \Shopify\Exception\HttpRequestException On transport errors
-     * @codeCoverageIgnore We can't test this method without making actual cURL requests
+     * {@inheritDoc}
      */
     public function sendRequest(): ?array
     {
@@ -56,7 +54,7 @@ class Curl implements Transport
     }
 
     /**
-     * @param string $body The body of the request
+     * {@inheritDoc}
      */
     public function setBody(string $body): void
     {
@@ -64,7 +62,7 @@ class Curl implements Transport
     }
 
     /**
-     * @param array $header Headers to send along with the request
+     * {@inheritDoc}
      */
     public function setHeader(array $header): void
     {
@@ -72,7 +70,7 @@ class Curl implements Transport
     }
 
     /**
-     * @param string $agent User Agent
+     * {@inheritDoc}
      */
     public function setUserAgent(string $agent): void
     {
@@ -80,7 +78,7 @@ class Curl implements Transport
     }
 
     /**
-     * @param string $method HTTP Method `PUT`, `POST`, `GET`, and `DELETE` supported
+     * {@inheritDoc}
      */
     public function setMethod(string $method): void
     {
@@ -98,14 +96,7 @@ class Curl implements Transport
     }
 
     /**
-     * Sets the given option in the cURL resource.
-     *
-     * @param int   $option The option to set
-     * @param mixed $value  The value for the option
-     *
-     * Note: this is only public so tests can override it.
-     *
-     * @codeCoverageIgnore We can't test this method without making actual cURL requests
+     * {@inheritDoc}
      */
     public function setCurlOption(int $option, mixed $value)
     {
@@ -113,7 +104,7 @@ class Curl implements Transport
     }
 
     /**
-     * @param string $url URL
+     * {@inheritDoc}
      */
     public function initializeRequest(string $url)
     {

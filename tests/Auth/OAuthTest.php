@@ -317,7 +317,8 @@ final class OAuthTest extends BaseTestCase
         $this->assertHttpRequest("{$this->domain}/" . OAuth::ACCESS_TOKEN_POST_PATH, [CURLOPT_POST => true]);
     }
 
-    public function testBeginFailsOnPrivateApp(){
+    public function testBeginFailsOnPrivateApp()
+    {
         Context::$IS_PRIVATE_APP = true;
 
         $this->expectException('Shopify\Exception\PrivateAppException');
@@ -325,7 +326,8 @@ final class OAuthTest extends BaseTestCase
         $oauth->begin('shopname', '/redirect', true);
     }
 
-    public function testBeginFunctionReturnSProperUrlForOfflineAccess(){
+    public function testBeginFunctionReturnSProperUrlForOfflineAccess()
+    {
         $oauth = new OAuth();
 
         $wasCallbackCalled = false;
@@ -347,7 +349,8 @@ final class OAuthTest extends BaseTestCase
         );
     }
 
-    public function testBeginFunctionReturnSProperUrlForOnlineAccess(){
+    public function testBeginFunctionReturnSProperUrlForOnlineAccess()
+    {
         $oauth = new OAuth();
         $this->cookie = new OAuthCookie(
             name: 'shopify_session_id',
@@ -375,7 +378,8 @@ final class OAuthTest extends BaseTestCase
         );
     }
 
-    public function testBeginRaisesErrorIfCookieNotSet(){
+    public function testBeginRaisesErrorIfCookieNotSet()
+    {
         $oauth = new OAuth();
         $this->expectException('Shopify\Exception\CookieSetException');
 
@@ -392,7 +396,8 @@ final class OAuthTest extends BaseTestCase
         $this->assertTrue($wasCallbackCalled);
     }
 
-    public function testBeginWithoutSetCookieFunction(){
+    public function testBeginWithoutSetCookieFunction()
+    {
         $oauth = new OAuth();
         $storage = new MockSessionStorage();
         Context::$SESSION_STORAGE = $storage;

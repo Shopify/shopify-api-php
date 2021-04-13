@@ -6,6 +6,7 @@ namespace Shopify\Auth;
 
 use DateTime;
 use Shopify\Context;
+use Shopify\Utils;
 
 /**
  * Stores App information from logged in merchants so they can make authenticated requests to the Admin API.
@@ -26,6 +27,7 @@ class Session
         private string $state,
         // phpcs:enable
     ) {
+        $this->shop = Utils::sanitizeShopDomain($shop);
     }
 
     public function getId(): string

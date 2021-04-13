@@ -28,7 +28,7 @@ class OAuth
     /**
      * Initializes a session and cookie for the OAuth process, and returns the authorization url
      *
-     * @param string        $shop              A Shopify shop domain or hostname
+     * @param string        $shop              A Shopify domain name or hostname
      * @param string        $redirectPath      Redirect path for callback
      * @param bool          $isOnline          Whether or not the session is online
      * @param null|callable $setCookieFunction An optional override for setting cookie in response
@@ -48,6 +48,7 @@ class OAuth
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp("OAuth is not allowed for private apps");
 
+        $shop = Utils::sanitizeShopDomain($shop);
         $mySessionId = $isOnline ? Uuid::uuid4()->toString() : $this->getOfflineSessionId($shop);
 
         $cookie = new OAuthCookie(

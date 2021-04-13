@@ -12,16 +12,16 @@ final class Utils
     /**
      * Returns a sanitized Shopify shop domain
      *
-     * If the provided shop domain is invalid or could not be sanitized, returns null.
+     * If the provided shop domain or hostname is invalid or could not be sanitized, returns null.
      *
-     * @param string $shopDomain A Shopify shop domain or hostname
+     * @param string $shop A Shopify shop domain or hostname
      * @param string|null $myshopifyDomain A custom Shopify domain
      *
-     * @return string $name a sanitifized Shopify shop domain, null if the provided domain is invalid
+     * @return string $name a sanitized Shopify shop domain, null if the provided domain is invalid
      */
-    public static function sanitizeShopDomain(string $shopDomain, ?string $myshopifyDomain = null)
+    public static function sanitizeShopDomain(string $shop, ?string $myshopifyDomain = null)
     {
-        $name = trim(strtolower($shopDomain));
+        $name = trim(strtolower($shop));
 
         $allowedDomainsRegexp = $myshopifyDomain ? "($myshopifyDomain)" : "(myshopify.com|myshopify.io)";
 

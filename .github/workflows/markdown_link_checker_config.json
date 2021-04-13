@@ -1,6 +1,11 @@
 {
   "ignorePatterns": [
     {
+      "pattern": "^https?://php.net"
+    }
+  ],
+  "replacementPatterns": [
+    {
       "pattern": "^/",
       "replacement": "{{BASEURL}}/"
     }

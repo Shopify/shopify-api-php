@@ -41,7 +41,7 @@ final class SessionTest extends BaseTestCase
         $this->assertEquals('my-shop.myshopify.io', $session->getShop());
         $this->assertEquals('asdf1234', $session->getState());
         $this->assertEquals('read_products', $session->getScope());
-        $this->assertEquals(new DateTime('January 25, 2021'), $session->getExpires());
+        $this->assertEquals('2021-01-25', $session->getExpires()->format('Y-m-d'));
         $this->assertEquals(true, $session->isOnline());
         $this->assertEquals('24ssdf243u2ohfd21', $session->getAccessToken());
         $this->assertEquals($onlineAccessInfo, $session->getOnlineAccessInfo());

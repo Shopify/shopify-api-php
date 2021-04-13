@@ -12,7 +12,10 @@ use Shopify\Exception\InvalidOAuthException;
 use Shopify\Exception\OAuthCookieNotFoundException;
 use Shopify\Exception\OAuthSessionNotFoundException;
 use Shopify\Exception\SessionStorageException;
+use Shopify\Exception\CookieSetException;
 use Shopify\Utils;
+use Shopify\Auth\OAuthCookie;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Provides methods to perform OAuth with Shopify.
@@ -21,6 +24,93 @@ class OAuth
 {
     public const SESSION_ID_COOKIE_NAME = 'shopify_session_id';
     public const ACCESS_TOKEN_POST_PATH = 'admin/oauth/access_token';
+
+    /**
+     * Initializes a session and cookie for the OAuth process, and returns the authorization url
+     *
+     * @param string        $shop              A Shopify shop domain or hostname
+     * @param string        $redirectPath      Redirect path for callback
+     * @param bool          $isOnline          Whether or not the session is online
+     * @param null|callable $setCookieFunction An optional override for setting cookie in response
+     *
+     * @return string The URL for OAuth redirection
+     * @throws \Shopify\Exception\CookieSetException
+     * @throws \Shopify\Exception\PrivateAppException
+     * @throws \Shopify\Exception\SessionStorageException
+     * @throws \Shopify\Exception\UninitializedContextException
+     */
+    public function begin(
+        string $shop,
+        string $redirectPath,
+        bool $isOnline,
+        ?callable $setCookieFunction = null
+    ): string {
+        Context::throwIfUninitialized();
+        Context::throwIfPrivateApp("OAuth is not allowed for private apps");
+
+        $mySessionId = $isOnline ? Uuid::uuid4()->toString() : $this->getOfflineSessionId($shop);
+
+        $cookie = new OAuthCookie(
+            name: self::SESSION_ID_COOKIE_NAME,
+            value: $mySessionId,
+            expire: strtotime('+1 minute'),
+            secure: true,
+            httpOnly: true,
+        );
+
+        if ($setCookieFunction) {
+            $cookieSet = $setCookieFunction($cookie);
+        } else {
+            // @codeCoverageIgnoreStart
+            // cannot mock setcookie() function
+            $cookieSet = setcookie(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpire(),
+                secure: $cookie->isSecure(),
+                httponly: $cookie->isHttpOnly(),
+            );
+            // @codeCoverageIgnoreEnd
+        }
+
+        if (!$cookieSet) {
+            throw new CookieSetException(
+                'OAuth Cookie could not be saved.'
+            );
+        }
+
+        $session = new Session(
+            id: $mySessionId,
+            shop: $shop,
+            isOnline: $isOnline,
+            state: Uuid::uuid4()->toString()
+        );
+
+        if ($isOnline) {
+            $session->setExpires(strtotime('+1 minute'));
+            $grantOptions = 'per-user';
+        } else {
+            $grantOptions = '';
+        }
+
+        $sessionStored = Context::$SESSION_STORAGE->storeSession($session);
+
+        if (!$sessionStored) {
+            throw new SessionStorageException(
+                'OAuth Session could not be saved. Please check your session storage functionality.'
+            );
+        }
+
+        $query = [
+            'client_id' => Context::$API_KEY,
+            'scope' => Context::$SCOPES->toString(),
+            'redirect_uri' => 'https://' . Context::$HOST_NAME . $redirectPath,
+            'state' => $session->getState(),
+            'grant_options[]' => $grantOptions,
+        ];
+
+        return "https://{$shop}/admin/oauth/authorize?" . http_build_query($query);
+    }
 
     /**
      * Performs the OAuth callback steps, checking the returned parameters and fetching the access token, preparing the
@@ -84,11 +174,22 @@ class OAuth
      * Builds a session id that can be loaded from JWTs from App Bridge
      *
      * @param string $shop       The session's shop
-     * @param string $userId|int The session'd user
+     * @param string $userId|int The session's user
      */
     public function getJwtSessionId(string $shop, string | int $userId): string
     {
         return "{$shop}_{$userId}";
+    }
+
+    /**
+     * Retrieves the offline session ID tied to a single shop
+     *
+     * @param string $shop  The session's shop
+     * @return string the offline session ID
+     */
+    public function getOfflineSessionId(string $shop): string
+    {
+        return "offline_{$shop}";
     }
 
     /**

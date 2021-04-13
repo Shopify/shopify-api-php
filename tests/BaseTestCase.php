@@ -26,7 +26,7 @@ class BaseTestCase extends TestCase
             apiKey: 'ash',
             apiSecretKey: 'steffi',
             scopes: ['sleepy', 'kitty'],
-            hostName: 'my-friends-cats',
+            hostName: 'www.my-friends-cats.com',
             sessionStorage: new MockSessionStorage(),
             apiVersion: 'unstable',
             isEmbeddedApp: true,

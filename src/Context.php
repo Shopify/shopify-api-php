@@ -30,7 +30,7 @@ class Context
      * @param string         $apiKey          App API key
      * @param string         $apiSecretKey    App API secret
      * @param string|array   $scopes          App scopes
-     * @param string         $hostName        App host name
+     * @param string         $hostName        App host name e.g. www.google.ca
      * @param SessionStorage $sessionStorage  Session storage strategy
      * @param string         $apiVersion      App API key, defaults to unstable
      * @param bool           $isEmbeddedApp   Whether the app is an embedded app, defaults to true

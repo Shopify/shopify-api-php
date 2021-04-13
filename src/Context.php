@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shopify;
 
 use Shopify\Auth\SessionStorage;
+use Shopify\Auth\Scopes;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\PrivateAppException;
 use Shopify\Exception\UninitializedContextException;
@@ -13,7 +14,7 @@ class Context
 {
     public static ?string $API_KEY = null;
     public static ?string $API_SECRET_KEY = null;
-    public static ?array $SCOPES = null;
+    public static Scopes $SCOPES;
     public static ?string $HOST_NAME = null;
     public static ?SessionStorage $SESSION_STORAGE = null;
     public static ?string $API_VERSION = null;
@@ -28,7 +29,7 @@ class Context
      *
      * @param string         $apiKey          App API key
      * @param string         $apiSecretKey    App API secret
-     * @param array          $scopes          App scopes
+     * @param string|array   $scopes          App scopes
      * @param string         $hostName        App host name
      * @param SessionStorage $sessionStorage  Session storage strategy
      * @param string         $apiVersion      App API key, defaults to unstable
@@ -39,7 +40,7 @@ class Context
     public static function initialize(
         string $apiKey,
         string $apiSecretKey,
-        array $scopes,
+        string | array $scopes,
         string $hostName,
         SessionStorage $sessionStorage,
         string $apiVersion = 'unstable',
@@ -47,6 +48,8 @@ class Context
         bool $isPrivateApp = false,
         string $userAgentPrefix = '',
     ): void {
+        $authScopes = new Scopes($scopes);
+
         // ensure required values given
         $requiredValues = [
             'apiKey' => $apiKey,
@@ -70,7 +73,7 @@ class Context
 
         self::$API_KEY = $apiKey;
         self::$API_SECRET_KEY = $apiSecretKey;
-        self::$SCOPES = $scopes;
+        self::$SCOPES = $authScopes;
         self::$HOST_NAME = $hostName;
         self::$SESSION_STORAGE = $sessionStorage;
         self::$API_VERSION = $apiVersion;

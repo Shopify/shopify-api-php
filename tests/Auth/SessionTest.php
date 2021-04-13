@@ -6,7 +6,9 @@ namespace ShopifyTest\Auth;
 
 use DateTime;
 use Shopify\Auth\AccessTokenOnlineUserInfo;
+use Shopify\Auth\Scopes;
 use Shopify\Auth\Session;
+use Shopify\Context;
 use ShopifyTest\BaseTestCase;
 
 final class SessionTest extends BaseTestCase
@@ -98,5 +100,72 @@ final class SessionTest extends BaseTestCase
         $this->assertEquals($session->getExpires(), $newSession->getExpires());
         $this->assertEquals($session->getAccessToken(), $newSession->getAccessToken());
         $this->assertEquals($session->getOnlineAccessInfo(), $newSession->getOnlineAccessInfo());
+    }
+
+    public function testIsValidReturnsTrue()
+    {
+        Context::$SCOPES = new Scopes('read_products');
+
+        $session = new Session(
+            id: '12345',
+            shop: 'my-shop.myshopify.io',
+            state: '1234',
+            isOnline: true,
+        );
+        $session->setScope('read_products');
+        $session->setExpires(strtotime('+10 minutes'));
+        $session->setAccessToken('totally_real_token');
+
+        $this->assertTrue($session->isValid());
+    }
+
+    public function testIsValidReturnsFalseIfScopesHaveChanged()
+    {
+        Context::$SCOPES = new Scopes('read_products,write_orders');
+
+        $session = new Session(
+            id: '12345',
+            shop: 'my-shop.myshopify.io',
+            state: '1234',
+            isOnline: true,
+        );
+        $session->setScope('read_products');
+        $session->setExpires(strtotime('+10 minutes'));
+        $session->setAccessToken('totally_real_token');
+
+        $this->assertFalse($session->isValid());
+    }
+
+    public function testIsValidReturnsFalseIfExpired()
+    {
+        Context::$SCOPES = new Scopes('read_products');
+
+        $session = new Session(
+            id: '12345',
+            shop: 'my-shop.myshopify.io',
+            state: '1234',
+            isOnline: true,
+        );
+        $session->setScope('read_products');
+        $session->setExpires(strtotime('-10 minutes'));
+        $session->setAccessToken('totally_real_token');
+
+        $this->assertFalse($session->isValid());
+    }
+
+    public function testIsValidReturnsFalseIfNoAccessToken()
+    {
+        Context::$SCOPES = new Scopes('read_products');
+
+        $session = new Session(
+            id: '12345',
+            shop: 'my-shop.myshopify.io',
+            state: '1234',
+            isOnline: true,
+        );
+        $session->setScope('read_products');
+        $session->setExpires(strtotime('+10 minutes'));
+
+        $this->assertFalse($session->isValid());
     }
 }

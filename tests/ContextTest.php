@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use Shopify\Auth\Scopes;
 use Shopify\Context;
 use ShopifyTest\Auth\MockSessionStorage;
 use ShopifyTest\BaseTestCase;
@@ -23,7 +24,7 @@ final class ContextTest extends BaseTestCase
 
         $this->assertEquals('ash', Context::$API_KEY);
         $this->assertEquals('steffi', Context::$API_SECRET_KEY);
-        $this->assertEquals(['sleepy', 'kitty'], Context::$SCOPES);
+        $this->assertEquals(new Scopes(['sleepy', 'kitty']), Context::$SCOPES);
         $this->assertEquals('my-friends-cats', Context::$HOST_NAME);
 
         // This should not trigger the exception
@@ -46,7 +47,7 @@ final class ContextTest extends BaseTestCase
 
         $this->assertEquals('tuck', Context::$API_KEY);
         $this->assertEquals('rocky', Context::$API_SECRET_KEY);
-        $this->assertEquals(['silly', 'doggo'], Context::$SCOPES);
+        $this->assertEquals(new Scopes(['silly', 'doggo']), Context::$SCOPES);
         $this->assertEquals('yay-for-doggos', Context::$HOST_NAME);
     }
 

@@ -103,7 +103,7 @@ class OAuth
 
         $query = [
             'client_id' => Context::$API_KEY,
-            'scope' => implode(',', Context::$SCOPES),
+            'scope' => Context::$SCOPES->toString(),
             'redirect_uri' => 'https://' . Context::$HOST_NAME . $redirectPath,
             'state' => $session->getState(),
             'grant_options[]' => $grantOptions,

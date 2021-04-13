@@ -41,7 +41,7 @@ final class OAuthTest extends BaseTestCase
     /**
      * @dataProvider validCallbackProvider
      */
-    public function testValidCallback2($isOnline, $isEmbedded)
+    public function testValidCallback($isOnline, $isEmbedded)
     {
 
         Context::$IS_EMBEDDED_APP = $isEmbedded;

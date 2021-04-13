@@ -35,8 +35,6 @@ class BaseTestCase extends TestCase
         );
         Context::$TRANSPORT = $this->createMock(Transport::class);
         Context::$RETRY_TIME_IN_SECONDS = 0;
-        $this->requestDetails = [];
-        $this->lastCheckedRequest = 0;
     }
 
     /**

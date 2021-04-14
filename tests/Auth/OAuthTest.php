@@ -380,7 +380,7 @@ final class OAuthTest extends BaseTestCase
         $oauth->begin('shopname', '/redirect', true);
     }
 
-    public function testBeginFunctionReturnSProperUrlForOfflineAccess()
+    public function testBeginFunctionReturnsProperUrlForOfflineAccess()
     {
         $oauth = new OAuth();
 
@@ -395,15 +395,15 @@ final class OAuthTest extends BaseTestCase
             }
         );
         $this->assertTrue($wasCallbackCalled);
-        $mySessionId = 'offline_shopname';
+        $mySessionId = 'offline_shopname.myshopify.com';
         $generatedState = Context::$SESSION_STORAGE->loadSession($mySessionId)->getState();
         $this->assertEquals(
-            "https://shopname/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=",
+            "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=",
             $returnUrl
         );
     }
 
-    public function testBeginFunctionReturnSProperUrlForOnlineAccess()
+    public function testBeginFunctionReturnsProperUrlForOnlineAccess()
     {
         $oauth = new OAuth();
         $this->cookie = new OAuthCookie(
@@ -427,7 +427,7 @@ final class OAuthTest extends BaseTestCase
 
         $generatedState = Context::$SESSION_STORAGE->loadSession($testCookieId)->getState();
         $this->assertEquals(
-            "https://shopname/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=per-user",
+            "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=per-user",
             $returnUrl
         );
     }

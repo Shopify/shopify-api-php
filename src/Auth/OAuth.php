@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shopify\Auth;
 
-use Shopify\Clients\Curl;
 use Shopify\Clients\Http;
 use Shopify\Clients\HttpResponse;
 use Shopify\Context;

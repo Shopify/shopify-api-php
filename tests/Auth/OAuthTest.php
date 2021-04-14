@@ -54,7 +54,7 @@ final class OAuthTest extends BaseTestCase
         $this->mockTransportWithExpectations(
             url: "https://test-shop.myshopify.io/admin/oauth/access_token",
             method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            userAgent: "Shopify Admin API Library for PHP v$this->version",
             headers: ['Content-Type: application/json',
                 "Content-Length: $bodyLength"
             ],
@@ -278,7 +278,7 @@ final class OAuthTest extends BaseTestCase
         $this->mockTransportWithExpectations(
             url: "https://test-shop.myshopify.io/admin/oauth/access_token",
             method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            userAgent: "Shopify Admin API Library for PHP v$this->version",
             headers: ['Content-Type: application/json',
                 "Content-Length: $bodyLength"
             ],
@@ -316,7 +316,7 @@ final class OAuthTest extends BaseTestCase
         $this->mockTransportWithExpectations(
             url: "https://test-shop.myshopify.io/admin/oauth/access_token",
             method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            userAgent: "Shopify Admin API Library for PHP v$this->version",
             headers: ['Content-Type: application/json',
                 "Content-Length: $bodyLength"
             ],
@@ -350,7 +350,7 @@ final class OAuthTest extends BaseTestCase
         $this->mockTransportWithExpectations(
             url: "https://test-shop.myshopify.io/admin/oauth/access_token",
             method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v0.0.1",
+            userAgent: "Shopify Admin API Library for PHP v$this->version",
             headers: ['Content-Type: application/json',
                 "Content-Length: $bodyLength"
             ],

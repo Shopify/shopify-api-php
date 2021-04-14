@@ -18,6 +18,7 @@ class BaseTestCase extends TestCase
     protected string $domain = 'test-shop.myshopify.io';
     protected array $requestDetails;
     protected int $lastCheckedRequest;
+    protected string $version;
 
     public function setUp(): void
     {
@@ -35,6 +36,7 @@ class BaseTestCase extends TestCase
         );
         Context::$TRANSPORT = $this->createMock(Transport::class);
         Context::$RETRY_TIME_IN_SECONDS = 0;
+        $this->version = require dirname(__FILE__) . '/../src/version.php';
     }
 
     /**

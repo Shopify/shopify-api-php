@@ -4,7 +4,7 @@ Once the library is set up for your project, you'll be able to use it to start a
 
 ## Begin OAuth
 
-Create a route for starting the OAuth method such as `/login`. In this route, the `begin` method located in `src/Auth/OAuth.php` will be used. The method takes in a Shopify shop domain or hostname (_string_), the redirect path (_string_), and whether or not you are requesting [online access](https://shopify.dev/concepts/about-apis/authentication#api-access-modes) (_boolean_). The last parameter is optional and is an override function to set cookies. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work, a function can be written to set cookies in your chosen framework.
+Create a route for starting the OAuth method such as `/login`. In this route, the `begin` method located in `src/Auth/OAuth.php` will be used. The method takes in a Shopify shop domain or hostname (_string_), the redirect path (_string_), and whether or not you are requesting [online access](https://shopify.dev/concepts/about-apis/authentication#api-access-modes) (_boolean_). The last parameter is optional and is an override function to set cookies. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work for your chosen framework, a function that sets cookies can be passed in.
 
 <details>
 <summary>Custom set cookie function with Yii</summary>

@@ -30,7 +30,7 @@ You can follow our [getting started guide](docs/) to learn how to use this libra
 - [Getting started](docs/getting_started.md)
   - [Install dependencies](docs/getting_started.md#install-dependencies)
 - [Performing OAuth](docs/usage/oauth.md)
-  - [OAuth begin](docs/usage/oauth.md#begin-oauth)
+  - [Begin OAuth](docs/usage/oauth.md#begin-oauth)
   - [OAuth callback](docs/usage/oauth.md#oauth-callback)
 - [Known issues and caveats](docs/issues.md)
 

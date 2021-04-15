@@ -22,7 +22,7 @@ final class HttpTest extends BaseTestCase
         ],
     ];
 
-    public function testGetRequest()
+    public function testGetRequestWithoutQuery()
     {
         $headers = ['X-Test-Header' => 'test_value'];
         $this->mockTransportWithExpectations(
@@ -34,14 +34,27 @@ final class HttpTest extends BaseTestCase
         );
 
         $client = new Http($this->domain);
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 200;
-        $expectedResponse->headers = [];
-        $expectedResponse->body = $this->successResponse;
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
         $response = $client->get(path: 'test/path', headers: $headers);
         $this->assertEquals($expectedResponse, $response);
     }
 
+    public function testGetRequest()
+    {
+        $headers = ['X-Test-Header' => 'test_value'];
+        $this->mockTransportWithExpectations(
+            url: "https://$this->domain/test/path?path=some_path",
+            method: "GET",
+            userAgent: "Shopify Admin API Library for PHP v$this->version",
+            headers: ['X-Test-Header: test_value'],
+            response: $this->buildMockHttpResponse(200, $this->successResponse)
+        );
+
+        $client = new Http($this->domain);
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $response = $client->get(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
+        $this->assertEquals($expectedResponse, $response);
+    }
 
     public function testPostRequest()
     {
@@ -51,25 +64,28 @@ final class HttpTest extends BaseTestCase
         $bodyLength = strlen($body);
 
         $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
+            url: "https://$this->domain/test/path?path=some_path",
             method: "POST",
             userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/json',
-                "Content-Length: $bodyLength",
-                'X-Test-Header: test_value'
-            ],
+            headers: [
+                     'Content-Type: application/json',
+                     "Content-Length: $bodyLength",
+                     'X-Test-Header: test_value'
+                 ],
             response: $this->buildMockHttpResponse(200, $this->successResponse),
             body: $body
         );
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 200;
-        $expectedResponse->headers = [];
-        $expectedResponse->body = $this->successResponse;
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
-        $response = $client->post(path: 'test/path', body: $this->product1, headers: $headers);
+        $response = $client->post(
+            path: 'test/path',
+            body: $this->product1,
+            headers: $headers,
+            query: ["path" => "some_path"]
+        );
         $this->assertEquals($expectedResponse, $response);
     }
 
@@ -82,25 +98,28 @@ final class HttpTest extends BaseTestCase
         $bodyLength = strlen($body);
 
         $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
+            url: "https://$this->domain/test/path?path=some_path",
             method: "PUT",
             userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/json',
-                "Content-Length: $bodyLength",
-                'X-Test-Header: test_value'
-            ],
+            headers: [
+                     'Content-Type: application/json',
+                     "Content-Length: $bodyLength",
+                     'X-Test-Header: test_value'
+                 ],
             response: $this->buildMockHttpResponse(200, $this->successResponse),
             body: $body
         );
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 200;
-        $expectedResponse->headers = [];
-        $expectedResponse->body = $this->successResponse;
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
-        $response = $client->put(path: 'test/path', body: $this->product1, headers: $headers);
+        $response = $client->put(
+            path: 'test/path',
+            body: $this->product1,
+            headers: $headers,
+            query: ["path" => "some_path"]
+        );
         $this->assertEquals($expectedResponse, $response);
     }
 
@@ -109,7 +128,7 @@ final class HttpTest extends BaseTestCase
         $headers = ['X-Test-Header' => 'test_value'];
 
         $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
+            url: "https://$this->domain/test/path?path=some_path",
             method: "DELETE",
             userAgent: "Shopify Admin API Library for PHP v$this->version",
             headers: ['X-Test-Header: test_value'],
@@ -118,12 +137,9 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 200;
-        $expectedResponse->headers = [];
-        $expectedResponse->body = $this->successResponse;
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
-        $response = $client->delete(path: 'test/path', headers: $headers);
+        $response = $client->delete(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
         $this->assertEquals($expectedResponse, $response);
     }
 
@@ -136,19 +152,18 @@ final class HttpTest extends BaseTestCase
             url: "https://$this->domain/test/path",
             method: "POST",
             userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/json',
-                "Content-Length: $bodyLength"
-            ],
+            headers: [
+                     'Content-Type: application/json',
+                     "Content-Length: $bodyLength"
+                 ],
             response: $this->buildMockHttpResponse(200, $this->successResponse),
             body: $body
         );
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 200;
-        $expectedResponse->headers = [];
-        $expectedResponse->body = $this->successResponse;
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+
 
         $response = $client->post(path: 'test/path', body: $body);
         $this->assertEquals($expectedResponse, $response);
@@ -164,19 +179,18 @@ final class HttpTest extends BaseTestCase
             url: "https://$this->domain/test/path",
             method: "POST",
             userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/x-www-form-urlencoded',
-                "Content-Length: $bodyLength"
-            ],
+            headers: [
+                     'Content-Type: application/x-www-form-urlencoded',
+                     "Content-Length: $bodyLength"
+                 ],
             response: $this->buildMockHttpResponse(200, $this->successResponse, dataType: Http::DATA_TYPE_URL_ENCODED),
             body: $body
         );
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 200;
-        $expectedResponse->headers = [];
-        $expectedResponse->body = $this->successResponse;
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+
 
         $response = $client->post(path: 'test/path', body: $this->product1, dataType: Http::DATA_TYPE_URL_ENCODED);
         $this->assertEquals($expectedResponse, $response);
@@ -252,7 +266,6 @@ final class HttpTest extends BaseTestCase
 
     public function testRetryLogicForAllRetriableCodes()
     {
-
         $this->mockTransportWithExpectationsWithoutBodyWithMultipleResponses(
             "https://$this->domain/test/path",
             "GET",
@@ -267,10 +280,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 200;
-        $expectedResponse->headers = [];
-        $expectedResponse->body = $this->successResponse;
+        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
         $response = $client->get(path: 'test/path', tries: 3);
         $this->assertEquals($expectedResponse, $response);
@@ -292,10 +302,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 500;
-        $expectedResponse->headers = ['X-Is-Last-Test-Request' => true];
-        $expectedResponse->body = null;
+        $expectedResponse = new HttpResponse(500, ['X-Is-Last-Test-Request' => true]);
 
         $response = $client->get(path: 'test/path', tries: 3);
         $this->assertEquals($expectedResponse, $response);
@@ -316,10 +323,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse();
-        $expectedResponse->statusCode = 400;
-        $expectedResponse->headers = ['X-Is-Last-Test-Request' => true];
-        $expectedResponse->body = null;
+        $expectedResponse = new HttpResponse(400, ['X-Is-Last-Test-Request' => true]);
 
         $response = $client->get(path: 'test/path', tries: 10);
         $this->assertEquals($expectedResponse, $response);

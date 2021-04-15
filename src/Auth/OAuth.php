@@ -207,7 +207,7 @@ class OAuth
     {
         if (Context::$IS_EMBEDDED_APP) {
             if ($headers) {
-                preg_match('/^Bearer (.+)$/', $headers, $matches);
+                preg_match('/^Bearer (.+)$/', $headers['authorization'], $matches);
                 if (!$matches) {
                     throw new MissingArgumentException(
                         "Missing Bearer token in authorization header"

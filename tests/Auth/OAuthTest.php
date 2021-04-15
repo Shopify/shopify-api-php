@@ -437,6 +437,36 @@ final class OAuthTest extends BaseTestCase
         );
     }
 
+    public function testGetCurrentSessionIdRaisesMissingArgumentException()
+    {
+        $oauth = new OAuth();
+        $storage = new MockSessionStorage();
+        Context::$SESSION_STORAGE = $storage;
+        Context::$IS_EMBEDDED_APP = true;
+        $this->expectException('Shopify\Exception\MissingArgumentException');
+        $token = 'access_token';
+        $headers = ['authorization'=> "bear $token"];
+
+        $oauth->getCurrentSessionId(
+            $headers, [], true
+        );
+    }
+
+    // public function testGetCurrentSessionId()
+    // {
+    //     $oauth = new OAuth();
+    //     $storage = new MockSessionStorage();
+    //     Context::$SESSION_STORAGE = $storage;
+    //     Context::$IS_EMBEDDED_APP = true;
+    //     $token = 'access_token';
+    //     $headers = ['authorization'=> "Bearer $token"];
+
+    //     $currentSessionId = $oauth->getCurrentSessionId(
+    //         $headers, [], true
+    //     );
+    //     echo $currentSessionId;  // prints access_token_access_token
+    // }
+
     /**
      * Creates a session with default values for testing, and stores it.
      *

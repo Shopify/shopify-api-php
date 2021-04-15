@@ -14,7 +14,6 @@ use Shopify\Exception\OAuthSessionNotFoundException;
 use Shopify\Exception\SessionStorageException;
 use Shopify\Exception\CookieSetException;
 use Shopify\Utils;
-use Shopify\Auth\OAuthCookie;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -254,14 +253,14 @@ class OAuth
 
         $client = new Http($session->getShop());
         $response = $this->requestAccessToken($client, $post);
-        if ($response->statusCode !== 200) {
-            throw new HttpRequestException("Failed to get access token: {$response->body}");
+        if ($response->getStatusCode() !== 200) {
+            throw new HttpRequestException("Failed to get access token: {$response->getBody()}");
         }
 
         if ($session->isOnline()) {
-            return $this->buildAccessTokenOnlineResponse($response->body);
+            return $this->buildAccessTokenOnlineResponse($response->getBody());
         } else {
-            return $this->buildAccessTokenResponse($response->body);
+            return $this->buildAccessTokenResponse($response->getBody());
         }
     }
 

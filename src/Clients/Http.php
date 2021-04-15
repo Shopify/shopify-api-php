@@ -15,6 +15,7 @@ class Http
 
     public const DATA_TYPE_JSON = 'application/json';
     public const DATA_TYPE_URL_ENCODED = 'application/x-www-form-urlencoded';
+    public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
 
@@ -32,13 +33,14 @@ class Http
      * @return HttpResponse
      * @throws \Shopify\Exception\HttpRequestException
      */
-    public function get(string $path, array $headers = [], ?int $tries = null): HttpResponse
+    public function get(string $path, array $headers = [], ?int $tries = null, array $query = []): HttpResponse
     {
         return $this->request(
             path: $path,
             method: self::METHOD_GET,
             headers: $headers,
             tries: $tries,
+            query: $query
         );
     }
 
@@ -56,10 +58,11 @@ class Http
      */
     public function post(
         string $path,
-        string | array $body,
+        string|array $body,
         string $dataType = self::DATA_TYPE_JSON,
         array $headers = [],
-        ?int $tries = null
+        ?int $tries = null,
+        array $query = []
     ): HttpResponse {
         return $this->request(
             path: $path,
@@ -68,6 +71,7 @@ class Http
             body: $body,
             headers: $headers,
             tries: $tries,
+            query: $query
         );
     }
 
@@ -85,10 +89,11 @@ class Http
      */
     public function put(
         string $path,
-        string | array $body,
+        string|array $body,
         string $dataType = self::DATA_TYPE_JSON,
         array $headers = [],
-        ?int $tries = null
+        ?int $tries = null,
+        array $query = []
     ): HttpResponse {
         return $this->request(
             path: $path,
@@ -97,6 +102,7 @@ class Http
             body: $body,
             headers: $headers,
             tries: $tries,
+            query: $query
         );
     }
 
@@ -110,13 +116,14 @@ class Http
      * @return HttpResponse
      * @throws \Shopify\Exception\HttpRequestException
      */
-    public function delete(string $path, array $headers = [], ?int $tries = null): HttpResponse
+    public function delete(string $path, array $headers = [], ?int $tries = null, array $query = []): HttpResponse
     {
         return $this->request(
             path: $path,
             method: self::METHOD_DELETE,
             headers: $headers,
             tries: $tries,
+            query: $query
         );
     }
 
@@ -133,16 +140,22 @@ class Http
      * @return HttpResponse
      * @throws \Shopify\Exception\HttpRequestException
      */
-    private function request(
+    protected function request(
         string $path,
         string $method,
         string $dataType = self::DATA_TYPE_JSON,
-        string | array $body = null,
+        string|array $body = null,
         array $headers = [],
         ?int $tries = null,
+        array $query = []
     ): HttpResponse {
         $maxTries = $tries ?? 1;
-        $url = "https://$this->domain/$path";
+
+        if ($formattedQuery = http_build_query($query)) {
+            $formattedQuery = "?$formattedQuery";
+        }
+
+        $url = "https://$this->domain/$path{$formattedQuery}";
 
         Context::$TRANSPORT->initializeRequest($url);
         Context::$TRANSPORT->setMethod($method);
@@ -194,21 +207,11 @@ class Http
 
             $curlResponse = Context::$TRANSPORT->sendRequest();
 
-            $response = new HttpResponse();
-            $response->statusCode = $curlResponse['statusCode'];
-            $response->headers = $curlResponse['headers'];
-            $response->body = '';
-
-            if ($curlResponse['body']) {
-                switch ($dataType) {
-                    case self::DATA_TYPE_JSON:
-                        $response->body = json_decode($curlResponse['body'], true);
-                        break;
-                    case self::DATA_TYPE_URL_ENCODED:
-                        parse_str($curlResponse['body'], $response->body);
-                        break;
-                }
-            }
+            $response = new HttpResponse(
+                $curlResponse['statusCode'],
+                $curlResponse['headers'],
+                $this->parseResponseBody($curlResponse['body'], $dataType)
+            );
 
             if (in_array($curlResponse['statusCode'], self::RETRIABLE_STATUS_CODES)) {
                 $retryAfter = $curlResponse['headers']['Retry-After'] ?? Context::$RETRY_TIME_IN_SECONDS;
@@ -219,5 +222,21 @@ class Http
         } while ($currentTries < $maxTries);
 
         return $response;
+    }
+
+    private function parseResponseBody($body, string $dataType): mixed
+    {
+        $responseBody = '';
+        if ($body) {
+            switch ($dataType) {
+                case self::DATA_TYPE_JSON:
+                    $responseBody = json_decode($body, true);
+                    break;
+                case self::DATA_TYPE_URL_ENCODED:
+                    parse_str($body, $responseBody);
+                    break;
+            }
+        }
+        return $responseBody;
     }
 }

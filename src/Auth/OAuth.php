@@ -195,12 +195,15 @@ class OAuth
 
     /**
      * Extracts the current session ID from the headers
-     * 
-     * @param array $headers The headers
+     *
+     * @param array $headers HTTP headers returned from the request context
+     * @param array $cookies HTTP request cookies
      * @param bool $isOnline Whether to load online or offline sessions
+     *
+     * @return string The ID of the current session
      * @throws \Shopify\Exception\OAuthSessionNotFoundException
      */
-    public function getCurrentSessionId(array $headers, bool $isOnline): string|null
+    public function getCurrentSessionId(array $headers, array $cookies, bool $isOnline): string
     {
         if (Context::$IS_EMBEDDED_APP) {
             if ($headers) {
@@ -218,6 +221,8 @@ class OAuth
             } else {
                 $currentSessionId = $this->getOfflineSessionId($shop);
             }
+        } else {
+            $this->getOAuthSessionFromCookies($cookies);
         }
 
         if (!$currentSessionId) {

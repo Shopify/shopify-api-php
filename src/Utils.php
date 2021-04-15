@@ -129,7 +129,7 @@ final class Utils
         Context::throwIfUninitialized();
 
         $oauth = new OAuth();
-        $sessionId = $oauth->getCurrentSessionId($headers, $isOnline);
+        $sessionId = $oauth->getCurrentSessionId($headers, $cookies, $isOnline);
         if (!$sessionId) {
             return null;
         }

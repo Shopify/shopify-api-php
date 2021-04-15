@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Shopify;
 
+use Shopify\Exception\InvalidArgumentException;
+
 /**
  * Class to store all util functions
  */
@@ -68,5 +70,30 @@ final class Utils
         }
         parse_str($queryString, $params);
         return $params;
+    }
+
+    /**
+     * Checks if the current version of the app (from Context::$API_VERSION) is compatible, i.e. more recent, than the
+     * given reference version.
+     *
+     * @param string $referenceVersion The version to check
+     *
+     * @return bool
+     * @throws \Shopify\Exception\InvalidArgumentException
+     */
+    public static function isApiVersionCompatible(string $referenceVersion): bool
+    {
+        if (Context::$API_VERSION === 'unstable' || Context::$API_VERSION === 'unversioned') {
+            return true;
+        }
+
+        if (!ctype_digit(str_replace('-', '', $referenceVersion))) {
+            throw new InvalidArgumentException("Reference version '$referenceVersion' is invalid");
+        }
+
+        $currentNumeric = (int)str_replace('-', '', Context::$API_VERSION);
+        $referenceNumeric = (int)str_replace('-', '', $referenceVersion);
+
+        return $currentNumeric >= $referenceNumeric;
     }
 }

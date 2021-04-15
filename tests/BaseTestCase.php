@@ -10,6 +10,7 @@ use Shopify\Clients\Transport;
 use Shopify\Context;
 use Shopify\Exception\HttpRequestException;
 use ShopifyTest\Auth\MockSessionStorage;
+use ShopifyTest\Clients\MockRequest;
 
 define('RUNNING_SHOPIFY_TESTS', 1);
 
@@ -74,6 +75,78 @@ class BaseTestCase extends TestCase
             'headers' => $headers,
             'error' => $error,
         ];
+    }
+
+    /**
+     * Sets up a transport layer mock that expects the given requests to happen.
+     *
+     * @param MockRequest[] $requests
+     */
+    public function mockTransportRequests(array $requests): void
+    {
+        $mock = $this->createMock(Transport::class);
+
+        $urls = [];
+        $methods = [];
+        $userAgents = [];
+        $headers = [];
+        $bodies = [];
+        $responses = [];
+        foreach ($requests as $request) {
+            $urls[] = [$request->url];
+            $methods[] = [$request->method];
+
+            // We only need to know if the actual user agent contains the string we expect
+            $userAgents[] = [$this->matchesRegularExpression("/$request->userAgent/")];
+
+            // We only want to check that the values we're expecting are there, without caring about others
+            if ($request->allowOtherHeaders) {
+                $headers[] = [$this->containsEqual(...$request->headers)];
+            } else {
+                $headers[] = [$request->headers];
+            }
+
+            if ($request->body) {
+                $bodies[] = [$request->body];
+            }
+
+            $responses[] = $request->error ? 'TEST EXCEPTION' : $request->response;
+        }
+
+        $mock->expects($this->exactly(count($urls)))
+            ->method('initializeRequest')
+            ->withConsecutive(...$urls);
+
+        $mock->expects($this->exactly(count($methods)))
+            ->method('setMethod')
+            ->withConsecutive(...$methods);
+
+        $mock->expects($this->exactly(count($userAgents)))
+            ->method('setUserAgent')
+            ->withConsecutive(...$userAgents);
+
+        $mock->expects($this->exactly(count($headers)))
+            ->method('setHeader')
+            ->withConsecutive(...$headers);
+
+        $mock->expects($this->exactly(count($bodies)))
+            ->method('setBody')
+            ->withConsecutive(...$bodies);
+
+        $i = 0;
+        $mock->expects($this->exactly(count($responses)))
+            ->method('sendRequest')
+            ->willReturnCallback(function () use (&$i, $responses) {
+                $response = $responses[$i++];
+
+                if ($response === 'TEST EXCEPTION') {
+                    throw new HttpRequestException();
+                } else {
+                    return $response;
+                }
+            });
+
+        Context::$TRANSPORT = $mock;
     }
 
     /**

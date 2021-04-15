@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shopify;
 
-use Shopify\Context;
 use Shopify\Auth\Session;
 use Shopify\Auth\OAuth;
+use Shopify\Context;
 use Shopify\Exception\InvalidArgumentException;
 
 /**
@@ -122,5 +122,18 @@ final class Utils
         }
 
         return $session;
+    }
+
+    public static function loadCurrentSession(array $headers, array $cookies, bool $isOnline)
+    {
+        Context::throwIfUninitialized();
+
+        $oauth = new OAuth();
+        $sessionId = $oauth->getCurrentSessionId($headers, $isOnline);
+        if (!$sessionId) {
+            return null;
+        }
+
+        return Context::$SESSION_STORAGE->loadSession($sessionId);
     }
 }

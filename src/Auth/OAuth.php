@@ -15,6 +15,7 @@ use Shopify\Exception\SessionStorageException;
 use Shopify\Exception\CookieSetException;
 use Shopify\Utils;
 use Ramsey\Uuid\Uuid;
+use Shopify\Exception\MissingArgumentException;
 
 /**
  * Provides methods to perform OAuth with Shopify.
@@ -190,6 +191,42 @@ class OAuth
     public static function getOfflineSessionId(string $shop): string
     {
         return "offline_{$shop}";
+    }
+
+    /**
+     * Extracts the current session ID from the headers
+     * 
+     * @param array $headers The headers
+     * @param bool $isOnline Whether to load online or offline sessions
+     * @throws \Shopify\Exception\OAuthSessionNotFoundException
+     */
+    public function getCurrentSessionId(array $headers, bool $isOnline): string|null
+    {
+        if (Context::$IS_EMBEDDED_APP) {
+            if ($headers) {
+                preg_match('/^Bearer (.+)$/', $headers, $matches);
+                if (!$matches) {
+                    throw new MissingArgumentException(
+                        "Missing Bearer token in authorization header"
+                    );
+                }
+            }
+            $jwtPayload = $matches[1];
+            $shop = preg_replace('/^https:\/\//', '', $jwtPayload);
+            if ($isOnline) {
+                $currentSessionId = $this->getJwtSessionId($shop, $jwtPayload);
+            } else {
+                $currentSessionId = $this->getOfflineSessionId($shop);
+            }
+        }
+
+        if (!$currentSessionId) {
+            throw new OAuthSessionNotFoundException(
+                'Could not retrieve the current session ID'
+            );
+        }
+
+        return $currentSessionId;
     }
 
     /**

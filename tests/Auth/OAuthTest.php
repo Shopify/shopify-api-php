@@ -445,11 +445,9 @@ final class OAuthTest extends BaseTestCase
         Context::$IS_EMBEDDED_APP = true;
         $this->expectException('Shopify\Exception\MissingArgumentException');
         $token = 'access_token';
-        $headers = ['authorization'=> "bear $token"];
+        $headers = 'polar bear';
 
-        $oauth->getCurrentSessionId(
-            $headers, [], true
-        );
+        $oauth->getCurrentSessionId($headers, [], true);
     }
 
     // public function testGetCurrentSessionId()

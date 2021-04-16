@@ -124,7 +124,7 @@ final class Utils
         return $session;
     }
 
-    public static function loadCurrentSession(array $headers, array $cookies, bool $isOnline)
+    public static function loadCurrentSession(string $headers, array $cookies, bool $isOnline)
     {
         Context::throwIfUninitialized();
 

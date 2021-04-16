@@ -38,7 +38,7 @@ class OAuth
      * @throws \Shopify\Exception\SessionStorageException
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public function begin(
+    public static function begin(
         string $shop,
         string $redirectPath,
         bool $isOnline,
@@ -48,7 +48,7 @@ class OAuth
         Context::throwIfPrivateApp("OAuth is not allowed for private apps");
 
         $shop = Utils::sanitizeShopDomain($shop);
-        $mySessionId = $isOnline ? Uuid::uuid4()->toString() : $this->getOfflineSessionId($shop);
+        $mySessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($shop);
 
         $cookie = new OAuthCookie(
             name: self::SESSION_ID_COOKIE_NAME,
@@ -123,18 +123,18 @@ class OAuth
      *
      * @return Session
      */
-    public function callback(array $cookies, array $query): Session
+    public static function callback(array $cookies, array $query): Session
     {
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp("OAuth is not allowed for private apps");
 
-        $session = $this->getOAuthSessionFromCookies($cookies);
+        $session = self::getOAuthSessionFromCookies($cookies);
 
-        if (!$this->isCallbackQueryValid($query, $session)) {
+        if (!self::isCallbackQueryValid($query, $session)) {
             throw new InvalidOAuthException('Invalid OAuth callback.');
         }
 
-        $response = $this->fetchAccessToken($query, $session);
+        $response = self::fetchAccessToken($query, $session);
 
         $session->setAccessToken($response->getAccessToken());
         $session->setScope($response->getScope());
@@ -147,7 +147,7 @@ class OAuth
             // If this is an online session in an embedded app, we replace it with a session that can be loaded from a
             // JWT.
             if (Context::$IS_EMBEDDED_APP) {
-                $jwtSessionId = $this->getJwtSessionId($session->getShop(), $session->getOnlineAccessInfo()->getId());
+                $jwtSessionId = self::getJwtSessionId($session->getShop(), $session->getOnlineAccessInfo()->getId());
                 $jwtSession = $session->clone($jwtSessionId);
 
                 $sessionDeleted = Context::$SESSION_STORAGE->deleteSession($session->getId());
@@ -176,7 +176,7 @@ class OAuth
      * @param string $shop       The session's shop
      * @param string $userId|int The session's user
      */
-    public function getJwtSessionId(string $shop, string | int $userId): string
+    public static function getJwtSessionId(string $shop, string | int $userId): string
     {
         return "{$shop}_{$userId}";
     }
@@ -187,7 +187,7 @@ class OAuth
      * @param string $shop  The session's shop
      * @return string the offline session ID
      */
-    public function getOfflineSessionId(string $shop): string
+    public static function getOfflineSessionId(string $shop): string
     {
         return "offline_{$shop}";
     }
@@ -197,7 +197,7 @@ class OAuth
      *
      * @param array $cookies The $cookies param from `callback`
      */
-    private function getOAuthSessionFromCookies(array $cookies): Session
+    private static function getOAuthSessionFromCookies(array $cookies): Session
     {
         $sessionId = $cookies[self::SESSION_ID_COOKIE_NAME] ?? null;
         if (!$sessionId) {
@@ -219,7 +219,7 @@ class OAuth
      * @param array   $query   The URL query parameters
      * @param Session $session The current session
      */
-    private function isCallbackQueryValid(array $query, Session $session): bool
+    private static function isCallbackQueryValid(array $query, Session $session): bool
     {
         $sanitizedShop = Utils::sanitizeShopDomain($query['shop'] ?? '');
         $state = $query['state'] ?? '';
@@ -241,7 +241,7 @@ class OAuth
      *
      * @return AccessTokenResponse|AccessTokenOnlineResponse The access token exchanged for the OAuth code
      */
-    private function fetchAccessToken(
+    private static function fetchAccessToken(
         array $query,
         Session $session
     ): AccessTokenResponse | AccessTokenOnlineResponse {
@@ -252,15 +252,15 @@ class OAuth
         ];
 
         $client = new Http($session->getShop());
-        $response = $this->requestAccessToken($client, $post);
+        $response = self::requestAccessToken($client, $post);
         if ($response->getStatusCode() !== 200) {
             throw new HttpRequestException("Failed to get access token: {$response->getBody()}");
         }
 
         if ($session->isOnline()) {
-            return $this->buildAccessTokenOnlineResponse($response->getBody());
+            return self::buildAccessTokenOnlineResponse($response->getBody());
         } else {
-            return $this->buildAccessTokenResponse($response->getBody());
+            return self::buildAccessTokenResponse($response->getBody());
         }
     }
 
@@ -269,7 +269,7 @@ class OAuth
      *
      * @param array $body The HTTP response body
      */
-    private function buildAccessTokenOnlineResponse(array $body): AccessTokenOnlineResponse
+    private static function buildAccessTokenOnlineResponse(array $body): AccessTokenOnlineResponse
     {
         $associatedUser = new AccessTokenOnlineUserInfo(
             id: $body['associated_user']['id'],
@@ -298,7 +298,7 @@ class OAuth
      *
      * @param array $body The HTTP response body
      */
-    private function buildAccessTokenResponse(array $body): AccessTokenResponse
+    private static function buildAccessTokenResponse(array $body): AccessTokenResponse
     {
         $response = new AccessTokenResponse(
             accessToken: $body['access_token'],
@@ -316,7 +316,7 @@ class OAuth
      *
      * @codeCoverageIgnore
      */
-    public function requestAccessToken(Http $client, array $post): HttpResponse
+    public static function requestAccessToken(Http $client, array $post): HttpResponse
     {
         return $client->post(path: self::ACCESS_TOKEN_POST_PATH, body: $post);
     }

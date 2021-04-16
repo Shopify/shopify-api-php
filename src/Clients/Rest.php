@@ -37,11 +37,11 @@ class Rest extends Http
         array $headers = [],
         ?int $tries = null,
         array $query = []
-    ): HttpResponse {
+    ): RestResponse {
         $headers[HttpHeaders::X_SHOPIFY_ACCESS_TOKEN] =
             Context::$IS_PRIVATE_APP ? Context::$API_SECRET_KEY : $this->accessToken;
 
-        return parent::request(
+        $response = parent::request(
             path: $this->getRestPath($path),
             method: $method,
             dataType: $dataType,
@@ -50,6 +50,13 @@ class Rest extends Http
             tries: $tries,
             query: $query
         );
+
+        return new RestResponse(
+            $response->getStatusCode(),
+            $response->getHeaders(),
+            $response->getBody(),
+            $this->getPageInfo($response)
+        );
     }
 
 
@@ -57,5 +64,20 @@ class Rest extends Http
     {
         $apiVersion = Context::$API_VERSION;
         return "admin/api/$apiVersion/$path.json";
+    }
+
+    /**
+     * @param \Shopify\Clients\HttpResponse $response
+     *
+     * @return \Shopify\Clients\PageInfo|null
+     */
+    private function getPageInfo(HttpResponse $response): ?PageInfo
+    {
+        $pageInfo = null;
+
+        if (array_key_exists('link', $response->getHeaders())) {
+            $pageInfo = PageInfo::fromLinkHeader($response->getHeaders()['link']);
+        }
+        return $pageInfo;
     }
 }

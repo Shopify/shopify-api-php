@@ -130,10 +130,7 @@ final class Utils
 
         $oauth = new OAuth();
         $sessionId = $oauth->getCurrentSessionId($headers, $cookies, $isOnline);
-        if (!$sessionId) {
-            return null;
-        }
 
-        return Context::$SESSION_STORAGE->loadSession($sessionId);
+        return !$sessionId ? null : Context::$SESSION_STORAGE->loadSession($sessionId);
     }
 }

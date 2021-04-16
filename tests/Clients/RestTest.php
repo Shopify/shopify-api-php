@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace ShopifyTest\Clients;
 
 use Shopify\Clients\Http;
-use Shopify\Clients\HttpResponse;
 use Shopify\Clients\Rest;
+use Shopify\Clients\RestResponse;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
 
 class RestTest extends BaseTestCase
 {
+    use PaginationTestHelper;
 
     private array $successResponse = [
         'products' => [
@@ -54,7 +55,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->get(path: 'products', headers: $headers);
 
@@ -78,7 +79,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->get(path: 'products', headers: $headers);
 
@@ -100,7 +101,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->get(path: 'products', query: ["path" => "some_path"]);
 
@@ -135,7 +136,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->post(path: 'products', body: $postData, dataType: Http::DATA_TYPE_JSON);
 
@@ -170,7 +171,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->post(
             path: 'products',
@@ -214,7 +215,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->post(path: 'products', body: $postData, dataType: Http::DATA_TYPE_URL_ENCODED);
 
@@ -249,7 +250,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->put(
             path: 'products/123',
@@ -278,10 +279,101 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, [], $this->successResponse);
 
         $response = $client->delete('products', $headers, query: ["path" => "some_path"]);
 
         $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function testCanRequestNextAndPreviousPagesUntilTheyRunOut()
+    {
+        $firstPageLinkHeader = $this->getProductsLinkHeader(nextToken: 'middlePageToken');
+
+        $middlePageLinkHeader = $this->getProductsLinkHeader(
+            previousToken: 'firstPageToken',
+            nextToken: 'lastPageToken'
+        );
+
+        $lastPageLinkHeader = $this->getProductsLinkHeader(previousToken: 'middlePageToken');
+
+        $this->mockTransportRequests(
+            [
+                new MockRequest(
+                    url: $this->getAdminApiUrl("products", "limit=10&fields=test1%2Ctest2"),
+                    method: "GET",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: dummy-token'],
+                    response: $this->buildMockHttpResponse(
+                        statusCode: 200,
+                        body: $this->successResponse,
+                        headers: ['link' => $firstPageLinkHeader]
+                    ),
+                ),
+                new MockRequest(
+                    url: $this->getProductsAdminApiPaginationUrl("middlePageToken"),
+                    method: "GET",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: dummy-token'],
+                    response: $this->buildMockHttpResponse(
+                        statusCode: 200,
+                        body: $this->successResponse,
+                        headers: ['link' => $middlePageLinkHeader]
+                    ),
+                ),
+                new MockRequest(
+                    url: $this->getProductsAdminApiPaginationUrl("lastPageToken"),
+                    method: "GET",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: dummy-token'],
+                    response: $this->buildMockHttpResponse(
+                        statusCode: 200,
+                        body: $this->successResponse,
+                        headers: ['link' => $lastPageLinkHeader]
+                    ),
+                ),
+                new MockRequest(
+                    url: $this->getProductsAdminApiPaginationUrl("middlePageToken"),
+                    method: "GET",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: dummy-token'],
+                    response:$this->buildMockHttpResponse(
+                        statusCode: 200,
+                        body: $this->successResponse,
+                        headers: ['link' => $middlePageLinkHeader]
+                    ),
+                ),
+                new MockRequest(
+                    url: $this->getProductsAdminApiPaginationUrl("firstPageToken"),
+                    method: "GET",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: dummy-token'],
+                    response:$this->buildMockHttpResponse(
+                        statusCode: 200,
+                        body: $this->successResponse,
+                        headers: ['link' => $firstPageLinkHeader]
+                    ),
+                ),
+
+            ]
+        );
+        $client = new Rest($this->domain, 'dummy-token');
+
+
+        $response = $client->get(path: 'products', query: ["limit" => "10", "fields" => 'test1,test2']);
+        $this->assertNull($response->getPageInfo()->getPreviousPageUrl());
+
+        $this->assertTrue($response->getPageInfo()->hasNextPage());
+        $response = $client->get(path: 'products', query: $response->getPageInfo()->getNextPageQuery());
+        $response = $client->get(path: 'products', query: $response->getPageInfo()->getNextPageQuery());
+        $this->assertFalse($response->getPageInfo()->hasNextPage());
+        $this->assertNull($response->getPageInfo()->getNextPageUrl());
+
+
+        $this->assertTrue($response->getPageInfo()->hasPreviousPage());
+        $response = $client->get(path: 'products', query: $response->getPageInfo()->getPreviousPageQuery());
+        $response = $client->get(path: 'products', query: $response->getPageInfo()->getPreviousPageQuery());
+        $this->assertFalse($response->getPageInfo()->hasPreviousPage());
+        $this->assertNull($response->getPageInfo()->getPreviousPageUrl());
     }
 }

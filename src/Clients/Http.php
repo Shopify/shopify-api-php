@@ -157,8 +157,10 @@ class Http
 
         $url = "https://$this->domain/$path{$formattedQuery}";
 
-        Context::$TRANSPORT->initializeRequest($url);
-        Context::$TRANSPORT->setMethod($method);
+        $transport = Context::$TRANSPORT_FACTORY->transport();
+
+        $transport->initializeRequest($url);
+        $transport->setMethod($method);
 
         $version = require dirname(__FILE__) . '/../version.php';
         $userAgentParts = ["Shopify Admin API Library for PHP v$version"];
@@ -172,7 +174,7 @@ class Http
             unset($headers['User-Agent']);
         }
 
-        Context::$TRANSPORT->setUserAgent(implode(' | ', $userAgentParts));
+        $transport->setUserAgent(implode(' | ', $userAgentParts));
 
         if ($body) {
             if (is_string($body)) {
@@ -184,7 +186,7 @@ class Http
                 };
             }
 
-            Context::$TRANSPORT->setBody($bodyString);
+            $transport->setBody($bodyString);
 
             $headers = array_merge(
                 [
@@ -199,13 +201,13 @@ class Http
         foreach ($headers as $header => $headerValue) {
             $headerOpts[] = "$header: $headerValue";
         }
-        Context::$TRANSPORT->setHeader($headerOpts);
+        $transport->setHeader($headerOpts);
 
         $currentTries = 0;
         do {
             $currentTries++;
 
-            $curlResponse = Context::$TRANSPORT->sendRequest();
+            $curlResponse = $transport->sendRequest();
 
             $response = new HttpResponse(
                 $curlResponse['statusCode'],

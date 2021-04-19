@@ -7,6 +7,7 @@ namespace ShopifyTest;
 use PHPUnit\Framework\TestCase;
 use Shopify\Clients\Http;
 use Shopify\Clients\Transport;
+use Shopify\Clients\TransportFactory;
 use Shopify\Context;
 use Shopify\Exception\HttpRequestException;
 use ShopifyTest\Auth\MockSessionStorage;
@@ -35,7 +36,7 @@ class BaseTestCase extends TestCase
             isPrivateApp: false,
             userAgentPrefix: '',
         );
-        Context::$TRANSPORT = $this->createMock(Transport::class);
+        Context::$TRANSPORT_FACTORY = $this->createMock(TransportFactory::class);
         Context::$RETRY_TIME_IN_SECONDS = 0;
         $this->version = require dirname(__FILE__) . '/../src/version.php';
     }
@@ -149,6 +150,12 @@ class BaseTestCase extends TestCase
                 }
             });
 
-        Context::$TRANSPORT = $mock;
+        $factory = $this->createMock(TransportFactory::class);
+
+        $factory->expects($this->any())
+            ->method('transport')
+            ->willReturn($mock);
+
+        Context::$TRANSPORT_FACTORY = $factory;
     }
 }

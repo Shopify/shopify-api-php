@@ -32,6 +32,7 @@ You can follow our [getting started guide](docs/) to learn how to use this libra
 - [Performing OAuth](docs/usage/oauth.md)
   - [Begin OAuth](docs/usage/oauth.md#begin-oauth)
   - [OAuth callback](docs/usage/oauth.md#oauth-callback)
+- [Webhooks](docs/usage/webhooks.md)
 - [Known issues and caveats](docs/issues.md)
 
 # Developing this library

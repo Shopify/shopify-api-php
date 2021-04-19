@@ -15,6 +15,8 @@ class Http
 
     public const DATA_TYPE_JSON = 'application/json';
     public const DATA_TYPE_URL_ENCODED = 'application/x-www-form-urlencoded';
+    public const DATA_TYPE_GRAPHQL = 'application/graphql';
+
     public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
@@ -229,6 +231,7 @@ class Http
         $responseBody = '';
         if ($body) {
             switch ($dataType) {
+                case self::DATA_TYPE_GRAPHQL:
                 case self::DATA_TYPE_JSON:
                     $responseBody = json_decode($body, true);
                     break;

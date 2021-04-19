@@ -8,4 +8,5 @@ You can follow our getting started guide to learn how to use this library's comp
   - [Install dependencies](getting_started.md#install-dependencies)
 - [Performing OAuth](usage/oauth.md)
   - [OAuth callback](usage/oauth.md#oauth-callback)
+- [Webhooks](usage/webhooks.md)
 - [Known issues and caveats](issues.md)

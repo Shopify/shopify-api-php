@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use Shopify\Context;
 use Shopify\Utils;
 
 final class UtilsTest extends BaseTestCase
@@ -78,5 +79,22 @@ final class UtilsTest extends BaseTestCase
         $this->assertEquals([], Utils::getQueryParams('google'));
         $this->assertEquals([], Utils::getQueryParams('www.google.ca'));
         $this->assertEquals(['asdf' => ''], Utils::getQueryParams('www.google.ca?asdf'));
+    }
+
+    public function testIsApiVersionCompatible()
+    {
+        Context::$API_VERSION = 'unstable';
+        $this->assertTrue(Utils::isApiVersionCompatible('2020-10'));
+
+        Context::$API_VERSION = 'unversioned';
+        $this->assertTrue(Utils::isApiVersionCompatible('2020-10'));
+
+        Context::$API_VERSION = '2021-04';
+        $this->assertTrue(Utils::isApiVersionCompatible('2021-04'));
+        $this->assertTrue(Utils::isApiVersionCompatible('2020-10'));
+        $this->assertFalse(Utils::isApiVersionCompatible('2021-07'));
+
+        $this->expectException('Shopify\\Exception\\InvalidArgumentException');
+        $this->assertTrue(Utils::isApiVersionCompatible('not_a_version'));
     }
 }

@@ -60,7 +60,7 @@ final class Scopes
             $scopes = new self($scopes);
         }
 
-        return count(array_diff($scopes->toArray(), $this->toArray())) === 0;
+        return count(array_diff($scopes->toArray(), $this->expandedScopes)) === 0;
     }
 
     /**

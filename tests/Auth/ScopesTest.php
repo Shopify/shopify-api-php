@@ -95,6 +95,27 @@ final class ScopesTest extends BaseTestCase
         $this->assertFalse($scopes->has(new Scopes('read_products,write_customers,read_orders')));
     }
 
+    public function testHasReturnsTrueForImpliedObjectScope()
+    {
+        $scopes = new Scopes('read_products,write_customers');
+        $this->assertTrue($scopes->has(new Scopes('read_products,read_customers')));
+        $this->assertFalse($scopes->has(new Scopes('write_products,write_customers')));
+    }
+
+    public function testHasReturnsTrueForImpliedArrayScope()
+    {
+        $scopes = new Scopes('read_products,write_customers');
+        $this->assertTrue($scopes->has(['read_products', 'read_customers']));
+        $this->assertFalse($scopes->has(['write_products', 'write_customers']));
+    }
+
+    public function testHasReturnsTrueForImpliedStringScope()
+    {
+        $scopes = new Scopes('read_products,write_customers');
+        $this->assertTrue($scopes->has('read_products,read_customers'));
+        $this->assertFalse($scopes->has('write_products,write_customers'));
+    }
+
     public function testEqualsReturnsTrueForEqualScopes()
     {
         $scopes1 = new Scopes('write_customers,read_products');
@@ -139,5 +160,38 @@ final class ScopesTest extends BaseTestCase
         $scopes1 = new Scopes('write_customers,read_products');
         $this->assertTrue($scopes1->equals(['write_customers', 'read_products']));
         $this->assertFalse($scopes1->equals(['write_customers', 'read_products', 'write_products']));
+    }
+
+    public function testEqualsReturnsTrueForImpliedObjectScopes()
+    {
+        $scopes = new Scopes('read_products,write_customers');
+
+        $scopes2 = new Scopes('read_products,read_customers,write_customers');
+        $this->assertTrue($scopes->equals($scopes2));
+        $this->assertTrue($scopes2->equals($scopes));
+
+        $scopes2 = new Scopes('read_products,write_customers');
+        $this->assertTrue($scopes->equals($scopes2));
+        $this->assertTrue($scopes2->equals($scopes));
+
+        $scopes2 = new Scopes('write_products,read_customers,write_customers');
+        $this->assertFalse($scopes->equals($scopes2));
+        $this->assertFalse($scopes2->equals($scopes));
+    }
+
+    public function testEqualsReturnsTrueForImpliedArrayScopes()
+    {
+        $scopes = new Scopes('read_products,write_customers');
+        $this->assertTrue($scopes->equals(['read_products', 'read_customers', 'write_customers']));
+        $this->assertTrue($scopes->equals(['read_products', 'write_customers']));
+        $this->assertFalse($scopes->equals(['write_products', 'read_customers', 'write_customers']));
+    }
+
+    public function testEqualsReturnsTrueForImpliedStringScopes()
+    {
+        $scopes = new Scopes('read_products,write_customers');
+        $this->assertTrue($scopes->equals('read_products,read_customers,write_customers'));
+        $this->assertTrue($scopes->equals('read_products,write_customers'));
+        $this->assertFalse($scopes->equals('write_products,read_customers,write_customers'));
     }
 }

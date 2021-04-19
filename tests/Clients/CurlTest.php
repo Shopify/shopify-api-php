@@ -2,6 +2,7 @@
 
 namespace ShopifyTest\Clients;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Clients\Curl;
 use PHPUnit\Framework\TestCase;
 
@@ -10,6 +11,7 @@ class CurlTest extends TestCase
 
     public function testSetMethod()
     {
+        /** @var Curl|MockObject $curl */
         $curl = $this->getMockBuilder(Curl::class)
             ->onlyMethods(['sendRequest', 'setCurlOption'])
             ->getMock();
@@ -31,6 +33,7 @@ class CurlTest extends TestCase
 
     public function testInitializeRequest()
     {
+        /** @var Curl|MockObject $curl */
         $curl = $this->getMockBuilder(Curl::class)
             ->onlyMethods(['sendRequest', 'setCurlOption'])
             ->getMock();
@@ -48,6 +51,7 @@ class CurlTest extends TestCase
     public function testSetBody()
     {
         $body = "some data";
+        /** @var Curl|MockObject $curl */
         $curl = $this->getMockBuilder(Curl::class)
             ->onlyMethods(['sendRequest', 'setCurlOption'])
             ->getMock();
@@ -62,6 +66,7 @@ class CurlTest extends TestCase
     public function testSetUserAgent()
     {
         $userAgent = "some user agent";
+        /** @var Curl|MockObject $curl */
         $curl = $this->getMockBuilder(Curl::class)
             ->onlyMethods(['sendRequest', 'setCurlOption'])
             ->getMock();
@@ -76,6 +81,7 @@ class CurlTest extends TestCase
     public function testSetHeader()
     {
         $headers = ["header1", "header2"];
+        /** @var Curl|MockObject $curl */
         $curl = $this->getMockBuilder(Curl::class)
             ->onlyMethods(['sendRequest', 'setCurlOption'])
             ->getMock();
@@ -86,5 +92,4 @@ class CurlTest extends TestCase
 
         $curl->setHeader($headers);
     }
-
 }

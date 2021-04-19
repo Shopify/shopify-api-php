@@ -12,6 +12,7 @@ class Curl implements Transport
 
     /**
      * {@inheritDoc}
+     * @codeCoverageIgnore We can't test this without making actual requests
      */
     public function sendRequest(): ?array
     {
@@ -22,6 +23,9 @@ class Curl implements Transport
         return $response;
     }
 
+    /**
+     * @codeCoverageIgnore We can't test this without making actual requests
+     */
     private function executeRequest(): ?array
     {
         $responseHeaders = [];
@@ -96,7 +100,7 @@ class Curl implements Transport
     }
 
     /**
-     * {@inheritDoc}
+     * @codeCoverageIgnore We can't test this without making actual requests
      */
     public function setCurlOption(int $option, mixed $value)
     {

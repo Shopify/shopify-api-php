@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use DateTime;
+use Firebase\JWT\JWT;
 use Shopify\Context;
+use ShopifyTest\Auth\MockSessionStorage;
 use Shopify\Utils;
 use Shopify\Auth\Session;
+
+use function PHPUnit\Framework\assertEquals;
 
 final class UtilsTest extends BaseTestCase
 {
@@ -137,5 +142,31 @@ final class UtilsTest extends BaseTestCase
 
         new Session("offline_$this->domain", $this->domain, false, 'state');
         $this->assertNull(Utils::loadOfflineSession($this->domain));
+    }
+
+    public function testDecodeSessionToken()
+    {
+        Context::initialize(
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
+            isPrivateApp: false,
+        );
+        $payload = [
+            'iss' => 'test-shop.myshopify.io/admin',
+            'dest' => 'test-shop.myshopify.io',
+            'aud' => Context::$API_KEY,
+            'sub' => '1',
+            'exp' => strtotime('+5 minutes'),
+            'nbf' => 1234,
+            'iat' => 1234,
+            'jti' => '4321',
+            'sid' => 'abc123'
+        ];
+
+        $actualPayload = Utils::decodeSessionToken($payload);
+        $this->assertEquals($payload, $actualPayload);
     }
 }

@@ -6,8 +6,8 @@ namespace Shopify;
 
 use Shopify\Auth\Session;
 use Shopify\Auth\OAuth;
-use Shopify\Context;
 use Shopify\Exception\InvalidArgumentException;
+use Firebase\JWT\JWT;
 
 /**
  * Class to store all util functions
@@ -132,5 +132,12 @@ final class Utils
         $sessionId = $oauth->getCurrentSessionId($headers, $cookies, $isOnline);
 
         return !$sessionId ? null : Context::$SESSION_STORAGE->loadSession($sessionId);
+    }
+
+    public static function decodeSessionToken(array $payload): array
+    {
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+        $payload = JWT::decode($jwt, Context::$API_SECRET_KEY, array('HS256'));
+        return (array) $payload;
     }
 }

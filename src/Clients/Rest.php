@@ -38,7 +38,7 @@ class Rest extends Http
         ?int $tries = null,
         array $query = []
     ): HttpResponse {
-        $headers[self::X_SHOPIFY_ACCESS_TOKEN] =
+        $headers[HttpHeaders::X_SHOPIFY_ACCESS_TOKEN] =
             Context::$IS_PRIVATE_APP ? Context::$API_SECRET_KEY : $this->accessToken;
 
         return parent::request(

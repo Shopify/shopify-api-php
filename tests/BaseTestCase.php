@@ -93,21 +93,24 @@ class BaseTestCase extends TestCase
         $bodies = [];
         $responses = [];
         foreach ($requests as $request) {
-            $urls[] = [$request->url];
-            $methods[] = [$request->method];
+            // If this request is a retry, we can skip all of the setup steps, as they are kept between tries
+            if (!$request->isRetry) {
+                $urls[] = [$request->url];
+                $methods[] = [$request->method];
 
-            // We only need to know if the actual user agent contains the string we expect
-            $userAgents[] = [$this->matchesRegularExpression("/$request->userAgent/")];
+                // We only need to know if the actual user agent contains the string we expect
+                $userAgents[] = [$this->matchesRegularExpression("/$request->userAgent/")];
 
-            // We only want to check that the values we're expecting are there, without caring about others
-            if ($request->allowOtherHeaders) {
-                $headers[] = [$this->containsEqual(...$request->headers)];
-            } else {
-                $headers[] = [$request->headers];
-            }
+                // We only want to check that the values we're expecting are there, without caring about others
+                if ($request->allowOtherHeaders && !empty($request->headers)) {
+                    $headers[] = [$this->containsEqual(...$request->headers)];
+                } else {
+                    $headers[] = [$request->headers];
+                }
 
-            if ($request->body) {
-                $bodies[] = [$request->body];
+                if ($request->body) {
+                    $bodies[] = [$request->body];
+                }
             }
 
             $responses[] = $request->error ? 'TEST EXCEPTION' : $request->response;
@@ -147,101 +150,5 @@ class BaseTestCase extends TestCase
             });
 
         Context::$TRANSPORT = $mock;
-    }
-
-    /**
-     * @param string      $url       Requested URL
-     * @param string      $method    HTTP Method `PUT`, `POST`, `GET`, and `DELETE` supported
-     * @param string      $userAgent User Agent
-     * @param array       $headers   HTTP Headers
-     * @param array       $response  Associative array with keys `body`, `error`, `headers`, and `error`
-     * @param string|null $body      Request body
-     * @param string|null $error     Error
-     */
-    public function mockTransportWithExpectations(
-        string $url,
-        string $method,
-        string $userAgent,
-        array $headers,
-        array $response,
-        ?string $body = null,
-        ?string $error = null
-    ): void {
-        Context::$TRANSPORT = $this->createMock(Transport::class);
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('initializeRequest')
-            ->with($this->equalTo($url));
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('setMethod')
-            ->with($this->equalTo($method));
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('setUserAgent')
-            ->with($this->equalTo($userAgent));
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('setHeader')
-            ->with($this->equalTo($headers));
-
-        if ($body) {
-            Context::$TRANSPORT->expects($this->once())
-                ->method('setBody')
-                ->with($this->equalTo($body));
-        } else {
-            Context::$TRANSPORT->expects($this->never())
-                ->method('setBody');
-        }
-
-        if ($error) {
-            Context::$TRANSPORT->expects($this->once())
-                ->method('sendRequest')
-                ->will($this->throwException(new HttpRequestException()));
-        } else {
-            Context::$TRANSPORT->expects($this->once())
-                ->method('sendRequest')
-                ->willReturn($response);
-        }
-    }
-
-    /**
-     * @param string $url       Requested URL
-     * @param string $method    HTTP Method `PUT`, `POST`, `GET`, and `DELETE` supported
-     * @param string $userAgent User Agent
-     * @param array  $headers   HTTP Headers
-     * @param array  $responses And array of associative arrays with keys `body`, `error`, `headers`, and `error`
-     */
-    public function mockTransportWithExpectationsWithoutBodyWithMultipleResponses(
-        string $url,
-        string $method,
-        string $userAgent,
-        array $headers,
-        array $responses
-    ): void {
-        Context::$TRANSPORT = $this->createMock(Transport::class);
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('initializeRequest')
-            ->with($this->equalTo($url));
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('setMethod')
-            ->with($this->equalTo($method));
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('setUserAgent')
-            ->with($this->equalTo($userAgent));
-
-        Context::$TRANSPORT->expects($this->once())
-            ->method('setHeader')
-            ->with($this->equalTo($headers));
-
-        Context::$TRANSPORT->expects($this->never())
-            ->method('setBody');
-
-        Context::$TRANSPORT->expects($this->exactly(count($responses)))
-            ->method('sendRequest')
-            ->willReturnOnConsecutiveCalls(...$responses);
     }
 }

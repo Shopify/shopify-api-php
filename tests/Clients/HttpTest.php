@@ -25,13 +25,16 @@ final class HttpTest extends BaseTestCase
     public function testGetRequestWithoutQuery()
     {
         $headers = ['X-Test-Header' => 'test_value'];
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "GET",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['X-Test-Header: test_value'],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: ['X-Test-Header: test_value'],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
@@ -42,13 +45,16 @@ final class HttpTest extends BaseTestCase
     public function testGetRequest()
     {
         $headers = ['X-Test-Header' => 'test_value'];
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path?path=some_path",
-            method: "GET",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['X-Test-Header: test_value'],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path?path=some_path",
+                method: "GET",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: ['X-Test-Header: test_value'],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
@@ -63,18 +69,21 @@ final class HttpTest extends BaseTestCase
         $body = json_encode($this->product1);
         $bodyLength = strlen($body);
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path?path=some_path",
-            method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/json',
-                     "Content-Length: $bodyLength",
-                     'X-Test-Header: test_value'
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse),
-            body: $body
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path?path=some_path",
+                method: "POST",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: [
+                    'Content-Type: application/json',
+                    "Content-Length: $bodyLength",
+                    'X-Test-Header: test_value',
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 
@@ -97,18 +106,21 @@ final class HttpTest extends BaseTestCase
         $body = json_encode($this->product1);
         $bodyLength = strlen($body);
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path?path=some_path",
-            method: "PUT",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/json',
-                     "Content-Length: $bodyLength",
-                     'X-Test-Header: test_value'
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse),
-            body: $body
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path?path=some_path",
+                method: "PUT",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: [
+                    'Content-Type: application/json',
+                    "Content-Length: $bodyLength",
+                    'X-Test-Header: test_value',
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 
@@ -127,13 +139,16 @@ final class HttpTest extends BaseTestCase
     {
         $headers = ['X-Test-Header' => 'test_value'];
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path?path=some_path",
-            method: "DELETE",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['X-Test-Header: test_value'],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path?path=some_path",
+                method: "DELETE",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: ['X-Test-Header: test_value'],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 
@@ -148,17 +163,20 @@ final class HttpTest extends BaseTestCase
         $body = json_encode($this->product1);
         $bodyLength = strlen($body);
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/json',
-                     "Content-Length: $bodyLength"
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse),
-            body: $body
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "POST",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: [
+                    'Content-Type: application/json',
+                    "Content-Length: $bodyLength",
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 
@@ -175,17 +193,24 @@ final class HttpTest extends BaseTestCase
 
         $bodyLength = strlen($body);
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/x-www-form-urlencoded',
-                     "Content-Length: $bodyLength"
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse, dataType: Http::DATA_TYPE_URL_ENCODED),
-            body: $body
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "POST",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: [
+                    'Content-Type: application/x-www-form-urlencoded',
+                    "Content-Length: $bodyLength",
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(
+                    200,
+                    $this->successResponse,
+                    dataType: Http::DATA_TYPE_URL_ENCODED,
+                ),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 
@@ -198,85 +223,100 @@ final class HttpTest extends BaseTestCase
 
     public function testUserAgent()
     {
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "GET",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: [],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client = new Http($this->domain);
-
         $client->get(path: 'test/path');
 
-
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "GET",
-            userAgent: "Extra user agent | Shopify Admin API Library for PHP v$this->version",
-            headers: [],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
-
-        $client = new Http($this->domain);
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Extra user agent | Shopify Admin API Library for PHP v$this->version$",
+                headers: [],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client->get(path: 'test/path', headers: ['User-Agent' => "Extra user agent"]);
 
         Context::$USER_AGENT_PREFIX = 'Test default user agent';
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "GET",
-            userAgent: "Test default user agent | Shopify Admin API Library for PHP v$this->version",
-            headers: [],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
-        $client = new Http($this->domain);
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Test default user agent | Shopify Admin API Library for PHP v$this->version$",
+                headers: [],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client->get(path: 'test/path');
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "GET",
-            userAgent: "Extra user agent | Test default user agent | Shopify Admin API Library for PHP v$this->version",
-            headers: [],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
-        $client = new Http($this->domain);
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                // phpcs:ignore
+                userAgent: "^Extra user agent | Test default user agent | Shopify Admin API Library for PHP v$this->version$",
+                headers: [],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $client->get(path: 'test/path', headers: ['User-Agent' => "Extra user agent"]);
     }
 
     public function testRequestThrowsErrorOnCurlFailure()
     {
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/test/path",
-            method: "GET",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [],
-            response: $this->buildMockHttpResponse(),
-            error: 'Test error!'
-        );
-        $client = new Http($this->domain);
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                headers: [],
+                response: $this->buildMockHttpResponse(),
+                error: 'Test error!',
+                allowOtherHeaders: false,
+            ),
+        ]);
 
+        $client = new Http($this->domain);
         $this->expectException('\Shopify\Exception\HttpRequestException');
         $client->get(path: 'test/path');
     }
 
     public function testRetryLogicForAllRetriableCodes()
     {
-        $this->mockTransportWithExpectationsWithoutBodyWithMultipleResponses(
-            "https://$this->domain/test/path",
-            "GET",
-            "Shopify Admin API Library for PHP v$this->version",
-            [],
-            [
-                $this->buildMockHttpResponse(429, headers: ['Retry-After' => 0]),
-                $this->buildMockHttpResponse(500),
-                $this->buildMockHttpResponse(200, $this->successResponse),
-            ]
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                response: $this->buildMockHttpResponse(429, headers: ['Retry-After' => 0]),
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(500),
+                isRetry: true,
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                isRetry: true,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 
@@ -288,17 +328,22 @@ final class HttpTest extends BaseTestCase
 
     public function testRetryStopsAfterReachingTheLimit()
     {
-        $this->mockTransportWithExpectationsWithoutBodyWithMultipleResponses(
-            "https://$this->domain/test/path",
-            "GET",
-            "Shopify Admin API Library for PHP v$this->version",
-            [],
-            [
-                $this->buildMockHttpResponse(500),
-                $this->buildMockHttpResponse(500),
-                $this->buildMockHttpResponse(500, headers: ['X-Is-Last-Test-Request' => true]),
-            ]
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                response: $this->buildMockHttpResponse(500),
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(500),
+                isRetry: true,
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(500, headers: ['X-Is-Last-Test-Request' => true]),
+                isRetry: true,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 
@@ -310,16 +355,18 @@ final class HttpTest extends BaseTestCase
 
     public function testRetryStopsOnNonRetriableError()
     {
-        $this->mockTransportWithExpectationsWithoutBodyWithMultipleResponses(
-            "https://$this->domain/test/path",
-            "GET",
-            "Shopify Admin API Library for PHP v$this->version",
-            [],
-            [
-                $this->buildMockHttpResponse(500),
-                $this->buildMockHttpResponse(400, headers: ['X-Is-Last-Test-Request' => true]),
-            ]
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
+                response: $this->buildMockHttpResponse(500),
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(400, headers: ['X-Is-Last-Test-Request' => true]),
+                isRetry: true,
+            ),
+        ]);
 
         $client = new Http($this->domain);
 

@@ -236,6 +236,7 @@ class Http
                     $responseBody = json_decode($body, true);
                     break;
                 case self::DATA_TYPE_URL_ENCODED:
+                    $responseBody = [];
                     parse_str($body, $responseBody);
                     break;
             }

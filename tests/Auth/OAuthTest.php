@@ -7,11 +7,8 @@ namespace ShopifyTest\Auth;
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
 use Shopify\Auth\AccessTokenOnlineUserInfo;
-use Shopify\Auth\OAuthCookie;
-use PHPUnit\Framework\MockObject\MockObject;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
-use Ramsey\Uuid\Uuid;
 
 final class OAuthTest extends BaseTestCase
 {
@@ -62,7 +59,6 @@ final class OAuthTest extends BaseTestCase
             body: $body
         );
 
-        $mockedOAuth = new OAuth();
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -71,9 +67,9 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $mockedOAuth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
 
-        $jwtSessionId = $mockedOAuth->getJwtSessionId($this->domain, '1');
+        $jwtSessionId = OAuth::getJwtSessionId($this->domain, '1');
 
         if ($isEmbedded && $isOnline) {
             // The OAuth session should have been replaced with a JWT-based session to allow App Bridge requests
@@ -109,8 +105,7 @@ final class OAuthTest extends BaseTestCase
 
         $mockCookies = [];
         $this->expectException('Shopify\Exception\OAuthCookieNotFoundException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, []);
+        OAuth::callback($mockCookies, []);
     }
 
     public function testCallbackFailsWithoutSession()
@@ -119,8 +114,7 @@ final class OAuthTest extends BaseTestCase
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => "👋 This is not the session you're looking for"];
         $this->expectException('Shopify\Exception\OAuthSessionNotFoundException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, []);
+        OAuth::callback($mockCookies, []);
     }
 
     public function testCallbackFailsWithMissingHMAC()
@@ -134,8 +128,7 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testCallbackFailsWithInvalidHMAC()
@@ -150,8 +143,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => 'Not the right hash',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testCallbackFailsWithMissingShop()
@@ -164,8 +156,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testCallbackFailsWithInvalidShop()
@@ -180,8 +171,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testCallbackFailsWithMissingState()
@@ -195,8 +185,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testCallbackFailsWithInvalidState()
@@ -211,8 +200,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testCallbackFailsWithMissingCode()
@@ -226,8 +214,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testCallbackFailsWithInvalidCode()
@@ -242,8 +229,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\InvalidOAuthException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testFailsForPrivateApp()
@@ -260,8 +246,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\PrivateAppException');
-        $oauth = new OAuth();
-        $oauth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testThrowsIfSessionDeleteFails()
@@ -286,8 +271,6 @@ final class OAuthTest extends BaseTestCase
             body: $body
         );
 
-        $mockedOAuth = new OAuth();
-
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
             'shop' => $this->domain,
@@ -299,7 +282,7 @@ final class OAuthTest extends BaseTestCase
         $storage->failNextCalls('delete');
         $this->expectException('Shopify\Exception\SessionStorageException');
 
-        $mockedOAuth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testThrowsIfSessionStoreFails()
@@ -324,8 +307,6 @@ final class OAuthTest extends BaseTestCase
             body: $body
         );
 
-        $mockedOAuth = new OAuth();
-
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
             'shop' => $this->domain,
@@ -337,7 +318,7 @@ final class OAuthTest extends BaseTestCase
         $storage->failNextCalls('store', amount: 1);
         $this->expectException('Shopify\Exception\SessionStorageException');
 
-        $mockedOAuth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testFailsIfTokenFetchFails()
@@ -358,8 +339,6 @@ final class OAuthTest extends BaseTestCase
             body: $body
         );
 
-        $mockedOAuth = new OAuth();
-
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
             'shop' => $this->domain,
@@ -368,7 +347,7 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $this->expectException('Shopify\Exception\HttpRequestException');
-        $mockedOAuth->callback($mockCookies, $mockQuery);
+        OAuth::callback($mockCookies, $mockQuery);
     }
 
     public function testBeginFailsOnPrivateApp()
@@ -376,16 +355,13 @@ final class OAuthTest extends BaseTestCase
         Context::$IS_PRIVATE_APP = true;
 
         $this->expectException('Shopify\Exception\PrivateAppException');
-        $oauth = new OAuth();
-        $oauth->begin('shopname', '/redirect', true);
+        OAuth::begin('shopname', '/redirect', true);
     }
 
     public function testBeginFunctionReturnsProperUrlForOfflineAccess()
     {
-        $oauth = new OAuth();
-
         $wasCallbackCalled = false;
-        $returnUrl = $oauth->begin(
+        $returnUrl = OAuth::begin(
             'shopname',
             '/redirect',
             false,
@@ -398,6 +374,7 @@ final class OAuthTest extends BaseTestCase
         $mySessionId = 'offline_shopname.myshopify.com';
         $generatedState = Context::$SESSION_STORAGE->loadSession($mySessionId)->getState();
         $this->assertEquals(
+            // phpcs:ignore
             "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=",
             $returnUrl
         );
@@ -405,16 +382,8 @@ final class OAuthTest extends BaseTestCase
 
     public function testBeginFunctionReturnsProperUrlForOnlineAccess()
     {
-        $oauth = new OAuth();
-        $this->cookie = new OAuthCookie(
-            name: 'shopify_session_id',
-            value: Uuid::uuid4()->toString(),
-            expire: strtotime('+1 minute'),
-            secure: true,
-            httpOnly: true
-        );
-
-        $returnUrl = $oauth->begin(
+        $testCookieId = '';
+        $returnUrl = OAuth::begin(
             'shopname',
             '/redirect',
             true,
@@ -423,10 +392,11 @@ final class OAuthTest extends BaseTestCase
                 return isset($testCookieId);
             }
         );
-        $this->assertTrue(isset($testCookieId));
+        $this->assertNotEmpty($testCookieId);
 
         $generatedState = Context::$SESSION_STORAGE->loadSession($testCookieId)->getState();
         $this->assertEquals(
+            // phpcs:ignore
             "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=per-user",
             $returnUrl
         );
@@ -434,11 +404,10 @@ final class OAuthTest extends BaseTestCase
 
     public function testBeginRaisesErrorIfCookieNotSet()
     {
-        $oauth = new OAuth();
         $this->expectException('Shopify\Exception\CookieSetException');
 
         $wasCallbackCalled = false;
-        $oauth->begin(
+        OAuth::begin(
             'shopname',
             '/redirect',
             false,
@@ -452,21 +421,23 @@ final class OAuthTest extends BaseTestCase
 
     public function testBeginWithoutSetCookieFunction()
     {
-        $oauth = new OAuth();
         $storage = new MockSessionStorage();
         Context::$SESSION_STORAGE = $storage;
         $storage->failNextCalls('store');
         $this->expectException('Shopify\Exception\SessionStorageException');
 
-        $returnUrl = $oauth->begin(
+        $returnUrl = OAuth::begin(
             'shopname',
             '/redirect',
             false,
-            function() {return true;}
+            function () {
+                return true;
+            },
         );
         $mySessionId = 'offline_shopname';
         $generatedState = Context::$SESSION_STORAGE->loadSession($mySessionId)->getState();
         $this->assertEquals(
+            // phpcs:ignore
             "https://shopname/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=",
             $returnUrl
         );

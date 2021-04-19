@@ -43,13 +43,16 @@ class RestTest extends BaseTestCase
 
         $client = new Rest($this->domain, 'dummy-token');
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
-            method: 'GET',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ["X-Test-Header: test_value", "X-Shopify-Access-Token: " . Context::$API_SECRET_KEY],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
+                method: 'GET',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: ["X-Test-Header: test_value", "X-Shopify-Access-Token: " . Context::$API_SECRET_KEY],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
@@ -64,13 +67,16 @@ class RestTest extends BaseTestCase
 
         $client = new Rest($this->domain, 'dummy-token');
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
-            method: 'GET',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['X-Test-Header: test_value', 'X-Shopify-Access-Token: dummy-token'],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
+                method: 'GET',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: ['X-Test-Header: test_value', 'X-Shopify-Access-Token: dummy-token'],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
@@ -83,13 +89,16 @@ class RestTest extends BaseTestCase
     {
         $client = new Rest($this->domain, 'dummy-token');
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
-            method: 'GET',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['X-Shopify-Access-Token: dummy-token'],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
+                method: 'GET',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: ['X-Shopify-Access-Token: dummy-token'],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
@@ -110,19 +119,21 @@ class RestTest extends BaseTestCase
         $body = json_encode($postData);
         $bodyLength = strlen($body);
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
-            method: 'POST',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/json',
-                     "Content-Length: $bodyLength",
-                     'X-Shopify-Access-Token: dummy-token'
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse),
-            body: $body
-        );
-
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
+                method: 'POST',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: [
+                    'Content-Type: application/json',
+                    "Content-Length: $bodyLength",
+                    'X-Shopify-Access-Token: dummy-token',
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
@@ -143,19 +154,21 @@ class RestTest extends BaseTestCase
         $body = json_encode($postData);
         $bodyLength = strlen($body);
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
-            method: 'POST',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/json',
-                     "Content-Length: $bodyLength",
-                     'X-Shopify-Access-Token: dummy-token'
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse),
-            body: $body
-        );
-
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
+                method: 'POST',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: [
+                    'Content-Type: application/json',
+                    "Content-Length: $bodyLength",
+                    'X-Shopify-Access-Token: dummy-token',
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
@@ -180,19 +193,26 @@ class RestTest extends BaseTestCase
 
         $body = http_build_query($postData);
         $bodyLength = strlen($body);
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
-            method: 'POST',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/x-www-form-urlencoded',
-                     "Content-Length: $bodyLength",
-                     'X-Shopify-Access-Token: dummy-token'
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse, dataType: Http::DATA_TYPE_URL_ENCODED),
-            body: $body
-        );
 
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
+                method: 'POST',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: [
+                    'Content-Type: application/x-www-form-urlencoded',
+                    "Content-Length: $bodyLength",
+                    'X-Shopify-Access-Token: dummy-token',
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(
+                    200,
+                    $this->successResponse,
+                    dataType: Http::DATA_TYPE_URL_ENCODED,
+                ),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
@@ -213,19 +233,21 @@ class RestTest extends BaseTestCase
         $body = json_encode($postData);
         $bodyLength = strlen($body);
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products/123.json?path=some_path",
-            method: 'PUT',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: [
-                     'Content-Type: application/json',
-                     "Content-Length: $bodyLength",
-                     'X-Shopify-Access-Token: dummy-token'
-                 ],
-            response: $this->buildMockHttpResponse(200, $this->successResponse),
-            body: $body
-        );
-
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products/123.json?path=some_path",
+                method: 'PUT',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: [
+                    'Content-Type: application/json',
+                    "Content-Length: $bodyLength",
+                    'X-Shopify-Access-Token: dummy-token',
+                ],
+                body: $body,
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
@@ -245,13 +267,16 @@ class RestTest extends BaseTestCase
 
         $client = new Rest($this->domain, 'dummy-token');
 
-        $this->mockTransportWithExpectations(
-            url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
-            method: 'DELETE',
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['X-Test-Header: test_value', 'X-Shopify-Access-Token: dummy-token'],
-            response: $this->buildMockHttpResponse(200, $this->successResponse)
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
+                method: 'DELETE',
+                userAgent: "Shopify Admin API Library for PHP v$this->version",
+                headers: ['X-Test-Header: test_value', 'X-Shopify-Access-Token: dummy-token'],
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
+                allowOtherHeaders: false,
+            ),
+        ]);
 
         $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 

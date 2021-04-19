@@ -9,10 +9,18 @@ use Shopify\Auth\Session;
 use Shopify\Auth\AccessTokenOnlineUserInfo;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
+use ShopifyTest\Clients\MockRequest;
 
 final class OAuthTest extends BaseTestCase
 {
     private string $oauthSessionId = 'test_oauth_session';
+
+    private array $codeRequestBody = [
+        'client_id' => 'ash',
+        'client_secret' => 'steffi',
+        'code' => 'real_code',
+    ];
+
     private array $onlineResponse = [
         'access_token' => 'some access token',
         'scope' => 'read_products',
@@ -29,36 +37,31 @@ final class OAuthTest extends BaseTestCase
             'collaborator' => true,
         ],
     ];
+
     private array $offlineResponse = [
         'access_token' => 'some access token',
         'scope' => 'read_products',
     ];
-
 
     /**
      * @dataProvider validCallbackProvider
      */
     public function testValidCallback($isOnline, $isEmbedded)
     {
-
         Context::$IS_EMBEDDED_APP = $isEmbedded;
 
         $this->createTestSession($isOnline);
 
-        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
-        $bodyLength = strlen($body);
-
-        $this->mockTransportWithExpectations(
-            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-            method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/json',
-                "Content-Length: $bodyLength"
-            ],
-            response: $this->buildMockHttpResponse(200, $isOnline ? $this->onlineResponse : $this->offlineResponse),
-            body: $body
-        );
-
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+                method: "POST",
+                userAgent: "^Shopify Admin API Library for PHP v",
+                headers: ['Content-Type: application/json'],
+                body: json_encode($this->codeRequestBody),
+                response: $this->buildMockHttpResponse(200, $isOnline ? $this->onlineResponse : $this->offlineResponse),
+            ),
+        ]);
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -257,19 +260,16 @@ final class OAuthTest extends BaseTestCase
 
         $this->createTestSession(true);
 
-        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
-        $bodyLength = strlen($body);
-
-        $this->mockTransportWithExpectations(
-            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-            method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/json',
-                "Content-Length: $bodyLength"
-            ],
-            response: $this->buildMockHttpResponse(200, $this->onlineResponse),
-            body: $body
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+                method: "POST",
+                userAgent: "^Shopify Admin API Library for PHP v",
+                headers: ['Content-Type: application/json'],
+                body: json_encode($this->codeRequestBody),
+                response: $this->buildMockHttpResponse(200, $this->onlineResponse),
+            ),
+        ]);
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -293,19 +293,16 @@ final class OAuthTest extends BaseTestCase
 
         $this->createTestSession(true);
 
-        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
-        $bodyLength = strlen($body);
-
-        $this->mockTransportWithExpectations(
-            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-            method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/json',
-                "Content-Length: $bodyLength"
-            ],
-            response: $this->buildMockHttpResponse(200, $this->onlineResponse),
-            body: $body
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+                method: "POST",
+                userAgent: "^Shopify Admin API Library for PHP v",
+                headers: ['Content-Type: application/json'],
+                body: json_encode($this->codeRequestBody),
+                response: $this->buildMockHttpResponse(200, $this->onlineResponse),
+            ),
+        ]);
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [
@@ -325,19 +322,16 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $body = '{"client_id":"ash","client_secret":"steffi","code":"real_code"}';
-        $bodyLength = strlen($body);
-
-        $this->mockTransportWithExpectations(
-            url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-            method: "POST",
-            userAgent: "Shopify Admin API Library for PHP v$this->version",
-            headers: ['Content-Type: application/json',
-                "Content-Length: $bodyLength"
-            ],
-            response: $this->buildMockHttpResponse(500, ''),
-            body: $body
-        );
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
+                method: "POST",
+                userAgent: "^Shopify Admin API Library for PHP v",
+                headers: ['Content-Type: application/json'],
+                body: json_encode($this->codeRequestBody),
+                response: $this->buildMockHttpResponse(500, ''),
+            ),
+        ]);
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
         $mockQuery = [

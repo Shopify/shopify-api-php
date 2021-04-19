@@ -17,8 +17,6 @@ class Http
     public const DATA_TYPE_URL_ENCODED = 'application/x-www-form-urlencoded';
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
-    public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
-
     private const RETRIABLE_STATUS_CODES = [429, 500];
 
     public function __construct(private string $domain)

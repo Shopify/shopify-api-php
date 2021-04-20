@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Shopify\Auth;
 
 use Shopify\Clients\Http;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Clients\HttpResponse;
 use Shopify\Context;
+use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\InvalidOAuthException;
+use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\OAuthCookieNotFoundException;
 use Shopify\Exception\OAuthSessionNotFoundException;
 use Shopify\Exception\SessionStorageException;
-use Shopify\Exception\CookieSetException;
 use Shopify\Utils;
 use Ramsey\Uuid\Uuid;
-use Shopify\Clients\HttpHeaders;
-use Shopify\Exception\MissingArgumentException;
 
 /**
  * Provides methods to perform OAuth with Shopify.
@@ -266,8 +266,9 @@ class OAuth
     /**
      * Fetches the OAuth session ID from the given cookies.
      *
-     * @param  array  $cookies   The $cookies param from `callback`
-     * @return string $sessionId The ID of the current session
+     * @param array $cookies The $cookies param from `callback`
+     *
+     * @return string The ID of the current session
      * @throws \Shopify\Exception\OAuthCookieNotFoundException
      */
     private static function getCookieSessionId(array $cookies): string

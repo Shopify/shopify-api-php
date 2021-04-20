@@ -19,8 +19,6 @@ define('RUNNING_SHOPIFY_TESTS', 1);
 class BaseTestCase extends TestCase
 {
     protected string $domain = 'test-shop.myshopify.io';
-    protected array $requestDetails;
-    protected int $lastCheckedRequest;
     protected string $version;
 
     public function setUp(): void

@@ -12,6 +12,7 @@ final class HttpHeadersTest extends BaseTestCase
     private $rawHeaders = [
         'Content-Type' => 'application/json',
         'X-Custom-Header' => 1234,
+        'X-Array-Header' => [1234, 4321],
     ];
 
     public function testHeadersAreNormalized()
@@ -21,6 +22,7 @@ final class HttpHeadersTest extends BaseTestCase
             [
                 'content-type' => ['application/json'],
                 'x-custom-header' => ['1234'],
+                'x-array-header' => ['1234', '4321'],
             ],
             $headers->toArray(),
         );
@@ -39,6 +41,73 @@ final class HttpHeadersTest extends BaseTestCase
         $this->assertFalse($headers->has('not-there'));
     }
 
+    public function testHasAcceptsStrings()
+    {
+        $headers = new HttpHeaders($this->rawHeaders);
+
+        $this->assertTrue($headers->has('Content-Type'));
+        $this->assertTrue($headers->has('content-type'));
+
+        $this->assertTrue($headers->has('Content-Type', allowEmpty: false));
+        $this->assertTrue($headers->has('content-type', allowEmpty: false));
+    }
+
+    public function testHasAcceptsEmptyStrings()
+    {
+        $rawHeaders = ['Test-header' => ''];
+        $headers = new HttpHeaders($rawHeaders);
+
+        $this->assertTrue($headers->has('Test-header'));
+        $this->assertTrue($headers->has('test-header'));
+    }
+
+    public function testHasDoesNotAcceptEmptyStrings()
+    {
+        $rawHeaders = ['Test-header' => ''];
+        $headers = new HttpHeaders($rawHeaders);
+
+        $this->assertFalse($headers->has('Test-header', allowEmpty: false));
+        $this->assertFalse($headers->has('test-header', allowEmpty: false));
+    }
+
+    public function testDiff()
+    {
+        $headers = new HttpHeaders($this->rawHeaders);
+
+        $this->assertEquals([], $headers->diff(['Content-Type']));
+        $this->assertEquals([], $headers->diff(['content-type']));
+
+        $this->assertEquals(['Not-there'], $headers->diff(['Not-there']));
+        $this->assertEquals(
+            ['Not-there-1', 'Not-there-2'],
+            $headers->diff(['Not-there-1', 'Not-there-2', 'content-type', 'Content-Type'])
+        );
+    }
+
+    public function testDiffAllowsEmptyParam()
+    {
+        $rawHeaders = ['Test-header' => ''];
+        $headers = new HttpHeaders($rawHeaders);
+
+        $this->assertEquals([], $headers->diff(['Test-header']));
+        $this->assertEquals([], $headers->diff(['test-header']));
+
+        $this->assertEquals(['Test-header'], $headers->diff(['Test-header'], allowEmpty: false));
+        $this->assertEquals(['test-header'], $headers->diff(['test-header'], allowEmpty: false));
+    }
+
+    public function testDiffMultipleValues()
+    {
+        $rawHeaders = ['Test-header' => '', 'Test-header-2' => 'Value'];
+        $headers = new HttpHeaders($rawHeaders);
+
+        $this->assertEquals([], $headers->diff(['Test-header', 'Test-header-2']));
+        $this->assertEquals([], $headers->diff(['test-header', 'test-header-2']));
+
+        $this->assertEquals(['Test-header'], $headers->diff(['Test-header', 'Test-header-2'], allowEmpty: false));
+        $this->assertEquals(['test-header'], $headers->diff(['test-header', 'test-header-2'], allowEmpty: false));
+    }
+
     public function testGetIsCaseInsensitiveAndReturnsStrings()
     {
         $headers = new HttpHeaders($this->rawHeaders);
@@ -48,6 +117,9 @@ final class HttpHeadersTest extends BaseTestCase
 
         $this->assertEquals('1234', $headers->get('X-Custom-Header'));
         $this->assertEquals('1234', $headers->get('x-custom-header'));
+
+        $this->assertEquals('1234,4321', $headers->get('X-Array-Header'));
+        $this->assertEquals('1234,4321', $headers->get('x-array-header'));
 
         $this->assertNull($headers->get('not-there'));
     }

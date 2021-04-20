@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Shopify\Webhooks;
 
 use Shopify\Clients\Http;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Context;
 use Shopify\Exception\InvalidArgumentException;
+use Shopify\Exception\InvalidWebhookException;
+use Shopify\Exception\MissingWebhookHandlerException;
 use Shopify\Exception\WebhookRegistrationException;
 use Shopify\Utils;
 
@@ -22,16 +25,16 @@ final class Registry
         self::DELIVERY_METHOD_EVENT_BRIDGE,
     ];
 
+    /** @var Handler[] */
     private static array $REGISTRY = [];
 
     /**
      * Sets the handler for the given topic. If a handler was previously set for the same topic, it will be overridden.
      *
-     * @param string       $topic   The topic to subscribe to. May be a string or a value from the Topics class
-     * @param string|array $handler The method that will handle this topic. Must map to a callable static function, e.g.
-     *                              ['Class', 'method'], where 'Class' has a static method named 'method'
+     * @param string  $topic   The topic to subscribe to. May be a string or a value from the Topics class
+     * @param Handler $handler The handler for this topic
      */
-    public static function addHandler(string $topic, string | array $handler): void
+    public static function addHandler(string $topic, Handler $handler): void
     {
         self::$REGISTRY[$topic] = $handler;
     }
@@ -41,9 +44,9 @@ final class Registry
      *
      * @param string $topic The topic to check
      *
-     * @return string|array|null
+     * @return Handler|null
      */
-    public static function getHandler(string $topic): string | array | null
+    public static function getHandler(string $topic): Handler | null
     {
         return self::$REGISTRY[$topic] ?? null;
     }
@@ -107,6 +110,49 @@ final class Registry
         }
 
         return new RegisterResponse($registered, $body);
+    }
+
+    /**
+     * Processes a triggered webhook, calling the appropriate handler.
+     *
+     * @param array  $rawHeaders The raw HTTP headers for the request
+     * @param string $rawBody    The raw body of the HTTP request
+     *
+     * @return ProcessResponse
+     *
+     * @throws \Shopify\Exception\InvalidWebhookException
+     * @throws \Shopify\Exception\MissingWebhookHandlerException
+     */
+    public static function process(array $rawHeaders, string $rawBody): ProcessResponse
+    {
+        if (empty($rawBody)) {
+            throw new InvalidWebhookException("No body was received when processing webhook");
+        }
+
+        $headers = self::parseProcessHeaders($rawHeaders);
+
+        $topic = $headers->get(HttpHeaders::X_SHOPIFY_TOPIC);
+        $shop = $headers->get(HttpHeaders::X_SHOPIFY_DOMAIN);
+        $hmac = $headers->get(HttpHeaders::X_SHOPIFY_HMAC);
+
+        self::validateProcessHmac($rawBody, $hmac);
+
+        $body = json_decode($rawBody, true);
+
+        $topic = self::convertTopic($topic);
+        $handler = self::getHandler($topic);
+        if (!$handler) {
+            throw new MissingWebhookHandlerException("No handler was registered for topic '$topic'");
+        }
+
+        try {
+            $handler->handle($topic, $shop, $body);
+            $response = new ProcessResponse(true);
+        } catch (\Exception $error) {
+            $response = new ProcessResponse(false, $error->getMessage());
+        }
+
+        return $response;
     }
 
     /**
@@ -361,5 +407,60 @@ final class Registry
             ($deliveryMethod === self::DELIVERY_METHOD_EVENT_BRIDGE && $webhookId) =>
                 'eventBridgeWebhookSubscriptionUpdate',
         };
+    }
+
+    /**
+     * Checks if all the necessary headers are given for this to be a valid webhook, returning the parsed headers.
+     *
+     * @param array $rawHeaders The raw HTTP headers from the request
+     *
+     * @return HttpHeaders The parsed headers
+     *
+     * @throws \Shopify\Exception\InvalidWebhookException
+     */
+    private static function parseProcessHeaders(array $rawHeaders): HttpHeaders
+    {
+        $headers = new HttpHeaders($rawHeaders);
+
+        $missingHeaders = $headers->diff(
+            headers: [HttpHeaders::X_SHOPIFY_HMAC, HttpHeaders::X_SHOPIFY_TOPIC, HttpHeaders::X_SHOPIFY_DOMAIN],
+            allowEmpty: false,
+        );
+
+        if (!empty($missingHeaders)) {
+            $missingHeaders = implode(', ', $missingHeaders);
+            throw new InvalidWebhookException(
+                "Missing one or more of the required HTTP headers to process webhooks: [$missingHeaders]"
+            );
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Checks if the given HMAC hash is valid.
+     *
+     * @param string $rawBody The HTTP request body
+     * @param string $hmac    The HMAC from the HTTP headers
+     *
+     * @throws \Shopify\Exception\InvalidWebhookException
+     */
+    private static function validateProcessHmac(string $rawBody, string $hmac): void
+    {
+        if ($hmac !== base64_encode(hash_hmac('sha256', $rawBody, Context::$API_SECRET_KEY, true))) {
+            throw new InvalidWebhookException("Could not validate webhook HMAC");
+        }
+    }
+
+    /**
+     * Converts the topic from the webhook post format (e.g. products/create) to the GraphQL format (PRODUCTS_CREATE)
+     *
+     * @param string $topic The topic to convert
+     *
+     * @return string
+     */
+    private static function convertTopic(string $topic): string
+    {
+        return strtoupper(str_replace('/', '_', $topic));
     }
 }

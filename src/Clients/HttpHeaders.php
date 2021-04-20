@@ -11,6 +11,9 @@ final class HttpHeaders
 {
     public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
     public const X_REQUEST_ID = "x-request-id";
+    public const X_SHOPIFY_HMAC = 'X-Shopify-Hmac-Sha256';
+    public const X_SHOPIFY_TOPIC = 'X-Shopify-Topic';
+    public const X_SHOPIFY_DOMAIN = 'X-Shopify-Shop-Domain';
 
     private array $headerSet = [];
 
@@ -29,14 +32,39 @@ final class HttpHeaders
     /**
      * Checks if this set contains the given header.
      *
-     * @param string $header The header to check
+     * @param string $headers    The headers to check
+     * @param bool   $allowEmpty If false, empty headers are handled as missing
      *
      * @return bool
      */
-    public function has(string $header): bool
+    public function has(string $header, bool $allowEmpty = true): bool
     {
         list($header) = $this->normalizeHeader($header);
-        return array_key_exists($header, $this->headerSet);
+
+        return (
+            array_key_exists($header, $this->headerSet) &&
+            ($allowEmpty || !empty($this->headerSet[$header]))
+        );
+    }
+
+    /**
+     * Returns all of the given headers that are missing in this object.
+     *
+     * @param array $headers    The headers to check
+     * @param bool  $allowEmpty If false, empty headers are handled as missing
+     *
+     * @return array The headers in $headers that are not set in this object
+     */
+    public function diff(array $headers, bool $allowEmpty = true): array
+    {
+        $missing = [];
+        foreach ($headers as $header) {
+            if (!$this->has($header, $allowEmpty)) {
+                $missing[] = $header;
+            }
+        }
+
+        return $missing;
     }
 
     /**
@@ -46,7 +74,7 @@ final class HttpHeaders
      *
      * @return string|null
      */
-    public function get(string $header): string | null
+    public function get(string $header): ?string
     {
         if (!$this->has($header)) {
             return null;
@@ -90,7 +118,11 @@ final class HttpHeaders
      */
     private function normalizeHeader(string $header, mixed $value = null): array
     {
-        $value = array_map(fn($item) => (string)$item, (array)$value);
+        if (empty($value)) {
+            $value = null;
+        } else {
+            $value = array_map(fn($item) => $item ? (string)$item : null, (array)$value);
+        }
 
         return [strtolower($header), $value];
     }

@@ -7,7 +7,6 @@ namespace ShopifyTest\Clients;
 final class MockRequest
 {
     public function __construct(
-        // phpcs:disable
         public array $response,
         public ?string $url = null,
         public ?string $method = null,
@@ -17,7 +16,6 @@ final class MockRequest
         public ?string $error = null,
         public bool $allowOtherHeaders = true,
         public bool $isRetry = false,
-        // phpcs:enable
     ) {
     }
 }

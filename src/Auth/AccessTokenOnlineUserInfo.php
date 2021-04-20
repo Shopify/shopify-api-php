@@ -7,8 +7,6 @@ namespace Shopify\Auth;
 final class AccessTokenOnlineUserInfo
 {
     public function __construct(
-        // This is currently a bug until a new version of phpcs is released
-        // phpcs:disable
         private int $id,
         private string $firstName,
         private string $lastName,
@@ -17,7 +15,6 @@ final class AccessTokenOnlineUserInfo
         private bool $accountOwner,
         private string $locale,
         private bool $collaborator,
-        // phpcs:enable
     ) {
     }
 

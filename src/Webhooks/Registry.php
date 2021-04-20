@@ -64,13 +64,11 @@ final class Registry
      * @throws \Shopify\Exception\WebhookRegistrationException
      */
     public static function register(
-        // phpcs:disable
         string $path,
         string $topic,
         string $shop,
         string $accessToken,
         string $deliveryMethod = self::DELIVERY_METHOD_HTTP,
-        // phpcs:enable
     ): RegisterResponse {
         if (!in_array($deliveryMethod, self::$DELIVERY_METHODS)) {
             throw new InvalidArgumentException("Unrecognized delivery method '$deliveryMethod'");

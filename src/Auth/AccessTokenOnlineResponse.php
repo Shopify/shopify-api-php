@@ -7,14 +7,11 @@ namespace Shopify\Auth;
 final class AccessTokenOnlineResponse extends AccessTokenResponse
 {
     public function __construct(
-        // This is currently a bug until a new version of phpcs is released
-        // phpcs:disable
         protected string $accessToken,
         protected string $scope,
         private int $expiresIn,
         private string $associatedUserScope,
         private ?AccessTokenOnlineUserInfo $associatedUser = null,
-        // phpcs:enable
     ) {
     }
 

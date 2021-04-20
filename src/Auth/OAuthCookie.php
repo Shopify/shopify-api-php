@@ -10,13 +10,11 @@ namespace Shopify\Auth;
 class OAuthCookie
 {
     public function __construct(
-        // phpcs:disable
         private string $value,
         private string $name,
         private int $expire = 0,
         private bool $secure = true,
-        private bool $httpOnly = true
-        // phpcs:enable
+        private bool $httpOnly = true,
     ) {
     }
 

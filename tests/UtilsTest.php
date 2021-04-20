@@ -37,14 +37,24 @@ final class UtilsTest extends BaseTestCase
     {
         $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain('my-shop', 'myshopify.io'));
         $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain('my-shop.myshopify.io', 'myshopify.io'));
-        $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain('http://my-shop.myshopify.io', 'myshopify.io'));
-        $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain('https://my-shop.myshopify.io', 'myshopify.io'));
-        $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain('https://my-shop.myshopify.io', 'myshopify.io'));
+        $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain(
+            'http://my-shop.myshopify.io',
+            'myshopify.io'
+        ));
+        $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain(
+            'https://my-shop.myshopify.io',
+            'myshopify.io'
+        ));
+        $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain(
+            'https://my-shop.myshopify.io',
+            'myshopify.io'
+        ));
         $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain(' MY-SHOP ', 'myshopify.io'));
     }
 
     public function testValidHmac()
     {
+        // phpcs:ignore
         $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&hmac=654619d4b5a4f54795c3f40db18e4ed8b825f0abce16d1d75ab57e10c5e09490&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
         $params = Utils::getQueryParams($url);
         $this->assertEquals(false, Utils::validateHmac(
@@ -55,6 +65,7 @@ final class UtilsTest extends BaseTestCase
 
     public function testInvalidHmac()
     {
+        // phpcs:ignore
         $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&hmac=asdf&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
         $params = Utils::getQueryParams($url);
         $this->assertEquals(false, Utils::validateHmac(

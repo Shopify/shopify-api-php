@@ -19,13 +19,10 @@ class Session
     private ?AccessTokenOnlineUserInfo $onlineAccessInfo = null;
 
     public function __construct(
-        // This is currently a bug until a new version of phpcs is released
-        // phpcs:disable
         private string $id,
         private string $shop,
         private bool $isOnline,
         private string $state,
-        // phpcs:enable
     ) {
         $this->shop = Utils::sanitizeShopDomain($shop);
     }

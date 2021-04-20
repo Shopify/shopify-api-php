@@ -124,7 +124,7 @@ final class Utils
         return $session;
     }
 
-    public static function loadCurrentSession(string $headers, array $cookies, bool $isOnline)
+    public static function loadCurrentSession(array $headers, array $cookies, bool $isOnline)
     {
         Context::throwIfUninitialized();
 
@@ -134,9 +134,8 @@ final class Utils
         return !$sessionId ? null : Context::$SESSION_STORAGE->loadSession($sessionId);
     }
 
-    public static function decodeSessionToken(array $payload): array
+    public static function decodeSessionToken(string $jwt): array
     {
-        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
         $payload = JWT::decode($jwt, Context::$API_SECRET_KEY, array('HS256'));
         return (array) $payload;
     }

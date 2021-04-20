@@ -15,6 +15,7 @@ use Shopify\Exception\SessionStorageException;
 use Shopify\Exception\CookieSetException;
 use Shopify\Utils;
 use Ramsey\Uuid\Uuid;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Exception\MissingArgumentException;
 
 /**
@@ -203,7 +204,7 @@ class OAuth
     /**
      * Extracts the current session ID from the headers
      *
-     * @param string $headers  HTTP headers returned from the request context
+     * @param array  $headers  HTTP headers returned from the request context
      * @param array  $cookies  HTTP request cookies
      * @param bool   $isOnline Whether to load online or offline sessions
      *
@@ -211,26 +212,46 @@ class OAuth
      * @throws \Shopify\Exception\MissingArgumentException
      * @throws \Shopify\Exception\OAuthSessionNotFoundException
      */
-    public function getCurrentSessionId(string $headers, array $cookies, bool $isOnline): string
+    public function getCurrentSessionId(array $headers, array $cookies, bool $isOnline): string
     {
         if (Context::$IS_EMBEDDED_APP) {
             if ($headers) {
-                preg_match('/^Bearer (.+)$/', $headers, $matches);
-                if (!$matches) {
+                $headers = new HttpHeaders($headers);
+
+                if ($headers->has('authorization')) {
+                    $auth = $headers->get('authorization');
+                } else {
                     throw new MissingArgumentException(
-                        "Missing Bearer token in authorization header"
+                        'Missing Authorization key in headers array'
                     );
                 }
-            }
-            $jwtPayload = $matches[1];
-            $shop = preg_replace('/^https:\/\//', '', $jwtPayload);
-            if ($isOnline) {
-                $currentSessionId = $this->getJwtSessionId($shop, $jwtPayload);
+                preg_match('/^Bearer (.+)$/', $auth, $matches);
+                if (!$matches) {
+                    throw new MissingArgumentException(
+                        'Missing Bearer token in authorization header'
+                    );
+                }
+                $jwt = $matches[1];
+                $jwtPayload = Utils::decodeSessionToken($jwt);
+                $shop = preg_replace('/^https:\/\//', '', $jwtPayload['dest']);
+                if ($isOnline) {
+                    $currentSessionId = $this->getJwtSessionId($shop, $jwtPayload['sub']);
+                } else {
+                    $currentSessionId = $this->getOfflineSessionId($shop);
+                }
             } else {
-                $currentSessionId = $this->getOfflineSessionId($shop);
+                throw new MissingArgumentException(
+                    'Missing headers argument for embedded app'
+                );
             }
         } else {
-            $this->getCookieSessionId($cookies);
+            if ($cookies) {
+                $currentSessionId = $this->getCookieSessionId($cookies);
+            } else {
+                throw new MissingArgumentException(
+                    'Missing cookies argument for non-embedded app'
+                );
+            }
         }
 
         if (!$currentSessionId) {

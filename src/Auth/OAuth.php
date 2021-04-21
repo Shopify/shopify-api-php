@@ -218,13 +218,12 @@ class OAuth
             if ($headers) {
                 $headers = new HttpHeaders($headers);
 
-                if ($headers->has('authorization')) {
-                    $auth = $headers->get('authorization');
-                } else {
+                if (!$headers->has('authorization')) {
                     throw new MissingArgumentException(
                         'Missing Authorization key in headers array'
                     );
                 }
+                $auth = $headers->get('authorization');
                 preg_match('/^Bearer (.+)$/', $auth, $matches);
                 if (!$matches) {
                     throw new MissingArgumentException(
@@ -245,19 +244,10 @@ class OAuth
                 );
             }
         } else {
-            if ($cookies) {
-                $currentSessionId = self::getCookieSessionId($cookies);
-            } else {
-                throw new MissingArgumentException(
-                    'Missing cookies argument for non-embedded app'
-                );
+            if (!$cookies) {
+                throw new OAuthCookieNotFoundException('Could not find the OAuth cookie to retrieve the session ID');
             }
-        }
-
-        if (!$currentSessionId) {
-            throw new OAuthSessionNotFoundException(
-                'Could not retrieve the current session ID'
-            );
+            $currentSessionId = self::getCookieSessionId($cookies);
         }
 
         return $currentSessionId;

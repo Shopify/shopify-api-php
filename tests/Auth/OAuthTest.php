@@ -435,6 +435,30 @@ final class OAuthTest extends BaseTestCase
         );
     }
 
+    public function testGetCurrentSessionIdRaisesCookieNotFoundException()
+    {
+        Context::$IS_EMBEDDED_APP = false;
+        $this->expectException(\Shopify\Exception\OAuthCookieNotFoundException::class);
+        $this->expectExceptionMessage(
+            'Could not find the OAuth cookie to retrieve the session ID'
+        );
+
+        OAuth::getCurrentSessionId(
+            [], [], true
+        );
+    }
+
+    public function testGetCurrentSessionIdNonEmbeddedApp()
+    {
+        Context::$IS_EMBEDDED_APP = false;
+        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+
+        $currentSessionId = OAuth::getCurrentSessionId(
+            [], $mockCookies, true
+        );
+        $this->assertEquals($currentSessionId, 'test_oauth_session');
+    }
+
     public function testGetCurrentSessionIdRaisesMissingArgumentException()
     {
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
@@ -463,7 +487,7 @@ final class OAuthTest extends BaseTestCase
         $this->assertEquals($currentSessionId, 'exampleshop.myshopify.com_42');
     }
 
-    public function testGetCurrentSessionForOfflineShop()
+    public function testGetCurrentSessionIdForOfflineShop()
     {
         // phpcs:ignore
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
@@ -475,7 +499,7 @@ final class OAuthTest extends BaseTestCase
         $this->assertEquals($currentSessionId, 'offline_exampleshop.myshopify.com');
     }
 
-    public function testGetCurrentSessionForEmbeddedAppMissingHeaders()
+    public function testGetCurrentSessionIdForEmbeddedAppMissingHeaders()
     {
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage(

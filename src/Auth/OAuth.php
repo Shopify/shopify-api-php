@@ -210,7 +210,7 @@ class OAuth
      *
      * @return string The ID of the current session
      * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\OAuthSessionNotFoundException
+     * @throws \Shopify\Exception\OAuthCookieNotFoundException
      */
     public static function getCurrentSessionId(array $headers, array $cookies, bool $isOnline): string
     {

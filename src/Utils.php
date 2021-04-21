@@ -139,8 +139,7 @@ final class Utils
      */
     public static function loadCurrentSession(array $headers, array $cookies, bool $isOnline): ?Session
     {
-        $oauth = new OAuth();
-        $sessionId = $oauth->getCurrentSessionId($headers, $cookies, $isOnline);
+        $sessionId = OAuth::getCurrentSessionId($headers, $cookies, $isOnline);
 
         return Context::$SESSION_STORAGE->loadSession($sessionId);
     }

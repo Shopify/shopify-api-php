@@ -35,6 +35,7 @@ You can follow our [getting started guide](docs/) to learn how to use this libra
 - [Performing OAuth](docs/usage/oauth.md)
   - [Begin OAuth](docs/usage/oauth.md#begin-oauth)
   - [OAuth callback](docs/usage/oauth.md#oauth-callback)
+- [Rest Admin API](docs/usage/rest.md)
 - [Make a Storefront API call](docs/usage/storefront.md)
 - [Webhooks](docs/usage/webhooks.md)
 - [Known issues and caveats](docs/issues.md)

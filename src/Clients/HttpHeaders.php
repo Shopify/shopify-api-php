@@ -20,10 +20,51 @@ final class HttpHeaders
      * @param array $headers HTTP request headers, from which the set will be loaded. This must be a hash of
      *                       header => value pairs. Value will be forcibly cast to string so objects that implement
      *                       toString are also valid.
+     *                       If you don't provide this value, you can still use `addRawHeader` to add headers one by
+     *                       one manually.
      */
-    public function __construct(array $headers)
+    public function __construct(array $headers = [])
     {
         $this->normalizeAndLoadHeaders($headers);
+    }
+
+
+    /**
+     * @param string $header Http header in `header-key: value` format. For example `Content-Type: application/json`.
+     *                       If this method is called more than once for the same `header-key` the stored value will be
+     *                       an array of values from each call.
+     *                       Example:
+     *                          If you call `addRawHeader` with `set-cookie: _y=bdc37ee4-ab06-49...`. The value
+     *                       associated with this `set-cookie` header will be ` _y=bdc37ee4-ab06-49...`. If you call it
+     *                       again with `set-cookie: _s=18d48dd0-a164-4b...`. The value will be
+     *                       ['_y=bdc37ee4-ab06-49...', '_s=18d48dd0-a164-4b...']
+     *
+     *                       If the header string doesn't contain the `:` diameter. The entry will be ignored and the
+     *                       length will be returned.
+     *
+     * @return int Header length
+     */
+    public function addRawHeader(string $header): int
+    {
+        $parsedHeader = explode(':', $header, 2);
+
+        if (count($parsedHeader) < 2) {
+            return strlen($header);
+        }
+
+        $key = strtolower(trim($parsedHeader[0]));
+        $value = trim($parsedHeader[1]);
+
+        if (array_key_exists($key, $this->headerSet)) {
+            if (gettype($this->headerSet[$key]) !== 'array') {
+                $this->headerSet[$key] = [$this->headerSet[$key]];
+            }
+            array_push($this->headerSet[$key], $value);
+        } else {
+            $this->headerSet[$key] = $value;
+        }
+
+        return strlen($header);
     }
 
     /**

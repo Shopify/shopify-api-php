@@ -30,19 +30,11 @@ class Curl implements Transport
      */
     private function executeRequest(): ?array
     {
-        $responseHeaders = [];
+        $headers = new HttpHeaders();
         $this->setCurlOption(
             CURLOPT_HEADERFUNCTION,
-            function ($curl, $header) use (&$responseHeaders) {
-                $len = strlen($header);
-                $header = explode(':', $header, 2);
-                if (count($header) < 2) {
-                    return $len;
-                }
-
-                $responseHeaders[strtolower(trim($header[0]))][] = trim($header[1]);
-
-                return $len;
+            function ($curl, $header) use (&$headers) {
+                return $headers->addRawHeader($header);
             }
         );
 
@@ -54,7 +46,7 @@ class Curl implements Transport
         $statusCode = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
         return [
             'statusCode' => $statusCode,
-            'headers' => $responseHeaders,
+            'headers' => $headers->toArray(),
             'body' => $responseBody,
         ];
     }

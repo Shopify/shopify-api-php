@@ -10,6 +10,7 @@ namespace Shopify\Clients;
 final class HttpHeaders
 {
     public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
+    public const X_REQUEST_ID = "x-request-id";
 
     private array $headerSet = [];
 

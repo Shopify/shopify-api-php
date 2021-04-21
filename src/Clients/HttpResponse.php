@@ -7,6 +7,8 @@ namespace Shopify\Clients;
 class HttpResponse
 {
 
+    private ?string $requestId;
+
     /**
      * HttpResponse constructor.
      *
@@ -19,6 +21,7 @@ class HttpResponse
         private array $headers = [],
         private array|string|null $body = null
     ) {
+        $this->requestId = $this->headers[HttpHeaders::X_REQUEST_ID] ?? null;
     }
 
     /**
@@ -43,5 +46,13 @@ class HttpResponse
     public function getBody(): array|string|null
     {
         return $this->body;
+    }
+
+    /**
+     * @return string|null request Id
+     */
+    public function getRequestId(): ?string
+    {
+        return $this->requestId;
     }
 }

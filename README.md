@@ -29,11 +29,13 @@ You can follow our [getting started guide](docs/) to learn how to use this libra
 
 - [Getting started](docs/getting_started.md)
   - [Install dependencies](docs/getting_started.md#install-dependencies)
+  - [Set up the library](docs/getting_started.md#set-up-the-library)
 - [Performing OAuth](docs/usage/oauth.md)
   - [Begin OAuth](docs/usage/oauth.md#begin-oauth)
   - [OAuth callback](docs/usage/oauth.md#oauth-callback)
 - [Webhooks](docs/usage/webhooks.md)
 - [Known issues and caveats](docs/issues.md)
+  - [Notes on session handling](docs/issues.md#notes-on-session-handling)
 
 # Developing this library
 

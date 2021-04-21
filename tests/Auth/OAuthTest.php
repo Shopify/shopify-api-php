@@ -437,43 +437,39 @@ final class OAuthTest extends BaseTestCase
 
     public function testGetCurrentSessionIdRaisesMissingArgumentException()
     {
-        $oauth = new OAuth();
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage(
             'Missing Authorization key in headers array'
         );
 
-        $oauth->getCurrentSessionId(['auth'=> 'Bearer 123.456.789'], [], true);
+        OAuth::getCurrentSessionId(['auth'=> 'Bearer 123.456.789'], [], true);
     }
 
     public function testGetCurrentSessionIdRaisesAnotherMissingArgumentException()
     {
-        $oauth = new OAuth();
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('Missing Bearer token in authorization header');
 
-        $oauth->getCurrentSessionId(['Authorization'=> 'Bear 123.456.789'], [], true);
+        OAuth::getCurrentSessionId(['Authorization'=> 'Bear 123.456.789'], [], true);
     }
 
     public function testGetCurrentSessionIdForOnlineShop()
     {
-        $oauth = new OAuth();
         // phpcs:ignore
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
         $headers = ['Authorization'=> "Bearer $token"];
 
-        $currentSessionId = $oauth->getCurrentSessionId($headers, [], true);
+        $currentSessionId = OAuth::getCurrentSessionId($headers, [], true);
         $this->assertEquals($currentSessionId, 'exampleshop.myshopify.com_42');
     }
 
     public function testGetCurrentSessionForOfflineShop()
     {
-        $oauth = new OAuth();
         // phpcs:ignore
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
         $headers = ['Authorization'=> "Bearer $token"];
 
-        $currentSessionId = $oauth->getCurrentSessionId(
+        $currentSessionId = OAuth::getCurrentSessionId(
             $headers, [], false
         );
         $this->assertEquals($currentSessionId, 'offline_exampleshop.myshopify.com');
@@ -481,12 +477,11 @@ final class OAuthTest extends BaseTestCase
 
     public function testGetCurrentSessionForEmbeddedAppMissingHeaders()
     {
-        $oauth = new OAuth();
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage(
             'Missing headers argument for embedded app'
         );
-        $currentSessionId = $oauth->getCurrentSessionId(
+        $currentSessionId = OAuth::getCurrentSessionId(
             [], [], false
         );
         $this->assertEquals($currentSessionId, 'offline_exampleshop.myshopify.com');

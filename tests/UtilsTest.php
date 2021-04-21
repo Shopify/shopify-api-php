@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace ShopifyTest;
 
 use Firebase\JWT\JWT;
+use Shopify\Auth\Session;
 use Shopify\Context;
 use Shopify\Utils;
-use Shopify\Auth\Session;
 
 final class UtilsTest extends BaseTestCase
 {
@@ -138,6 +138,26 @@ final class UtilsTest extends BaseTestCase
 
         new Session("offline_$this->domain", $this->domain, false, 'state');
         $this->assertNull(Utils::loadOfflineSession($this->domain));
+    }
+
+    public function testLoadCurrentSession()
+    {
+        // phpcs:ignore
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
+        $headers = ['Authorization'=> "Bearer $token"];
+        $sessionId = 'exampleshop.myshopify.com_42';
+        $session = new Session(
+            id: $sessionId,
+            shop: 'test-shop.myshopify.io',
+            state: '1234',
+            isOnline: true,
+        );
+
+        $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
+        $this->assertEquals($session, Context::$SESSION_STORAGE->loadSession('exampleshop.myshopify.com_42'));
+        
+        $currentSession = Utils::loadCurrentSession($headers, [], true);
+        $this->assertEquals($currentSession, $session);
     }
 
     public function testDecodeSessionToken()

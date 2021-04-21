@@ -21,7 +21,7 @@ final class OAuthCookieTest extends BaseTestCase
         $this->assertEquals('Test cookie', $cookie->getName());
         $this->assertEquals('Test value', $cookie->getValue());
         $this->assertEquals(1234, $cookie->getExpire());
-        $this->assertEquals(true, $cookie->isSecure());
-        $this->assertEquals(true, $cookie->isHttpOnly());
+        $this->assertTrue($cookie->isSecure());
+        $this->assertTrue($cookie->isHttpOnly());
     }
 }

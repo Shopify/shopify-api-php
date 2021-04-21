@@ -26,10 +26,10 @@ final class AccessTokenOnlineResponseTest extends BaseTestCase
         $this->assertEquals('John', $user->getFirstName());
         $this->assertEquals('Doe', $user->getLastName());
         $this->assertEquals('john.doe@nowhere', $user->getEmail());
-        $this->assertEquals(true, $user->isEmailVerified());
-        $this->assertEquals(true, $user->isAccountOwner());
+        $this->assertTrue($user->isEmailVerified());
+        $this->assertTrue($user->isAccountOwner());
         $this->assertEquals('en', $user->getLocale());
-        $this->assertEquals(true, $user->isCollaborator());
+        $this->assertTrue($user->isCollaborator());
 
         $response = new AccessTokenOnlineResponse(
             accessToken: 'test_token',

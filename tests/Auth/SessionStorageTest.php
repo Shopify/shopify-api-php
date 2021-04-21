@@ -30,9 +30,9 @@ final class SessionStorageTest extends BaseTestCase
         $storage = new MockSessionStorage();
 
         $this->assertEquals(null, $storage->loadSession($this->sessionId));
-        $this->assertEquals(true, $storage->storeSession($this->session));
+        $this->assertTrue($storage->storeSession($this->session));
         $this->assertEquals($this->session, $storage->loadSession($this->sessionId));
-        $this->assertEquals(true, $storage->deleteSession($this->sessionId));
+        $this->assertTrue($storage->deleteSession($this->sessionId));
         $this->assertEquals(
             [
                 ['load',   $this->sessionId],

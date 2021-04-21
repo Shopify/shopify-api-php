@@ -212,7 +212,7 @@ class OAuth
      * @throws \Shopify\Exception\MissingArgumentException
      * @throws \Shopify\Exception\OAuthSessionNotFoundException
      */
-    public function getCurrentSessionId(array $headers, array $cookies, bool $isOnline): string
+    public static function getCurrentSessionId(array $headers, array $cookies, bool $isOnline): string
     {
         if (Context::$IS_EMBEDDED_APP) {
             if ($headers) {
@@ -235,9 +235,9 @@ class OAuth
                 $jwtPayload = Utils::decodeSessionToken($jwt);
                 $shop = preg_replace('/^https:\/\//', '', $jwtPayload['dest']);
                 if ($isOnline) {
-                    $currentSessionId = $this->getJwtSessionId($shop, $jwtPayload['sub']);
+                    $currentSessionId = self::getJwtSessionId($shop, $jwtPayload['sub']);
                 } else {
-                    $currentSessionId = $this->getOfflineSessionId($shop);
+                    $currentSessionId = self::getOfflineSessionId($shop);
                 }
             } else {
                 throw new MissingArgumentException(
@@ -246,7 +246,7 @@ class OAuth
             }
         } else {
             if ($cookies) {
-                $currentSessionId = $this->getCookieSessionId($cookies);
+                $currentSessionId = self::getCookieSessionId($cookies);
             } else {
                 throw new MissingArgumentException(
                     'Missing cookies argument for non-embedded app'

@@ -17,7 +17,9 @@ class Curl implements Transport
     public function sendRequest(): ?array
     {
         $response = $this->executeRequest();
-        if ($curlError = curl_error($this->ch)) {
+        $curlError = curl_error($this->ch);
+        curl_close($this->ch);
+        if ($curlError) {
             throw new HttpRequestException("HTTP request failed: $curlError");
         }
         return $response;

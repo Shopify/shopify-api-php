@@ -19,8 +19,8 @@ final class HttpHeadersTest extends BaseTestCase
         $headers = new HttpHeaders($this->rawHeaders);
         $this->assertSame(
             [
-                'content-type' => 'application/json',
-                'x-custom-header' => '1234',
+                'content-type' => ['application/json'],
+                'x-custom-header' => ['1234'],
             ],
             $headers->toArray(),
         );

@@ -17,13 +17,13 @@ final class HttpResponseTest extends BaseTestCase
             body: 'This is a response!',
         );
         $this->assertEquals(1234, $response->getStatusCode());
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             [
                 'Header-1' => ['ABCD'],
                 'Header-2' => ['DCBA'],
-                'x-request-id' => ['test-request-id']
+                'x-request-id' => ['test-request-id'],
             ],
-            $response->getHeaders()
+            $response->getHeaders(),
         );
         $this->assertEquals('This is a response!', $response->getBody());
         $this->assertEquals('test-request-id', $response->getRequestId());

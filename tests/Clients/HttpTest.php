@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Clients;
 
+use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\Test\TestLogger;
 use Shopify\Clients\Http;
 use Shopify\Clients\HttpResponse;
 use Shopify\Context;
@@ -384,5 +387,104 @@ final class HttpTest extends BaseTestCase
 
         $response = $client->get(path: 'test/path', tries: 10);
         $this->assertEquals($expectedResponse, $response);
+    }
+
+    public function testDeprecatedRequestsAreLogged()
+    {
+        $vfsRoot = vfsStream::setup('test');
+
+        /** @var MockObject|Http */
+        $mockedClient = $this->getMockBuilder(Http::class)
+            ->setConstructorArgs([$this->domain])
+            ->onlyMethods(['getApiDeprecationTimestampFilePath'])
+            ->getMock();
+        $mockedClient->expects($this->once())
+            ->method('getApiDeprecationTimestampFilePath')
+            ->willReturn(vfsStream::url('test/timestamp_file'));
+
+        $testLogger = new TestLogger();
+        Context::$LOGGER = $testLogger;
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                response: $this->buildMockHttpResponse(
+                    200,
+                    headers: ['X-Shopify-API-Deprecated-Reason' => 'Test reason'],
+                ),
+            ),
+        ]);
+
+        $this->assertFalse($vfsRoot->hasChild('timestamp_file'));
+        $mockedClient->get('test/path');
+
+        $this->assertTrue($testLogger->hasWarningThatContains(
+            <<<NOTICE
+            API Deprecation notice:
+                URL: https://test-shop.myshopify.io/test/path
+                Reason: Test reason
+            Stack trace:
+            NOTICE
+        ));
+        $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
+    }
+
+    public function testDeprecationLogBackoffPeriod()
+    {
+        vfsStream::setup('test');
+
+        /** @var MockObject|Http */
+        $mockedClient = $this->getMockBuilder(Http::class)
+            ->setConstructorArgs([$this->domain])
+            ->onlyMethods(['getApiDeprecationTimestampFilePath'])
+            ->getMock();
+        $mockedClient->expects($this->exactly(3))
+            ->method('getApiDeprecationTimestampFilePath')
+            ->willReturn(vfsStream::url('test/timestamp_file'));
+
+        $testLogger = new TestLogger();
+        Context::$LOGGER = $testLogger;
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                response: $this->buildMockHttpResponse(
+                    200,
+                    headers: ['X-Shopify-API-Deprecated-Reason' => 'Test reason'],
+                ),
+            ),
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                response: $this->buildMockHttpResponse(
+                    200,
+                    headers: ['X-Shopify-API-Deprecated-Reason' => 'Test reason'],
+                ),
+            ),
+            new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
+                response: $this->buildMockHttpResponse(
+                    200,
+                    headers: ['X-Shopify-API-Deprecated-Reason' => 'Test reason'],
+                ),
+            ),
+        ]);
+
+        $this->assertCount(0, $testLogger->records);
+
+        $mockedClient->get('test/path');
+        $this->assertCount(1, $testLogger->records);
+
+        $mockedClient->get('test/path');
+        $this->assertCount(1, $testLogger->records);
+
+        // We only log once every minute, so simulate more time than having elapsed
+        file_put_contents(vfsStream::url('test/timestamp_file'), time() - 70);
+
+        $mockedClient->get('test/path');
+        $this->assertCount(2, $testLogger->records);
     }
 }

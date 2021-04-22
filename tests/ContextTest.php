@@ -106,30 +106,30 @@ final class ContextTest extends BaseTestCase
         Context::$LOGGER = $testLogger;
 
         Context::log('Defaults to info');
-        $this->assertTrue($testLogger->hasInfoThatContains('Defaults to info'));
+        $this->assertTrue($testLogger->hasInfo('Defaults to info'));
 
         Context::log('Debug log', LogLevel::DEBUG);
-        $this->assertTrue($testLogger->hasDebugThatContains('Debug log'));
+        $this->assertTrue($testLogger->hasDebug('Debug log'));
 
         Context::log('Info log', LogLevel::INFO);
-        $this->assertTrue($testLogger->hasInfoThatContains('Info log'));
+        $this->assertTrue($testLogger->hasInfo('Info log'));
 
         Context::log('Notice log', LogLevel::NOTICE);
-        $this->assertTrue($testLogger->hasNoticeThatContains('Notice log'));
+        $this->assertTrue($testLogger->hasNotice('Notice log'));
 
         Context::log('Warning log', LogLevel::WARNING);
-        $this->assertTrue($testLogger->hasWarningThatContains('Warning log'));
+        $this->assertTrue($testLogger->hasWarning('Warning log'));
 
         Context::log('Err log', LogLevel::ERROR);
-        $this->assertTrue($testLogger->hasErrorThatContains('Err log'));
+        $this->assertTrue($testLogger->hasError('Err log'));
 
         Context::log('Crit log', LogLevel::CRITICAL);
-        $this->assertTrue($testLogger->hasCriticalThatContains('Crit log'));
+        $this->assertTrue($testLogger->hasCritical('Crit log'));
 
         Context::log('Alert log', LogLevel::ALERT);
-        $this->assertTrue($testLogger->hasAlertThatContains('Alert log'));
+        $this->assertTrue($testLogger->hasAlert('Alert log'));
 
         Context::log('Emerg log', LogLevel::EMERGENCY);
-        $this->assertTrue($testLogger->hasEmergencyThatContains('Emerg log'));
+        $this->assertTrue($testLogger->hasEmergency('Emerg log'));
     }
 }

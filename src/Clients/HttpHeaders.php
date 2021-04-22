@@ -53,7 +53,7 @@ final class HttpHeaders
         }
 
         list($header) = $this->normalizeHeader($header);
-        return $this->headerSet[$header];
+        return implode(',', $this->headerSet[$header]);
     }
 
     /**
@@ -90,6 +90,8 @@ final class HttpHeaders
      */
     private function normalizeHeader(string $header, mixed $value = null): array
     {
-        return [strtolower($header), $value ? (string)$value : null];
+        $value = array_map(fn($item) => (string)$item, (array)$value);
+
+        return [strtolower($header), $value];
     }
 }

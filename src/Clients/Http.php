@@ -7,6 +7,7 @@ namespace Shopify\Clients;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\Utils;
+use Psr\Log\LogLevel;
 use Shopify\Context;
 
 class Http
@@ -24,6 +25,7 @@ class Http
     public const USER_AGENT = 'User-Agent';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
+    private const DEPRECATION_ALERT_SECONDS = 60;
 
     public function __construct(private string $domain)
     {
@@ -226,6 +228,61 @@ class Http
             }
         } while ($currentTries < $maxTries);
 
+        if ($response->getHeaders()['X-Shopify-API-Deprecated-Reason'][0] ?? false) {
+            $this->logApiDeprecation($url->__toString(), $response->getHeaders()['X-Shopify-API-Deprecated-Reason'][0]);
+        }
+
         return $response;
+    }
+
+    /**
+     * Logs an API deprecation for the given URL to the app's logged, if one was given.
+     *
+     * @param string $url    The URL that used a deprecated resource
+     * @param string $reason The deprecation reason
+     * @throws \Shopify\Exception\UninitializedContextException
+     */
+    private function logApiDeprecation(string $url, string $reason): void
+    {
+        $warningFilePath = $this->getApiDeprecationTimestampFilePath();
+
+        $lastWarning = null;
+        if (file_exists($warningFilePath)) {
+            $lastWarning = (int)(file_get_contents($warningFilePath));
+        }
+
+        if (time() - $lastWarning < self::DEPRECATION_ALERT_SECONDS) {
+            return;
+        }
+
+        file_put_contents($warningFilePath, time());
+
+        $e = new \Exception();
+        $stackTrace = str_replace("\n", "\n    ", $e->getTraceAsString());
+
+        // For some reason, code coverage doesn't like the heredoc string, but there's no branching here so if the lines
+        // above are hit, so is this.
+        // @codeCoverageIgnoreStart
+        Context::log(
+            <<<NOTICE
+            API Deprecation notice:
+                URL: $url
+                Reason: $reason
+            Stack trace:
+                $stackTrace
+            NOTICE,
+            LogLevel::WARNING,
+        );
+        // @codeCoverageIgnoreEnd
+    }
+
+    /**
+     * Fetches the path to the file holding the timestamp of the last API deprecation warning we logged.
+     *
+     * @codeCoverageIgnore This is mocked in tests so we don't use real files
+     */
+    public function getApiDeprecationTimestampFilePath(): string
+    {
+        return dirname(__DIR__) . '/.last_api_deprecation_warning';
     }
 }

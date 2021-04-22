@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShopifyTest\Clients;
 
 use Shopify\Clients\Http;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Clients\HttpResponse;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
@@ -37,7 +38,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
         $response = $client->get(path: 'test/path', headers: $headers);
         $this->assertEquals($expectedResponse, $response);
     }
@@ -57,7 +58,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
         $response = $client->get(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
         $this->assertEquals($expectedResponse, $response);
     }
@@ -87,7 +88,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->post(
             path: 'test/path',
@@ -124,7 +125,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->put(
             path: 'test/path',
@@ -152,7 +153,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->delete(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
         $this->assertEquals($expectedResponse, $response);
@@ -180,7 +181,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
 
 
         $response = $client->post(path: 'test/path', body: $body);
@@ -214,7 +215,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
 
 
         $response = $client->post(path: 'test/path', body: $this->product1, dataType: Http::DATA_TYPE_URL_ENCODED);
@@ -320,7 +321,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
+        $expectedResponse = new HttpResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->get(path: 'test/path', tries: 3);
         $this->assertEquals($expectedResponse, $response);
@@ -347,7 +348,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(500, ['X-Is-Last-Test-Request' => true]);
+        $expectedResponse = new HttpResponse(500, new HttpHeaders(['X-Is-Last-Test-Request' => true]));
 
         $response = $client->get(path: 'test/path', tries: 3);
         $this->assertEquals($expectedResponse, $response);
@@ -370,7 +371,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(400, ['X-Is-Last-Test-Request' => true]);
+        $expectedResponse = new HttpResponse(400, new HttpHeaders(['X-Is-Last-Test-Request' => true]));
 
         $response = $client->get(path: 'test/path', tries: 10);
         $this->assertEquals($expectedResponse, $response);

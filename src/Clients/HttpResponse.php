@@ -12,16 +12,16 @@ class HttpResponse
     /**
      * HttpResponse constructor.
      *
-     * @param int               $statusCode
-     * @param array             $headers
-     * @param array|string|null $body
+     * @param int                          $statusCode
+     * @param \Shopify\Clients\HttpHeaders $headers
+     * @param array|string|null            $body
      */
     public function __construct(
         private int $statusCode,
-        private array $headers = [],
+        private HttpHeaders $headers,
         private array|string|null $body = null
     ) {
-        $this->requestId = $this->headers[HttpHeaders::X_REQUEST_ID] ?? null;
+        $this->requestId = $this->headers->get(HttpHeaders::X_REQUEST_ID);
     }
 
     /**
@@ -33,9 +33,9 @@ class HttpResponse
     }
 
     /**
-     * @return array HTTP headers
+     * @return \Shopify\Clients\HttpHeaders HTTP headers
      */
-    public function getHeaders(): array
+    public function getHeaders(): HttpHeaders
     {
         return $this->headers;
     }

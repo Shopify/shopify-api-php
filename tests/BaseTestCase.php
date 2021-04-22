@@ -6,6 +6,7 @@ namespace ShopifyTest;
 
 use PHPUnit\Framework\TestCase;
 use Shopify\Clients\Http;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Clients\Transport;
 use Shopify\Clients\TransportFactory;
 use Shopify\Context;
@@ -73,7 +74,7 @@ class BaseTestCase extends TestCase
         return [
             'statusCode' => $statusCode,
             'body' => $body,
-            'headers' => $headers,
+            'headers' => new HttpHeaders($headers),
             'error' => $error,
         ];
     }

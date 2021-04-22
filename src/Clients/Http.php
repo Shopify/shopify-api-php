@@ -216,7 +216,7 @@ class Http
             );
 
             if (in_array($curlResponse['statusCode'], self::RETRIABLE_STATUS_CODES)) {
-                $retryAfter = $curlResponse['headers']['Retry-After'] ?? Context::$RETRY_TIME_IN_SECONDS;
+                $retryAfter = $curlResponse['headers']->get('Retry-After') ?? Context::$RETRY_TIME_IN_SECONDS;
                 usleep($retryAfter * 1000000);
             } else {
                 break;

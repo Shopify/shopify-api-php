@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ShopifyTest\Clients;
 
 use Shopify\Clients\Http;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Clients\Rest;
 use Shopify\Clients\RestResponse;
 use Shopify\Context;
@@ -55,7 +56,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->get(path: 'products', headers: $headers);
 
@@ -79,7 +80,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->get(path: 'products', headers: $headers);
 
@@ -101,7 +102,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->get(path: 'products', query: ["path" => "some_path"]);
 
@@ -136,7 +137,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->post(path: 'products', body: $postData, dataType: Http::DATA_TYPE_JSON);
 
@@ -171,7 +172,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->post(
             path: 'products',
@@ -215,7 +216,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->post(path: 'products', body: $postData, dataType: Http::DATA_TYPE_URL_ENCODED);
 
@@ -250,7 +251,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->put(
             path: 'products/123',
@@ -279,7 +280,7 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
+        $expectedResponse = new RestResponse(200, new HttpHeaders(), $this->successResponse);
 
         $response = $client->delete('products', $headers, query: ["path" => "some_path"]);
 

@@ -46,7 +46,7 @@ class Curl implements Transport
         $statusCode = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
         return [
             'statusCode' => $statusCode,
-            'headers' => $headers->toArray(),
+            'headers' => $headers,
             'body' => $responseBody,
         ];
     }

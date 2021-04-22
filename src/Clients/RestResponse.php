@@ -9,13 +9,13 @@ class RestResponse extends HttpResponse
      * RestResponse constructor.
      *
      * @param int                            $statusCode
-     * @param array                          $headers
+     * @param \Shopify\Clients\HttpHeaders   $headers
      * @param array|string|null              $body
      * @param \Shopify\Clients\PageInfo|null $pageInfo
      */
     public function __construct(
         int $statusCode,
-        array $headers = [],
+        HttpHeaders $headers,
         array|string|null $body = null,
         private PageInfo|null $pageInfo = null
     ) {

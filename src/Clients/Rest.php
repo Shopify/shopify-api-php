@@ -75,8 +75,8 @@ class Rest extends Http
     {
         $pageInfo = null;
 
-        if (array_key_exists('link', $response->getHeaders())) {
-            $pageInfo = PageInfo::fromLinkHeader($response->getHeaders()['link']);
+        if ($response->getHeaders()->has('link')) {
+            $pageInfo = PageInfo::fromLinkHeader($response->getHeaders()->get('link'));
         }
         return $pageInfo;
     }

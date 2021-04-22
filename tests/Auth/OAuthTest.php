@@ -107,9 +107,11 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [];
-        $this->expectException('Shopify\Exception\OAuthCookieNotFoundException');
-        OAuth::callback($mockCookies, []);
+        $this->expectException(\Shopify\Exception\OAuthCookieNotFoundException::class);
+        $this->expectExceptionMessage(
+            'Could not find the OAuth cookie to complete the callback'
+        );
+        OAuth::callback([], []);
     }
 
     public function testCallbackFailsWithoutSession()
@@ -117,7 +119,10 @@ final class OAuthTest extends BaseTestCase
         $this->createTestSession(false);
 
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => "👋 This is not the session you're looking for"];
-        $this->expectException('Shopify\Exception\OAuthSessionNotFoundException');
+        $this->expectException(\Shopify\Exception\OAuthSessionNotFoundException::class);
+        $this->expectExceptionMessage(
+            'You may have taken more than 60 seconds to complete the OAuth process and the session cannot be found'
+        );
         OAuth::callback($mockCookies, []);
     }
 
@@ -131,7 +136,8 @@ final class OAuthTest extends BaseTestCase
             'state' => '1234',
             'code' => 'real_code',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -146,7 +152,8 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => 'Not the right hash',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -159,7 +166,8 @@ final class OAuthTest extends BaseTestCase
             'state' => '1234',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -174,7 +182,8 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -188,7 +197,8 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -203,7 +213,8 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -217,7 +228,8 @@ final class OAuthTest extends BaseTestCase
             'state' => '1234',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -232,7 +244,8 @@ final class OAuthTest extends BaseTestCase
             'code' => 'not_the_real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\InvalidOAuthException');
+        $this->expectException(\Shopify\Exception\InvalidOAuthException::class);
+        $this->expectExceptionMessage('Invalid OAuth callback.');
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -249,7 +262,7 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\PrivateAppException');
+        $this->expectException(\Shopify\Exception\PrivateAppException::class);
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -280,7 +293,7 @@ final class OAuthTest extends BaseTestCase
         ];
 
         $storage->failNextCalls('delete');
-        $this->expectException('Shopify\Exception\SessionStorageException');
+        $this->expectException(\Shopify\Exception\SessionStorageException::class);
 
         OAuth::callback($mockCookies, $mockQuery);
     }
@@ -312,7 +325,7 @@ final class OAuthTest extends BaseTestCase
         ];
 
         $storage->failNextCalls('store', amount: 1);
-        $this->expectException('Shopify\Exception\SessionStorageException');
+        $this->expectexception(\Shopify\Exception\SessionStorageException::class);
 
         OAuth::callback($mockCookies, $mockQuery);
     }
@@ -339,7 +352,7 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        $this->expectException('Shopify\Exception\HttpRequestException');
+        $this->expectexception(\Shopify\Exception\HttpRequestException::class);
         OAuth::callback($mockCookies, $mockQuery);
     }
 
@@ -347,7 +360,7 @@ final class OAuthTest extends BaseTestCase
     {
         Context::$IS_PRIVATE_APP = true;
 
-        $this->expectException('Shopify\Exception\PrivateAppException');
+        $this->expectexception(\Shopify\Exception\PrivateAppException::class);
         OAuth::begin('shopname', '/redirect', true);
     }
 
@@ -397,7 +410,7 @@ final class OAuthTest extends BaseTestCase
 
     public function testBeginRaisesErrorIfCookieNotSet()
     {
-        $this->expectException('Shopify\Exception\CookieSetException');
+        $this->expectexception(\Shopify\Exception\CookieSetException::class);
 
         $wasCallbackCalled = false;
         OAuth::begin(
@@ -417,7 +430,7 @@ final class OAuthTest extends BaseTestCase
         $storage = new MockSessionStorage();
         Context::$SESSION_STORAGE = $storage;
         $storage->failNextCalls('store');
-        $this->expectException('Shopify\Exception\SessionStorageException');
+        $this->expectexception(\Shopify\Exception\SessionStorageException::class);
 
         $returnUrl = OAuth::begin(
             'shopname',

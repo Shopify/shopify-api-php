@@ -131,7 +131,7 @@ class OAuth
     public static function callback(array $cookies, array $query): Session
     {
         Context::throwIfUninitialized();
-        Context::throwIfPrivateApp("OAuth is not allowed for private apps");
+        Context::throwIfPrivateApp('OAuth is not allowed for private apps');
 
         $sessionId = self::getCookieSessionId($cookies);
         $session = Context::$SESSION_STORAGE->loadSession($sessionId);

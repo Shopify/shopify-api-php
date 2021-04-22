@@ -61,14 +61,7 @@ class BaseTestCase extends TestCase
         string $error = null
     ): array {
         if ($body && !is_string($body)) {
-            switch ($dataType) {
-                case Http::DATA_TYPE_JSON:
-                    $body = json_encode($body);
-                    break;
-                case Http::DATA_TYPE_URL_ENCODED:
-                    $body = http_build_query($body);
-                    break;
-            }
+            $body = json_encode($body);
         }
 
         return [

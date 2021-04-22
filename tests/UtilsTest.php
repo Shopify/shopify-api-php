@@ -6,6 +6,7 @@ namespace ShopifyTest;
 
 use Shopify\Context;
 use Shopify\Utils;
+use Shopify\Auth\Session;
 
 final class UtilsTest extends BaseTestCase
 {
@@ -107,5 +108,34 @@ final class UtilsTest extends BaseTestCase
 
         $this->expectException('Shopify\\Exception\\InvalidArgumentException');
         $this->assertTrue(Utils::isApiVersionCompatible('not_a_version'));
+    }
+
+    public function testGetOfflineSessionReturnsSession()
+    {
+        $offlineSession = new Session("offline_$this->domain", $this->domain, false, 'state');
+        $offlineSession->setScope(Context::$SCOPES->toString());
+        $offlineSession->setAccessToken('vatican_cameos');
+        Context::$SESSION_STORAGE->storeSession($offlineSession);
+
+        $this->assertEquals($offlineSession, Utils::loadOfflineSession($this->domain));
+    }
+
+    public function testGetOfflineSessionWithExpiredReturnsSession()
+    {
+        $offlineSession = new Session("offline_$this->domain", $this->domain, false, 'state');
+        $offlineSession->setScope(Context::$SCOPES->toString());
+        $offlineSession->setAccessToken('vatican_cameos');
+        $offlineSession->setExpires(new \DateTime());
+        Context::$SESSION_STORAGE->storeSession($offlineSession);
+
+        $this->assertEquals($offlineSession, Utils::loadOfflineSession($this->domain, true));
+    }
+
+    public function testGetOfflineSessionReturnsNullIfNoSession()
+    {
+        $this->assertNull(Utils::loadOfflineSession($this->domain, true));
+
+        new Session("offline_$this->domain", $this->domain, false, 'state');
+        $this->assertNull(Utils::loadOfflineSession($this->domain));
     }
 }

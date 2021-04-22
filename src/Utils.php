@@ -130,16 +130,16 @@ final class Utils
 
      * Loads the current user's session based on the given headers and cookies.
      *
-     * @param array $headers    the headers from the HTTP request
+     * @param array $rawHeaders the headers from the HTTP request
      * @param array $cookies    the cookies from the HTTP response
      * @param bool  $isOnline   whether to load online or offline sessions
      *
      * @return Session|null returns the session or null if the session can't be found
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public static function loadCurrentSession(array $headers, array $cookies, bool $isOnline): ?Session
+    public static function loadCurrentSession(array $rawHeaders, array $cookies, bool $isOnline): ?Session
     {
-        $sessionId = OAuth::getCurrentSessionId($headers, $cookies, $isOnline);
+        $sessionId = OAuth::getCurrentSessionId($rawHeaders, $cookies, $isOnline);
 
         return Context::$SESSION_STORAGE->loadSession($sessionId);
     }

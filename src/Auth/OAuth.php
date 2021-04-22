@@ -136,7 +136,9 @@ class OAuth
         $sessionId = self::getCookieSessionId($cookies);
         $session = Context::$SESSION_STORAGE->loadSession($sessionId);
         if (!$session) {
-            throw new OAuthSessionNotFoundException('Could not find the OAuth session to complete the callback');
+            throw new OAuthSessionNotFoundException(
+                'You may have taken more than 60 seconds to complete the OAuth process and the session cannot be found'
+            );
         }
 
         if (!self::isCallbackQueryValid($query, $session)) {
@@ -204,7 +206,7 @@ class OAuth
     /**
      * Extracts the current session ID from the headers
      *
-     * @param array  $headers  HTTP headers returned from the request context
+     * @param array  $rawHeaders  HTTP headers returned from the request context
      * @param array  $cookies  HTTP request cookies
      * @param bool   $isOnline Whether to load online or offline sessions
      *
@@ -212,26 +214,22 @@ class OAuth
      * @throws \Shopify\Exception\MissingArgumentException
      * @throws \Shopify\Exception\OAuthCookieNotFoundException
      */
-    public static function getCurrentSessionId(array $headers, array $cookies, bool $isOnline): string
+    public static function getCurrentSessionId(array $rawHeaders, array $cookies, bool $isOnline): string
     {
         if (Context::$IS_EMBEDDED_APP) {
-            if ($headers) {
-                $headers = new HttpHeaders($headers);
+            if ($rawHeaders) {
+                $headers = new HttpHeaders($rawHeaders);
 
                 if (!$headers->has('authorization')) {
-                    throw new MissingArgumentException(
-                        'Missing Authorization key in headers array'
-                    );
+                    throw new MissingArgumentException('Missing Authorization key in headers array');
                 }
                 $auth = $headers->get('authorization');
                 preg_match('/^Bearer (.+)$/', $auth, $matches);
                 if (!$matches) {
-                    throw new MissingArgumentException(
-                        'Missing Bearer token in authorization header'
-                    );
+                    throw new MissingArgumentException('Missing Bearer token in authorization header');
                 }
-                $jwt = $matches[1];
-                $jwtPayload = Utils::decodeSessionToken($jwt);
+
+                $jwtPayload = Utils::decodeSessionToken($matches[1]);
                 $shop = preg_replace('/^https:\/\//', '', $jwtPayload['dest']);
                 if ($isOnline) {
                     $currentSessionId = self::getJwtSessionId($shop, $jwtPayload['sub']);
@@ -239,9 +237,7 @@ class OAuth
                     $currentSessionId = self::getOfflineSessionId($shop);
                 }
             } else {
-                throw new MissingArgumentException(
-                    'Missing headers argument for embedded app'
-                );
+                throw new MissingArgumentException('Missing headers argument for embedded app');
             }
         } else {
             if (!$cookies) {

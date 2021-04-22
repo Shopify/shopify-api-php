@@ -142,8 +142,7 @@ final class UtilsTest extends BaseTestCase
 
     public function testLoadCurrentSession()
     {
-        // phpcs:ignore
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
+        $token = $this->encodeJwtPayload();
         $headers = ['Authorization'=> "Bearer $token"];
         $sessionId = 'exampleshop.myshopify.com_42';
         $session = new Session(
@@ -178,22 +177,19 @@ final class UtilsTest extends BaseTestCase
         $this->assertEquals($payload, $actualPayload);
     }
 
-    public function testDecodeSessionTokenWithJwtString()
+    private function encodeJwtPayload()
     {
         $payload = [
             "iss"=>"https://exampleshop.myshopify.com/admin",
             "dest"=>"https://exampleshop.myshopify.com",
             "aud"=>"api-key-123",
             "sub"=>"42",
-            "exp"=>2591765058,
+            "exp"=>strtotime('+5 minutes'),
             "nbf"=>1591764998,
             "iat"=>1591764998,
             "jti"=>"f8912129-1af6-4cad-9ca3-76b0f7621087",
             "sid"=>"aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
         ];
-        // phpcs:ignore
-        $jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
-        $actualPayload = Utils::decodeSessionToken($jwt);
-        $this->assertEquals($payload, $actualPayload);
+        return JWT::encode($payload, Context::$API_SECRET_KEY);
     }
 }

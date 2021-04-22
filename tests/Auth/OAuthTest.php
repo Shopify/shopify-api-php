@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Auth;
 
+use Firebase\JWT\JWT;
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
 use Shopify\Auth\AccessTokenOnlineUserInfo;
@@ -439,13 +440,9 @@ final class OAuthTest extends BaseTestCase
     {
         Context::$IS_EMBEDDED_APP = false;
         $this->expectException(\Shopify\Exception\OAuthCookieNotFoundException::class);
-        $this->expectExceptionMessage(
-            'Could not find the OAuth cookie to retrieve the session ID'
-        );
+        $this->expectExceptionMessage('Could not find the OAuth cookie to retrieve the session ID');
 
-        OAuth::getCurrentSessionId(
-            [], [], true
-        );
+        OAuth::getCurrentSessionId([], [], true);
     }
 
     public function testGetCurrentSessionIdNonEmbeddedApp()
@@ -462,9 +459,7 @@ final class OAuthTest extends BaseTestCase
     public function testGetCurrentSessionIdRaisesMissingArgumentException()
     {
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
-        $this->expectExceptionMessage(
-            'Missing Authorization key in headers array'
-        );
+        $this->expectExceptionMessage('Missing Authorization key in headers array');
 
         OAuth::getCurrentSessionId(['auth'=> 'Bearer 123.456.789'], [], true);
     }
@@ -479,35 +474,25 @@ final class OAuthTest extends BaseTestCase
 
     public function testGetCurrentSessionIdForOnlineShop()
     {
-        // phpcs:ignore
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
-        $headers = ['Authorization'=> "Bearer $token"];
+        $token = $this->encodeJwtPayload();
 
-        $currentSessionId = OAuth::getCurrentSessionId($headers, [], true);
+        $currentSessionId = OAuth::getCurrentSessionId(['Authorization'=> "Bearer $token"], [], true);
         $this->assertEquals($currentSessionId, 'exampleshop.myshopify.com_42');
     }
 
     public function testGetCurrentSessionIdForOfflineShop()
     {
-        // phpcs:ignore
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2V4YW1wbGVzaG9wLm15c2hvcGlmeS5jb20vYWRtaW4iLCJkZXN0IjoiaHR0cHM6Ly9leGFtcGxlc2hvcC5teXNob3BpZnkuY29tIiwiYXVkIjoiYXBpLWtleS0xMjMiLCJzdWIiOiI0MiIsImV4cCI6MjU5MTc2NTA1OCwibmJmIjoxNTkxNzY0OTk4LCJpYXQiOjE1OTE3NjQ5OTgsImp0aSI6ImY4OTEyMTI5LTFhZjYtNGNhZC05Y2EzLTc2YjBmNzYyMTA4NyIsInNpZCI6ImFhZWExODJmMjczMmQ0NGMyMzA1N2MwZmVhNTg0MDIxYTQ0ODViMmJkMjVkM2ViN2ZkMzQ5MzEzYWQyNGM2ODUifQ.x8DC5FvzbrBOFU8gFZTd84XPs1kvDrxON3p5vp86V1U';
-        $headers = ['Authorization'=> "Bearer $token"];
+        $token = $this->encodeJwtPayload();
 
-        $currentSessionId = OAuth::getCurrentSessionId(
-            $headers, [], false
-        );
+        $currentSessionId = OAuth::getCurrentSessionId(['Authorization'=> "Bearer $token"], [], false);
         $this->assertEquals($currentSessionId, 'offline_exampleshop.myshopify.com');
     }
 
     public function testGetCurrentSessionIdForEmbeddedAppMissingHeaders()
     {
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
-        $this->expectExceptionMessage(
-            'Missing headers argument for embedded app'
-        );
-        $currentSessionId = OAuth::getCurrentSessionId(
-            [], [], false
-        );
+        $this->expectExceptionMessage('Missing headers argument for embedded app');
+        $currentSessionId = OAuth::getCurrentSessionId([], [], false);
         $this->assertEquals($currentSessionId, 'offline_exampleshop.myshopify.com');
     }
 
@@ -565,5 +550,21 @@ final class OAuthTest extends BaseTestCase
         }
 
         return $session;
+    }
+
+    private function encodeJwtPayload()
+    {
+        $payload = [
+            "iss"=>"https://exampleshop.myshopify.com/admin",
+            "dest"=>"https://exampleshop.myshopify.com",
+            "aud"=>"api-key-123",
+            "sub"=>"42",
+            "exp"=>strtotime('+5 minutes'),
+            "nbf"=>1591764998,
+            "iat"=>1591764998,
+            "jti"=>"f8912129-1af6-4cad-9ca3-76b0f7621087",
+            "sid"=>"aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
+        ];
+        return JWT::encode($payload, Context::$API_SECRET_KEY);
     }
 }

@@ -128,7 +128,7 @@ final class Utils
         return $session;
     }
 
-     * Loads the current user's session based on the given headers and cookies.
+    /** Loads the current user's session based on the given headers and cookies.
      *
      * @param array $rawHeaders the headers from the HTTP request
      * @param array $cookies    the cookies from the HTTP response

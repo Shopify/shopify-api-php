@@ -143,7 +143,7 @@ final class UtilsTest extends BaseTestCase
     public function testLoadCurrentSession()
     {
         $token = $this->encodeJwtPayload();
-        $headers = ['Authorization'=> "Bearer $token"];
+        $headers = ['Authorization' => "Bearer $token"];
         $sessionId = 'exampleshop.myshopify.com_42';
         $session = new Session(
             id: $sessionId,
@@ -154,7 +154,7 @@ final class UtilsTest extends BaseTestCase
 
         $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
         $this->assertEquals($session, Context::$SESSION_STORAGE->loadSession('exampleshop.myshopify.com_42'));
-        
+
         $currentSession = Utils::loadCurrentSession($headers, [], true);
         $this->assertEquals($currentSession, $session);
     }
@@ -180,15 +180,15 @@ final class UtilsTest extends BaseTestCase
     private function encodeJwtPayload()
     {
         $payload = [
-            "iss"=>"https://exampleshop.myshopify.com/admin",
-            "dest"=>"https://exampleshop.myshopify.com",
-            "aud"=>"api-key-123",
-            "sub"=>"42",
-            "exp"=>strtotime('+5 minutes'),
-            "nbf"=>1591764998,
-            "iat"=>1591764998,
-            "jti"=>"f8912129-1af6-4cad-9ca3-76b0f7621087",
-            "sid"=>"aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
+            "iss" => "https://exampleshop.myshopify.com/admin",
+            "dest" => "https://exampleshop.myshopify.com",
+            "aud" => "api-key-123",
+            "sub" => "42",
+            "exp" => strtotime('+5 minutes'),
+            "nbf" => 1591764998,
+            "iat" => 1591764998,
+            "jti" => "f8912129-1af6-4cad-9ca3-76b0f7621087",
+            "sid" => "aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
         ];
         return JWT::encode($payload, Context::$API_SECRET_KEY);
     }

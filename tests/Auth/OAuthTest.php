@@ -463,9 +463,7 @@ final class OAuthTest extends BaseTestCase
         Context::$IS_EMBEDDED_APP = false;
         $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
 
-        $currentSessionId = OAuth::getCurrentSessionId(
-            [], $mockCookies, true
-        );
+        $currentSessionId = OAuth::getCurrentSessionId([], $mockCookies, true);
         $this->assertEquals($currentSessionId, 'test_oauth_session');
     }
 
@@ -474,7 +472,7 @@ final class OAuthTest extends BaseTestCase
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('Missing Authorization key in headers array');
 
-        OAuth::getCurrentSessionId(['auth'=> 'Bearer 123.456.789'], [], true);
+        OAuth::getCurrentSessionId(['auth' => 'Bearer 123.456.789'], [], true);
     }
 
     public function testGetCurrentSessionIdRaisesAnotherMissingArgumentException()
@@ -482,14 +480,14 @@ final class OAuthTest extends BaseTestCase
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('Missing Bearer token in authorization header');
 
-        OAuth::getCurrentSessionId(['Authorization'=> 'Bear 123.456.789'], [], true);
+        OAuth::getCurrentSessionId(['Authorization' => 'Bear 123.456.789'], [], true);
     }
 
     public function testGetCurrentSessionIdForOnlineShop()
     {
         $token = $this->encodeJwtPayload();
 
-        $currentSessionId = OAuth::getCurrentSessionId(['Authorization'=> "Bearer $token"], [], true);
+        $currentSessionId = OAuth::getCurrentSessionId(['Authorization' => "Bearer $token"], [], true);
         $this->assertEquals($currentSessionId, 'exampleshop.myshopify.com_42');
     }
 
@@ -497,7 +495,7 @@ final class OAuthTest extends BaseTestCase
     {
         $token = $this->encodeJwtPayload();
 
-        $currentSessionId = OAuth::getCurrentSessionId(['Authorization'=> "Bearer $token"], [], false);
+        $currentSessionId = OAuth::getCurrentSessionId(['Authorization' => "Bearer $token"], [], false);
         $this->assertEquals($currentSessionId, 'offline_exampleshop.myshopify.com');
     }
 
@@ -568,15 +566,15 @@ final class OAuthTest extends BaseTestCase
     private function encodeJwtPayload()
     {
         $payload = [
-            "iss"=>"https://exampleshop.myshopify.com/admin",
-            "dest"=>"https://exampleshop.myshopify.com",
-            "aud"=>"api-key-123",
-            "sub"=>"42",
-            "exp"=>strtotime('+5 minutes'),
-            "nbf"=>1591764998,
-            "iat"=>1591764998,
-            "jti"=>"f8912129-1af6-4cad-9ca3-76b0f7621087",
-            "sid"=>"aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
+            "iss" => "https://exampleshop.myshopify.com/admin",
+            "dest" => "https://exampleshop.myshopify.com",
+            "aud" => "api-key-123",
+            "sub" => "42",
+            "exp" => strtotime('+5 minutes'),
+            "nbf" => 1591764998,
+            "iat" => 1591764998,
+            "jti" => "f8912129-1af6-4cad-9ca3-76b0f7621087",
+            "sid" => "aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
         ];
         return JWT::encode($payload, Context::$API_SECRET_KEY);
     }

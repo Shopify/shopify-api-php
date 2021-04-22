@@ -35,6 +35,7 @@ class BaseTestCase extends TestCase
             isEmbeddedApp: true,
             isPrivateApp: false,
             userAgentPrefix: '',
+            logger: null,
         );
         Context::$TRANSPORT_FACTORY = $this->createMock(TransportFactory::class);
         Context::$RETRY_TIME_IN_SECONDS = 0;

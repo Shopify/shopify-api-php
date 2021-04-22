@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use Psr\Log\LogLevel;
+use Psr\Log\Test\TestLogger;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
 use ShopifyTest\Auth\MockSessionStorage;
@@ -92,5 +94,42 @@ final class ContextTest extends BaseTestCase
         $this->expectException('\Shopify\Exception\PrivateAppException');
         $this->expectExceptionMessage('BOOOOOO');
         Context::throwIfPrivateApp('BOOOOOO');
+    }
+
+    public function testCanAddOverrideLogger()
+    {
+        $testLogger = new TestLogger();
+
+        Context::log('Logging something!', LogLevel::DEBUG);
+        $this->assertEmpty($testLogger->records);
+
+        Context::$LOGGER = $testLogger;
+
+        Context::log('Defaults to info');
+        $this->assertTrue($testLogger->hasInfoThatContains('Defaults to info'));
+
+        Context::log('Debug log', LogLevel::DEBUG);
+        $this->assertTrue($testLogger->hasDebugThatContains('Debug log'));
+
+        Context::log('Info log', LogLevel::INFO);
+        $this->assertTrue($testLogger->hasInfoThatContains('Info log'));
+
+        Context::log('Notice log', LogLevel::NOTICE);
+        $this->assertTrue($testLogger->hasNoticeThatContains('Notice log'));
+
+        Context::log('Warning log', LogLevel::WARNING);
+        $this->assertTrue($testLogger->hasWarningThatContains('Warning log'));
+
+        Context::log('Err log', LogLevel::ERROR);
+        $this->assertTrue($testLogger->hasErrorThatContains('Err log'));
+
+        Context::log('Crit log', LogLevel::CRITICAL);
+        $this->assertTrue($testLogger->hasCriticalThatContains('Crit log'));
+
+        Context::log('Alert log', LogLevel::ALERT);
+        $this->assertTrue($testLogger->hasAlertThatContains('Alert log'));
+
+        Context::log('Emerg log', LogLevel::EMERGENCY);
+        $this->assertTrue($testLogger->hasEmergencyThatContains('Emerg log'));
     }
 }

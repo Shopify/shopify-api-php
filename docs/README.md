@@ -10,6 +10,8 @@ You can follow our getting started guide to learn how to use this library's comp
 - [Performing OAuth](usage/oauth.md)
   - [Begin OAuth](usage/oauth.md#begin-oauth)
   - [OAuth callback](usage/oauth.md#oauth-callback)
+- [REST Admin API](usage/rest.md)
+- [Make a GraphQL API call](usage/graphql.md)
 - [Make a Storefront API call](usage/storefront.md)
 - [Webhooks](usage/webhooks.md)
 - [Known issues and caveats](issues.md)

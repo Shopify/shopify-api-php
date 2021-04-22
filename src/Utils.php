@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Shopify;
 
-use Shopify\Context;
-use Shopify\Auth\Session;
 use Shopify\Auth\OAuth;
+use Shopify\Auth\Session;
+use Shopify\Context;
 use Shopify\Exception\InvalidArgumentException;
+use Firebase\JWT\JWT;
 
 /**
  * Class to store all util functions
@@ -19,12 +20,12 @@ final class Utils
      *
      * If the provided shop domain or hostname is invalid or could not be sanitized, returns null.
      *
-     * @param string $shop A Shopify shop domain or hostname
-     * @param string|null $myshopifyDomain A custom Shopify domain
+     * @param string        $shop               A Shopify shop domain or hostname
+     * @param string|null   $myshopifyDomain    A custom Shopify domain
      *
      * @return string $name a sanitized Shopify shop domain, null if the provided domain is invalid
      */
-    public static function sanitizeShopDomain(string $shop, ?string $myshopifyDomain = null)
+    public static function sanitizeShopDomain(string $shop, ?string $myshopifyDomain = null): ?string
     {
         $name = trim(strtolower($shop));
 
@@ -45,11 +46,13 @@ final class Utils
     /**
      * Determines if request is valid by processing secret key through an HMAC-SHA256 hash function
      *
-     * @param array $params array of parameters parsed from a URL
+     * @param array  $params array of parameters parsed from a URL
      * @param string $secret the secret key associated with the app in the Partners Dashboard
+     *
      * @return bool true if the generated hexdigest is equal to the hmac parameter, false otherwise
+     * @throws \Shopify\Exception\UninitializedContextException
      */
-    public static function validateHmac(array $params, string $secret)
+    public static function validateHmac(array $params, string $secret): bool
     {
         $hmac = $params['hmac'] ?? '';
         unset($params['hmac']);
@@ -63,9 +66,10 @@ final class Utils
      * Retrieves the query string arguments from a URL, if any
      *
      * @param string $url the url string with query parameters to be extracted
-     * @return array $params Array of key/value pairs representing the query parameters
+     *
+     * @return array $params Array of key/value pairs representing the query parameters or empty array
      */
-    public static function getQueryParams(string $url)
+    public static function getQueryParams(string $url): array
     {
         $queryString = parse_url($url, PHP_URL_QUERY);
         if (empty($queryString)) {
@@ -122,5 +126,34 @@ final class Utils
         }
 
         return $session;
+    }
+
+    /** Loads the current user's session based on the given headers and cookies.
+     *
+     * @param array $rawHeaders the headers from the HTTP request
+     * @param array $cookies    the cookies from the HTTP response
+     * @param bool  $isOnline   whether to load online or offline sessions
+     *
+     * @return Session|null returns the session or null if the session can't be found
+     * @throws \Shopify\Exception\UninitializedContextException
+     */
+    public static function loadCurrentSession(array $rawHeaders, array $cookies, bool $isOnline): ?Session
+    {
+        $sessionId = OAuth::getCurrentSessionId($rawHeaders, $cookies, $isOnline);
+
+        return Context::$SESSION_STORAGE->loadSession($sessionId);
+    }
+
+    /**
+     * Decodes the given session token and extracts the session information from it
+     *
+     * @param string $jwt a compact JSON web token in the form of xxxx.yyyy.zzzz
+     *
+     * @return array the decoded payload which contains claims about the entity
+     */
+    public static function decodeSessionToken(string $jwt): array
+    {
+        $payload = JWT::decode($jwt, Context::$API_SECRET_KEY, array('HS256'));
+        return (array) $payload;
     }
 }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use Firebase\JWT\JWT;
+use Shopify\Auth\Session;
 use Shopify\Context;
 use Shopify\Utils;
-use Shopify\Auth\Session;
 
 final class UtilsTest extends BaseTestCase
 {
@@ -137,5 +138,58 @@ final class UtilsTest extends BaseTestCase
 
         new Session("offline_$this->domain", $this->domain, false, 'state');
         $this->assertNull(Utils::loadOfflineSession($this->domain));
+    }
+
+    public function testLoadCurrentSession()
+    {
+        $token = $this->encodeJwtPayload();
+        $headers = ['Authorization' => "Bearer $token"];
+        $sessionId = 'exampleshop.myshopify.com_42';
+        $session = new Session(
+            id: $sessionId,
+            shop: 'test-shop.myshopify.io',
+            state: '1234',
+            isOnline: true,
+        );
+
+        $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
+        $this->assertEquals($session, Context::$SESSION_STORAGE->loadSession('exampleshop.myshopify.com_42'));
+
+        $currentSession = Utils::loadCurrentSession($headers, [], true);
+        $this->assertEquals($currentSession, $session);
+    }
+
+    public function testDecodeSessionToken()
+    {
+        $payload = [
+            'iss' => 'test-shop.myshopify.io/admin',
+            'dest' => 'test-shop.myshopify.io',
+            'aud' => Context::$API_KEY,
+            'sub' => '1',
+            'exp' => strtotime('+5 minutes'),
+            'nbf' => 1234,
+            'iat' => 1234,
+            'jti' => '4321',
+            'sid' => 'abc123'
+        ];
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+        $actualPayload = Utils::decodeSessionToken($jwt);
+        $this->assertEquals($payload, $actualPayload);
+    }
+
+    private function encodeJwtPayload()
+    {
+        $payload = [
+            "iss" => "https://exampleshop.myshopify.com/admin",
+            "dest" => "https://exampleshop.myshopify.com",
+            "aud" => "api-key-123",
+            "sub" => "42",
+            "exp" => strtotime('+5 minutes'),
+            "nbf" => 1591764998,
+            "iat" => 1591764998,
+            "jti" => "f8912129-1af6-4cad-9ca3-76b0f7621087",
+            "sid" => "aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
+        ];
+        return JWT::encode($payload, Context::$API_SECRET_KEY);
     }
 }

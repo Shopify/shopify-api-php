@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Shopify\Auth;
 
 use Shopify\Clients\Http;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Clients\HttpResponse;
 use Shopify\Context;
+use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\InvalidOAuthException;
+use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\OAuthCookieNotFoundException;
 use Shopify\Exception\OAuthSessionNotFoundException;
 use Shopify\Exception\SessionStorageException;
-use Shopify\Exception\CookieSetException;
 use Shopify\Utils;
 use Ramsey\Uuid\Uuid;
 
@@ -122,13 +124,22 @@ class OAuth
      * @param array $query   The HTTP request URL query values.
      *
      * @return Session
+     * @throws \Shopify\Exception\InvalidOAuthException
+     * @throws \Shopify\Exception\OAuthSessionNotFoundException
+     * @throws \Shopify\Exception\SessionStorageException
      */
     public static function callback(array $cookies, array $query): Session
     {
         Context::throwIfUninitialized();
-        Context::throwIfPrivateApp("OAuth is not allowed for private apps");
+        Context::throwIfPrivateApp('OAuth is not allowed for private apps');
 
-        $session = self::getOAuthSessionFromCookies($cookies);
+        $sessionId = self::getCookieSessionId($cookies);
+        $session = Context::$SESSION_STORAGE->loadSession($sessionId);
+        if (!$session) {
+            throw new OAuthSessionNotFoundException(
+                'You may have taken more than 60 seconds to complete the OAuth process and the session cannot be found'
+            );
+        }
 
         if (!self::isCallbackQueryValid($query, $session)) {
             throw new InvalidOAuthException('Invalid OAuth callback.');
@@ -193,24 +204,67 @@ class OAuth
     }
 
     /**
-     * Fetches the OAuth session from the given cookies.
+     * Extracts the current session ID from the headers
+     *
+     * @param array  $rawHeaders  HTTP headers returned from the request context
+     * @param array  $cookies  HTTP request cookies
+     * @param bool   $isOnline Whether to load online or offline sessions
+     *
+     * @return string The ID of the current session
+     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws \Shopify\Exception\OAuthCookieNotFoundException
+     */
+    public static function getCurrentSessionId(array $rawHeaders, array $cookies, bool $isOnline): string
+    {
+        if (Context::$IS_EMBEDDED_APP) {
+            if ($rawHeaders) {
+                $headers = new HttpHeaders($rawHeaders);
+
+                if (!$headers->has('authorization')) {
+                    throw new MissingArgumentException('Missing Authorization key in headers array');
+                }
+                $auth = $headers->get('authorization');
+                preg_match('/^Bearer (.+)$/', $auth, $matches);
+                if (!$matches) {
+                    throw new MissingArgumentException('Missing Bearer token in authorization header');
+                }
+
+                $jwtPayload = Utils::decodeSessionToken($matches[1]);
+                $shop = preg_replace('/^https:\/\//', '', $jwtPayload['dest']);
+                if ($isOnline) {
+                    $currentSessionId = self::getJwtSessionId($shop, $jwtPayload['sub']);
+                } else {
+                    $currentSessionId = self::getOfflineSessionId($shop);
+                }
+            } else {
+                throw new MissingArgumentException('Missing headers argument for embedded app');
+            }
+        } else {
+            if (!$cookies) {
+                throw new OAuthCookieNotFoundException('Could not find the OAuth cookie to retrieve the session ID');
+            }
+            $currentSessionId = self::getCookieSessionId($cookies);
+        }
+
+        return $currentSessionId;
+    }
+
+    /**
+     * Fetches the OAuth session ID from the given cookies.
      *
      * @param array $cookies The $cookies param from `callback`
+     *
+     * @return string The ID of the current session
+     * @throws \Shopify\Exception\OAuthCookieNotFoundException
      */
-    private static function getOAuthSessionFromCookies(array $cookies): Session
+    private static function getCookieSessionId(array $cookies): string
     {
         $sessionId = $cookies[self::SESSION_ID_COOKIE_NAME] ?? null;
         if (!$sessionId) {
             throw new OAuthCookieNotFoundException("Could not find the OAuth cookie to complete the callback");
         }
 
-        $sessionId = (string)$sessionId;
-        $session = Context::$SESSION_STORAGE->loadSession($sessionId);
-        if (!$session) {
-            throw new OAuthSessionNotFoundException("Could not find the OAuth session to complete the callback");
-        }
-
-        return $session;
+        return (string)$sessionId;
     }
 
     /**

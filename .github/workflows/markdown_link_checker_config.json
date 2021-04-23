@@ -9,5 +9,7 @@
       "pattern": "^/",
       "replacement": "{{BASEURL}}/"
     }
-  ]
+  ],
+  "retryOn429": true,
+  "fallbackRetryDelay": "1s"
 }

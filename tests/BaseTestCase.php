@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
 use Shopify\Clients\Http;
-use Shopify\Clients\Transport;
-use Shopify\Clients\TransportFactory;
+use Shopify\Clients\HttpClientFactory;
 use Shopify\Context;
 use Shopify\Exception\HttpRequestException;
 use ShopifyTest\Auth\MockSessionStorage;
@@ -37,7 +38,6 @@ class BaseTestCase extends TestCase
             userAgentPrefix: '',
             logger: null,
         );
-        Context::$TRANSPORT_FACTORY = $this->createMock(TransportFactory::class);
         Context::$RETRY_TIME_IN_SECONDS = 0;
         $this->version = require dirname(__FILE__) . '/../src/version.php';
     }
@@ -55,7 +55,7 @@ class BaseTestCase extends TestCase
      */
     protected function buildMockHttpResponse(
         int $statusCode = null,
-        string | array $body = null,
+        string|array $body = null,
         array $headers = [],
         string $dataType = Http::DATA_TYPE_JSON,
         string $error = null
@@ -79,77 +79,49 @@ class BaseTestCase extends TestCase
      */
     public function mockTransportRequests(array $requests): void
     {
-        $mock = $this->createMock(Transport::class);
-
-        $urls = [];
-        $methods = [];
-        $userAgents = [];
-        $headers = [];
-        $bodies = [];
-        $responses = [];
+        $requestMatchers = [];
+        $newResponses = [];
         foreach ($requests as $request) {
-            // If this request is a retry, we can skip all of the setup steps, as they are kept between tries
-            if (!$request->isRetry) {
-                $urls[] = [$request->url];
-                $methods[] = [$request->method];
+            $matcher = new HttpRequestMatcher(
+                $request->url,
+                $request->method,
+                "/$request->userAgent/",
+                $request->headers,
+                $request->body ?? ""
+            );
 
-                // We only need to know if the actual user agent contains the string we expect
-                $userAgents[] = [$this->matchesRegularExpression("/$request->userAgent/")];
+            $requestMatchers[] = [$matcher];
 
-                // We only want to check that the values we're expecting are there, without caring about others
-                if ($request->allowOtherHeaders && !empty($request->headers)) {
-                    $headers[] = [$this->containsEqual(...$request->headers)];
-                } else {
-                    $headers[] = [$request->headers];
-                }
-
-                if ($request->body) {
-                    $bodies[] = [$request->body];
-                }
-            }
-
-            $responses[] = $request->error ? 'TEST EXCEPTION' : $request->response;
+            $newResponses[] = $request->error ? 'TEST EXCEPTION' : new Response(
+                status: $request->response['statusCode'],
+                headers: $request->response['headers'],
+                body: $request->response['body']
+            );
         }
 
-        $mock->expects($this->exactly(count($urls)))
-            ->method('initializeRequest')
-            ->withConsecutive(...$urls);
-
-        $mock->expects($this->exactly(count($methods)))
-            ->method('setMethod')
-            ->withConsecutive(...$methods);
-
-        $mock->expects($this->exactly(count($userAgents)))
-            ->method('setUserAgent')
-            ->withConsecutive(...$userAgents);
-
-        $mock->expects($this->exactly(count($headers)))
-            ->method('setHeader')
-            ->withConsecutive(...$headers);
-
-        $mock->expects($this->exactly(count($bodies)))
-            ->method('setBody')
-            ->withConsecutive(...$bodies);
+        $client = $this->createMock(ClientInterface::class);
 
         $i = 0;
-        $mock->expects($this->exactly(count($responses)))
+        $client->expects($this->exactly(count($requestMatchers)))
             ->method('sendRequest')
-            ->willReturnCallback(function () use (&$i, $responses) {
-                $response = $responses[$i++];
-
-                if ($response === 'TEST EXCEPTION') {
-                    throw new HttpRequestException();
-                } else {
-                    return $response;
+            ->withConsecutive(...$requestMatchers)
+            ->willReturnCallback(
+                function () use (&$i, $newResponses) {
+                    $response = $newResponses[$i++];
+                    if ($response === 'TEST EXCEPTION') {
+                        throw new HttpRequestException();
+                    } else {
+                        return $response;
+                    }
                 }
-            });
+            );
 
-        $factory = $this->createMock(TransportFactory::class);
+        $factory = $this->createMock(HttpClientFactory::class);
 
         $factory->expects($this->any())
-            ->method('transport')
-            ->willReturn($mock);
+            ->method('client')
+            ->willReturn($client);
 
-        Context::$TRANSPORT_FACTORY = $factory;
+        Context::$HTTP_CLIENT_FACTORY = $factory;
     }
 }

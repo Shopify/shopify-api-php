@@ -21,7 +21,7 @@ class HttpResponse
         private array $headers = [],
         private array|string|null $body = null
     ) {
-        $this->requestId = $this->headers[HttpHeaders::X_REQUEST_ID] ?? null;
+        $this->requestId = $this->headers[HttpHeaders::X_REQUEST_ID][0] ?? null;
     }
 
     /**

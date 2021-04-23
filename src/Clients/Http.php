@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Shopify\Clients;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\Utils;
 use Shopify\Context;
 
 class Http
@@ -18,6 +21,7 @@ class Http
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
     public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
+    public const USER_AGENT = 'User-Agent';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
 
@@ -145,7 +149,7 @@ class Http
      * @param int|null   $tries       How many times to attempt the request
      *
      * @return HttpResponse
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     protected function request(
         string $path,
@@ -158,17 +162,6 @@ class Http
     ): HttpResponse {
         $maxTries = $tries ?? 1;
 
-        if ($formattedQuery = http_build_query($query)) {
-            $formattedQuery = "?$formattedQuery";
-        }
-
-        $url = "https://$this->domain/$path{$formattedQuery}";
-
-        $transport = Context::$TRANSPORT_FACTORY->transport();
-
-        $transport->initializeRequest($url);
-        $transport->setMethod($method);
-
         $version = require dirname(__FILE__) . '/../version.php';
         $userAgentParts = ["Shopify Admin API Library for PHP v$version"];
 
@@ -176,12 +169,21 @@ class Http
             array_unshift($userAgentParts, Context::$USER_AGENT_PREFIX);
         }
 
-        if (isset($headers['User-Agent'])) {
-            array_unshift($userAgentParts, $headers['User-Agent']);
-            unset($headers['User-Agent']);
+        if (isset($headers[self::USER_AGENT])) {
+            array_unshift($userAgentParts, $headers[self::USER_AGENT]);
+            unset($headers[self::USER_AGENT]);
         }
 
-        $transport->setUserAgent(implode(' | ', $userAgentParts));
+        $client = Context::$HTTP_CLIENT_FACTORY->client();
+
+        $url = (new Uri())
+            ->withScheme('https')
+            ->withHost($this->domain)
+            ->withPath($path)
+            ->withQuery(http_build_query($query));
+
+        $request = new Request($method, $url, $headers);
+        $request = $request->withHeader(header: self::USER_AGENT, value: implode(' | ', $userAgentParts));
 
         if ($body) {
             if (is_string($body)) {
@@ -193,38 +195,31 @@ class Http
                 };
             }
 
-            $transport->setBody($bodyString);
-
-            $headers = array_merge(
-                [
-                    'Content-Type' => $dataType,
-                    'Content-Length' => mb_strlen($bodyString),
-                ],
-                $headers,
-            );
+            $stream = Utils::streamFor($bodyString);
+            $request = $request
+                ->withBody($stream)
+                ->withHeader('Content-Type', $dataType)
+                ->withHeader('Content-Length', mb_strlen($bodyString));
         }
-
-        $headerOpts = [];
-        foreach ($headers as $header => $headerValue) {
-            $headerOpts[] = "$header: $headerValue";
-        }
-        $transport->setHeader($headerOpts);
 
         $currentTries = 0;
         do {
             $currentTries++;
 
-            $curlResponse = $transport->sendRequest();
+            $psrResponse = $client->sendRequest($request);
 
-            $responseBody = $curlResponse['body'] ? json_decode($curlResponse['body'], true, JSON_THROW_ON_ERROR) : '';
+            $responseBody = $psrResponse->getBody()->getContents();
+            $responseBody = $responseBody ? json_decode($responseBody, true, JSON_THROW_ON_ERROR) : '';
             $response = new HttpResponse(
-                $curlResponse['statusCode'],
-                $curlResponse['headers'],
-                $responseBody
+                $psrResponse->getStatusCode(),
+                $psrResponse->getHeaders(),
+                empty($responseBody) ? null : $responseBody
             );
 
-            if (in_array($curlResponse['statusCode'], self::RETRIABLE_STATUS_CODES)) {
-                $retryAfter = $curlResponse['headers']['Retry-After'] ?? Context::$RETRY_TIME_IN_SECONDS;
+            if (in_array($psrResponse->getStatusCode(), self::RETRIABLE_STATUS_CODES)) {
+                $retryAfter = empty(
+                    $psrResponse->getHeaderLine('Retry-After')
+                ) ? Context::$RETRY_TIME_IN_SECONDS : $psrResponse->getHeaderLine('Retry-After');
                 usleep($retryAfter * 1000000);
             } else {
                 break;

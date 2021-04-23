@@ -307,7 +307,7 @@ class RestTest extends BaseTestCase
                     response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
-                        headers: ['link' => $firstPageLinkHeader]
+                        headers: ['Link' => $firstPageLinkHeader]
                     ),
                 ),
                 new MockRequest(
@@ -318,7 +318,7 @@ class RestTest extends BaseTestCase
                     response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
-                        headers: ['link' => $middlePageLinkHeader]
+                        headers: ['Link' => $middlePageLinkHeader]
                     ),
                 ),
                 new MockRequest(
@@ -329,7 +329,7 @@ class RestTest extends BaseTestCase
                     response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
-                        headers: ['link' => $lastPageLinkHeader]
+                        headers: ['Link' => $lastPageLinkHeader]
                     ),
                 ),
                 new MockRequest(
@@ -340,7 +340,7 @@ class RestTest extends BaseTestCase
                     response:$this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
-                        headers: ['link' => $middlePageLinkHeader]
+                        headers: ['Link' => $middlePageLinkHeader]
                     ),
                 ),
                 new MockRequest(
@@ -351,7 +351,7 @@ class RestTest extends BaseTestCase
                     response:$this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
-                        headers: ['link' => $firstPageLinkHeader]
+                        headers: ['Link' => $firstPageLinkHeader]
                     ),
                 ),
 

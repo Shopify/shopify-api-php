@@ -309,10 +309,14 @@ final class HttpTest extends BaseTestCase
                 response: $this->buildMockHttpResponse(429, headers: ['Retry-After' => 0]),
             ),
             new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
                 response: $this->buildMockHttpResponse(500),
                 isRetry: true,
             ),
             new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
                 response: $this->buildMockHttpResponse(200, $this->successResponse),
                 isRetry: true,
             ),
@@ -336,10 +340,14 @@ final class HttpTest extends BaseTestCase
                 response: $this->buildMockHttpResponse(500),
             ),
             new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
                 response: $this->buildMockHttpResponse(500),
                 isRetry: true,
             ),
             new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
                 response: $this->buildMockHttpResponse(500, headers: ['X-Is-Last-Test-Request' => true]),
                 isRetry: true,
             ),
@@ -347,7 +355,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(500, ['X-Is-Last-Test-Request' => true]);
+        $expectedResponse = new HttpResponse(500, ['X-Is-Last-Test-Request' => [true]]);
 
         $response = $client->get(path: 'test/path', tries: 3);
         $this->assertEquals($expectedResponse, $response);
@@ -363,6 +371,8 @@ final class HttpTest extends BaseTestCase
                 response: $this->buildMockHttpResponse(500),
             ),
             new MockRequest(
+                url: "https://$this->domain/test/path",
+                method: "GET",
                 response: $this->buildMockHttpResponse(400, headers: ['X-Is-Last-Test-Request' => true]),
                 isRetry: true,
             ),
@@ -370,7 +380,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(400, ['X-Is-Last-Test-Request' => true]);
+        $expectedResponse = new HttpResponse(400, ['X-Is-Last-Test-Request' => [true]]);
 
         $response = $client->get(path: 'test/path', tries: 10);
         $this->assertEquals($expectedResponse, $response);

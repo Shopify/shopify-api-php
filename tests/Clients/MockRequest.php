@@ -17,5 +17,7 @@ final class MockRequest
         public bool $allowOtherHeaders = true,
         public bool $isRetry = false,
     ) {
+
+        array_unshift($this->headers, 'Host: test-shop.myshopify.io');
     }
 }

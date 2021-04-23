@@ -24,6 +24,7 @@ class Context
     public static ?string $API_VERSION = null;
     public static bool $IS_EMBEDDED_APP = true;
     public static bool $IS_PRIVATE_APP = false;
+    public static ?string $PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = null;
     public static ?string $USER_AGENT_PREFIX = null;
     public static int $RETRY_TIME_IN_SECONDS = 1;
     public static ?LoggerInterface $LOGGER = null;
@@ -32,17 +33,18 @@ class Context
     /**
      * Initializes Context object
      *
-     * @param string          $apiKey          App API key
-     * @param string          $apiSecretKey    App API secret
-     * @param string|array    $scopes          App scopes
-     * @param string          $hostName        App host name e.g. www.google.ca
-     * @param SessionStorage  $sessionStorage  Session storage strategy
-     * @param string          $apiVersion      App API version, defaults to unstable
-     * @param bool            $isEmbeddedApp   Whether the app is an embedded app, defaults to true
-     * @param bool            $isPrivateApp    Whether the app is a private app, defaults to false
-     * @param string          $userAgentPrefix Prefix for user agent header sent with a request, defaults to empty
-     *                                         string
-     * @param LoggerInterface $logger          App logger, so the library can add its own logs to it
+     * @param string               $apiKey                          App API key
+     * @param string               $apiSecretKey                    App API secret
+     * @param string|array         $scopes                          App scopes
+     * @param string               $hostName                        App host name e.g. www.google.ca
+     * @param SessionStorage       $sessionStorage                  Session storage strategy
+     * @param string               $apiVersion                      App API key, defaults to unstable
+     * @param bool                 $isEmbeddedApp                   Whether the app is an embedded app, defaults to true
+     * @param bool                 $isPrivateApp                    Whether the app is a private app, defaults to false
+     * @param string|null          $privateAppStorefrontAccessToken The Storefront API Access Token for a private app
+     * @param string               $userAgentPrefix                 Prefix for user agent header sent with a request
+     * @param LoggerInterface|null $logger                          App logger, so the library can add its own logs to
+     *                                                              it
      */
     public static function initialize(
         string $apiKey,
@@ -53,6 +55,7 @@ class Context
         string $apiVersion = 'unstable',
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
+        string $privateAppStorefrontAccessToken = null,
         string $userAgentPrefix = '',
         LoggerInterface $logger = null,
     ): void {
@@ -88,6 +91,7 @@ class Context
         self::$API_VERSION = $apiVersion;
         self::$IS_EMBEDDED_APP = $isEmbeddedApp;
         self::$IS_PRIVATE_APP = $isPrivateApp;
+        self::$PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = $privateAppStorefrontAccessToken;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
         self::$LOGGER = $logger;
 

@@ -20,7 +20,6 @@ class Http
     public const DATA_TYPE_JSON = 'application/json';
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
-    public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
     public const USER_AGENT = 'User-Agent';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
@@ -164,7 +163,7 @@ class Http
         $maxTries = $tries ?? 1;
 
         $version = require dirname(__FILE__) . '/../version.php';
-        $userAgentParts = ["Shopify Admin API Library for PHP v$version"];
+        $userAgentParts = ["Shopify API Library for PHP v$version"];
 
         if (Context::$USER_AGENT_PREFIX) {
             array_unshift($userAgentParts, Context::$USER_AGENT_PREFIX);

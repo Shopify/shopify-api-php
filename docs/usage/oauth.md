@@ -4,26 +4,30 @@ Once the library is set up for your project, you'll be able to use it to start a
 
 ## Begin OAuth
 
-Create a route for starting the OAuth method such as `/login`. In this route, the `begin` method located in `src/Auth/OAuth.php` will be used. The method takes in a Shopify shop domain or hostname (_string_), the redirect path (_string_), and whether or not you are requesting [online access](https://shopify.dev/concepts/about-apis/authentication#api-access-modes) (_boolean_). The last parameter is optional and is an override function to set cookies. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work for your chosen framework, a function that sets cookies can be passed in.
+Create a route for starting the OAuth method such as `/login`. In this route, the `begin` method located in `src/Auth/OAuth.php` will be used. The method takes in a Shopify shop domain or hostname (_string_), the redirect path (_string_), and whether or not you are requesting [online access](https://shopify.dev/concepts/about-apis/authentication#api-access-modes) (_boolean_). The last parameter is optional and is an override function to set cookies. The `begin` method returns a URL that will be used for redirecting the user to the Shopify Authentication screen.
 
-<details>
-<summary>Custom set cookie function with Yii</summary>
+| Parameter | Type | Required? | Default Value | Notes |
+| -------------- | ----------------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------- |
+| `shop` | `string` | Yes | - | A Shopify domain name or hostname. It can be in the form of `exampleshop`, `exampleshop.myshopify.com`, or `https://exampleshop.myshopify.com`. The utils function `sanitizeShopDomain` will be called to change the `shop` string to the form of `exampleshop.myshopify.com`. |
+| `redirectPath` | `string` | Yes | - | The redirect path used for callback. It must begin with a leading `/` and the route should be whitelisted under the app settings. |
+| `isOnline` | `bool` | Yes | - | `true` if the session is online and `false` otherwise. |
+| `setCookieFunction` | `callable` | No | - | An override function to set cookies in the HTTP request. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work for your chosen framework, a function that sets cookies can be passed in. An example can be found below. |
+
+Custom set cookie function with Yii
 ```php
-function () use ($cookie) {
+function () use (Shopify\Auth\OAuthCookie $cookie) {
     $cookies = Yii::$app->response->cookies;
-    $cookieSet = $cookies->add(new Cookie([
-        $cookie->getName(),
-        $cookie->getValue(),
-        $cookie->getExpire(),
-        secure: $cookie->isSecure(),
-        httponly: $cookie->isHttpOnly(),
-    ]))
-    return $cookieSet;
+    $cookies->add(new \yii\web\Cookie([
+        'name' => $cookie->getName(),
+        'value' => $cookie->getValue(),
+        'expire' => $cookie->getExpire(),
+        'secure' => $cookie->isSecure(),
+        'httpOnly' => $cookie->isSecure(),
+    ]));
+
+    return true;
 }
 ```
-</details>
-
-The `begin` method returns a URL that will be used for redirecting the user to the Shopify Authentication screen.
 
 ## OAuth callback
 

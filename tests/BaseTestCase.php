@@ -57,7 +57,6 @@ class BaseTestCase extends TestCase
         int $statusCode = null,
         string|array $body = null,
         array $headers = [],
-        string $dataType = Http::DATA_TYPE_JSON,
         string $error = null
     ): array {
         if ($body && !is_string($body)) {

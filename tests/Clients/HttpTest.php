@@ -187,40 +187,6 @@ final class HttpTest extends BaseTestCase
         $this->assertEquals($expectedResponse, $response);
     }
 
-    public function testPostWithUrlEncodedBody()
-    {
-        $body = http_build_query($this->product1);
-
-        $bodyLength = strlen($body);
-
-        $this->mockTransportRequests([
-            new MockRequest(
-                url: "https://$this->domain/test/path",
-                method: "POST",
-                userAgent: "^Shopify Admin API Library for PHP v$this->version$",
-                headers: [
-                    'Content-Type: application/x-www-form-urlencoded',
-                    "Content-Length: $bodyLength",
-                ],
-                body: $body,
-                response: $this->buildMockHttpResponse(
-                    200,
-                    $this->successResponse,
-                    dataType: Http::DATA_TYPE_URL_ENCODED,
-                ),
-                allowOtherHeaders: false,
-            ),
-        ]);
-
-        $client = new Http($this->domain);
-
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
-
-
-        $response = $client->post(path: 'test/path', body: $this->product1, dataType: Http::DATA_TYPE_URL_ENCODED);
-        $this->assertEquals($expectedResponse, $response);
-    }
-
     public function testUserAgent()
     {
         $this->mockTransportRequests([

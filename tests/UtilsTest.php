@@ -140,6 +140,17 @@ final class UtilsTest extends BaseTestCase
         $this->assertNull(Utils::loadOfflineSession($this->domain));
     }
 
+    public function testGetOfflineSessionReturnsNullIfSessionIsExpired()
+    {
+        $offlineSession = new Session("offline_$this->domain", $this->domain, false, 'state');
+        $offlineSession->setScope(Context::$SCOPES->toString());
+        $offlineSession->setAccessToken('vatican_cameos');
+        $offlineSession->setExpires(new \DateTime());
+        Context::$SESSION_STORAGE->storeSession($offlineSession);
+
+        $this->assertNull(Utils::loadOfflineSession($this->domain, includeExpired: false));
+    }
+
     public function testLoadCurrentSession()
     {
         $token = $this->encodeJwtPayload();

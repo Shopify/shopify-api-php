@@ -6,7 +6,6 @@ namespace Shopify\Clients;
 
 class HttpResponse
 {
-
     private ?string $requestId;
 
     /**

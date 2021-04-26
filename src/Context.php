@@ -62,7 +62,7 @@ class Context
         $requiredValues = [
             'apiKey' => $apiKey,
             'apiSecretKey' => $apiSecretKey,
-            'scopes' => implode($scopes),
+            'scopes' => implode((array)$scopes),
             'hostName' => $hostName,
         ];
         $missing = array();

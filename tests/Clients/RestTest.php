@@ -183,45 +183,6 @@ class RestTest extends BaseTestCase
         $this->assertEquals($expectedResponse, $response);
     }
 
-    public function testCanMakePostRequestWithFormData()
-    {
-        $client = new Rest($this->domain, 'dummy-token');
-
-        $postData = [
-            "title" => 'Test product',
-            "amount" => 10,
-        ];
-
-        $body = http_build_query($postData);
-        $bodyLength = strlen($body);
-
-        $this->mockTransportRequests([
-            new MockRequest(
-                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
-                method: 'POST',
-                userAgent: "Shopify Admin API Library for PHP v$this->version",
-                headers: [
-                    'Content-Type: application/x-www-form-urlencoded',
-                    "Content-Length: $bodyLength",
-                    'X-Shopify-Access-Token: dummy-token',
-                ],
-                body: $body,
-                response: $this->buildMockHttpResponse(
-                    200,
-                    $this->successResponse,
-                    dataType: Http::DATA_TYPE_URL_ENCODED,
-                ),
-                allowOtherHeaders: false,
-            ),
-        ]);
-
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
-        $response = $client->post(path: 'products', body: $postData, dataType: Http::DATA_TYPE_URL_ENCODED);
-
-        $this->assertEquals($expectedResponse, $response);
-    }
-
     public function testCanMakePutRequestWithJsonData()
     {
         $client = new Rest($this->domain, 'dummy-token');

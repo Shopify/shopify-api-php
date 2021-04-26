@@ -17,7 +17,6 @@ class Http
     public const METHOD_DELETE = 'DELETE';
 
     public const DATA_TYPE_JSON = 'application/json';
-    public const DATA_TYPE_URL_ENCODED = 'application/x-www-form-urlencoded';
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
     public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
@@ -189,10 +188,7 @@ class Http
             if (is_string($body)) {
                 $bodyString = $body;
             } else {
-                $bodyString = match ($dataType) {
-                    self::DATA_TYPE_JSON => json_encode($body),
-                    self::DATA_TYPE_URL_ENCODED => http_build_query($body),
-                };
+                $bodyString = json_encode($body);
             }
 
             $stream = Utils::streamFor($bodyString);

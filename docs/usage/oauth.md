@@ -8,12 +8,12 @@ Create a route for starting the OAuth method such as `/login`. In this route, th
 
 | Parameter | Type | Required? | Default Value | Notes |
 | -------------- | ----------------------------------- | :-------: | :-----------: | ---------------------------------------------------------------------------------------- |
-| `shop` | `string` | Yes | - | A Shopify domain name or hostname. It can be in the form of `exampleshop`, `exampleshop.myshopify.com`, or `https://exampleshop.myshopify.com`. The utils function `sanitizeShopDomain` will be called to change the `shop` string to the form of `exampleshop.myshopify.com`. |
-| `redirectPath` | `string` | Yes | - | The redirect path used for callback. It must begin with a leading `/` and the route should be whitelisted under the app settings. |
+| `shop` | `string` | Yes | - | A Shopify domain name or hostname that will be converted to the form `exampleshop.myshopify.com`. |
+| `redirectPath` | `string` | Yes | - | The redirect path used for callback with an optional leading `/` (e.g. both `auth/callback` and `/auth/callback` are acceptable). The route should be whitelisted under the app settings. |
 | `isOnline` | `bool` | Yes | - | `true` if the session is online and `false` otherwise. |
-| `setCookieFunction` | `callable` | No | - | An override function to set cookies in the HTTP request. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work for your chosen framework, a function that sets cookies can be passed in. An example can be found below. |
+| `setCookieFunction` | `callable` | No | - | An override function to set cookies in the HTTP request. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work for your chosen framework, a function that sets cookies can be passed in. |
 
-Custom set cookie function with Yii
+ An example of the custom set cookie function with Yii. Similar functions can be created for any frameworks that do not rely on the PHP `setcookie` function
 ```php
 function () use (Shopify\Auth\OAuthCookie $cookie) {
     $cookies = Yii::$app->response->cookies;

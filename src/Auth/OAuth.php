@@ -50,6 +50,10 @@ class OAuth
         Context::throwIfPrivateApp("OAuth is not allowed for private apps");
 
         $shop = Utils::sanitizeShopDomain($shop);
+
+        $redirectPath = trim(strtolower($redirectPath));
+        $redirectPath = ($redirectPath[0] == '/') ? $redirectPath : '/' . $redirectPath;
+
         $mySessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($shop);
 
         $cookie = new OAuthCookie(

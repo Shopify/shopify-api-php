@@ -4,7 +4,15 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Webhooks;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use Shopify\Clients\HttpHeaders;
 use Shopify\Context;
+use Shopify\Exception\InvalidArgumentException;
+use Shopify\Exception\InvalidWebhookException;
+use Shopify\Exception\MissingWebhookHandlerException;
+use Shopify\Exception\WebhookRegistrationException;
+use Shopify\Webhooks\Handler;
 use Shopify\Webhooks\Registry;
 use Shopify\Webhooks\Topics;
 use ShopifyTest\BaseTestCase;
@@ -12,44 +20,49 @@ use ShopifyTest\Clients\MockRequest;
 
 final class RegistryTest extends BaseTestCase
 {
-    private static array $WEBHOOK_CALLS;
-
     public function setUp(): void
     {
         parent::setUp();
 
-        self::$WEBHOOK_CALLS = [];
+        // Clean up the registry for every test
+        $reflection = new ReflectionClass(Registry::class);
+        $reflection->setStaticPropertyValue('REGISTRY', []);
     }
 
     public function testAddHandler()
     {
-        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: ['Test', 'method']);
+        $handler = $this->getMockHandler();
+        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: $handler);
 
-        $this->assertEquals(['Test', 'method'], Registry::getHandler(Topics::APP_UNINSTALLED));
+        $this->assertSame($handler, Registry::getHandler(Topics::APP_UNINSTALLED));
     }
 
     public function testAddHandlerToExistingRegistry()
     {
-        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: ['Test', 'method']);
+        $handler = $this->getMockHandler();
+        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: $handler);
 
-        $this->assertEquals(['Test', 'method'], Registry::getHandler(Topics::APP_UNINSTALLED));
+        $this->assertSame($handler, Registry::getHandler(Topics::APP_UNINSTALLED));
 
         // Now add a second webhook for a different topic
-        Registry::addHandler(topic: Topics::PRODUCTS_CREATE, handler: ['Test', 'productCreateMethod']);
+        $handler = $this->getMockHandler();
+        Registry::addHandler(topic: Topics::PRODUCTS_CREATE, handler: $handler);
 
-        $this->assertEquals(['Test', 'productCreateMethod'], Registry::getHandler(Topics::PRODUCTS_CREATE));
+        $this->assertSame($handler, Registry::getHandler(Topics::PRODUCTS_CREATE));
     }
 
     public function testAddHandlerOverridesRegistry()
     {
-        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: ['Test', 'method']);
+        $handler = $this->getMockHandler();
+        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: $handler);
 
-        $this->assertEquals(['Test', 'method'], Registry::getHandler(Topics::APP_UNINSTALLED));
+        $this->assertSame($handler, Registry::getHandler(Topics::APP_UNINSTALLED));
 
-        // Now add a second webhook for a different topic
-        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: ['Test', 'newMethod']);
+        // Now add a second handler for the same topic
+        $handler = $this->getMockHandler();
+        Registry::addHandler(topic: Topics::APP_UNINSTALLED, handler: $handler);
 
-        $this->assertEquals(['Test', 'newMethod'], Registry::getHandler(Topics::APP_UNINSTALLED));
+        $this->assertSame($handler, Registry::getHandler(Topics::APP_UNINSTALLED));
     }
 
     public function testCanRegisterAndUpdateWebhook()
@@ -276,7 +289,7 @@ final class RegistryTest extends BaseTestCase
     {
         Context::$API_VERSION = '2020-01';
 
-        $this->expectException('\Shopify\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         Registry::register(
             shop: $this->domain,
@@ -289,7 +302,7 @@ final class RegistryTest extends BaseTestCase
 
     public function testCannotRegisterUnknownDeliveryMethod()
     {
-        $this->expectException('\Shopify\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         Registry::register(
             shop: $this->domain,
@@ -313,7 +326,7 @@ final class RegistryTest extends BaseTestCase
             ),
         ]);
 
-        $this->expectException('\Shopify\Exception\WebhookRegistrationException');
+        $this->expectException(WebhookRegistrationException::class);
 
         Registry::register(
             shop: $this->domain,
@@ -344,7 +357,7 @@ final class RegistryTest extends BaseTestCase
             ),
         ]);
 
-        $this->expectException('\Shopify\Exception\WebhookRegistrationException');
+        $this->expectException(WebhookRegistrationException::class);
 
         Registry::register(
             shop: $this->domain,
@@ -354,13 +367,104 @@ final class RegistryTest extends BaseTestCase
         );
     }
 
-    public static function successCallback(string $shop, string $topic, array $body): void
+    public function testProcessWebhook()
     {
-        self::$WEBHOOK_CALLS[] = [
-            'shop' => $shop,
-            'topic' => $topic,
-            'body' => $body,
-        ];
+        $handler = $this->getMockHandler();
+        $handler->expects($this->once())
+            ->method('handle')
+            ->with(
+                Topics::PRODUCTS_UPDATE,
+                'test-shop.myshopify.io',
+                $this->processBody,
+            );
+
+        Registry::addHandler(Topics::PRODUCTS_UPDATE, $handler);
+
+        $response = Registry::process($this->processHeaders, json_encode($this->processBody));
+        $this->assertTrue($response->isSuccess());
+        $this->assertNull($response->getErrorMessage());
+    }
+
+    public function testProcessWebhookWithHandlerErrors()
+    {
+        $handler = $this->getMockHandler();
+        $handler->expects($this->once())
+            ->method('handle')
+            ->willThrowException(new \Exception('Something went wrong in the handler'));
+
+        Registry::addHandler(Topics::PRODUCTS_UPDATE, $handler);
+
+        $response = Registry::process($this->processHeaders, json_encode($this->processBody));
+        $this->assertFalse($response->isSuccess());
+        $this->assertEquals('Something went wrong in the handler', $response->getErrorMessage());
+    }
+
+    public function testProcessThrowsErrorOnMissingBody()
+    {
+        Registry::addHandler(Topics::PRODUCTS_UPDATE, $this->getMockHandler());
+
+        $this->expectException(InvalidWebhookException::class);
+        Registry::process($this->processHeaders, '');
+    }
+
+    public function testProcessThrowsErrorOnMissingHmac()
+    {
+        Registry::addHandler(Topics::PRODUCTS_UPDATE, $this->getMockHandler());
+
+        $headers = $this->processHeaders;
+        unset($headers[HttpHeaders::X_SHOPIFY_HMAC]);
+
+        $this->expectException(InvalidWebhookException::class);
+        Registry::process($headers, json_encode($this->processBody));
+    }
+
+    public function testProcessThrowsErrorOnMissingTopic()
+    {
+        Registry::addHandler(Topics::PRODUCTS_UPDATE, $this->getMockHandler());
+
+        $headers = $this->processHeaders;
+        unset($headers[HttpHeaders::X_SHOPIFY_TOPIC]);
+
+        $this->expectException(InvalidWebhookException::class);
+        Registry::process($headers, json_encode($this->processBody));
+    }
+
+    public function testProcessThrowsErrorOnMissingShop()
+    {
+        Registry::addHandler(Topics::PRODUCTS_UPDATE, $this->getMockHandler());
+
+        $headers = $this->processHeaders;
+        unset($headers[HttpHeaders::X_SHOPIFY_DOMAIN]);
+
+        $this->expectException(InvalidWebhookException::class);
+        Registry::process($headers, json_encode($this->processBody));
+    }
+
+    public function testProcessThrowsErrorOnInvalidHmac()
+    {
+        Registry::addHandler(Topics::PRODUCTS_UPDATE, $this->getMockHandler());
+
+        $headers = $this->processHeaders;
+        $headers[HttpHeaders::X_SHOPIFY_HMAC] = 'whoops_this_is_wrong';
+
+        $this->expectException(InvalidWebhookException::class);
+        Registry::process($headers, json_encode($this->processBody));
+    }
+
+    public function testProcessThrowsErrorOnMissingHandler()
+    {
+        $this->expectException(MissingWebhookHandlerException::class);
+        Registry::process($this->processHeaders, json_encode($this->processBody));
+    }
+
+    /**
+     * Creates a new mock handler to be used for testing.
+     *
+     * @return MockObject|Handler
+     */
+    private function getMockHandler(): MockObject | Handler
+    {
+        return $this->createMock(Handler::class);
     }
 
     private string $checkQuery = <<<QUERY
@@ -568,5 +672,15 @@ final class RegistryTest extends BaseTestCase
                 ],
             ],
         ],
+    ];
+
+    private array $processHeaders = [
+        HttpHeaders::X_SHOPIFY_HMAC => '/Redz4YXHLnSmmSN8grr5/Jl/Ua3d7yX3iWbjb8R8wo=',
+        HttpHeaders::X_SHOPIFY_TOPIC => Topics::PRODUCTS_UPDATE,
+        HttpHeaders::X_SHOPIFY_DOMAIN => 'test-shop.myshopify.io',
+    ];
+
+    private array $processBody = [
+        'foo' => 'bar',
     ];
 }

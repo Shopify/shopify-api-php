@@ -11,32 +11,43 @@ In order to subscribe to webhooks using this library, there are 3 main steps to 
 
 ## Load your handlers
 
-The first step your app needs to perform to process webhooks is telling the library how you expect to handle them. To do that, you can call the `Shopify\Webhooks\Registry::addHandler` method to set the callback you want the library to trigger when a certain topic is received.
+The first step to process webhooks in your app is telling the library how you expect to handle them. To do that, you can call the `Shopify\Webhooks\Registry::addHandler` method to set the callback you want the library to trigger when a certain topic is received.
 
 The parameters this method accepts are:
 
 | Parameter | Type | Required? | Default Value | Notes |
 | --- | --- | :---: | :---: | --- |
 | `topic` | `string` | Yes | - | The topic to subscribe to. May be a string or a value from the Shopify\Webhooks\Topics class. |
-| `handler` | `string \| array` | Yes | - | The method that will handle this topic. Must map to a callable static function, e.g. `['Class', 'method']`, where `Class` has a static method named `method`. |
+| `handler` | `Handler` | Yes | - | The handler for this topic, an instance of a class that implements `Handler`. |
+
+Your handler needs to implement the `Shopify\Webhooks\Handler` interface, so it needs to implement the `handle` method. This method should accept the following parameters:
+
+| Parameter | Type | Notes |
+| --- | --- | --- |
+| `topic` | `string` | The webhook topic. |
+| `shop` | `string` | The shop for which the webhook was triggered. |
+| `body` | `array` | The parsed payload of the POST request made by Shopify. |
 
 For example, you can load one or more handlers in your `index.php` file (or any other location, as long as it happens before the call to `process`) by running:
 
 ```php
-Shopify\Webhooks\Registry::addHandler(
-    Shopify\Webhooks\Topics::APP_UNINSTALLED,
-    ['\App\WebhookHandlers', 'appUninstalled']
-);
+use Shopify\Webhooks\Registry;
+use Shopify\Webhooks\Topics;
+use App\Webhook\Handlers\AppUninstalled;
+
+Registry::addHandler(Topics::APP_UNINSTALLED, new AppUninstalled());
 ```
 
-Which will cause the static `appUninstalled` method to be called when processing webhooks, like so:
+Which will cause the `handle` method to be called when processing webhooks, like so:
 
 ```php
-namespace App;
+namespace App\Webhook\Handlers;
 
-class WebhookHandlers
+use Shopify\Webhooks\Handler;
+
+class AppUninstalled implements Handler
 {
-    public static function appUninstalled(string $shop, string $topic, string $requestBody): void
+    public function handle(string $topic, string $shop, array $requestBody): void
     {
         // Handle your webhook here!
     }
@@ -47,9 +58,9 @@ class WebhookHandlers
 
 ## Webhook Registration
 
-After your handlers are loaded, you can register which topics you want your app to listen to. This can only happen after the merchant has installed your app, so the best place to register webhooks is after OAuth completes.
+After your handlers are loaded, you need to register which topics you want your app to listen to with Shopify. This can only happen after the merchant has installed your app, so the best place to register webhooks is after OAuth completes.
 
-In your OAuth callback function, you can use the `Shopify\Webhooks\Registry::register` method to subscribe to any topic. This method can safely be called multiple times for a shop, as it will update existing webhooks if necessary.
+In your OAuth callback action, you can use the `Shopify\Webhooks\Registry::register` method to subscribe to any topic allowed by your app's scopes. This method can safely be called multiple times for a shop, as it will update existing webhooks if necessary.
 
 The parameters this method accepts are:
 
@@ -60,6 +71,13 @@ The parameters this method accepts are:
 | `shop` | `string` | Yes | - | The shop to use for requests. |
 | `accessToken` | `string` | Yes | - | The access token to use for requests. |
 | `deliveryMethod` | `string` | No | `Registry::DELIVERY_METHOD_HTTP` | The delivery method for this webhook. |
+
+This method will return a `RegisterResponse` object, which holds the following data:
+
+| Method | Return type | Notes |
+| --- | --- | --- |
+| `isSuccess` | `bool` | Whether the registration was successful. |
+| `getBody` | `array` | The body from the Shopify request to register the webhook. May be null even when successful if no request was needed. |
 
 For example, to subscribe to the `APP_UNINSTALLED` event, you can run this code in your OAuth callback action:
 
@@ -83,8 +101,67 @@ function oauthCallbackAction()
 }
 ```
 
+**Note**: You can either handle all webhooks in a single action or have multiple actions, but you can only register one handler per topic. If you're using multiple actions, they should all call the `Shopify\Webhooks\Registry::process` method.
+
 ## Webhook Processing
 
-Coming soon!
+Once your webhooks are registered, Shopify will trigger them when the corresponding events happen in the shop. All webhooks will be a POST request made to the path defined in your `Shopify\Webhooks\Registry::register` call.
+
+To handle webhooks, your app should call `Shopify\Webhooks\Registry::process`, which will validate that the request is a legitimate Shopify request and call your registered handler, or throw an exception.
+
+The parameters this method accepts are:
+
+| Parameter | Type | Required? | Default Value | Notes |
+| --- | --- | :---: | :---: | --- |
+| `rawHeaders` | `array` | Yes | - | The HTTP headers from the request, in pairs of type `[header => value]`. The header's `value` will be cast to a string so that objects that implement `toString` are also acceptable. |
+| `rawBody` | `string` | Yes | - | The raw HTTP body from the request. The body is part of the request validation process, so it is important that it is not altered before being passed into this method. |
+
+This method will return a `ProcessResponse` object, which holds the following data:
+
+| Method | Return type | Notes |
+| --- | --- | --- |
+| `isSuccess` | `bool` | Whether the handler ran to completion. |
+| `getErrorMessage` | `string` | The error message from the handler exception, if any were thrown. |
+
+Following the example in the `register` section, your app may handle webhooks like so:
+
+```php
+class ShopifyController
+{
+    public function webhooksAction($request)
+    {
+        try {
+            $response = Shopify\Webhooks\Registry::process($request->headers->toArray(), $request->getRawBody());
+
+            if ($response->isSuccess()) {
+                \My\App::log("Responded to webhook!");
+                // Respond with HTTP 200 OK
+            } else {
+                // The webhook request was valid, but the handler threw an exception
+                \My\App::log("Webhook handler failed with message: " . $response->getErrorMessage());
+            }
+        } catch (\Exception $error) {
+            // The webhook request was not a valid one, likely a code error or it wasn't fired by Shopify
+            \My\App::log($error);
+        }
+    }
+}
+```
+
+As mentioned before, the handler you defined in your `addHandler` call will be triggered when `process` is called successfully.
+
+```php
+namespace App\Webhook\Handlers;
+
+use Shopify\Webhooks\Handler;
+
+class AppUninstalled implements Handler
+{
+    public function handle(string $topic, string $shop, array $requestBody): void
+    {
+        // Handle your webhook here!
+    }
+}
+```
 
 [Back to guide index](../README.md)

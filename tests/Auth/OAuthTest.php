@@ -386,12 +386,12 @@ final class OAuthTest extends BaseTestCase
         );
     }
 
-    public function testBeginFunctionReturnsProperUrlForOnlineAccess()
+    public function testBeginFunctionReturnsProperUrlForOnlineAccessWithNoLeadingSlashOnRedirectRoute()
     {
         $testCookieId = '';
         $returnUrl = OAuth::begin(
             'shopname',
-            '/redirect',
+            'redirect',
             true,
             function ($cookie) use (&$testCookieId) {
                 $testCookieId = $cookie->getValue();

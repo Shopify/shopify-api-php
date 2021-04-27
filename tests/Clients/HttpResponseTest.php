@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Clients;
 
+use JsonException;
 use Shopify\Clients\HttpResponse;
 use ShopifyTest\BaseTestCase;
 
@@ -12,11 +13,11 @@ final class HttpResponseTest extends BaseTestCase
     public function testGetters()
     {
         $response = new HttpResponse(
-            statusCode: 1234,
+            status: 200,
             headers: ['Header-1' => ['ABCD'], 'Header-2' => ['DCBA'], 'x-request-id' => ['test-request-id']],
-            body: 'This is a response!',
+            body: '{"name": "Shoppity Shop"}',
         );
-        $this->assertEquals(1234, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEqualsCanonicalizing(
             [
                 'Header-1' => ['ABCD'],
@@ -25,13 +26,21 @@ final class HttpResponseTest extends BaseTestCase
             ],
             $response->getHeaders(),
         );
-        $this->assertEquals('This is a response!', $response->getBody());
+        $this->assertEquals(['name' => 'Shoppity Shop'], $response->getDecodedBody());
         $this->assertEquals('test-request-id', $response->getRequestId());
     }
 
     public function testGetRequestIdReturnsNullIfHeaderIsMissing()
     {
-        $response = new HttpResponse(statusCode: 1234);
+        $response = new HttpResponse(status: 200);
         $this->assertNull($response->getRequestId());
+    }
+
+    public function testGetDecodedBodyWillThrwoExceptionIfBodyIsNotJson()
+    {
+        $response = new HttpResponse(body: "not-json");
+
+        $this->expectException(JsonException::class);
+        $response->getDecodedBody();
     }
 }

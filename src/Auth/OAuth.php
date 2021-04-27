@@ -312,13 +312,13 @@ class OAuth
         $client = new Http($session->getShop());
         $response = self::requestAccessToken($client, $post);
         if ($response->getStatusCode() !== 200) {
-            throw new HttpRequestException("Failed to get access token: {$response->getBody()}");
+            throw new HttpRequestException("Failed to get access token: {$response->getDecodedBody()}");
         }
 
         if ($session->isOnline()) {
-            return self::buildAccessTokenOnlineResponse($response->getBody());
+            return self::buildAccessTokenOnlineResponse($response->getDecodedBody());
         } else {
-            return self::buildAccessTokenResponse($response->getBody());
+            return self::buildAccessTokenResponse($response->getDecodedBody());
         }
     }
 

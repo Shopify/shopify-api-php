@@ -52,10 +52,12 @@ class Rest extends Http
         );
 
         return new RestResponse(
-            $response->getStatusCode(),
-            $response->getHeaders(),
-            $response->getBody(),
-            $this->getPageInfo($response)
+            status: $response->getStatusCode(),
+            headers: $response->getHeaders(),
+            body: $response->getBody(),
+            version: $response->getProtocolVersion(),
+            reason: $response->getReasonPhrase(),
+            pageInfo: $this->getPageInfo($response)
         );
     }
 

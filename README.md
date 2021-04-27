@@ -10,6 +10,8 @@ This library provides support for PHP [Shopify](https://www.shopify.com) apps to
 - Making requests to the [GraphQL API](https://shopify.dev/docs/admin-api/graphql/reference)
 - Registering/processing webhooks
 
+In addition to the Admin API, this library also allows querying the [Storefront API](https://shopify.dev/docs/storefront-api).
+
 This library can be used in any application that has a PHP backend, since it doesn't rely on any specific framework—you can include it alongside your preferred stack and only use the features that you need to build your app.
 
 # Requirements
@@ -33,6 +35,7 @@ You can follow our [getting started guide](docs/) to learn how to use this libra
 - [Performing OAuth](docs/usage/oauth.md)
   - [Begin OAuth](docs/usage/oauth.md#begin-oauth)
   - [OAuth callback](docs/usage/oauth.md#oauth-callback)
+- [Make a Storefront API call](docs/usage/storefront.md)
 - [Webhooks](docs/usage/webhooks.md)
 - [Known issues and caveats](docs/issues.md)
   - [Notes on session handling](docs/issues.md#notes-on-session-handling)

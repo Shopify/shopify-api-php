@@ -1,6 +1,6 @@
 {
     "name": "shopify/shopify-api",
-    "description": "Shopify Admin API Library for PHP",
+    "description": "Shopify API Library for PHP",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -11,7 +11,8 @@
         "graphql",
         "rest",
         "webhook",
-        "Admin API"
+        "Admin API",
+        "Storefront API"
     ],
     "authors": [
         {

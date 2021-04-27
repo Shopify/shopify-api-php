@@ -8,7 +8,6 @@ use Shopify\Clients\Graphql;
 use Shopify\Clients\HttpResponse;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
-use Shopify\Exception\MissingArgumentException;
 
 final class GraphqlTest extends BaseTestCase
 {

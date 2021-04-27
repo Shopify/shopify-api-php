@@ -10,6 +10,7 @@ namespace Shopify\Clients;
 final class HttpHeaders
 {
     public const X_SHOPIFY_ACCESS_TOKEN = "X-Shopify-Access-Token";
+    public const X_SHOPIFY_STOREFRONT_ACCESS_TOKEN = "X-Shopify-Storefront-Access-Token";
     public const X_REQUEST_ID = "x-request-id";
     public const X_SHOPIFY_HMAC = 'X-Shopify-Hmac-Sha256';
     public const X_SHOPIFY_TOPIC = 'X-Shopify-Topic';

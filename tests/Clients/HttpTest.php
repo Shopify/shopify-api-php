@@ -8,9 +8,9 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\Test\TestLogger;
 use Shopify\Clients\Http;
-use Shopify\Clients\HttpResponse;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
+use ShopifyTest\HttpResponseMatcher;
 
 final class HttpTest extends BaseTestCase
 {
@@ -40,9 +40,8 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
         $response = $client->get(path: 'test/path', headers: $headers);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testGetRequest()
@@ -60,9 +59,8 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
         $response = $client->get(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testPostRequest()
@@ -90,7 +88,6 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
         $response = $client->post(
             path: 'test/path',
@@ -98,7 +95,7 @@ final class HttpTest extends BaseTestCase
             headers: $headers,
             query: ["path" => "some_path"]
         );
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
 
@@ -127,7 +124,6 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
 
         $response = $client->put(
             path: 'test/path',
@@ -135,7 +131,7 @@ final class HttpTest extends BaseTestCase
             headers: $headers,
             query: ["path" => "some_path"]
         );
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testDeleteRequest()
@@ -155,10 +151,8 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
-
         $response = $client->delete(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testPostWithStringBody()
@@ -183,11 +177,8 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
-
-
         $response = $client->post(path: 'test/path', body: $body);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testUserAgent()
@@ -293,10 +284,8 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(200, [], $this->successResponse);
-
         $response = $client->get(path: 'test/path', tries: 3);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testRetryStopsAfterReachingTheLimit()
@@ -324,10 +313,8 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(500, ['X-Is-Last-Test-Request' => [true]]);
-
         $response = $client->get(path: 'test/path', tries: 3);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(500, ['X-Is-Last-Test-Request' => [true]]));
     }
 
     public function testRetryStopsOnNonRetriableError()
@@ -349,10 +336,8 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $expectedResponse = new HttpResponse(400, ['X-Is-Last-Test-Request' => [true]]);
-
         $response = $client->get(path: 'test/path', tries: 10);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(400, ['X-Is-Last-Test-Request' => [true]]));
     }
 
     public function testDeprecatedRequestsAreLogged()

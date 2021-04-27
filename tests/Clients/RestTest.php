@@ -6,9 +6,9 @@ namespace ShopifyTest\Clients;
 
 use Shopify\Clients\Http;
 use Shopify\Clients\Rest;
-use Shopify\Clients\RestResponse;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
+use ShopifyTest\HttpResponseMatcher;
 
 class RestTest extends BaseTestCase
 {
@@ -55,11 +55,8 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
         $response = $client->get(path: 'products', headers: $headers);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testCanMakeGetRequest()
@@ -79,11 +76,8 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
         $response = $client->get(path: 'products', headers: $headers);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testCanMakeGetRequestWithPathInQuery()
@@ -101,11 +95,8 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
         $response = $client->get(path: 'products', query: ["path" => "some_path"]);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testCanMakePostRequestWithJsonData()
@@ -136,11 +127,8 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
         $response = $client->post(path: 'products', body: $postData, dataType: Http::DATA_TYPE_JSON);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testCanMakePostRequestWithJsonDataAndPathInQuery()
@@ -171,16 +159,13 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
         $response = $client->post(
             path: 'products',
             body: $postData,
             dataType: Http::DATA_TYPE_JSON,
             query: ["path" => "some_path"]
         );
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testCanMakePutRequestWithJsonData()
@@ -211,16 +196,13 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
         $response = $client->put(
             path: 'products/123',
             body: $postData,
             dataType: Http::DATA_TYPE_JSON,
             query: ["path" => "some_path"]
         );
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testCanMakeDeleteRequest()
@@ -240,11 +222,8 @@ class RestTest extends BaseTestCase
             ),
         ]);
 
-        $expectedResponse = new RestResponse(200, [], $this->successResponse);
-
         $response = $client->delete('products', $headers, query: ["path" => "some_path"]);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->successResponse));
     }
 
     public function testCanRequestNextAndPreviousPagesUntilTheyRunOut()

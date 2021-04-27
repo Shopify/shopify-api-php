@@ -203,20 +203,12 @@ class Http
         do {
             $currentTries++;
 
-            $psrResponse = $client->sendRequest($request);
+            $response = HttpResponse::fromResponse($client->sendRequest($request));
 
-            $responseBody = $psrResponse->getBody()->getContents();
-            $responseBody = $responseBody ? json_decode($responseBody, true, JSON_THROW_ON_ERROR) : '';
-            $response = new HttpResponse(
-                $psrResponse->getStatusCode(),
-                $psrResponse->getHeaders(),
-                empty($responseBody) ? null : $responseBody
-            );
-
-            if (in_array($psrResponse->getStatusCode(), self::RETRIABLE_STATUS_CODES)) {
+            if (in_array($response->getStatusCode(), self::RETRIABLE_STATUS_CODES)) {
                 $retryAfter = empty(
-                    $psrResponse->getHeaderLine('Retry-After')
-                ) ? Context::$RETRY_TIME_IN_SECONDS : $psrResponse->getHeaderLine('Retry-After');
+                    $response->getHeaderLine('Retry-After')
+                ) ? Context::$RETRY_TIME_IN_SECONDS : $response->getHeaderLine('Retry-After');
                 usleep($retryAfter * 1000000);
             } else {
                 break;
@@ -224,7 +216,7 @@ class Http
         } while ($currentTries < $maxTries);
 
         if ($response->getHeaders()['X-Shopify-API-Deprecated-Reason'][0] ?? false) {
-            $this->logApiDeprecation($url->__toString(), $response->getHeaders()['X-Shopify-API-Deprecated-Reason'][0]);
+            $this->logApiDeprecation($url->__toString(), $response->getHeaderLine('X-Shopify-API-Deprecated-Reason'));
         }
 
         return $response;

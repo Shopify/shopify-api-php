@@ -51,7 +51,7 @@ final class StorefrontTest extends BaseTestCase
 
         $response = $client->query(data: $this->query);
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals($this->successResponse, $response->getBody());
+        $this->assertEquals($this->successResponse, $response->getDecodedBody());
         $this->assertEquals('request_id', $response->getRequestId());
     }
 
@@ -81,7 +81,7 @@ final class StorefrontTest extends BaseTestCase
 
         $response = $client->query(data: $this->query);
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals($this->successResponse, $response->getBody());
+        $this->assertEquals($this->successResponse, $response->getDecodedBody());
         $this->assertEquals('request_id', $response->getRequestId());
     }
 
@@ -110,7 +110,7 @@ final class StorefrontTest extends BaseTestCase
 
         $response = $client->query(data: $this->query);
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals($this->successResponse, $response->getBody());
+        $this->assertEquals($this->successResponse, $response->getDecodedBody());
         $this->assertEquals('request_id', $response->getRequestId());
     }
 }

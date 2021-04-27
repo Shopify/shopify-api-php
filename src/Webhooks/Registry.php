@@ -198,7 +198,7 @@ final class Registry
         );
 
         $checkStatusCode = $checkResponse->getStatusCode();
-        $checkBody = $checkResponse->getBody();
+        $checkBody = $checkResponse->getDecodedBody();
 
         if ($checkStatusCode !== 200) {
             throw new WebhookRegistrationException(
@@ -263,7 +263,7 @@ final class Registry
         );
 
         $statusCode = $registerResponse->getStatusCode();
-        $body = $registerResponse->getBody();
+        $body = $registerResponse->getDecodedBody();
         if ($statusCode !== 200) {
             throw new WebhookRegistrationException(
                 <<<ERROR

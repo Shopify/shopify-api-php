@@ -4,47 +4,48 @@ declare(strict_types=1);
 
 namespace Shopify\Clients;
 
-class HttpResponse
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+
+class HttpResponse extends Response
 {
     private ?string $requestId;
 
     /**
-     * HttpResponse constructor.
-     *
-     * @param int               $statusCode
-     * @param array             $headers
-     * @param array|string|null $body
+     * {@inheritDoc}
      */
     public function __construct(
-        private int $statusCode,
-        private array $headers = [],
-        private array|string|null $body = null
+        $status = 200,
+        array $headers = [],
+        $body = null,
+        $version = '1.1',
+        $reason = null
     ) {
-        $this->requestId = $this->headers[HttpHeaders::X_REQUEST_ID][0] ?? null;
+        parent::__construct($status, $headers, $body, $version, $reason);
+        $requestIdHeaderValue = $this->getHeaderLine(HttpHeaders::X_REQUEST_ID);
+        $this->requestId = empty($requestIdHeaderValue) ? null : $requestIdHeaderValue;
     }
 
-    /**
-     * @return int HTTP status code
-     */
-    public function getStatusCode(): int
+    public static function fromResponse(ResponseInterface $response): HttpResponse
     {
-        return $this->statusCode;
-    }
-
-    /**
-     * @return array HTTP headers
-     */
-    public function getHeaders(): array
-    {
-        return $this->headers;
+        return new HttpResponse(
+            $response->getStatusCode(),
+            $response->getHeaders(),
+            $response->getBody(),
+            $response->getProtocolVersion(),
+            $response->getReasonPhrase()
+        );
     }
 
     /**
      * @return array|string|null Body
      */
-    public function getBody(): array|string|null
+    public function getDecodedBody(): array|string|null
     {
-        return $this->body;
+        $responseBody = $this->getBody()->getContents();
+        return $responseBody
+            ? json_decode(json: $responseBody, associative: true, flags: JSON_THROW_ON_ERROR)
+            : null;
     }
 
     /**

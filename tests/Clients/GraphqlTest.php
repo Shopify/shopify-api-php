@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace ShopifyTest\Clients;
 
 use Shopify\Clients\Graphql;
-use Shopify\Clients\HttpResponse;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
+use Shopify\Exception\MissingArgumentException;
+use ShopifyTest\HttpResponseMatcher;
 
 final class GraphqlTest extends BaseTestCase
 {
@@ -69,15 +70,8 @@ final class GraphqlTest extends BaseTestCase
             )
         ]);
 
-        $expectedResponse = new HttpResponse(
-            statusCode: 200,
-            headers: [],
-            body: json_decode($this->successResponse, true)
-        );
-
         $response = $client->query(data: $this->testQueryString);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: json_decode($this->successResponse, true)));
     }
 
     public function testCanQueryWithDataArray()
@@ -99,15 +93,8 @@ final class GraphqlTest extends BaseTestCase
             )
         ]);
 
-        $expectedResponse = new HttpResponse(
-            statusCode: 200,
-            headers: [],
-            body: json_decode($this->successResponse, true)
-        );
-
         $response = $client->query(data: $this->testQueryArray);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: json_decode($this->successResponse, true)));
     }
 
     public function testCanQueryWithExtraHeaders()
@@ -131,14 +118,7 @@ final class GraphqlTest extends BaseTestCase
             )
         ]);
 
-        $expectedResponse = new HttpResponse(
-            statusCode: 200,
-            headers: [],
-            body: json_decode($this->successResponse, true)
-        );
-
         $response = $client->query(data: $this->testQueryString, extraHeaders: $extraHeaders);
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: json_decode($this->successResponse, true)));
     }
 }

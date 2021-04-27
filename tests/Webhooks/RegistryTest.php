@@ -322,7 +322,7 @@ final class RegistryTest extends BaseTestCase
                 body: $this->checkQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(403, "Unauthorized"),
+                response: $this->buildMockHttpResponse(403),
             ),
         ]);
 
@@ -353,7 +353,7 @@ final class RegistryTest extends BaseTestCase
                 body: $this->registerAddQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(403, "Unauthorized"),
+                response: $this->buildMockHttpResponse(403),
             ),
         ]);
 

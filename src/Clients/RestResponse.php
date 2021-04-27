@@ -6,20 +6,17 @@ class RestResponse extends HttpResponse
 {
 
     /**
-     * RestResponse constructor.
-     *
-     * @param int                            $statusCode
-     * @param array                          $headers
-     * @param array|string|null              $body
-     * @param \Shopify\Clients\PageInfo|null $pageInfo
+     * {@inheritDoc}
      */
     public function __construct(
-        int $statusCode,
+        $status = 200,
         array $headers = [],
-        array|string|null $body = null,
+        $body = null,
+        $version = '1.1',
+        $reason = null,
         private PageInfo|null $pageInfo = null
     ) {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($status, $headers, $body, $version, $reason);
     }
 
     /**

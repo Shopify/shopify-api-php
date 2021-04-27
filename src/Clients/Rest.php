@@ -76,9 +76,8 @@ class Rest extends Http
     private function getPageInfo(HttpResponse $response): ?PageInfo
     {
         $pageInfo = null;
-
-        if (array_key_exists('Link', $response->getHeaders())) {
-            $pageInfo = PageInfo::fromLinkHeader($response->getHeaders()['Link'][0]);
+        if ($response->hasHeader(HttpHeaders::PAGINATION_HEADER)) {
+            $pageInfo = PageInfo::fromLinkHeader($response->getHeaderLine(HttpHeaders::PAGINATION_HEADER));
         }
         return $pageInfo;
     }

@@ -15,7 +15,12 @@ final class HttpHeaders
     public const X_SHOPIFY_HMAC = 'X-Shopify-Hmac-Sha256';
     public const X_SHOPIFY_TOPIC = 'X-Shopify-Topic';
     public const X_SHOPIFY_DOMAIN = 'X-Shopify-Shop-Domain';
-
+    public const X_SHOPIFY_API_DEPRECATED_REASON = 'X-Shopify-API-Deprecated-Reason';
+    public const PAGINATION_HEADER = 'Link';
+    public const CONTENT_TYPE = 'Content-Type';
+    public const CONTENT_LENGTH = 'Content-Length';
+    public const USER_AGENT = 'User-Agent';
+    public const RETRY_AFTER = 'Retry-After';
     private array $headerSet = [];
 
     /**

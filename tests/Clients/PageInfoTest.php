@@ -23,6 +23,7 @@ class PageInfoTest extends BaseTestCase
             ),
             $pageInfo
         );
+        $this->assertEquals(['test1', 'test2'], $pageInfo->getFields());
     }
 
     public function testPreviousAndNextPageQueries()

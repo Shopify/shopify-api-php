@@ -39,6 +39,7 @@ You can follow our [getting started guide](docs/) to learn how to use this libra
 - [Make a GraphQL API call](docs/usage/graphql.md)
 - [Make a Storefront API call](docs/usage/storefront.md)
 - [Webhooks](docs/usage/webhooks.md)
+- [Utilities](docs/usage/utils.md)
 - [Known issues and caveats](docs/issues.md)
   - [Notes on session handling](docs/issues.md#notes-on-session-handling)
 

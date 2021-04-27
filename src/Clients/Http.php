@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shopify\Clients;
 
+use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\Utils;
@@ -30,13 +31,15 @@ class Http
     /**
      * Makes a GET request to this client's domain.
      *
-     * @param string        $path    The URL path to request
-     * @param array         $headers Any extra headers to send along with the request
-     * @param array|null    $query   Parameters on a query to be added to the URL
-     * @param int|null      $tries   How many times to attempt the request
+     * @param string   $path    The URL path to request
+     * @param array    $headers Any extra headers to send along with the request
+     * @param int|null $tries   How many times to attempt the request
+     *
+     * @param array    $query   Parameters on a query to be added to the URL
      *
      * @return HttpResponse
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public function get(string $path, array $headers = [], ?int $tries = null, array $query = []): HttpResponse
     {
@@ -56,11 +59,13 @@ class Http
      * @param string|array $body     The body of the request
      * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
-     * @param array|null   $query    Parameters on a query to be added to the URL
      * @param int|null     $tries    How many times to attempt the request
      *
+     * @param array        $query    Parameters on a query to be added to the URL
+     *
      * @return HttpResponse
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public function post(
         string $path,
@@ -88,11 +93,13 @@ class Http
      * @param string|array $body     The body of the request
      * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
-     * @param array|null   $query    Parameters on a query to be added to the URL
      * @param int|null     $tries    How many times to attempt the request
      *
+     * @param array        $query    Parameters on a query to be added to the URL
+     *
      * @return HttpResponse
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public function put(
         string $path,
@@ -116,13 +123,15 @@ class Http
     /**
      * Makes a DELETE request to this client's domain.
      *
-     * @param string        $path    The URL path to request
-     * @param array         $headers Any extra headers to send along with the request
-     * @param array|null    $query   Parameters on a query to be added to the URL
-     * @param int|null      $tries   How many times to attempt the request
+     * @param string   $path    The URL path to request
+     * @param array    $headers Any extra headers to send along with the request
+     * @param int|null $tries   How many times to attempt the request
+     *
+     * @param array    $query   Parameters on a query to be added to the URL
      *
      * @return HttpResponse
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public function delete(string $path, array $headers = [], ?int $tries = null, array $query = []): HttpResponse
     {
@@ -138,16 +147,18 @@ class Http
     /**
      * Internally handles the logic for making requests.
      *
-     * @param string     $path        The path to query
-     * @param string     $method      The method to use
-     * @param string     $dataType    The data type of the request
-     * @param string     $body        The request body to send
-     * @param array|null $query       Parameters on a query to be added to the URL
-     * @param array      $headers     Any extra headers to send along with the request
-     * @param int|null   $tries       How many times to attempt the request
+     * @param string            $path     The path to query
+     * @param string            $method   The method to use
+     * @param string            $dataType The data type of the request
+     * @param string|array|null $body     The request body to send
+     * @param array             $headers  Any extra headers to send along with the request
+     * @param int|null          $tries    How many times to attempt the request
+     *
+     * @param array             $query    Parameters on a query to be added to the URL
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     protected function request(
         string $path,
@@ -246,7 +257,7 @@ class Http
 
         file_put_contents($warningFilePath, time());
 
-        $e = new \Exception();
+        $e = new Exception();
         $stackTrace = str_replace("\n", "\n    ", $e->getTraceAsString());
 
         // For some reason, code coverage doesn't like the heredoc string, but there's no branching here so if the lines

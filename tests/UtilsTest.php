@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use DateTime;
 use Firebase\JWT\JWT;
 use Shopify\Auth\Session;
 use Shopify\Context;
@@ -126,7 +127,7 @@ final class UtilsTest extends BaseTestCase
         $offlineSession = new Session("offline_$this->domain", $this->domain, false, 'state');
         $offlineSession->setScope(Context::$SCOPES->toString());
         $offlineSession->setAccessToken('vatican_cameos');
-        $offlineSession->setExpires(new \DateTime());
+        $offlineSession->setExpires(new DateTime());
         Context::$SESSION_STORAGE->storeSession($offlineSession);
 
         $this->assertEquals($offlineSession, Utils::loadOfflineSession($this->domain, true));
@@ -159,8 +160,8 @@ final class UtilsTest extends BaseTestCase
         $session = new Session(
             id: $sessionId,
             shop: 'test-shop.myshopify.io',
-            state: '1234',
             isOnline: true,
+            state: '1234',
         );
 
         $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
@@ -188,7 +189,7 @@ final class UtilsTest extends BaseTestCase
         $this->assertEquals($payload, $actualPayload);
     }
 
-    private function encodeJwtPayload()
+    private function encodeJwtPayload(): string
     {
         $payload = [
             "iss" => "https://exampleshop.myshopify.com/admin",

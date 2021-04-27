@@ -38,7 +38,7 @@ final class HttpHeaders
     /**
      * Checks if this set contains the given header.
      *
-     * @param string $headers    The headers to check
+     * @param string $header     The header to check
      * @param bool   $allowEmpty If false, empty headers are handled as missing
      *
      * @return bool

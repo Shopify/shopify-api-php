@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopify\Clients;
 
 class RestResponse extends HttpResponse

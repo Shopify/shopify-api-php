@@ -9,7 +9,7 @@ use ShopifyTest\BaseTestCase;
 
 final class HttpHeadersTest extends BaseTestCase
 {
-    private $rawHeaders = [
+    private array $rawHeaders = [
         'Content-Type' => 'application/json',
         'X-Custom-Header' => 1234,
         'X-Array-Header' => [1234, 4321],

@@ -46,11 +46,11 @@ class RestTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
                 method: 'GET',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
                 headers: ["X-Test-Header: test_value", "X-Shopify-Access-Token: " . Context::$API_SECRET_KEY],
-                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 allowOtherHeaders: false,
             ),
         ]);
@@ -67,11 +67,11 @@ class RestTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
                 method: 'GET',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
                 headers: ['X-Test-Header: test_value', 'X-Shopify-Access-Token: dummy-token'],
-                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 allowOtherHeaders: false,
             ),
         ]);
@@ -86,11 +86,11 @@ class RestTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
                 method: 'GET',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
                 headers: ['X-Shopify-Access-Token: dummy-token'],
-                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 allowOtherHeaders: false,
             ),
         ]);
@@ -113,6 +113,7 @@ class RestTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json",
                 method: 'POST',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
@@ -122,7 +123,6 @@ class RestTest extends BaseTestCase
                     'X-Shopify-Access-Token: dummy-token',
                 ],
                 body: $body,
-                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 allowOtherHeaders: false,
             ),
         ]);
@@ -145,6 +145,7 @@ class RestTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
                 method: 'POST',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
@@ -154,7 +155,6 @@ class RestTest extends BaseTestCase
                     'X-Shopify-Access-Token: dummy-token',
                 ],
                 body: $body,
-                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 allowOtherHeaders: false,
             ),
         ]);
@@ -182,6 +182,7 @@ class RestTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products/123.json?path=some_path",
                 method: 'PUT',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
@@ -191,7 +192,6 @@ class RestTest extends BaseTestCase
                     'X-Shopify-Access-Token: dummy-token',
                 ],
                 body: $body,
-                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 allowOtherHeaders: false,
             ),
         ]);
@@ -213,11 +213,11 @@ class RestTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . "/products.json?path=some_path",
                 method: 'DELETE',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
                 headers: ['X-Test-Header: test_value', 'X-Shopify-Access-Token: dummy-token'],
-                response: $this->buildMockHttpResponse(200, $this->successResponse),
                 allowOtherHeaders: false,
             ),
         ]);
@@ -240,59 +240,59 @@ class RestTest extends BaseTestCase
         $this->mockTransportRequests(
             [
                 new MockRequest(
-                    url: $this->getAdminApiUrl("products", "limit=10&fields=test1%2Ctest2"),
-                    method: "GET",
-                    userAgent: "Shopify Admin API Library for PHP v",
-                    headers: ['X-Shopify-Access-Token: dummy-token'],
                     response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
                         headers: ['Link' => $firstPageLinkHeader]
                     ),
-                ),
-                new MockRequest(
-                    url: $this->getProductsAdminApiPaginationUrl("middlePageToken"),
+                    url: $this->getAdminApiUrl("products", "limit=10&fields=test1%2Ctest2"),
                     method: "GET",
                     userAgent: "Shopify Admin API Library for PHP v",
                     headers: ['X-Shopify-Access-Token: dummy-token'],
+                ),
+                new MockRequest(
                     response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
                         headers: ['Link' => $middlePageLinkHeader]
                     ),
-                ),
-                new MockRequest(
-                    url: $this->getProductsAdminApiPaginationUrl("lastPageToken"),
+                    url: $this->getProductsAdminApiPaginationUrl("middlePageToken"),
                     method: "GET",
                     userAgent: "Shopify Admin API Library for PHP v",
                     headers: ['X-Shopify-Access-Token: dummy-token'],
+                ),
+                new MockRequest(
                     response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
                         headers: ['Link' => $lastPageLinkHeader]
                     ),
-                ),
-                new MockRequest(
-                    url: $this->getProductsAdminApiPaginationUrl("middlePageToken"),
+                    url: $this->getProductsAdminApiPaginationUrl("lastPageToken"),
                     method: "GET",
                     userAgent: "Shopify Admin API Library for PHP v",
                     headers: ['X-Shopify-Access-Token: dummy-token'],
-                    response:$this->buildMockHttpResponse(
+                ),
+                new MockRequest(
+                    response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
                         headers: ['Link' => $middlePageLinkHeader]
                     ),
-                ),
-                new MockRequest(
-                    url: $this->getProductsAdminApiPaginationUrl("firstPageToken"),
+                    url: $this->getProductsAdminApiPaginationUrl("middlePageToken"),
                     method: "GET",
                     userAgent: "Shopify Admin API Library for PHP v",
                     headers: ['X-Shopify-Access-Token: dummy-token'],
-                    response:$this->buildMockHttpResponse(
+                ),
+                new MockRequest(
+                    response: $this->buildMockHttpResponse(
                         statusCode: 200,
                         body: $this->successResponse,
                         headers: ['Link' => $firstPageLinkHeader]
                     ),
+                    url: $this->getProductsAdminApiPaginationUrl("firstPageToken"),
+                    method: "GET",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: dummy-token'],
                 ),
 
             ]

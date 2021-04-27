@@ -6,8 +6,8 @@ namespace Shopify;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Shopify\Auth\SessionStorage;
 use Shopify\Auth\Scopes;
+use Shopify\Auth\SessionStorage;
 use Shopify\Clients\HttpClientFactory;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\PrivateAppException;
@@ -45,6 +45,8 @@ class Context
      * @param string               $userAgentPrefix                 Prefix for user agent header sent with a request
      * @param LoggerInterface|null $logger                          App logger, so the library can add its own logs to
      *                                                              it
+     *
+     * @throws \Shopify\Exception\MissingArgumentException
      */
     public static function initialize(
         string $apiKey,
@@ -100,6 +102,8 @@ class Context
 
     /**
      * Throws exception if initialize() has not been called
+     *
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public static function throwIfUninitialized(): void
     {
@@ -114,7 +118,9 @@ class Context
     /**
      * Throws exception if the app is private has not been called
      *
-     * @param string $message   Message to output with the exception
+     * @param string $message Message to output with the exception
+     *
+     * @throws \Shopify\Exception\PrivateAppException
      */
     public static function throwIfPrivateApp(string $message): void
     {

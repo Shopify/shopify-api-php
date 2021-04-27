@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Shopify\Auth;
 
-use Shopify\Auth\Session;
-use Shopify\Auth\SessionStorage;
-
 /**
  * Stores Sessions in a local file so that Session variables can be accessed throughout the app.
  */

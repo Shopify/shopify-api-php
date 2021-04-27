@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shopify\Webhooks;
 
+use Exception;
 use Shopify\Clients\Http;
 use Shopify\Clients\HttpHeaders;
 use Shopify\Context;
@@ -20,7 +21,7 @@ final class Registry
 {
     public const DELIVERY_METHOD_HTTP = 'http';
     public const DELIVERY_METHOD_EVENT_BRIDGE = 'eventbridge';
-    private static $DELIVERY_METHODS = [
+    private static array $DELIVERY_METHODS = [
         self::DELIVERY_METHOD_HTTP,
         self::DELIVERY_METHOD_EVENT_BRIDGE,
     ];
@@ -62,8 +63,9 @@ final class Registry
      * @param string $deliveryMethod The delivery method for this webhook. Defaults to HTTP
      *
      * @return \Shopify\Webhooks\RegisterResponse
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Shopify\Exception\InvalidArgumentException
+     * @throws \Shopify\Exception\UninitializedContextException
      * @throws \Shopify\Exception\WebhookRegistrationException
      */
     public static function register(
@@ -148,7 +150,7 @@ final class Registry
         try {
             $handler->handle($topic, $shop, $body);
             $response = new ProcessResponse(true);
-        } catch (\Exception $error) {
+        } catch (Exception $error) {
             $response = new ProcessResponse(false, $error->getMessage());
         }
 
@@ -181,7 +183,9 @@ final class Registry
      *
      * @return array
      *
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\InvalidArgumentException
+     * @throws \Shopify\Exception\UninitializedContextException
      * @throws \Shopify\Exception\WebhookRegistrationException
      */
     private static function isWebhookRegistrationNeeded(
@@ -244,7 +248,8 @@ final class Registry
      *
      * @return array
      *
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\UninitializedContextException
      * @throws \Shopify\Exception\WebhookRegistrationException
      */
     private static function sendRegisterRequest(
@@ -295,6 +300,7 @@ final class Registry
      * @param string $topic
      *
      * @return string
+     * @throws \Shopify\Exception\InvalidArgumentException
      */
     private static function buildCheckQuery(string $topic): string
     {

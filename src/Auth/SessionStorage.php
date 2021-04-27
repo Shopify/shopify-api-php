@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Shopify\Auth;
 
-use Shopify\Auth\Session;
-
 interface SessionStorage
 {
     /**

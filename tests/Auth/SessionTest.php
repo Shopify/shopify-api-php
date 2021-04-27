@@ -18,8 +18,8 @@ final class SessionTest extends BaseTestCase
         $session = new Session(
             id: '12345',
             shop: 'my-shop.myshopify.io',
-            state: 'asdf1234',
             isOnline: true,
+            state: 'asdf1234',
         );
         $session->setScope('read_products');
         $session->setExpires('January 25, 2021');
@@ -53,8 +53,8 @@ final class SessionTest extends BaseTestCase
         $session = new Session(
             id: '12345',
             shop: 'my-shop.myshopify.io',
-            state: 'asdf1234',
             isOnline: true,
+            state: 'asdf1234',
         );
 
         $session->setExpires((int)$date->format('U'));
@@ -72,8 +72,8 @@ final class SessionTest extends BaseTestCase
         $session = new Session(
             id: '12345',
             shop: 'my-shop.myshopify.io',
-            state: 'asdf1234',
             isOnline: true,
+            state: 'asdf1234',
         );
         $session->setScope('read_products');
         $session->setExpires('January 25, 2021');
@@ -109,8 +109,8 @@ final class SessionTest extends BaseTestCase
         $session = new Session(
             id: '12345',
             shop: 'my-shop.myshopify.io',
-            state: '1234',
             isOnline: true,
+            state: '1234',
         );
         $session->setScope('read_products');
         $session->setExpires(strtotime('+10 minutes'));
@@ -126,8 +126,8 @@ final class SessionTest extends BaseTestCase
         $session = new Session(
             id: '12345',
             shop: 'my-shop.myshopify.io',
-            state: '1234',
             isOnline: true,
+            state: '1234',
         );
         $session->setScope('read_products');
         $session->setExpires(strtotime('+10 minutes'));
@@ -143,8 +143,8 @@ final class SessionTest extends BaseTestCase
         $session = new Session(
             id: '12345',
             shop: 'my-shop.myshopify.io',
-            state: '1234',
             isOnline: true,
+            state: '1234',
         );
         $session->setScope('read_products');
         $session->setExpires(strtotime('-10 minutes'));
@@ -160,8 +160,8 @@ final class SessionTest extends BaseTestCase
         $session = new Session(
             id: '12345',
             shop: 'my-shop.myshopify.io',
-            state: '1234',
             isOnline: true,
+            state: '1234',
         );
         $session->setScope('read_products');
         $session->setExpires(strtotime('+10 minutes'));

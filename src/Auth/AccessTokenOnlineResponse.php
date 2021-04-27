@@ -15,17 +15,17 @@ final class AccessTokenOnlineResponse extends AccessTokenResponse
     ) {
     }
 
-    public function getExpiresIn()
+    public function getExpiresIn(): int
     {
         return $this->expiresIn;
     }
 
-    public function getAssociatedUserScope()
+    public function getAssociatedUserScope(): string
     {
         return $this->associatedUserScope;
     }
 
-    public function getAssociatedUser()
+    public function getAssociatedUser(): ?AccessTokenOnlineUserInfo
     {
         return $this->associatedUser;
     }

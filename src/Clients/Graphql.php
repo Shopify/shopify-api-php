@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Shopify\Clients;
 
 use Shopify\Context;
-use Shopify\Clients\Http;
 use Shopify\Exception\MissingArgumentException;
 
 class Graphql
@@ -33,12 +32,13 @@ class Graphql
     /**
      * Sends a GraphQL query to this client's domain.
      *
-     * @param string|array  $data          Query to be posted to endpoint
-     * @param array         $query         Parameters on a query to be added to the URL
+     * @param string|array   $data         Query to be posted to endpoint
+     * @param array          $query        Parameters on a query to be added to the URL
      * @param array         &$extraHeaders Any extra headers to send along with the request
-     * @param int|null      $tries         How many times to attempt the request
+     * @param int|null       $tries        How many times to attempt the request
      *
      * @return HttpResponse
+     * @throws \Shopify\Exception\HttpRequestException
      * @throws \Shopify\Exception\MissingArgumentException
      */
     public function query(
@@ -66,8 +66,8 @@ class Graphql
             body: $data,
             dataType: $dataType,
             headers: $extraHeaders,
-            query: $query,
             tries: $tries,
+            query: $query,
         );
     }
 

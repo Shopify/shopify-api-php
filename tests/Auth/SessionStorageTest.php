@@ -17,8 +17,8 @@ final class SessionStorageTest extends BaseTestCase
         $this->session = new Session(
             id: $this->sessionId,
             shop: 'test-shop.myshopify.io',
-            state: '1234',
             isOnline: true,
+            state: '1234',
         );
         $this->session->setScope('read_products');
         $this->session->setExpires(strtotime('+1 day'));

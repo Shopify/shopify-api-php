@@ -46,7 +46,6 @@ class BaseTestCase extends TestCase
      * @param int|null          $statusCode The HTTP status code to return
      * @param string|array|null $body       The body of the HTTP response
      * @param array             $headers    The headers expected in the response
-     * @param string            $dataType   The data type of the response
      * @param string|null       $error      The cURL error message to return
      *
      * @return array

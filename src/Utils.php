@@ -6,7 +6,6 @@ namespace Shopify;
 
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
-use Shopify\Context;
 use Shopify\Exception\InvalidArgumentException;
 use Firebase\JWT\JWT;
 
@@ -20,10 +19,10 @@ final class Utils
      *
      * If the provided shop domain or hostname is invalid or could not be sanitized, returns null.
      *
-     * @param string        $shop               A Shopify shop domain or hostname
-     * @param string|null   $myshopifyDomain    A custom Shopify domain
+     * @param string      $shop            A Shopify shop domain or hostname
+     * @param string|null $myshopifyDomain A custom Shopify domain
      *
-     * @return string $name a sanitized Shopify shop domain, null if the provided domain is invalid
+     * @return string|null $name a sanitized Shopify shop domain, null if the provided domain is invalid
      */
     public static function sanitizeShopDomain(string $shop, ?string $myshopifyDomain = null): ?string
     {
@@ -31,7 +30,7 @@ final class Utils
 
         $allowedDomainsRegexp = $myshopifyDomain ? "($myshopifyDomain)" : "(myshopify.com|myshopify.io)";
 
-        if (!preg_match($allowedDomainsRegexp, $name) && (strpos($name, ".") === false)) {
+        if (!preg_match($allowedDomainsRegexp, $name) && (!str_contains($name, "."))) {
             $name .= '.' . ($myshopifyDomain ?? 'myshopify.com');
         }
         $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
@@ -50,7 +49,6 @@ final class Utils
      * @param string $secret the secret key associated with the app in the Partners Dashboard
      *
      * @return bool true if the generated hexdigest is equal to the hmac parameter, false otherwise
-     * @throws \Shopify\Exception\UninitializedContextException
      */
     public static function validateHmac(array $params, string $secret): bool
     {
@@ -112,7 +110,7 @@ final class Utils
      * @param bool   $includeExpired Optionally include expired sessions, defaults to false
      *
      * @return Session|null If exists, the most recent session
-     * @throws \Shopify\Exception\ContextUninitializedException
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public static function loadOfflineSession(string $shop, bool $includeExpired = false): ?Session
     {
@@ -135,7 +133,8 @@ final class Utils
      * @param bool  $isOnline   whether to load online or offline sessions
      *
      * @return Session|null returns the session or null if the session can't be found
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws \Shopify\Exception\OAuthCookieNotFoundException
      */
     public static function loadCurrentSession(array $rawHeaders, array $cookies, bool $isOnline): ?Session
     {

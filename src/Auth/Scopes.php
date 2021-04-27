@@ -48,7 +48,7 @@ final class Scopes
     }
 
     /**
-     * Checks whether the scopes in this object encapuslate the given scopes.
+     * Checks whether the scopes in this object encapsulate the given scopes.
      *
      * @param string|array|Scopes $scopes The scopes to check
      *

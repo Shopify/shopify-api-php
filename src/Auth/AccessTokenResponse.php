@@ -12,12 +12,12 @@ class AccessTokenResponse
     ) {
     }
 
-    public function getAccessToken()
+    public function getAccessToken(): string
     {
         return $this->accessToken;
     }
 
-    public function getScope()
+    public function getScope(): string
     {
         return $this->scope;
     }

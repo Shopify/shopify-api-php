@@ -72,6 +72,9 @@ class Session
         $this->scope = $scope;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function setExpires(string | int | DateTime $expires): void
     {
         $date = null;
@@ -109,8 +112,8 @@ class Session
         $newSession = new Session(
             id: $newSessionId,
             shop: $this->shop,
-            state: $this->state,
             isOnline: $this->isOnline,
+            state: $this->state,
         );
         $newSession->scope = $this->scope;
         $newSession->expires = $this->expires;

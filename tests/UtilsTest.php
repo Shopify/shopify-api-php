@@ -6,9 +6,12 @@ namespace ShopifyTest;
 
 use DateTime;
 use Firebase\JWT\JWT;
+use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
 use Shopify\Context;
+use Shopify\Exception\SessionNotFoundException;
 use Shopify\Utils;
+use ShopifyTest\Clients\MockRequest;
 
 final class UtilsTest extends BaseTestCase
 {
@@ -189,6 +192,140 @@ final class UtilsTest extends BaseTestCase
         $this->assertEquals($payload, $actualPayload);
     }
 
+    public function testGraphqlProxyFailsWithNoSession()
+    {
+        $token = $this->encodeJwtPayload();
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $this->expectException(SessionNotFoundException::class);
+        Utils::graphqlProxy($headers, [], $this->testGraphqlQuery);
+    }
+
+    public function testGraphqlProxyFailsWithJWTForNonEmbeddedApps()
+    {
+        $sessionId = 'exampleshop.myshopify.com_42';
+        $session = new Session(
+            id: $sessionId,
+            shop: 'test-shop.myshopify.io',
+            isOnline: true,
+            state: '1234',
+        );
+        $session->setAccessToken('token');
+
+        $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
+
+        $token = $this->encodeJwtPayload();
+        $headers = ['Authorization' => "Bearer $token"];
+        $cookies = [OAuth::SESSION_ID_COOKIE_NAME => 'cookie_id'];
+
+        // The session is valid and can be loaded from the headers
+        Context::$IS_EMBEDDED_APP = true;
+        $this->assertEquals($session, Utils::loadCurrentSession($headers, [], isOnline: true));
+
+        Context::$IS_EMBEDDED_APP = false;
+        $this->expectException(SessionNotFoundException::class);
+        Utils::graphqlProxy([], $cookies, $this->testGraphqlQuery);
+    }
+
+    public function testGraphqlProxyFailsWithCookiesForEmbeddedApps()
+    {
+        $sessionId = 'cookie_id';
+        $session = new Session(
+            id: $sessionId,
+            shop: 'test-shop.myshopify.io',
+            isOnline: true,
+            state: '1234',
+        );
+        $session->setAccessToken('token');
+
+        $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
+
+        $token = $this->encodeJwtPayload();
+        $headers = ['Authorization' => "Bearer $token"];
+        $cookies = [OAuth::SESSION_ID_COOKIE_NAME => 'cookie_id'];
+
+        // The session is valid and can be loaded from the cookies
+        Context::$IS_EMBEDDED_APP = false;
+        $this->assertEquals($session, Utils::loadCurrentSession([], $cookies, isOnline: true));
+
+        Context::$IS_EMBEDDED_APP = true;
+        $this->expectException(SessionNotFoundException::class);
+        Utils::graphqlProxy($headers, [], $this->testGraphqlQuery);
+    }
+
+    public function testGraphqlProxyFetchesDataWithJWT()
+    {
+        Context::$IS_EMBEDDED_APP = true;
+
+        $sessionId = 'exampleshop.myshopify.com_42';
+        $session = new Session(
+            id: $sessionId,
+            shop: 'test-shop.myshopify.io',
+            isOnline: true,
+            state: '1234',
+        );
+        $session->setAccessToken('token');
+
+        $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
+        $this->assertEquals($session, Context::$SESSION_STORAGE->loadSession('exampleshop.myshopify.com_42'));
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->testGraphqlResponse),
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
+                method: 'POST',
+                headers: [
+                    'Content-Type: application/graphql',
+                    'Content-Length: ' . strlen($this->testGraphqlQuery),
+                    'X-Shopify-Access-Token: token',
+                ],
+                body: $this->testGraphqlQuery,
+            )
+        ]);
+
+        $token = $this->encodeJwtPayload();
+        $headers = ['Authorization' => "Bearer $token"];
+        $response = Utils::graphqlProxy($headers, [], $this->testGraphqlQuery);
+
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->testGraphqlResponse));
+    }
+
+    public function testGraphqlProxyFetchesDataWithCookies()
+    {
+        Context::$IS_EMBEDDED_APP = false;
+
+        $sessionId = 'exampleshop.myshopify.com_42';
+        $session = new Session(
+            id: $sessionId,
+            shop: 'test-shop.myshopify.io',
+            isOnline: true,
+            state: '1234',
+        );
+        $session->setAccessToken('token');
+
+        $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
+        $this->assertEquals($session, Context::$SESSION_STORAGE->loadSession('exampleshop.myshopify.com_42'));
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->testGraphqlResponse),
+                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
+                method: 'POST',
+                headers: [
+                    'Content-Type: application/graphql',
+                    'Content-Length: ' . strlen($this->testGraphqlQuery),
+                    'X-Shopify-Access-Token: token',
+                ],
+                body: $this->testGraphqlQuery,
+            )
+        ]);
+
+        $cookies = [OAuth::SESSION_ID_COOKIE_NAME => $sessionId];
+        $response = Utils::graphqlProxy([], $cookies, $this->testGraphqlQuery);
+
+        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->testGraphqlResponse));
+    }
+
     private function encodeJwtPayload(): string
     {
         $payload = [
@@ -204,4 +341,20 @@ final class UtilsTest extends BaseTestCase
         ];
         return JWT::encode($payload, Context::$API_SECRET_KEY);
     }
+
+    private string $testGraphqlQuery = <<<QUERY
+    {
+      shop {
+        name
+      }
+    }
+    QUERY;
+
+    private array $testGraphqlResponse = [
+      "data" => [
+        "shop" => [
+          "name" => "Shoppity Shop",
+        ],
+      ],
+    ];
 }

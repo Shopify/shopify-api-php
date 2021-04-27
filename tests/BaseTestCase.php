@@ -38,6 +38,9 @@ class BaseTestCase extends TestCase
         );
         Context::$RETRY_TIME_IN_SECONDS = 0;
         $this->version = require dirname(__FILE__) . '/../src/version.php';
+
+        // Make sure we always mock the transport layer so we don't accidentally make real requests
+        $this->mockTransportRequests([]);
     }
 
     /**

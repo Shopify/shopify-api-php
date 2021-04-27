@@ -20,8 +20,6 @@ class Http
     public const DATA_TYPE_JSON = 'application/json';
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
-    public const USER_AGENT = 'User-Agent';
-
     private const RETRIABLE_STATUS_CODES = [429, 500];
     private const DEPRECATION_ALERT_SECONDS = 60;
 
@@ -169,9 +167,9 @@ class Http
             array_unshift($userAgentParts, Context::$USER_AGENT_PREFIX);
         }
 
-        if (isset($headers[self::USER_AGENT])) {
-            array_unshift($userAgentParts, $headers[self::USER_AGENT]);
-            unset($headers[self::USER_AGENT]);
+        if (isset($headers[HttpHeaders::USER_AGENT])) {
+            array_unshift($userAgentParts, $headers[HttpHeaders::USER_AGENT]);
+            unset($headers[HttpHeaders::USER_AGENT]);
         }
 
         $client = Context::$HTTP_CLIENT_FACTORY->client();
@@ -183,7 +181,7 @@ class Http
             ->withQuery(http_build_query($query));
 
         $request = new Request($method, $url, $headers);
-        $request = $request->withHeader(header: self::USER_AGENT, value: implode(' | ', $userAgentParts));
+        $request = $request->withHeader(header: HttpHeaders::USER_AGENT, value: implode(' | ', $userAgentParts));
 
         if ($body) {
             if (is_string($body)) {
@@ -195,8 +193,8 @@ class Http
             $stream = Utils::streamFor($bodyString);
             $request = $request
                 ->withBody($stream)
-                ->withHeader('Content-Type', $dataType)
-                ->withHeader('Content-Length', mb_strlen($bodyString));
+                ->withHeader(HttpHeaders::CONTENT_TYPE, $dataType)
+                ->withHeader(HttpHeaders::CONTENT_LENGTH, mb_strlen($bodyString));
         }
 
         $currentTries = 0;
@@ -206,17 +204,21 @@ class Http
             $response = HttpResponse::fromResponse($client->sendRequest($request));
 
             if (in_array($response->getStatusCode(), self::RETRIABLE_STATUS_CODES)) {
-                $retryAfter = empty(
-                    $response->getHeaderLine('Retry-After')
-                ) ? Context::$RETRY_TIME_IN_SECONDS : $response->getHeaderLine('Retry-After');
+                $retryAfter = $response->hasHeader(HttpHeaders::RETRY_AFTER)
+                    ? $response->getHeaderLine(HttpHeaders::RETRY_AFTER)
+                    : Context::$RETRY_TIME_IN_SECONDS;
+
                 usleep($retryAfter * 1000000);
             } else {
                 break;
             }
         } while ($currentTries < $maxTries);
 
-        if ($response->getHeaders()['X-Shopify-API-Deprecated-Reason'][0] ?? false) {
-            $this->logApiDeprecation($url->__toString(), $response->getHeaderLine('X-Shopify-API-Deprecated-Reason'));
+        if ($response->hasHeader(HttpHeaders::X_SHOPIFY_API_DEPRECATED_REASON)) {
+            $this->logApiDeprecation(
+                $url->__toString(),
+                $response->getHeaderLine(HttpHeaders::X_SHOPIFY_API_DEPRECATED_REASON)
+            );
         }
 
         return $response;

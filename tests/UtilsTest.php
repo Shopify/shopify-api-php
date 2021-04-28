@@ -107,7 +107,7 @@ final class UtilsTest extends BaseTestCase
         $this->assertTrue(Utils::isApiVersionCompatible('2020-10'));
         $this->assertFalse(Utils::isApiVersionCompatible('2021-07'));
 
-        $this->expectException('Shopify\\Exception\\InvalidArgumentException');
+        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
         $this->assertTrue(Utils::isApiVersionCompatible('not_a_version'));
     }
 

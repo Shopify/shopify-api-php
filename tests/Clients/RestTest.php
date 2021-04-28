@@ -23,7 +23,7 @@ class RestTest extends BaseTestCase
 
     public function testFailsToInstantiateWithoutAccessTokenForNonPrivateApps()
     {
-        $this->expectException('\Shopify\Exception\MissingArgumentException');
+        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
 
         new Rest($this->domain);
     }

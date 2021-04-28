@@ -54,12 +54,12 @@ final class Registry
     /**
      * Registers a new webhook for this app with Shopify.
      *
-     * @param string $path           The URL path for the callback. If using EventBridge, this is the full resource
-     *                               address.
-     * @param string $topic          The topic to subscribe to. May be a string or a value from the Topics class
-     * @param string $shop           The shop to use for requests
-     * @param string $accessToken    The access token to use for requests
-     * @param string $deliveryMethod The delivery method for this webhook. Defaults to HTTP
+     * @param string        $path           The URL path for the callback. If using EventBridge, this is the full
+     *                                      resource address
+     * @param string        $topic          The topic to subscribe to. May be a string or a value from the Topics class
+     * @param string        $shop           The shop to use for requests
+     * @param string        $accessToken    The access token to use for requests
+     * @param string|null   $deliveryMethod The delivery method for this webhook. Defaults to HTTP
      *
      * @return \Shopify\Webhooks\RegisterResponse
      * @throws \Shopify\Exception\HttpRequestException
@@ -71,7 +71,7 @@ final class Registry
         string $topic,
         string $shop,
         string $accessToken,
-        string $deliveryMethod = self::DELIVERY_METHOD_HTTP,
+        ?string $deliveryMethod = self::DELIVERY_METHOD_HTTP,
     ): RegisterResponse {
         if (!in_array($deliveryMethod, self::$DELIVERY_METHODS)) {
             throw new InvalidArgumentException("Unrecognized delivery method '$deliveryMethod'");

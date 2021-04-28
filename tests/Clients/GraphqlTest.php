@@ -40,7 +40,7 @@ final class GraphqlTest extends BaseTestCase
     public function testPublicAppThrowsWithoutToken()
     {
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
-        $client = new Graphql('domain.myshopify.com');
+        new Graphql('domain.myshopify.com');
     }
 
     public function testThrowsIfQueryMissing()
@@ -56,6 +56,7 @@ final class GraphqlTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, json_decode($this->successResponse, true)),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 method: 'POST',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
@@ -64,7 +65,6 @@ final class GraphqlTest extends BaseTestCase
                     'Content-Length: ' . strlen($this->testQueryString),
                     'X-Shopify-Access-Token: token'
                 ],
-                response: $this->buildMockHttpResponse(200, json_decode($this->successResponse, true)),
                 body: $this->testQueryString
             )
         ]);
@@ -79,6 +79,7 @@ final class GraphqlTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, json_decode($this->successResponse, true)),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 method: 'POST',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
@@ -87,7 +88,6 @@ final class GraphqlTest extends BaseTestCase
                          'Content-Length: ' . strlen(json_encode($this->testQueryArray)),
                          'X-Shopify-Access-Token: token'
                      ],
-                response: $this->buildMockHttpResponse(200, json_decode($this->successResponse, true)),
                 body: json_encode($this->testQueryArray)
             )
         ]);
@@ -103,6 +103,7 @@ final class GraphqlTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, json_decode($this->successResponse, true)),
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 method: 'POST',
                 userAgent: "Shopify Admin API Library for PHP v$this->version",
@@ -112,7 +113,6 @@ final class GraphqlTest extends BaseTestCase
                          'Extra-Extra: hear_all_about_it',
                          'X-Shopify-Access-Token: token'
                      ],
-                response: $this->buildMockHttpResponse(200, json_decode($this->successResponse, true)),
                 body: $this->testQueryString
             )
         ]);

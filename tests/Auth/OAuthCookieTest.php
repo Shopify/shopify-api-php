@@ -12,8 +12,8 @@ final class OAuthCookieTest extends BaseTestCase
     public function testGetters()
     {
         $cookie = new OAuthCookie(
-            name: 'Test cookie',
             value: 'Test value',
+            name: 'Test cookie',
             expire: 1234,
             secure: true,
             httpOnly: true,

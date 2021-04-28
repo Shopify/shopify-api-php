@@ -128,9 +128,13 @@ class OAuth
      * @param array $query   The HTTP request URL query values.
      *
      * @return Session
+     * @throws \Shopify\Exception\HttpRequestException
      * @throws \Shopify\Exception\InvalidOAuthException
+     * @throws \Shopify\Exception\OAuthCookieNotFoundException
      * @throws \Shopify\Exception\OAuthSessionNotFoundException
+     * @throws \Shopify\Exception\PrivateAppException
      * @throws \Shopify\Exception\SessionStorageException
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public static function callback(array $cookies, array $query): Session
     {
@@ -188,8 +192,10 @@ class OAuth
     /**
      * Builds a session id that can be loaded from JWTs from App Bridge
      *
-     * @param string $shop       The session's shop
-     * @param string $userId|int The session's user
+     * @param string     $shop   The session's shop
+     * @param string|int $userId |int The session's user
+     *
+     * @return string
      */
     public static function getJwtSessionId(string $shop, string | int $userId): string
     {
@@ -276,6 +282,9 @@ class OAuth
      *
      * @param array   $query   The URL query parameters
      * @param Session $session The current session
+     *
+     * @return bool
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     private static function isCallbackQueryValid(array $query, Session $session): bool
     {
@@ -298,6 +307,7 @@ class OAuth
      * @param Session $session The OAuth session
      *
      * @return AccessTokenResponse|AccessTokenOnlineResponse The access token exchanged for the OAuth code
+     * @throws \Shopify\Exception\HttpRequestException
      */
     private static function fetchAccessToken(
         array $query,
@@ -340,15 +350,13 @@ class OAuth
             collaborator: $body['associated_user']['collaborator'],
         );
 
-        $response = new AccessTokenOnlineResponse(
+        return new AccessTokenOnlineResponse(
             accessToken: $body['access_token'],
             scope: $body['scope'],
             expiresIn: $body['expires_in'],
             associatedUserScope: $body['associated_user_scope'],
             associatedUser: $associatedUser,
         );
-
-        return $response;
     }
 
     /**
@@ -358,20 +366,21 @@ class OAuth
      */
     private static function buildAccessTokenResponse(array $body): AccessTokenResponse
     {
-        $response = new AccessTokenResponse(
+        return new AccessTokenResponse(
             accessToken: $body['access_token'],
             scope: $body['scope'],
         );
-
-        return $response;
     }
 
     /**
      * Fires the actual request for the access token. This was isolated so it can be stubbed in unit tests.
      *
-     * @param Http  $session The HTTP client
-     * @param array $post    The POST payload
+     * @param Http  $client
+     * @param array $post The POST payload
      *
+     * @return \Shopify\Clients\HttpResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\UninitializedContextException
      * @codeCoverageIgnore
      */
     public static function requestAccessToken(Http $client, array $post): HttpResponse

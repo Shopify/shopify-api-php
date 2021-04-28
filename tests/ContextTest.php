@@ -6,10 +6,10 @@ namespace ShopifyTest;
 
 use Psr\Log\LogLevel;
 use Psr\Log\Test\TestLogger;
+use ReflectionClass;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
 use ShopifyTest\Auth\MockSessionStorage;
-use ShopifyTest\BaseTestCase;
 
 final class ContextTest extends BaseTestCase
 {
@@ -72,10 +72,10 @@ final class ContextTest extends BaseTestCase
     {
         // ReflectionClass is used in this test as IS_INITIALIZED is a private static variable,
         // which would have been set as true due to previous tests
-        $reflectedContext = new \ReflectionClass('Shopify\Context');
+        $reflectedContext = new ReflectionClass('Shopify\Context');
         $reflectedIsInitialized = $reflectedContext->getProperty('IS_INITIALIZED');
         $reflectedIsInitialized->setAccessible(true);
-        $reflectedIsInitialized = $reflectedIsInitialized->setValue(false);
+        $reflectedIsInitialized->setValue(false);
 
         $this->expectException(\Shopify\Exception\UninitializedContextException::class);
         Context::throwIfUninitialized();

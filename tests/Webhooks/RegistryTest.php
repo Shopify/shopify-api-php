@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Webhooks;
 
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use Shopify\Clients\HttpHeaders;
@@ -69,52 +70,52 @@ final class RegistryTest extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                url: "https://$this->domain/admin/api/unstable/graphql.json",
-                method: "POST",
-                body: $this->checkQuery,
-                userAgent: "Shopify Admin API Library for PHP v",
-                headers: ['X-Shopify-Access-Token: real_token'],
                 response: $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-            ),
-            new MockRequest(
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->registerAddQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
-            ),
-            new MockRequest(
-                url: "https://$this->domain/admin/api/unstable/graphql.json",
-                method: "POST",
                 body: $this->checkQuery,
-                userAgent: "Shopify Admin API Library for PHP v",
-                headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->checkResponseExisting),
             ),
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->registerUpdateQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->registerAddQuery,
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->checkResponseExisting),
+                url: "https://$this->domain/admin/api/unstable/graphql.json",
+                method: "POST",
+                userAgent: "Shopify Admin API Library for PHP v",
+                headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->checkQuery,
+            ),
+            new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerUpdateResponse),
+                url: "https://$this->domain/admin/api/unstable/graphql.json",
+                method: "POST",
+                userAgent: "Shopify Admin API Library for PHP v",
+                headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->registerUpdateQuery,
             ),
         ]);
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
         $this->assertTrue($response->isSuccess());
         $this->assertEquals($this->registerAddResponse, $response->getBody());
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks-updated',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
         $this->assertTrue($response->isSuccess());
@@ -125,43 +126,43 @@ final class RegistryTest extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                url: "https://$this->domain/admin/api/unstable/graphql.json",
-                method: "POST",
-                body: $this->checkQuery,
-                userAgent: "Shopify Admin API Library for PHP v",
-                headers: ['X-Shopify-Access-Token: real_token'],
                 response: $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-            ),
-            new MockRequest(
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->registerAddEventBridgeQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->registerAddEventBridgeResponse),
-            ),
-            new MockRequest(
-                url: "https://$this->domain/admin/api/unstable/graphql.json",
-                method: "POST",
                 body: $this->checkQuery,
-                userAgent: "Shopify Admin API Library for PHP v",
-                headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->checkEventBridgeResponseExisting),
             ),
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->registerAddEventBridgeResponse),
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->registerUpdateEventBridgeQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->registerAddEventBridgeQuery,
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->checkEventBridgeResponseExisting),
+                url: "https://$this->domain/admin/api/unstable/graphql.json",
+                method: "POST",
+                userAgent: "Shopify Admin API Library for PHP v",
+                headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->checkQuery,
+            ),
+            new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerUpdateEventBridgeResponse),
+                url: "https://$this->domain/admin/api/unstable/graphql.json",
+                method: "POST",
+                userAgent: "Shopify Admin API Library for PHP v",
+                headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->registerUpdateEventBridgeQuery,
             ),
         ]);
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
             deliveryMethod: Registry::DELIVERY_METHOD_EVENT_BRIDGE,
         );
@@ -169,9 +170,9 @@ final class RegistryTest extends BaseTestCase
         $this->assertEquals($this->registerAddEventBridgeResponse, $response->getBody());
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks-updated',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
             deliveryMethod: Registry::DELIVERY_METHOD_EVENT_BRIDGE,
         );
@@ -185,52 +186,52 @@ final class RegistryTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                url: "https://$this->domain/admin/api/2020-01/graphql.json",
-                method: "POST",
-                body: $this->legacyCheckQuery,
-                userAgent: "Shopify Admin API Library for PHP v",
-                headers: ['X-Shopify-Access-Token: real_token'],
                 response: $this->buildMockHttpResponse(200, $this->legacyCheckResponseEmpty),
-            ),
-            new MockRequest(
                 url: "https://$this->domain/admin/api/2020-01/graphql.json",
                 method: "POST",
-                body: $this->registerAddQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
-            ),
-            new MockRequest(
-                url: "https://$this->domain/admin/api/2020-01/graphql.json",
-                method: "POST",
                 body: $this->legacyCheckQuery,
-                userAgent: "Shopify Admin API Library for PHP v",
-                headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->legacyCheckResponseExisting),
             ),
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
                 url: "https://$this->domain/admin/api/2020-01/graphql.json",
                 method: "POST",
-                body: $this->registerUpdateQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->registerAddQuery,
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->legacyCheckResponseExisting),
+                url: "https://$this->domain/admin/api/2020-01/graphql.json",
+                method: "POST",
+                userAgent: "Shopify Admin API Library for PHP v",
+                headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->legacyCheckQuery,
+            ),
+            new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerUpdateResponse),
+                url: "https://$this->domain/admin/api/2020-01/graphql.json",
+                method: "POST",
+                userAgent: "Shopify Admin API Library for PHP v",
+                headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->registerUpdateQuery,
             ),
         ]);
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
         $this->assertTrue($response->isSuccess());
         $this->assertEquals($this->registerAddResponse, $response->getBody());
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks-updated',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
         $this->assertTrue($response->isSuccess());
@@ -241,44 +242,44 @@ final class RegistryTest extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                url: "https://$this->domain/admin/api/unstable/graphql.json",
-                method: "POST",
-                body: $this->checkQuery,
-                userAgent: "Shopify Admin API Library for PHP v",
-                headers: ['X-Shopify-Access-Token: real_token'],
                 response: $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-            ),
-            new MockRequest(
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->registerAddQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
-            ),
-            new MockRequest(
-                url: "https://$this->domain/admin/api/unstable/graphql.json",
-                method: "POST",
                 body: $this->checkQuery,
+            ),
+            new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
+                url: "https://$this->domain/admin/api/unstable/graphql.json",
+                method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->registerAddQuery,
+            ),
+            new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->checkResponseExisting),
+                url: "https://$this->domain/admin/api/unstable/graphql.json",
+                method: "POST",
+                userAgent: "Shopify Admin API Library for PHP v",
+                headers: ['X-Shopify-Access-Token: real_token'],
+                body: $this->checkQuery,
             ),
         ]);
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
         $this->assertTrue($response->isSuccess());
         $this->assertEquals($this->registerAddResponse, $response->getBody());
 
         $response = Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
         $this->assertTrue($response->isSuccess());
@@ -292,9 +293,9 @@ final class RegistryTest extends BaseTestCase
         $this->expectException(InvalidArgumentException::class);
 
         Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
             deliveryMethod: Registry::DELIVERY_METHOD_EVENT_BRIDGE,
         );
@@ -305,9 +306,9 @@ final class RegistryTest extends BaseTestCase
         $this->expectException(InvalidArgumentException::class);
 
         Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
             deliveryMethod: 'NOT_A_REAL_METHOD',
         );
@@ -317,21 +318,21 @@ final class RegistryTest extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(403),
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->checkQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(403),
+                body: $this->checkQuery,
             ),
         ]);
 
         $this->expectException(WebhookRegistrationException::class);
 
         Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
     }
@@ -340,29 +341,29 @@ final class RegistryTest extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
+                response: $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->checkQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
+                body: $this->checkQuery,
             ),
             new MockRequest(
+                response: $this->buildMockHttpResponse(403),
                 url: "https://$this->domain/admin/api/unstable/graphql.json",
                 method: "POST",
-                body: $this->registerAddQuery,
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                response: $this->buildMockHttpResponse(403),
+                body: $this->registerAddQuery,
             ),
         ]);
 
         $this->expectException(WebhookRegistrationException::class);
 
         Registry::register(
-            shop: $this->domain,
-            topic: Topics::APP_UNINSTALLED,
             path: '/test-webhooks',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
             accessToken: 'real_token',
         );
     }
@@ -390,7 +391,7 @@ final class RegistryTest extends BaseTestCase
         $handler = $this->getMockHandler();
         $handler->expects($this->once())
             ->method('handle')
-            ->willThrowException(new \Exception('Something went wrong in the handler'));
+            ->willThrowException(new Exception('Something went wrong in the handler'));
 
         Registry::addHandler(Topics::PRODUCTS_UPDATE, $handler);
 

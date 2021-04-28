@@ -18,42 +18,42 @@ final class AccessTokenOnlineUserInfo
     ) {
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    public function getLastName()
+    public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function isEmailVerified()
+    public function isEmailVerified(): bool
     {
         return $this->emailVerified;
     }
 
-    public function isAccountOwner()
+    public function isAccountOwner(): bool
     {
         return $this->accountOwner;
     }
 
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    public function isCollaborator()
+    public function isCollaborator(): bool
     {
         return $this->collaborator;
     }

@@ -6,11 +6,11 @@ namespace ShopifyTest;
 
 use DateTime;
 use Firebase\JWT\JWT;
+use Shopify\Context;
+use Shopify\Utils;
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
-use Shopify\Context;
 use Shopify\Exception\SessionNotFoundException;
-use Shopify\Utils;
 use ShopifyTest\Clients\MockRequest;
 
 final class UtilsTest extends BaseTestCase

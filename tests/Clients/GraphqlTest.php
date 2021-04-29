@@ -72,14 +72,14 @@ final class GraphqlTest extends BaseTestCase
 
     public function testPublicAppThrowsWithoutToken()
     {
-        $this->expectException('\Shopify\Exception\MissingArgumentException');
+        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         new Graphql('domain.myshopify.com');
     }
 
     public function testThrowsIfQueryMissing()
     {
         $client = new Graphql('domain.myshopify.com', 'token');
-        $this->expectException('\Shopify\Exception\MissingArgumentException');
+        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $client->query(data: '');
     }
 

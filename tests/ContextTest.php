@@ -55,7 +55,7 @@ final class ContextTest extends BaseTestCase
 
     public function testThrowsIfMissingArguments()
     {
-        $this->expectException('\Shopify\Exception\MissingArgumentException');
+        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage(
             'Cannot initialize Shopify API Library. Missing values for: apiKey, apiSecretKey, scopes, hostName'
         );
@@ -77,7 +77,7 @@ final class ContextTest extends BaseTestCase
         $reflectedIsInitialized->setAccessible(true);
         $reflectedIsInitialized->setValue(false);
 
-        $this->expectException('\Shopify\Exception\UninitializedContextException');
+        $this->expectException(\Shopify\Exception\UninitializedContextException::class);
         Context::throwIfUninitialized();
     }
 
@@ -91,7 +91,7 @@ final class ContextTest extends BaseTestCase
             sessionStorage: new MockSessionStorage(),
             isPrivateApp: true,
         );
-        $this->expectException('\Shopify\Exception\PrivateAppException');
+        $this->expectException(\Shopify\Exception\PrivateAppException::class);
         $this->expectExceptionMessage('BOOOOOO');
         Context::throwIfPrivateApp('BOOOOOO');
     }

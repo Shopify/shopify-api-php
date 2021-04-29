@@ -255,7 +255,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $this->expectException('\Shopify\Exception\HttpRequestException');
+        $this->expectException(\Shopify\Exception\HttpRequestException::class);
         $client->get(path: 'test/path');
     }
 

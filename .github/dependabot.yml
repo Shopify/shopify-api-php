@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "00:00"
+      timezone: "UTC"
+    reviewers:
+      - Shopify/core-build-learn
+    labels:
+      - "Composer upgrades"
+    open-pull-requests-limit: 100
+    registries: '*'

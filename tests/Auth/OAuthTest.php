@@ -13,7 +13,6 @@ use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\InvalidOAuthException;
 use Shopify\Exception\MissingArgumentException;
-use Shopify\Exception\OAuthCookieNotFoundException;
 use Shopify\Exception\OAuthSessionNotFoundException;
 use Shopify\Exception\PrivateAppException;
 use Shopify\Exception\SessionStorageException;
@@ -115,10 +114,8 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $this->expectException(OAuthCookieNotFoundException::class);
-        $this->expectExceptionMessage(
-            'Could not find the OAuth cookie to complete the callback'
-        );
+        $this->expectException(\Shopify\Exception\CookieNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the current session id in the cookies');
         OAuth::callback([], []);
     }
 
@@ -460,8 +457,8 @@ final class OAuthTest extends BaseTestCase
     public function testGetCurrentSessionIdRaisesCookieNotFoundException()
     {
         Context::$IS_EMBEDDED_APP = false;
-        $this->expectException(OAuthCookieNotFoundException::class);
-        $this->expectExceptionMessage('Could not find the OAuth cookie to retrieve the session ID');
+        $this->expectException(\Shopify\Exception\CookieNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the current session id in the cookies');
 
         OAuth::getCurrentSessionId([], [], true);
     }

@@ -14,5 +14,6 @@ You can follow our getting started guide to learn how to use this library's comp
 - [Make a GraphQL API call](usage/graphql.md)
 - [Make a Storefront API call](usage/storefront.md)
 - [Webhooks](usage/webhooks.md)
+- [Utilities](usage/utils.md)
 - [Known issues and caveats](issues.md)
   - [Notes on session handling](issues.md#notes-on-session-handling)

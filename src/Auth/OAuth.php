@@ -8,11 +8,11 @@ use Shopify\Clients\Http;
 use Shopify\Clients\HttpHeaders;
 use Shopify\Clients\HttpResponse;
 use Shopify\Context;
+use Shopify\Exception\CookieNotFoundException;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\InvalidOAuthException;
 use Shopify\Exception\MissingArgumentException;
-use Shopify\Exception\OAuthCookieNotFoundException;
 use Shopify\Exception\OAuthSessionNotFoundException;
 use Shopify\Exception\SessionStorageException;
 use Shopify\Utils;
@@ -222,7 +222,7 @@ class OAuth
      *
      * @return string The ID of the current session
      * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\OAuthCookieNotFoundException
+     * @throws \Shopify\Exception\CookieNotFoundException
      */
     public static function getCurrentSessionId(array $rawHeaders, array $cookies, bool $isOnline): string
     {
@@ -251,7 +251,7 @@ class OAuth
             }
         } else {
             if (!$cookies) {
-                throw new OAuthCookieNotFoundException('Could not find the OAuth cookie to retrieve the session ID');
+                throw new CookieNotFoundException('Could not find the current session id in the cookies');
             }
             $currentSessionId = self::getCookieSessionId($cookies);
         }
@@ -260,18 +260,18 @@ class OAuth
     }
 
     /**
-     * Fetches the OAuth session ID from the given cookies.
+     * Fetches the current session ID from the given cookies.
      *
      * @param array $cookies The $cookies param from `callback`
      *
      * @return string The ID of the current session
-     * @throws \Shopify\Exception\OAuthCookieNotFoundException
+     * @throws \Shopify\Exception\CookieNotFoundException
      */
     private static function getCookieSessionId(array $cookies): string
     {
         $sessionId = $cookies[self::SESSION_ID_COOKIE_NAME] ?? null;
         if (!$sessionId) {
-            throw new OAuthCookieNotFoundException("Could not find the OAuth cookie to complete the callback");
+            throw new CookieNotFoundException("Could not find the current session id in the cookies");
         }
 
         return (string)$sessionId;

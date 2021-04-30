@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Shopify;
 
+use Shopify\Context;
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
+use Shopify\Clients\Graphql;
+use Shopify\Clients\HttpResponse;
 use Shopify\Exception\InvalidArgumentException;
+use Shopify\Exception\SessionNotFoundException;
 use Firebase\JWT\JWT;
 
 /**
@@ -126,15 +130,16 @@ final class Utils
         return $session;
     }
 
-    /** Loads the current user's session based on the given headers and cookies.
+    /**
+     * Loads the current user's session based on the given headers and cookies.
      *
-     * @param array $rawHeaders the headers from the HTTP request
-     * @param array $cookies    the cookies from the HTTP response
-     * @param bool  $isOnline   whether to load online or offline sessions
+     * @param array $rawHeaders The headers from the HTTP request
+     * @param array $cookies    The cookies from the HTTP request
+     * @param bool  $isOnline   Whether to load online or offline sessions
      *
-     * @return Session|null returns the session or null if the session can't be found
+     * @return Session|null The session or null if the session can't be found
+     * @throws \Shopify\Exception\CookieNotFoundException
      * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\OAuthCookieNotFoundException
      */
     public static function loadCurrentSession(array $rawHeaders, array $cookies, bool $isOnline): ?Session
     {
@@ -146,13 +151,39 @@ final class Utils
     /**
      * Decodes the given session token and extracts the session information from it
      *
-     * @param string $jwt a compact JSON web token in the form of xxxx.yyyy.zzzz
+     * @param string $jwt A compact JSON web token in the form of xxxx.yyyy.zzzz
      *
-     * @return array the decoded payload which contains claims about the entity
+     * @return array The decoded payload which contains claims about the entity
      */
     public static function decodeSessionToken(string $jwt): array
     {
         $payload = JWT::decode($jwt, Context::$API_SECRET_KEY, array('HS256'));
         return (array) $payload;
+    }
+
+    /**
+     * Forwards the GraphQL query in the HTTP request to Shopify, returning the response.
+     *
+     * @param array  $rawHeaders The headers from the HTTP request
+     * @param array  $cookies    The cookies from the HTTP request
+     * @param string $rawBody    The raw HTTP request payload
+     *
+     * @return HttpResponse
+     * @throws \Shopify\Exception\CookieNotFoundException
+     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws \Shopify\Exception\SessionNotFoundException
+     */
+    public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody): HttpResponse
+    {
+        $session = self::loadCurrentSession($rawHeaders, $cookies, isOnline: true);
+        if (!$session) {
+            throw new SessionNotFoundException("Could not find session for GraphQL proxy");
+        }
+
+        $client = new Graphql($session->getShop(), $session->getAccessToken());
+
+        // If the body is not JSON, we forward it as a string
+        $parsedBody = json_decode($rawBody, true) ?: $rawBody;
+        return $client->query(data: $parsedBody);
     }
 }

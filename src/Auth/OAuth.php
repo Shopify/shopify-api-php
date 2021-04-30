@@ -24,7 +24,7 @@ use Ramsey\Uuid\Uuid;
 class OAuth
 {
     public const SESSION_ID_COOKIE_NAME = 'shopify_session_id';
-    public const ACCESS_TOKEN_POST_PATH = 'admin/oauth/access_token';
+    public const ACCESS_TOKEN_POST_PATH = '/admin/oauth/access_token';
 
     /**
      * Initializes a session and cookie for the OAuth process, and returns the authorization url

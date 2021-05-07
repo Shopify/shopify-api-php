@@ -373,6 +373,7 @@ final class OAuthTest extends BaseTestCase
     public function testBeginThrowsOnEmptyShop()
     {
         $this->expectexception(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid shop domain: shopname.shop.ca');
         OAuth::begin('shopname.shop.ca', '/redirect', true);
     }
 

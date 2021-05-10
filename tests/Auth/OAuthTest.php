@@ -11,6 +11,7 @@ use Shopify\Auth\AccessTokenOnlineUserInfo;
 use Shopify\Context;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
+use Shopify\Exception\InvalidArgumentException;
 use Shopify\Exception\InvalidOAuthException;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\OAuthSessionNotFoundException;
@@ -367,6 +368,13 @@ final class OAuthTest extends BaseTestCase
 
         $this->expectexception(PrivateAppException::class);
         OAuth::begin('shopname', '/redirect', true);
+    }
+
+    public function testBeginThrowsOnEmptyShop()
+    {
+        $this->expectexception(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid shop domain: shopname.shop.ca');
+        OAuth::begin('shopname.shop.ca', '/redirect', true);
     }
 
     public function testBeginFunctionReturnsProperUrlForOfflineAccess()

@@ -11,6 +11,7 @@ use Shopify\Context;
 use Shopify\Exception\CookieNotFoundException;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
+use Shopify\Exception\InvalidArgumentException;
 use Shopify\Exception\InvalidOAuthException;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\OAuthSessionNotFoundException;
@@ -24,7 +25,7 @@ use Ramsey\Uuid\Uuid;
 class OAuth
 {
     public const SESSION_ID_COOKIE_NAME = 'shopify_session_id';
-    public const ACCESS_TOKEN_POST_PATH = 'admin/oauth/access_token';
+    public const ACCESS_TOKEN_POST_PATH = '/admin/oauth/access_token';
 
     /**
      * Initializes a session and cookie for the OAuth process, and returns the authorization url
@@ -49,12 +50,16 @@ class OAuth
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp("OAuth is not allowed for private apps");
 
-        $shop = Utils::sanitizeShopDomain($shop);
+        $sanitizedShop = Utils::sanitizeShopDomain($shop);
+
+        if (!isset($sanitizedShop)) {
+            throw new InvalidArgumentException("Invalid shop domain: $shop");
+        }
 
         $redirectPath = trim(strtolower($redirectPath));
         $redirectPath = ($redirectPath[0] == '/') ? $redirectPath : '/' . $redirectPath;
 
-        $mySessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($shop);
+        $mySessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($sanitizedShop);
 
         $cookie = new OAuthCookie(
             name: self::SESSION_ID_COOKIE_NAME,
@@ -87,7 +92,7 @@ class OAuth
 
         $session = new Session(
             id: $mySessionId,
-            shop: $shop,
+            shop: $sanitizedShop,
             isOnline: $isOnline,
             state: Uuid::uuid4()->toString()
         );
@@ -115,7 +120,7 @@ class OAuth
             'grant_options[]' => $grantOptions,
         ];
 
-        return "https://{$shop}/admin/oauth/authorize?" . http_build_query($query);
+        return "https://{$sanitizedShop}/admin/oauth/authorize?" . http_build_query($query);
     }
 
     /**

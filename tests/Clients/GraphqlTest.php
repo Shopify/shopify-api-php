@@ -190,4 +190,41 @@ final class GraphqlTest extends BaseTestCase
             new HttpResponseMatcher(decodedBody: json_decode($this->querySuccessResponse, true))
         );
     }
+
+    public function testProxyForwardsBodyAsJsonType()
+    {
+        $queryToProxy = <<<QUERY
+        {
+          "variables": {},
+          "query": "{\nshop {\n    name\n    __typename\n  }\n}"
+        }
+        QUERY;
+
+        $extraHeaders = ['Extra-Extra' => 'hear_all_about_it'];
+        $client = new Graphql($this->domain, 'token');
+
+        $this->mockTransportRequests(
+            [
+                new MockRequest(
+                    response: $this->buildMockHttpResponse(200, json_decode($this->querySuccessResponse, true)),
+                    url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
+                    method: 'POST',
+                    userAgent: "Shopify Admin API Library for PHP v$this->version",
+                    headers: [
+                                  'Content-Type: application/json',
+                                  'Content-Length: ' . strlen($queryToProxy),
+                                  'Extra-Extra: hear_all_about_it',
+                                  'X-Shopify-Access-Token: token'
+                              ],
+                    body: $queryToProxy
+                )
+            ]
+        );
+
+        $response = $client->proxy(data: $queryToProxy, extraHeaders: $extraHeaders);
+        $this->assertThat(
+            $response,
+            new HttpResponseMatcher(decodedBody: json_decode($this->querySuccessResponse, true))
+        );
+    }
 }

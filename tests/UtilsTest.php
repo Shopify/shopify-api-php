@@ -275,7 +275,7 @@ final class UtilsTest extends BaseTestCase
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 method: 'POST',
                 headers: [
-                    'Content-Type: application/graphql',
+                    'Content-Type: application/json',
                     'Content-Length: ' . strlen($this->testGraphqlQuery),
                     'X-Shopify-Access-Token: token',
                 ],
@@ -312,7 +312,7 @@ final class UtilsTest extends BaseTestCase
                 url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 method: 'POST',
                 headers: [
-                    'Content-Type: application/graphql',
+                    'Content-Type: application/json',
                     'Content-Length: ' . strlen($this->testGraphqlQuery),
                     'X-Shopify-Access-Token: token',
                 ],

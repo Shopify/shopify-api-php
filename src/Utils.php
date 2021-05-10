@@ -169,9 +169,11 @@ final class Utils
      * @param string $rawBody    The raw HTTP request payload
      *
      * @return HttpResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Shopify\Exception\CookieNotFoundException
      * @throws \Shopify\Exception\MissingArgumentException
      * @throws \Shopify\Exception\SessionNotFoundException
+     * @throws \Shopify\Exception\UninitializedContextException
      */
     public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody): HttpResponse
     {
@@ -182,8 +184,6 @@ final class Utils
 
         $client = new Graphql($session->getShop(), $session->getAccessToken());
 
-        // If the body is not JSON, we forward it as a string
-        $parsedBody = json_decode($rawBody, true) ?: $rawBody;
-        return $client->query(data: $parsedBody);
+        return $client->proxy(data: $rawBody);
     }
 }

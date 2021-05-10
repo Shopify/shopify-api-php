@@ -34,7 +34,7 @@ class Graphql
      *
      * @param string|array   $data         Query to be posted to endpoint
      * @param array          $query        Parameters on a query to be added to the URL
-     * @param array         &$extraHeaders Any extra headers to send along with the request
+     * @param array          $extraHeaders Any extra headers to send along with the request
      * @param int|null       $tries        How many times to attempt the request
      *
      * @return HttpResponse
@@ -44,7 +44,7 @@ class Graphql
     public function query(
         string | array $data,
         array $query = [],
-        array &$extraHeaders = [],
+        array $extraHeaders = [],
         ?int $tries = null
     ): HttpResponse {
         if (empty($data)) {
@@ -68,6 +68,40 @@ class Graphql
             headers: $extraHeaders,
             tries: $tries,
             query: $query,
+        );
+    }
+
+    /**
+     * Proxy string query to this client's domain.
+     *
+     * @param string   $data         Query to be posted to endpoint
+     * @param array    $extraHeaders Any extra headers to send along with the request
+     * @param int|null $tries        How many times to attempt the request
+     *
+     * @return \Shopify\Clients\HttpResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws \Shopify\Exception\UninitializedContextException
+     */
+    public function proxy(
+        string $data,
+        array $extraHeaders = [],
+        ?int $tries = null
+    ): HttpResponse {
+        if (empty($data)) {
+            throw new MissingArgumentException('Query missing');
+        }
+
+        list($accessTokenHeader, $accessToken) = $this->getAccessTokenHeader();
+        $extraHeaders[$accessTokenHeader] = $accessToken;
+
+        return $this->client->post(
+            path: $this->getApiPath(),
+            body: $data,
+            dataType: Http::DATA_TYPE_JSON,
+            headers: $extraHeaders,
+            tries: $tries,
+            query: [],
         );
     }
 

@@ -47,7 +47,7 @@ class HttpRequestMatcher extends Constraint
 
     private function matchUserAgent(RequestInterface $request): bool
     {
-        return preg_match($this->userAgent, $request->getHeaderLine('user-agent')) !== false;
+        return preg_match($this->userAgent, $request->getHeaderLine('user-agent')) != false;
     }
 
     private function matchBody(): bool

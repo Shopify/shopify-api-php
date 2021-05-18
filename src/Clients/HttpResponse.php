@@ -42,6 +42,7 @@ class HttpResponse extends Response
      */
     public function getDecodedBody(): array|string|null
     {
+        $this->getBody()->rewind();
         $responseBody = $this->getBody()->getContents();
         return $responseBody
             ? json_decode(json: $responseBody, associative: true, flags: JSON_THROW_ON_ERROR)

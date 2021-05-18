@@ -8,7 +8,6 @@ use Psr\Http\Message\RequestInterface;
 class HttpRequestMatcher extends Constraint
 {
 
-    private string $actualBody;
 
     /**
      * HttpRequestMatcher constructor.
@@ -35,11 +34,10 @@ class HttpRequestMatcher extends Constraint
         if (!($other instanceof RequestInterface)) {
             return false;
         }
-        $this->actualBody = $this->actualBody ?? $other->getBody()->getContents();
         return
             ($other->getUri() == $this->url)
             && ($other->getMethod() === $this->method)
-            && $this->matchBody()
+            && $this->matchBody($other)
             && $this->matchHeadersWithoutUserAgent($other)
             && $this->matchUserAgent($other);
     }
@@ -50,9 +48,10 @@ class HttpRequestMatcher extends Constraint
         return preg_match($this->userAgent, $request->getHeaderLine('user-agent')) != false;
     }
 
-    private function matchBody(): bool
+    private function matchBody(RequestInterface $request): bool
     {
-        return $this->body === $this->actualBody;
+        $request->getBody()->rewind();
+        return $this->body === $request->getBody()->getContents();
     }
 
     private function matchHeadersWithoutUserAgent(RequestInterface $request): bool
@@ -86,8 +85,9 @@ class HttpRequestMatcher extends Constraint
         if ($other->getMethod() !== $this->method) {
             $diff[] = $this->diffLine("Method", $this->method, $other->getMethod());
         }
-        if (!$this->matchBody()) {
-            $diff[] = $this->diffLine("Body", $this->body, $this->actualBody);
+        if (!$this->matchBody($other)) {
+            $other->getBody()->rewind();
+            $diff[] = $this->diffLine("Body", $this->body, $other->getBody()->getContents());
         }
 
         if (!$this->matchUserAgent($other)) {

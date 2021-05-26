@@ -75,7 +75,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->httpCheckQuery,
             ),
             new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
@@ -91,7 +91,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->httpCheckQuery,
             ),
             new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerUpdateResponse),
@@ -131,7 +131,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->eventBridgeCheckQuery,
             ),
             new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerAddEventBridgeResponse),
@@ -147,7 +147,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->eventBridgeCheckQuery,
             ),
             new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerUpdateEventBridgeResponse),
@@ -178,6 +178,66 @@ final class RegistryTest extends BaseTestCase
         );
         $this->assertTrue($response->isSuccess());
         $this->assertEquals($this->registerUpdateEventBridgeResponse, $response->getBody());
+    }
+
+    public function testCanRegisterAndUpdatePubSubWebhook()
+    {
+        $this->mockTransportRequests(
+            [
+                new MockRequest(
+                    response: $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
+                    url: "https://$this->domain/admin/api/unstable/graphql.json",
+                    method: "POST",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: real_token'],
+                    body: $this->pubSubCheckQuery,
+                ),
+                new MockRequest(
+                    response: $this->buildMockHttpResponse(200, $this->registerPubSubResponse),
+                    url: "https://$this->domain/admin/api/unstable/graphql.json",
+                    method: "POST",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: real_token'],
+                    body: $this->registerPubSubQuery,
+                ),
+                new MockRequest(
+                    response: $this->buildMockHttpResponse(200, $this->pubSubWebhookCheckResponse),
+                    url: "https://$this->domain/admin/api/unstable/graphql.json",
+                    method: "POST",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: real_token'],
+                    body: $this->pubSubCheckQuery,
+                ),
+                new MockRequest(
+                    response: $this->buildMockHttpResponse(200, $this->registerUpdatePubSubResponse),
+                    url: "https://$this->domain/admin/api/unstable/graphql.json",
+                    method: "POST",
+                    userAgent: "Shopify Admin API Library for PHP v",
+                    headers: ['X-Shopify-Access-Token: real_token'],
+                    body: $this->registerUpdatePubSubQuery,
+                ),
+            ]
+        );
+
+        $response = Registry::register(
+            path: 'pubsub://my-project-id:my-topic-id',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
+            accessToken: 'real_token',
+            deliveryMethod: Registry::DELIVERY_METHOD_PUB_SUB,
+        );
+        $this->assertTrue($response->isSuccess());
+        $this->assertEquals($this->registerPubSubResponse, $response->getBody());
+
+        $response = Registry::register(
+            path: 'pubsub://my-project-id:my-topic-id-updated',
+            topic: Topics::APP_UNINSTALLED,
+            shop: $this->domain,
+            accessToken: 'real_token',
+            deliveryMethod: Registry::DELIVERY_METHOD_PUB_SUB,
+        );
+        $this->assertTrue($response->isSuccess());
+        $this->assertEquals($this->registerUpdatePubSubResponse, $response->getBody());
     }
 
     public function testCanRegisterAndUpdateLegacyWebhook()
@@ -247,7 +307,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->httpCheckQuery,
             ),
             new MockRequest(
                 response: $this->buildMockHttpResponse(200, $this->registerAddResponse),
@@ -263,7 +323,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->httpCheckQuery,
             ),
         ]);
 
@@ -323,7 +383,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->httpCheckQuery,
             ),
         ]);
 
@@ -346,7 +406,7 @@ final class RegistryTest extends BaseTestCase
                 method: "POST",
                 userAgent: "Shopify Admin API Library for PHP v",
                 headers: ['X-Shopify-Access-Token: real_token'],
-                body: $this->checkQuery,
+                body: $this->httpCheckQuery,
             ),
             new MockRequest(
                 response: $this->buildMockHttpResponse(403),
@@ -468,7 +528,7 @@ final class RegistryTest extends BaseTestCase
         return $this->createMock(Handler::class);
     }
 
-    private string $checkQuery = <<<QUERY
+    private string $httpCheckQuery = <<<QUERY
     {
         webhookSubscriptions(first: 1, topics: APP_UNINSTALLED) {
             edges {
@@ -479,8 +539,42 @@ final class RegistryTest extends BaseTestCase
                         ... on WebhookHttpEndpoint {
                             callbackUrl
                         }
+                    }
+                }
+            }
+        }
+    }
+    QUERY;
+
+    private string $eventBridgeCheckQuery = <<<QUERY
+    {
+        webhookSubscriptions(first: 1, topics: APP_UNINSTALLED) {
+            edges {
+                node {
+                    id
+                    endpoint {
+                        __typename
                         ... on WebhookEventBridgeEndpoint {
                             arn
+                        }
+                    }
+                }
+            }
+        }
+    }
+    QUERY;
+
+    private string $pubSubCheckQuery = <<<QUERY
+    {
+        webhookSubscriptions(first: 1, topics: APP_UNINSTALLED) {
+            edges {
+                node {
+                    id
+                    endpoint {
+                        __typename
+                        ... on WebhookPubSubEndpoint {
+                            pubSubProject
+                            pubSubTopic
                         }
                     }
                 }
@@ -674,6 +768,79 @@ final class RegistryTest extends BaseTestCase
             ],
         ],
     ];
+
+    // phpcs:disable
+    private string $registerPubSubQuery = <<<QUERY
+    mutation webhookSubscription {
+        pubSubWebhookSubscriptionCreate(topic: APP_UNINSTALLED, webhookSubscription: {pubSubProject: "my-project-id", pubSubTopic: "my-topic-id"}) {
+            userErrors {
+                field
+                message
+            }
+            webhookSubscription {
+                id
+            }
+        }
+    }
+    QUERY;
+    // phpcs:enable
+
+    private array $registerPubSubResponse = [
+        'data' => [
+            'pubSubWebhookSubscriptionCreate' => [
+                "userErrors" => [],
+                "webhookSubscription" => [
+                    "id" => "webhook_1",
+                ],
+            ],
+        ],
+    ];
+
+    private array $pubSubWebhookCheckResponse = [
+        'data' => [
+            'webhookSubscriptions' => [
+                'edges' => [
+                    [
+                        'node' => [
+                            'id' => 'test_webhook_1',
+                            'endpoint' => [
+                                '__typename' => 'WebhookPubSubEndpoint',
+                                'pubSubProject' => 'my-project-id',
+                                'pubSubTopic' => 'my-topic-id',
+                            ],
+                        ],
+                    ]
+                ],
+            ],
+        ],
+    ];
+
+    private array $registerUpdatePubSubResponse = [
+        'data' => [
+            'pubSubWebhookSubscriptionUpdate' => [
+                "userErrors" => [],
+                "webhookSubscription" => [
+                    "id" => "webhook_1",
+                ],
+            ],
+        ],
+    ];
+
+    // phpcs:disable
+    private string $registerUpdatePubSubQuery = <<<QUERY
+    mutation webhookSubscription {
+        pubSubWebhookSubscriptionUpdate(id: "test_webhook_1", webhookSubscription: {pubSubProject: "my-project-id", pubSubTopic: "my-topic-id-updated"}) {
+            userErrors {
+                field
+                message
+            }
+            webhookSubscription {
+                id
+            }
+        }
+    }
+    QUERY;
+    // phpcs:enable
 
     private array $processHeaders = [
         HttpHeaders::X_SHOPIFY_HMAC => '/Redz4YXHLnSmmSN8grr5/Jl/Ua3d7yX3iWbjb8R8wo=',

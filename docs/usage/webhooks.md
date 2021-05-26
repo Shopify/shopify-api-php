@@ -62,15 +62,23 @@ After your handlers are loaded, you need to register which topics you want your 
 
 In your OAuth callback action, you can use the `Shopify\Webhooks\Registry::register` method to subscribe to any topic allowed by your app's scopes. This method can safely be called multiple times for a shop, as it will update existing webhooks if necessary.
 
+### EventBridge and PubSub Webhooks
+
+You can also register webhooks for delivery to Amazon EventBridge or Google Cloud Pub/Sub. In this case the `path` argument to `Registry::register` needs to be of a specific form.
+
+For EventBridge, the `path` must be the [ARN of the partner event source](https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_EventSource.html).
+
+For Pub/Sub, the `path` must be of the form `pubsub://[PROJECT-ID]:[PUB-SUB-TOPIC-ID]`.  For example, if you created a topic with id `red` in the project `blue`, then the value of `path` would be `pubsub://blue:red`.
+
 The parameters this method accepts are:
 
-| Parameter | Type | Required? | Default Value | Notes |
-| --- | --- | :---: | :---: | --- |
-| `path` | `string` | Yes | - | The URL path for the callback. If using EventBridge, this is the full resource address. |
-| `topic` | `string` | Yes | - | The topic to subscribe to. May be a string or a value from the Topics class. |
-| `shop` | `string` | Yes | - | The shop to use for requests. |
-| `accessToken` | `string` | Yes | - | The access token to use for requests. |
-| `deliveryMethod` | `string` | No | `Registry::DELIVERY_METHOD_HTTP` | The delivery method for this webhook. |
+| Parameter        | Type     | Required? |          Default Value           | Notes                                                                        |
+|:-----------------|:---------|:---------:|:--------------------------------:|:-----------------------------------------------------------------------------|
+| `path`           | `string` |    Yes    |                -                 | The URL path for the callback for HTTP delivery, EventBridge or Pub/Sub URLs |
+| `topic`          | `string` |    Yes    |                -                 | The topic to subscribe to. May be a string or a value from the Topics class. |
+| `shop`           | `string` |    Yes    |                -                 | The shop to use for requests.                                                |
+| `accessToken`    | `string` |    Yes    |                -                 | The access token to use for requests.                                        |
+| `deliveryMethod` | `string` |    No     | `Registry::DELIVERY_METHOD_HTTP` | The delivery method for this webhook.                                        |
 
 This method will return a `RegisterResponse` object, which holds the following data:
 

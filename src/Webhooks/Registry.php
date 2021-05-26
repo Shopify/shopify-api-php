@@ -13,6 +13,9 @@ use Shopify\Exception\InvalidWebhookException;
 use Shopify\Exception\MissingWebhookHandlerException;
 use Shopify\Exception\WebhookRegistrationException;
 use Shopify\Utils;
+use Shopify\Webhooks\Delivery\EventBridge;
+use Shopify\Webhooks\Delivery\HttpDelivery;
+use Shopify\Webhooks\Delivery\PubSub;
 
 /**
  * Handles registering and processing webhook calls.
@@ -21,10 +24,7 @@ final class Registry
 {
     public const DELIVERY_METHOD_HTTP = 'http';
     public const DELIVERY_METHOD_EVENT_BRIDGE = 'eventbridge';
-    private static array $DELIVERY_METHODS = [
-        self::DELIVERY_METHOD_HTTP,
-        self::DELIVERY_METHOD_EVENT_BRIDGE,
-    ];
+    public const DELIVERY_METHOD_PUB_SUB = 'pubsub';
 
     /** @var Handler[] */
     private static array $REGISTRY = [];
@@ -75,17 +75,15 @@ final class Registry
         string $accessToken,
         ?string $deliveryMethod = self::DELIVERY_METHOD_HTTP,
     ): RegisterResponse {
-        if (!in_array($deliveryMethod, self::$DELIVERY_METHODS)) {
-            throw new InvalidArgumentException("Unrecognized delivery method '$deliveryMethod'");
-        }
 
-        if ($deliveryMethod === self::DELIVERY_METHOD_EVENT_BRIDGE && !self::isEventBridgeSupported()) {
-            throw new InvalidArgumentException(
-                "EventBridge webhooks are not supported in API version " . Context::$API_VERSION
-            );
-        }
+        $method = match ($deliveryMethod) {
+            self::DELIVERY_METHOD_EVENT_BRIDGE => new EventBridge(),
+            self::DELIVERY_METHOD_PUB_SUB => new PubSub(),
+            self::DELIVERY_METHOD_HTTP => new HttpDelivery(),
+            default => throw new InvalidArgumentException("Unrecognized delivery method '$deliveryMethod'"),
+        };
 
-        $callbackAddress = self::getCallbackAddress($deliveryMethod, $path);
+        $callbackAddress = $method->getCallbackAddress($path);
 
         // TODO Refactor this to use the GraphQL client once that's available
         $client = new Http(Utils::sanitizeShopDomain($shop));
@@ -94,7 +92,8 @@ final class Registry
             $client,
             $topic,
             $accessToken,
-            $callbackAddress
+            $callbackAddress,
+            $method
         );
 
         $registered = true;
@@ -104,11 +103,11 @@ final class Registry
                 $client,
                 $topic,
                 $callbackAddress,
-                $deliveryMethod,
+                $method,
                 $accessToken,
                 $webhookId
             );
-            $registered = self::isSuccess($body, $deliveryMethod, $webhookId);
+            $registered = $method->isSuccess($body, $webhookId);
         }
 
         return new RegisterResponse($registered, $body);
@@ -158,33 +157,18 @@ final class Registry
     }
 
     /**
-     * Builds the full address to be used for the webhook, depending on the delivery method.
-     *
-     * @param string $deliveryMethod
-     * @param string $path
-     *
-     * @return string
-     */
-    private static function getCallbackAddress(string $deliveryMethod, string $path): string
-    {
-        return ($deliveryMethod === self::DELIVERY_METHOD_EVENT_BRIDGE) ?
-            $path :
-            'https://' . Context::$HOST_NAME . '/' . ltrim($path, '/');
-    }
-
-    /**
      * Checks if Shopify already has a callback set for this webhook via a GraphQL check, and checks if we need to
      * update our subscription if one exists.
      *
-     * @param Http   $client
-     * @param string $topic
-     * @param string $accessToken
-     * @param string $callbackAddress
+     * @param Http                             $client
+     * @param string                           $topic
+     * @param string                           $accessToken
+     * @param string                           $callbackAddress
+     * @param \Shopify\Webhooks\DeliveryMethod $method
      *
      * @return array
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\InvalidArgumentException
      * @throws \Shopify\Exception\UninitializedContextException
      * @throws \Shopify\Exception\WebhookRegistrationException
      */
@@ -193,10 +177,11 @@ final class Registry
         string $topic,
         string $accessToken,
         string $callbackAddress,
+        DeliveryMethod $method
     ): array {
         $checkResponse = $client->post(
             path: 'admin/api/' . Context::$API_VERSION . '/graphql.json',
-            body: self::buildCheckQuery($topic),
+            body: $method->buildCheckQuery($topic),
             dataType: Http::DATA_TYPE_GRAPHQL,
             headers: ['X-Shopify-Access-Token' => $accessToken],
         );
@@ -213,25 +198,9 @@ final class Registry
             );
         }
 
-        $edges = $checkBody['data']['webhookSubscriptions']['edges'] ?? [];
+        list($webhookId, $currentAddress) = $method->parseCheckQueryResult($checkBody);
 
-        $mustRegister = true;
-        $webhookId = null;
-        if (count($edges ?? [])) {
-            $node = $edges[0]['node'];
-
-            $webhookId = (string)$node['id'];
-
-            if (array_key_exists('endpoint', $node)) {
-                $currentAddress = ($node['endpoint']['__typename'] === 'WebhookHttpEndpoint') ?
-                    $node['endpoint']['callbackUrl'] :
-                    $node['endpoint']['arn'];
-            } else {
-                $currentAddress = $node['callbackUrl'];
-            }
-
-            $mustRegister = ($currentAddress !== $callbackAddress);
-        }
+        $mustRegister = ($currentAddress !== $callbackAddress);
 
         return [$webhookId, $mustRegister];
     }
@@ -239,12 +208,12 @@ final class Registry
     /**
      * Creates or updates a webhook subscription in Shopify by firing the appropriate GraphQL query.
      *
-     * @param Http        $client
-     * @param string      $topic
-     * @param string      $callbackAddress
-     * @param string      $deliveryMethod
-     * @param string      $accessToken
-     * @param string|null $webhookId
+     * @param Http                             $client
+     * @param string                           $topic
+     * @param string                           $callbackAddress
+     * @param \Shopify\Webhooks\DeliveryMethod $deliveryMethod
+     * @param string                           $accessToken
+     * @param string|null                      $webhookId
      *
      * @return array
      *
@@ -256,13 +225,13 @@ final class Registry
         Http $client,
         string $topic,
         string $callbackAddress,
-        string $deliveryMethod,
+        DeliveryMethod $deliveryMethod,
         string $accessToken,
         ?string $webhookId,
     ): array {
         $registerResponse = $client->post(
             path: 'admin/api/' . Context::$API_VERSION . '/graphql.json',
-            body: self::buildRegisterQuery($topic, $callbackAddress, $deliveryMethod, $webhookId),
+            body: $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId),
             dataType: Http::DATA_TYPE_GRAPHQL,
             headers: ['X-Shopify-Access-Token' => $accessToken],
         );
@@ -279,140 +248,6 @@ final class Registry
         }
 
         return $body;
-    }
-
-    /**
-     * Determines whether the current API version is compatible with EventBridge webhooks.
-     *
-     * @return bool
-     *
-     * @throws \Shopify\Exception\InvalidArgumentException
-     */
-    private static function isEventBridgeSupported(): bool
-    {
-        return Utils::isApiVersionCompatible('2020-07');
-    }
-
-
-    /**
-     * Builds a GraphQL query to check whether this topic is already registered for the shop.
-     *
-     * @param string $topic
-     *
-     * @return string
-     * @throws \Shopify\Exception\InvalidArgumentException
-     */
-    private static function buildCheckQuery(string $topic): string
-    {
-        if (self::isEventBridgeSupported()) {
-            return <<<QUERY
-            {
-                webhookSubscriptions(first: 1, topics: $topic) {
-                    edges {
-                        node {
-                            id
-                            endpoint {
-                                __typename
-                                ... on WebhookHttpEndpoint {
-                                    callbackUrl
-                                }
-                                ... on WebhookEventBridgeEndpoint {
-                                    arn
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            QUERY;
-        } else {
-            return <<<LEGACY_QUERY
-            {
-                webhookSubscriptions(first: 1, topics: $topic) {
-                    edges {
-                        node {
-                            id
-                            callbackUrl
-                        }
-                    }
-                }
-            }
-            LEGACY_QUERY;
-        }
-    }
-
-    /**
-     * Assembles a GraphQL query for registering a webhook.
-     *
-     * @param string      $topic
-     * @param string      $callbackAddress
-     * @param string      $deliveryMethod
-     * @param string|null $webhookId
-     *
-     * @return string
-     */
-    private static function buildRegisterQuery(
-        string $topic,
-        string $callbackAddress,
-        string $deliveryMethod,
-        ?string $webhookId = null
-    ): string {
-        $mutationName = self::getMutationName($deliveryMethod, $webhookId);
-        $identifier = $webhookId ? "id: \"$webhookId\"" : "topic: $topic";
-        $webhookSubscriptionArgs = match ($deliveryMethod) {
-            self::DELIVERY_METHOD_HTTP => "{callbackUrl: \"$callbackAddress\"}",
-            self::DELIVERY_METHOD_EVENT_BRIDGE => "{arn: \"$callbackAddress\"}",
-        };
-
-        return <<<QUERY
-        mutation webhookSubscription {
-            $mutationName($identifier, webhookSubscription: $webhookSubscriptionArgs) {
-                userErrors {
-                    field
-                    message
-                }
-                webhookSubscription {
-                    id
-                }
-            }
-        }
-        QUERY;
-    }
-
-    /**
-     * Checks if the given result was successful.
-     *
-     * @param array       $result
-     * @param string      $deliveryMethod
-     * @param string|null $webhookId
-     *
-     * @return bool
-     */
-    private static function isSuccess(array $result, string $deliveryMethod, ?string $webhookId = null): bool
-    {
-        return !empty($result['data'][self::getMutationName($deliveryMethod, $webhookId)]['webhookSubscription']);
-    }
-
-    /**
-     * Builds the mutation name to be used depending on the delivery method and webhook id.
-     *
-     * @param string      $deliveryMethod
-     * @param string|null $webhookId
-     *
-     * @return string
-     */
-    private static function getMutationName(string $deliveryMethod, ?string $webhookId = null): string
-    {
-        return match (true) {
-            ($deliveryMethod === self::DELIVERY_METHOD_HTTP && !$webhookId) =>
-                'webhookSubscriptionCreate',
-            ($deliveryMethod === self::DELIVERY_METHOD_HTTP && $webhookId) =>
-                'webhookSubscriptionUpdate',
-            ($deliveryMethod === self::DELIVERY_METHOD_EVENT_BRIDGE && !$webhookId) =>
-                'eventBridgeWebhookSubscriptionCreate',
-            ($deliveryMethod === self::DELIVERY_METHOD_EVENT_BRIDGE && $webhookId) =>
-                'eventBridgeWebhookSubscriptionUpdate',
-        };
     }
 
     /**

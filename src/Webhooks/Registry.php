@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shopify\Webhooks;
 
 use Exception;
-use Shopify\Clients\Http;
+use Shopify\Clients\Graphql;
 use Shopify\Clients\HttpHeaders;
 use Shopify\Context;
 use Shopify\Exception\InvalidArgumentException;
@@ -85,13 +85,11 @@ final class Registry
 
         $callbackAddress = $method->getCallbackAddress($path);
 
-        // TODO Refactor this to use the GraphQL client once that's available
-        $client = new Http(Utils::sanitizeShopDomain($shop));
+        $client = new Graphql(Utils::sanitizeShopDomain($shop), $accessToken);
 
         list($webhookId, $mustRegister) = self::isWebhookRegistrationNeeded(
             $client,
             $topic,
-            $accessToken,
             $callbackAddress,
             $method
         );
@@ -104,7 +102,6 @@ final class Registry
                 $topic,
                 $callbackAddress,
                 $method,
-                $accessToken,
                 $webhookId
             );
             $registered = $method->isSuccess($body, $webhookId);
@@ -160,31 +157,24 @@ final class Registry
      * Checks if Shopify already has a callback set for this webhook via a GraphQL check, and checks if we need to
      * update our subscription if one exists.
      *
-     * @param Http                             $client
+     * @param \Shopify\Clients\Graphql         $client
      * @param string                           $topic
-     * @param string                           $accessToken
      * @param string                           $callbackAddress
      * @param \Shopify\Webhooks\DeliveryMethod $method
      *
      * @return array
      *
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Shopify\Exception\MissingArgumentException
      * @throws \Shopify\Exception\WebhookRegistrationException
      */
     private static function isWebhookRegistrationNeeded(
-        Http $client,
+        Graphql $client,
         string $topic,
-        string $accessToken,
         string $callbackAddress,
         DeliveryMethod $method
     ): array {
-        $checkResponse = $client->post(
-            path: 'admin/api/' . Context::$API_VERSION . '/graphql.json',
-            body: $method->buildCheckQuery($topic),
-            dataType: Http::DATA_TYPE_GRAPHQL,
-            headers: ['X-Shopify-Access-Token' => $accessToken],
-        );
+        $checkResponse = $client->query(data: $method->buildCheckQuery($topic));
 
         $checkStatusCode = $checkResponse->getStatusCode();
         $checkBody = $checkResponse->getDecodedBody();
@@ -208,32 +198,27 @@ final class Registry
     /**
      * Creates or updates a webhook subscription in Shopify by firing the appropriate GraphQL query.
      *
-     * @param Http                             $client
+     * @param \Shopify\Clients\Graphql         $client
      * @param string                           $topic
      * @param string                           $callbackAddress
      * @param \Shopify\Webhooks\DeliveryMethod $deliveryMethod
-     * @param string                           $accessToken
      * @param string|null                      $webhookId
      *
      * @return array
      *
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Shopify\Exception\MissingArgumentException
      * @throws \Shopify\Exception\WebhookRegistrationException
      */
     private static function sendRegisterRequest(
-        Http $client,
+        Graphql $client,
         string $topic,
         string $callbackAddress,
         DeliveryMethod $deliveryMethod,
-        string $accessToken,
         ?string $webhookId,
     ): array {
-        $registerResponse = $client->post(
-            path: 'admin/api/' . Context::$API_VERSION . '/graphql.json',
-            body: $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId),
-            dataType: Http::DATA_TYPE_GRAPHQL,
-            headers: ['X-Shopify-Access-Token' => $accessToken],
+        $registerResponse = $client->query(
+            data: $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId),
         );
 
         $statusCode = $registerResponse->getStatusCode();

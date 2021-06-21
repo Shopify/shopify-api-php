@@ -6,12 +6,12 @@ Once you've implemented these actions in your app, please make sure to read our 
 
 ## Begin OAuth
 
-Create a route for starting the OAuth method such as `/login`. In this route, the `Shopify\Auth\OAuth::begin` method will be used. The method takes in a Shopify shop domain or hostname (_string_), the redirect path (_string_), and whether or not you are requesting [online access](https://shopify.dev/concepts/about-apis/authentication#api-access-modes) (_boolean_). The last parameter is optional and is an override function to set cookies. The `begin` method returns a URL that will be used for redirecting the user to the Shopify Authentication screen.
+Create a route for starting the OAuth method such as `/login`. In this route, the `Shopify\Auth\OAuth::begin` method will be used. The `begin` method returns a URL that will be used for redirecting the user to the Shopify Authentication screen. It takes in the following arguments:
 
 | Parameter | Type | Required? | Default Value | Notes |
 | --- | --- | :---: | :---: | --- |
 | `shop` | `string` | Yes | - | A Shopify domain name or hostname that will be converted to the form `exampleshop.myshopify.com`. |
-| `redirectPath` | `string` | Yes | - | The redirect path used for callback with an optional leading `/` (e.g. both `auth/callback` and `/auth/callback` are acceptable). The route should be whitelisted under the app settings. |
+| `redirectPath` | `string` | Yes | - | The redirect path used for callback with an optional leading `/` (e.g. both `auth/callback` and `/auth/callback` are acceptable). The route should be allowed under the app settings. |
 | `isOnline` | `bool` | Yes | - | `true` if the session is online and `false` otherwise. |
 | `setCookieFunction` | `callable` | No | - | An override function to set cookies in the HTTP request. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work for your chosen framework, a function that sets cookies can be passed in. |
 

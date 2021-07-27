@@ -95,10 +95,10 @@ function oauthCallbackAction()
     $session = OAuth::callback( ... );
 
     $response = Shopify\Webhooks\Registry::register(
-        path: '/shopify/webhooks',
-        topic: Shopify\Webhooks\Topics::APP_UNINSTALLED,
-        shop: $session->getShop(),
-        accessToken: $session->getAccessToken(),
+        '/shopify/webhooks',
+        Shopify\Webhooks\Topics::APP_UNINSTALLED,
+        $session->getShop(),
+        $session->getAccessToken(),
     );
 
     if ($response->isSuccess()) {

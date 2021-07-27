@@ -10,8 +10,8 @@ $client = new \Shopify\Clients\Rest($session->getShop(), $session->getAccessToke
 
 // Create a new access token
 $storefrontTokenResponse = $client->post(
-    path: 'storefront_access_tokens',
-    body: [
+    'storefront_access_tokens',
+    [
         "storefront_access_token" => [
             "title" => "This is my test access token",
         ]
@@ -37,7 +37,7 @@ $storefrontClient = new \Shopify\Clients\Storefront($shop, $storefrontAccessToke
 
 // Call query and pass your query as `data`
 $products = $storefrontClient->query(
-    data: <<<QUERY
+    <<<QUERY
     {
         products (first: 10) {
             edges {

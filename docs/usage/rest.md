@@ -46,7 +46,7 @@ To get the next page.
 
 ```php
 $pageInfo = unserialize($serializedPageInfo);
-$result = $client->get(path: 'products', query: $pageInfo->getNextPageQuery());
+$result = $client->get('products', [], $pageInfo->getNextPageQuery());
 ```
 
 PageInfo gives you some convenience methods to determine whether there is there are more pages.

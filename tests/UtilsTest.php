@@ -152,7 +152,7 @@ final class UtilsTest extends BaseTestCase
         $offlineSession->setExpires(new \DateTime());
         Context::$SESSION_STORAGE->storeSession($offlineSession);
 
-        $this->assertNull(Utils::loadOfflineSession($this->domain, includeExpired: false));
+        $this->assertNull(Utils::loadOfflineSession($this->domain, false));
     }
 
     public function testLoadCurrentSession()
@@ -160,12 +160,7 @@ final class UtilsTest extends BaseTestCase
         $token = $this->encodeJwtPayload();
         $headers = ['Authorization' => "Bearer $token"];
         $sessionId = 'exampleshop.myshopify.com_42';
-        $session = new Session(
-            id: $sessionId,
-            shop: 'test-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session($sessionId, 'test-shop.myshopify.io', true, '1234');
 
         $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
         $this->assertEquals($session, Context::$SESSION_STORAGE->loadSession('exampleshop.myshopify.com_42'));
@@ -204,12 +199,7 @@ final class UtilsTest extends BaseTestCase
     public function testGraphqlProxyFailsWithJWTForNonEmbeddedApps()
     {
         $sessionId = 'exampleshop.myshopify.com_42';
-        $session = new Session(
-            id: $sessionId,
-            shop: 'test-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session($sessionId, 'test-shop.myshopify.io', true, '1234');
         $session->setAccessToken('token');
 
         $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
@@ -220,7 +210,7 @@ final class UtilsTest extends BaseTestCase
 
         // The session is valid and can be loaded from the headers
         Context::$IS_EMBEDDED_APP = true;
-        $this->assertEquals($session, Utils::loadCurrentSession($headers, [], isOnline: true));
+        $this->assertEquals($session, Utils::loadCurrentSession($headers, [], true));
 
         Context::$IS_EMBEDDED_APP = false;
         $this->expectException(SessionNotFoundException::class);
@@ -230,12 +220,7 @@ final class UtilsTest extends BaseTestCase
     public function testGraphqlProxyFailsWithCookiesForEmbeddedApps()
     {
         $sessionId = 'cookie_id';
-        $session = new Session(
-            id: $sessionId,
-            shop: 'test-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session($sessionId, 'test-shop.myshopify.io', true, '1234');
         $session->setAccessToken('token');
 
         $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
@@ -246,7 +231,7 @@ final class UtilsTest extends BaseTestCase
 
         // The session is valid and can be loaded from the cookies
         Context::$IS_EMBEDDED_APP = false;
-        $this->assertEquals($session, Utils::loadCurrentSession([], $cookies, isOnline: true));
+        $this->assertEquals($session, Utils::loadCurrentSession([], $cookies, true));
 
         Context::$IS_EMBEDDED_APP = true;
         $this->expectException(SessionNotFoundException::class);
@@ -258,12 +243,7 @@ final class UtilsTest extends BaseTestCase
         Context::$IS_EMBEDDED_APP = true;
 
         $sessionId = 'exampleshop.myshopify.com_42';
-        $session = new Session(
-            id: $sessionId,
-            shop: 'test-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session($sessionId, 'test-shop.myshopify.io', true, '1234');
         $session->setAccessToken('token');
 
         $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
@@ -271,15 +251,16 @@ final class UtilsTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(200, $this->testGraphqlResponse),
-                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
-                method: 'POST',
-                headers: [
+                $this->buildMockHttpResponse(200, $this->testGraphqlResponse),
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
+                'POST',
+                null,
+                [
                     'Content-Type: application/json',
                     'Content-Length: ' . strlen($this->testGraphqlQuery),
                     'X-Shopify-Access-Token: token',
                 ],
-                body: $this->testGraphqlQuery,
+                $this->testGraphqlQuery,
             )
         ]);
 
@@ -287,7 +268,7 @@ final class UtilsTest extends BaseTestCase
         $headers = ['Authorization' => "Bearer $token"];
         $response = Utils::graphqlProxy($headers, [], $this->testGraphqlQuery);
 
-        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->testGraphqlResponse));
+        $this->assertThat($response, new HttpResponseMatcher(200, [], $this->testGraphqlResponse));
     }
 
     public function testGraphqlProxyFetchesDataWithCookies()
@@ -295,12 +276,7 @@ final class UtilsTest extends BaseTestCase
         Context::$IS_EMBEDDED_APP = false;
 
         $sessionId = 'exampleshop.myshopify.com_42';
-        $session = new Session(
-            id: $sessionId,
-            shop: 'test-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session($sessionId, 'test-shop.myshopify.io', true, '1234');
         $session->setAccessToken('token');
 
         $this->assertTrue(Context::$SESSION_STORAGE->storeSession($session));
@@ -308,22 +284,23 @@ final class UtilsTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(200, $this->testGraphqlResponse),
-                url: "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
-                method: 'POST',
-                headers: [
+                $this->buildMockHttpResponse(200, $this->testGraphqlResponse),
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
+                'POST',
+                null,
+                [
                     'Content-Type: application/json',
                     'Content-Length: ' . strlen($this->testGraphqlQuery),
                     'X-Shopify-Access-Token: token',
                 ],
-                body: $this->testGraphqlQuery,
+                $this->testGraphqlQuery,
             )
         ]);
 
         $cookies = [OAuth::SESSION_ID_COOKIE_NAME => $sessionId];
         $response = Utils::graphqlProxy([], $cookies, $this->testGraphqlQuery);
 
-        $this->assertThat($response, new HttpResponseMatcher(decodedBody: $this->testGraphqlResponse));
+        $this->assertThat($response, new HttpResponseMatcher(200, [], $this->testGraphqlResponse));
     }
 
     private function encodeJwtPayload(): string
@@ -342,7 +319,8 @@ final class UtilsTest extends BaseTestCase
         return JWT::encode($payload, Context::$API_SECRET_KEY);
     }
 
-    private string $testGraphqlQuery = <<<QUERY
+    /** @var string */
+    private $testGraphqlQuery = <<<QUERY
     {
       shop {
         name
@@ -350,7 +328,8 @@ final class UtilsTest extends BaseTestCase
     }
     QUERY;
 
-    private array $testGraphqlResponse = [
+    /** @var array */
+    private $testGraphqlResponse = [
       "data" => [
         "shop" => [
           "name" => "Shoppity Shop",

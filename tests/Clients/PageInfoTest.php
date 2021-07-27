@@ -11,7 +11,7 @@ class PageInfoTest extends BaseTestCase
 
     public function testParsePreviousAndNextUrlsFromLinkHeaderAndFields()
     {
-        $link = $this->getProductsLinkHeader(previousToken: 'previousToken', nextToken: 'nextToken');
+        $link = $this->getProductsLinkHeader('previousToken', 'nextToken');
 
         $pageInfo = PageInfo::fromLinkHeader($link);
 

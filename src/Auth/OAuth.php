@@ -61,13 +61,7 @@ class OAuth
 
         $mySessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($sanitizedShop);
 
-        $cookie = new OAuthCookie(
-            name: self::SESSION_ID_COOKIE_NAME,
-            value: $mySessionId,
-            expire: strtotime('+1 minute'),
-            secure: true,
-            httpOnly: true,
-        );
+        $cookie = new OAuthCookie($mySessionId, self::SESSION_ID_COOKIE_NAME, strtotime('+1 minute'), true, true);
 
         if ($setCookieFunction) {
             $cookieSet = $setCookieFunction($cookie);
@@ -78,8 +72,10 @@ class OAuth
                 $cookie->getName(),
                 $cookie->getValue(),
                 $cookie->getExpire(),
-                secure: $cookie->isSecure(),
-                httponly: $cookie->isHttpOnly(),
+                "",
+                "",
+                $cookie->isSecure(),
+                $cookie->isHttpOnly(),
             );
             // @codeCoverageIgnoreEnd
         }
@@ -90,12 +86,7 @@ class OAuth
             );
         }
 
-        $session = new Session(
-            id: $mySessionId,
-            shop: $sanitizedShop,
-            isOnline: $isOnline,
-            state: Uuid::uuid4()->toString()
-        );
+        $session = new Session($mySessionId, $sanitizedShop, $isOnline, Uuid::uuid4()->toString());
 
         if ($isOnline) {
             $session->setExpires(strtotime('+1 minute'));
@@ -202,7 +193,7 @@ class OAuth
      *
      * @return string
      */
-    public static function getJwtSessionId(string $shop, string | int $userId): string
+    public static function getJwtSessionId(string $shop, $userId): string
     {
         return "{$shop}_{$userId}";
     }
@@ -317,7 +308,7 @@ class OAuth
     private static function fetchAccessToken(
         array $query,
         Session $session
-    ): AccessTokenResponse | AccessTokenOnlineResponse {
+    ) {
         $post = [
             'client_id' => Context::$API_KEY,
             'client_secret' => Context::$API_SECRET_KEY,
@@ -345,22 +336,22 @@ class OAuth
     private static function buildAccessTokenOnlineResponse(array $body): AccessTokenOnlineResponse
     {
         $associatedUser = new AccessTokenOnlineUserInfo(
-            id: $body['associated_user']['id'],
-            firstName: $body['associated_user']['first_name'],
-            lastName: $body['associated_user']['last_name'],
-            email: $body['associated_user']['email'],
-            emailVerified: $body['associated_user']['email_verified'],
-            accountOwner: $body['associated_user']['account_owner'],
-            locale: $body['associated_user']['locale'],
-            collaborator: $body['associated_user']['collaborator'],
+            $body['associated_user']['id'],
+            $body['associated_user']['first_name'],
+            $body['associated_user']['last_name'],
+            $body['associated_user']['email'],
+            $body['associated_user']['email_verified'],
+            $body['associated_user']['account_owner'],
+            $body['associated_user']['locale'],
+            $body['associated_user']['collaborator'],
         );
 
         return new AccessTokenOnlineResponse(
-            accessToken: $body['access_token'],
-            scope: $body['scope'],
-            expiresIn: $body['expires_in'],
-            associatedUserScope: $body['associated_user_scope'],
-            associatedUser: $associatedUser,
+            $body['access_token'],
+            $body['scope'],
+            $body['expires_in'],
+            $body['associated_user_scope'],
+            $associatedUser,
         );
     }
 
@@ -371,10 +362,7 @@ class OAuth
      */
     private static function buildAccessTokenResponse(array $body): AccessTokenResponse
     {
-        return new AccessTokenResponse(
-            accessToken: $body['access_token'],
-            scope: $body['scope'],
-        );
+        return new AccessTokenResponse($body['access_token'], $body['scope']);
     }
 
     /**
@@ -390,6 +378,6 @@ class OAuth
      */
     public static function requestAccessToken(Http $client, array $post): HttpResponse
     {
-        return $client->post(path: self::ACCESS_TOKEN_POST_PATH, body: $post);
+        return $client->post(self::ACCESS_TOKEN_POST_PATH, $post);
     }
 }

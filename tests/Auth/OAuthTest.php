@@ -22,15 +22,18 @@ use ShopifyTest\Clients\MockRequest;
 
 final class OAuthTest extends BaseTestCase
 {
-    private string $oauthSessionId = 'test_oauth_session';
+    /** @var string */
+    private $oauthSessionId = 'test_oauth_session';
 
-    private array $codeRequestBody = [
+    /** @var array */
+    private $codeRequestBody = [
         'client_id' => 'ash',
         'client_secret' => 'steffi',
         'code' => 'real_code',
     ];
 
-    private array $onlineResponse = [
+    /** @var array */
+    private $onlineResponse = [
         'access_token' => 'some access token',
         'scope' => 'read_products',
         'expires_in' => 525600,
@@ -47,7 +50,8 @@ final class OAuthTest extends BaseTestCase
         ],
     ];
 
-    private array $offlineResponse = [
+    /** @var array */
+    private $offlineResponse = [
         'access_token' => 'some access token',
         'scope' => 'read_products',
     ];
@@ -63,12 +67,12 @@ final class OAuthTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(200, $isOnline ? $this->onlineResponse : $this->offlineResponse),
-                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-                method: "POST",
-                userAgent: "^Shopify Admin API Library for PHP v",
-                headers: ['Content-Type: application/json'],
-                body: json_encode($this->codeRequestBody),
+                $this->buildMockHttpResponse(200, $isOnline ? $this->onlineResponse : $this->offlineResponse),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($this->codeRequestBody),
             ),
         ]);
 
@@ -281,12 +285,12 @@ final class OAuthTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(200, $this->onlineResponse),
-                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-                method: "POST",
-                userAgent: "^Shopify Admin API Library for PHP v",
-                headers: ['Content-Type: application/json'],
-                body: json_encode($this->codeRequestBody),
+                $this->buildMockHttpResponse(200, $this->onlineResponse),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($this->codeRequestBody),
             ),
         ]);
 
@@ -313,12 +317,12 @@ final class OAuthTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(200, $this->onlineResponse),
-                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-                method: "POST",
-                userAgent: "^Shopify Admin API Library for PHP v",
-                headers: ['Content-Type: application/json'],
-                body: json_encode($this->codeRequestBody),
+                $this->buildMockHttpResponse(200, $this->onlineResponse),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($this->codeRequestBody),
             ),
         ]);
 
@@ -342,12 +346,12 @@ final class OAuthTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(500, ''),
-                url: "https://test-shop.myshopify.io/admin/oauth/access_token",
-                method: "POST",
-                userAgent: "^Shopify Admin API Library for PHP v",
-                headers: ['Content-Type: application/json'],
-                body: json_encode($this->codeRequestBody),
+                $this->buildMockHttpResponse(500, ''),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($this->codeRequestBody),
             ),
         ]);
 
@@ -529,12 +533,7 @@ final class OAuthTest extends BaseTestCase
      */
     private function createTestSession(bool $isOnline): Session
     {
-        $session = new Session(
-            id: $this->oauthSessionId,
-            shop: 'test-shop.myshopify.io',
-            isOnline: $isOnline,
-            state: '1234',
-        );
+        $session = new Session($this->oauthSessionId, 'test-shop.myshopify.io', $isOnline, '1234');
         Context::$SESSION_STORAGE->storeSession($session);
 
         return $session;
@@ -551,12 +550,7 @@ final class OAuthTest extends BaseTestCase
      */
     private function buildExpectedSession(string $sessionId, bool $isOnline = true): Session
     {
-        $session = new Session(
-            id: $sessionId,
-            shop: $this->domain,
-            isOnline: $isOnline,
-            state: '1234',
-        );
+        $session = new Session($sessionId, $this->domain, $isOnline, '1234');
         $session->setScope('read_products');
         $session->setAccessToken('some access token');
 
@@ -564,14 +558,14 @@ final class OAuthTest extends BaseTestCase
             $session->setExpires(strtotime('+525600 seconds'));
 
             $onlineAccessInfo = new AccessTokenOnlineUserInfo(
-                id: 1,
-                firstName: 'John',
-                lastName: 'Smith',
-                email: 'john@example.com',
-                emailVerified: true,
-                accountOwner: true,
-                locale: 'en',
-                collaborator: true,
+                1,
+                'John',
+                'Smith',
+                'john@example.com',
+                true,
+                true,
+                'en',
+                true,
             );
             $session->setOnlineAccessInfo($onlineAccessInfo);
         }

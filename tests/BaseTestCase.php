@@ -7,7 +7,6 @@ namespace ShopifyTest;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
-use Shopify\Clients\Http;
 use Shopify\Clients\HttpClientFactory;
 use Shopify\Context;
 use Shopify\Exception\HttpRequestException;
@@ -18,23 +17,20 @@ define('RUNNING_SHOPIFY_TESTS', 1);
 
 class BaseTestCase extends TestCase
 {
-    protected string $domain = 'test-shop.myshopify.io';
-    protected string $version;
+    /** @var string */
+    protected $domain = 'test-shop.myshopify.io';
+    /** @var string */
+    protected $version;
 
     public function setUp(): void
     {
         // Initialize Context before each test
         Context::initialize(
-            apiKey: 'ash',
-            apiSecretKey: 'steffi',
-            scopes: ['sleepy', 'kitty'],
-            hostName: 'www.my-friends-cats.com',
-            sessionStorage: new MockSessionStorage(),
-            apiVersion: 'unstable',
-            isEmbeddedApp: true,
-            isPrivateApp: false,
-            userAgentPrefix: '',
-            logger: null,
+            'ash',
+            'steffi',
+            ['sleepy', 'kitty'],
+            'www.my-friends-cats.com',
+            new MockSessionStorage(),
         );
         Context::$RETRY_TIME_IN_SECONDS = 0;
         $this->version = require dirname(__FILE__) . '/../src/version.php';
@@ -55,7 +51,7 @@ class BaseTestCase extends TestCase
      */
     protected function buildMockHttpResponse(
         int $statusCode = null,
-        string|array $body = null,
+        $body = null,
         array $headers = [],
         string $error = null
     ): array {
@@ -92,9 +88,9 @@ class BaseTestCase extends TestCase
             $requestMatchers[] = [$matcher];
 
             $newResponses[] = $request->error ? 'TEST EXCEPTION' : new Response(
-                status: $request->response['statusCode'],
-                headers: $request->response['headers'],
-                body: $request->response['body']
+                $request->response['statusCode'],
+                $request->response['headers'],
+                $request->response['body'],
             );
         }
 

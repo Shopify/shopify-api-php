@@ -9,16 +9,21 @@ namespace Shopify\Auth;
  */
 class FileSessionStorage implements SessionStorage
 {
+    /** @var string */
+    private $path;
+
     /**
      * Initializes FileSessionStorage object
      *
      * @param string $path Path to store the session files in
      */
-    public function __construct(private string $path = '/tmp/shopify_api_sessions')
+    public function __construct(string $path = '/tmp/shopify_api_sessions')
     {
         if (!is_dir($path)) {
             mkdir($path);
         }
+
+        $this->path = $path;
     }
 
     /**

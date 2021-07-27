@@ -9,13 +9,29 @@ namespace Shopify\Auth;
  */
 class OAuthCookie
 {
+    /** @var string */
+    private $value;
+    /** @var string */
+    private $name;
+    /** @var int */
+    private $expire = 0;
+    /** @var bool */
+    private $secure = true;
+    /** @var bool */
+    private $httpOnly = true;
+
     public function __construct(
-        private string $value,
-        private string $name,
-        private int $expire = 0,
-        private bool $secure = true,
-        private bool $httpOnly = true,
+        string $value,
+        string $name,
+        int $expire = 0,
+        bool $secure = true,
+        bool $httpOnly = true
     ) {
+        $this->value = $value;
+        $this->name = $name;
+        $this->expire = $expire;
+        $this->secure = $secure;
+        $this->httpOnly = $httpOnly;
     }
 
     public function getValue(): string

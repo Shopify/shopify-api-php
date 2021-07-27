@@ -9,6 +9,8 @@ use Shopify\Exception\MissingArgumentException;
 
 class Rest extends Http
 {
+    /** @var string */
+    private $accessToken;
 
     /**
      * Rest Client constructor.
@@ -18,9 +20,11 @@ class Rest extends Http
      *
      * @throws \Shopify\Exception\MissingArgumentException
      */
-    public function __construct(string $domain, private ?string $accessToken = null)
+    public function __construct(string $domain, ?string $accessToken = null)
     {
         parent::__construct($domain);
+        $this->accessToken = $accessToken;
+
         if (!Context::$IS_PRIVATE_APP && !$this->accessToken) {
             throw new MissingArgumentException('Missing access token when creating REST client');
         }
@@ -32,35 +36,26 @@ class Rest extends Http
     protected function request(
         string $path,
         string $method,
-        string $dataType = self::DATA_TYPE_JSON,
-        string|array $body = null,
+        $body = null,
         array $headers = [],
+        array $query = [],
         ?int $tries = null,
-        array $query = []
+        string $dataType = self::DATA_TYPE_JSON
     ): RestResponse {
         $headers[HttpHeaders::X_SHOPIFY_ACCESS_TOKEN] =
             Context::$IS_PRIVATE_APP ? Context::$API_SECRET_KEY : $this->accessToken;
 
-        $response = parent::request(
-            path: $this->getRestPath($path),
-            method: $method,
-            dataType: $dataType,
-            body: $body,
-            headers: $headers,
-            tries: $tries,
-            query: $query
-        );
+        $response = parent::request($this->getRestPath($path), $method, $body, $headers, $query, $tries, $dataType);
 
         return new RestResponse(
-            status: $response->getStatusCode(),
-            headers: $response->getHeaders(),
-            body: $response->getBody(),
-            version: $response->getProtocolVersion(),
-            reason: $response->getReasonPhrase(),
-            pageInfo: $this->getPageInfo($response)
+            $response->getStatusCode(),
+            $response->getHeaders(),
+            $response->getBody(),
+            $response->getProtocolVersion(),
+            $response->getReasonPhrase(),
+            $this->getPageInfo($response)
         );
     }
-
 
     private function getRestPath(string $path): string
     {

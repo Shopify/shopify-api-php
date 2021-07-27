@@ -15,20 +15,32 @@ use Shopify\Exception\UninitializedContextException;
 
 class Context
 {
-    public static ?string $API_KEY = null;
-    public static ?string $API_SECRET_KEY = null;
-    public static Scopes $SCOPES;
-    public static ?string $HOST_NAME = null;
-    public static ?SessionStorage $SESSION_STORAGE = null;
-    public static HttpClientFactory $HTTP_CLIENT_FACTORY;
-    public static ?string $API_VERSION = null;
-    public static bool $IS_EMBEDDED_APP = true;
-    public static bool $IS_PRIVATE_APP = false;
-    public static ?string $PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = null;
-    public static ?string $USER_AGENT_PREFIX = null;
-    public static int $RETRY_TIME_IN_SECONDS = 1;
-    public static ?LoggerInterface $LOGGER = null;
-    private static bool $IS_INITIALIZED = false;
+    /** @var string */
+    public static $API_KEY = null;
+    /** @var string */
+    public static $API_SECRET_KEY = null;
+    /** @var Scopes */
+    public static $SCOPES;
+    /** @var string */
+    public static $HOST_NAME = null;
+    /** @var SessionStorage */
+    public static $SESSION_STORAGE = null;
+    /** @var string */
+    public static $API_VERSION = null;
+    /** @var bool */
+    public static $IS_EMBEDDED_APP = true;
+    /** @var bool */
+    public static $IS_PRIVATE_APP = false;
+    /** @var string|null */
+    public static $PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = null;
+    /** @var string */
+    public static $USER_AGENT_PREFIX = null;
+    /** @var LoggerInterface|null */
+    public static $LOGGER = null;
+
+    public static $RETRY_TIME_IN_SECONDS = 1;
+    public static $HTTP_CLIENT_FACTORY;
+    private static $IS_INITIALIZED = false;
 
     /**
      * Initializes Context object
@@ -51,7 +63,7 @@ class Context
     public static function initialize(
         string $apiKey,
         string $apiSecretKey,
-        string | array $scopes,
+        $scopes,
         string $hostName,
         SessionStorage $sessionStorage,
         string $apiVersion = 'unstable',
@@ -59,7 +71,7 @@ class Context
         bool $isPrivateApp = false,
         string $privateAppStorefrontAccessToken = null,
         string $userAgentPrefix = '',
-        LoggerInterface $logger = null,
+        LoggerInterface $logger = null
     ): void {
         $authScopes = new Scopes($scopes);
 

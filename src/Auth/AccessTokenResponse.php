@@ -6,10 +6,17 @@ namespace Shopify\Auth;
 
 class AccessTokenResponse
 {
+    /** @var string */
+    protected $accessToken;
+    /** @var string */
+    protected $scope;
+
     public function __construct(
-        protected string $accessToken,
-        protected string $scope,
+        string $accessToken,
+        string $scope
     ) {
+        $this->accessToken = $accessToken;
+        $this->scope = $scope;
     }
 
     public function getAccessToken(): string

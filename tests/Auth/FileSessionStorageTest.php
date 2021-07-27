@@ -12,20 +12,18 @@ use org\bovigo\vfs\vfsStreamDirectory;
 
 final class FileSessionStorageTest extends BaseTestCase
 {
-    private string $sessionId = 'test_session';
-    private Session $session;
-    private vfsStreamDirectory $root;
+    /** @var string */
+    private $sessionId = 'test_session';
+    /** @var Session */
+    private $session;
+    /** @var vfsStreamDirectory */
+    private $root;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->session = new Session(
-            id: $this->sessionId,
-            shop: 'test-shop.myshopify.io',
-            state: '1234',
-            isOnline: true,
-        );
+        $this->session = new Session($this->sessionId, 'test-shop.myshopify.io', true, '1234');
         $this->session->setScope('read_products');
         $this->session->setExpires(strtotime('+1 day'));
         $this->session->setAccessToken('totally_real_access_token');

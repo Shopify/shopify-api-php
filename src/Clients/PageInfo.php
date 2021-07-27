@@ -8,6 +8,13 @@ class PageInfo
 {
     private const LINK_HEADER_REGEXP = '/<([^<]+)>; rel="([^"]+)"/';
 
+    /** @var array|null */
+    private $fields;
+    /** @var string|null */
+    private $previousPageUrl;
+    /** @var string|null */
+    private $nextPageUrl;
+
     /**
      * PageInfo constructor.
      *
@@ -17,10 +24,13 @@ class PageInfo
      * @param string|null $nextPageUrl     link to the next page of the result
      */
     public function __construct(
-        private ?array $fields,
-        private ?string $previousPageUrl,
-        private ?string $nextPageUrl,
+        ?array $fields,
+        ?string $previousPageUrl,
+        ?string $nextPageUrl
     ) {
+        $this->fields = $fields;
+        $this->previousPageUrl = $previousPageUrl;
+        $this->nextPageUrl = $nextPageUrl;
     }
 
     /**

@@ -9,7 +9,10 @@ use Shopify\Exception\MissingArgumentException;
 
 class Graphql
 {
-    private Http $client;
+    /** @var Http */
+    private $client;
+    /** @var string|null */
+    protected $token;
 
     /**
      * GraphQL Client constructor.
@@ -21,12 +24,13 @@ class Graphql
      */
     public function __construct(
         string $domain,
-        protected ?string $token = null,
+        ?string $token = null
     ) {
         if (!Context::$IS_PRIVATE_APP && empty($token)) {
             throw new MissingArgumentException('Missing access token when creating GraphQL client');
         }
         $this->client = new Http($domain);
+        $this->token = $token;
     }
 
     /**
@@ -42,7 +46,7 @@ class Graphql
      * @throws \Shopify\Exception\MissingArgumentException
      */
     public function query(
-        string | array $data,
+        $data,
         array $query = [],
         array $extraHeaders = [],
         ?int $tries = null
@@ -62,12 +66,12 @@ class Graphql
         }
 
         return $this->client->post(
-            path: $this->getApiPath(),
-            body: $data,
-            dataType: $dataType,
-            headers: $extraHeaders,
-            tries: $tries,
-            query: $query,
+            $this->getApiPath(),
+            $data,
+            $extraHeaders,
+            $query,
+            $tries,
+            $dataType,
         );
     }
 
@@ -96,12 +100,12 @@ class Graphql
         $extraHeaders[$accessTokenHeader] = $accessToken;
 
         return $this->client->post(
-            path: $this->getApiPath(),
-            body: $data,
-            dataType: Http::DATA_TYPE_JSON,
-            headers: $extraHeaders,
-            tries: $tries,
-            query: [],
+            $this->getApiPath(),
+            $data,
+            $extraHeaders,
+            [],
+            $tries,
+            Http::DATA_TYPE_JSON,
         );
     }
 

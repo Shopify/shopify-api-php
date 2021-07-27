@@ -6,6 +6,8 @@ namespace Shopify\Clients;
 
 class RestResponse extends HttpResponse
 {
+    /** @var PageInfo|null */
+    private $pageInfo = null;
 
     /**
      * {@inheritDoc}
@@ -16,9 +18,10 @@ class RestResponse extends HttpResponse
         $body = null,
         $version = '1.1',
         $reason = null,
-        private PageInfo|null $pageInfo = null
+        ?PageInfo $pageInfo = null
     ) {
         parent::__construct($status, $headers, $body, $version, $reason);
+        $this->pageInfo = $pageInfo;
     }
 
     /**

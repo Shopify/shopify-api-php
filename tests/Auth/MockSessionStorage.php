@@ -9,9 +9,12 @@ use Shopify\Auth\SessionStorage;
 
 final class MockSessionStorage implements SessionStorage
 {
-    private array $testSessions = [];
-    private array $calls = [];
-    private array $scheduledFails = [
+    /** @var array */
+    private $testSessions = [];
+    /** @var array */
+    private $calls = [];
+    /** @var array */
+    private $scheduledFails = [
         'store' => 0,
         'load' => 0,
         'delete' => 0,
@@ -31,7 +34,10 @@ final class MockSessionStorage implements SessionStorage
         }
     }
 
-    public function loadSession(string $sessionId): Session | null
+    /**
+     * @return Session|null
+     */
+    public function loadSession(string $sessionId)
     {
         $shouldSucceed = $this->shouldCallSucceed('load');
 

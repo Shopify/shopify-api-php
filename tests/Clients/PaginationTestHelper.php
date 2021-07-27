@@ -6,7 +6,8 @@ use Shopify\Context;
 
 trait PaginationTestHelper
 {
-    protected string $domain = 'test-shop.myshopify.io';
+    /** @var string */
+    protected $domain = 'test-shop.myshopify.io';
 
     /**
      * @param string $path Rest resource. e.g. `products`

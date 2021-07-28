@@ -26,7 +26,7 @@ class HttpResponseMatcher extends Constraint
     public function __construct(
         int $statusCode = 200,
         array $headers = [],
-        $decodedBody = null
+        ?array $decodedBody = null
     ) {
         $this->statusCode = $statusCode;
         $this->headers = $headers;

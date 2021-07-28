@@ -11,7 +11,7 @@ final class SessionStorageTest extends BaseTestCase
 {
     /** @var string */
     private $sessionId = 'test_session';
-    /** @var string */
+    /** @var Session */
     private $session;
 
     public function setUp(): void

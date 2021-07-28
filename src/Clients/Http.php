@@ -56,8 +56,8 @@ class Http
      * @param string|array $body     The body of the request
      * @param array        $headers  Any extra headers to send along with the request
      * @param array        $query    Parameters on a query to be added to the URL
-     * @param string       $dataType The data type to expect in the response
      * @param int|null     $tries    How many times to attempt the request
+     * @param string       $dataType The data type to expect in the response
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface

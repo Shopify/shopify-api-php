@@ -38,8 +38,11 @@ class Context
     /** @var LoggerInterface|null */
     public static $LOGGER = null;
 
+    /** @var int */
     public static $RETRY_TIME_IN_SECONDS = 1;
+    /** @var HttpClientFactory */
     public static $HTTP_CLIENT_FACTORY;
+    /** @var bool */
     private static $IS_INITIALIZED = false;
 
     /**

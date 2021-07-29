@@ -22,7 +22,7 @@ interface SessionStorage
      *
      * @return Session|null The session if it exists, null otherwise
      */
-    public function loadSession(string $sessionId): Session | null;
+    public function loadSession(string $sessionId);
 
     /**
      * Internally handles deleting the given session.

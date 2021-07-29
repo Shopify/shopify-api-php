@@ -21,7 +21,9 @@ final class HttpHeaders
     public const CONTENT_LENGTH = 'Content-Length';
     public const USER_AGENT = 'User-Agent';
     public const RETRY_AFTER = 'Retry-After';
-    private array $headerSet = [];
+
+    /** @var array */
+    private $headerSet = [];
 
     /**
      * Loads a set of HTTP headers.
@@ -122,12 +124,17 @@ final class HttpHeaders
      *
      * @return array Normalized header in format [$header, $value]
      */
-    private function normalizeHeader(string $header, mixed $value = null): array
+    private function normalizeHeader(string $header, $value = null): array
     {
         if (empty($value)) {
             $value = null;
         } else {
-            $value = array_map(fn($item) => $item ? (string)$item : null, (array)$value);
+            $value = array_map(
+                function ($item) {
+                    return $item ? (string)$item : null;
+                },
+                (array)$value
+            );
         }
 
         return [strtolower($header), $value];

@@ -6,17 +6,45 @@ namespace ShopifyTest\Clients;
 
 final class MockRequest
 {
+    /** @var array */
+    public $response;
+    /** @var string|null */
+    public $url = null;
+    /** @var string|null */
+    public $method = null;
+    /** @var string|null */
+    public $userAgent = null;
+    /** @var array */
+    public $headers = [];
+    /** @var string|null */
+    public $body = null;
+    /** @var string|null */
+    public $error = null;
+    /** @var bool */
+    public $allowOtherHeaders = true;
+    /** @var bool */
+    public $isRetry = false;
+
     public function __construct(
-        public array $response,
-        public ?string $url = null,
-        public ?string $method = null,
-        public ?string $userAgent = null,
-        public array $headers = [],
-        public ?string $body = null,
-        public ?string $error = null,
-        public bool $allowOtherHeaders = true,
-        public bool $isRetry = false,
+        array $response,
+        ?string $url = null,
+        ?string $method = null,
+        ?string $userAgent = null,
+        array $headers = [],
+        ?string $body = null,
+        ?string $error = null,
+        bool $allowOtherHeaders = true,
+        bool $isRetry = false
     ) {
+        $this->response = $response;
+        $this->url = $url;
+        $this->method = $method;
+        $this->userAgent = $userAgent;
+        $this->headers = $headers;
+        $this->body = $body;
+        $this->error = $error;
+        $this->allowOtherHeaders = $allowOtherHeaders;
+        $this->isRetry = $isRetry;
 
         array_unshift($this->headers, 'Host: test-shop.myshopify.io');
     }

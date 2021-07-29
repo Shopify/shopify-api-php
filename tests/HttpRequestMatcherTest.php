@@ -8,12 +8,13 @@ use Psr\Http\Message\RequestInterface;
 
 class HttpRequestMatcherTest extends TestCase
 {
-    private RequestInterface $request;
+    /** @var RequestInterface */
+    private $request;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->request = new Request('GET', 'https://hello-world.com/something?q1=v1&q2=v2', body: 'Request-body');
+        $this->request = new Request('GET', 'https://hello-world.com/something?q1=v1&q2=v2', [], 'Request-body');
     }
 
     public function testMatchesExactMethodAndUrlAndRegexUserAgentAndBody()
@@ -21,20 +22,22 @@ class HttpRequestMatcherTest extends TestCase
         $this->assertThat(
             $this->request,
             new HttpRequestMatcher(
-                url: 'https://hello-world.com/something?q1=v1&q2=v2',
-                method: 'GET',
-                userAgent: '//',
-                body: 'Request-body'
+                'https://hello-world.com/something?q1=v1&q2=v2',
+                'GET',
+                '//',
+                [],
+                'Request-body'
             )
         );
         $this->assertThat(
             $this->request,
             $this->logicalNot(
                 new HttpRequestMatcher(
-                    url: 'https://hello-world.com/something?q1=v1&q2=v2',
-                    method: 'GET',
-                    userAgent: '//',
-                    body: 'Wrong-request-body'
+                    'https://hello-world.com/something?q1=v1&q2=v2',
+                    'GET',
+                    '//',
+                    [],
+                    'Wrong-request-body'
                 )
             )
         );
@@ -66,10 +69,11 @@ class HttpRequestMatcherTest extends TestCase
         $this->assertThat(
             $request,
             new HttpRequestMatcher(
-                url: 'https://hello-world.com/something?q1=v1&q2=v2',
-                method: 'GET',
-                userAgent: '/user/',
-                body: 'Request-body'
+                'https://hello-world.com/something?q1=v1&q2=v2',
+                'GET',
+                '/user/',
+                [],
+                'Request-body'
             )
         );
 
@@ -78,10 +82,11 @@ class HttpRequestMatcherTest extends TestCase
             $request,
             $this->logicalNot(
                 new HttpRequestMatcher(
-                    url: 'https://hello-world.com/something?q1=v1&q2=v2',
-                    method: 'GET',
-                    userAgent: '/^user$/',
-                    body: 'Request-body'
+                    'https://hello-world.com/something?q1=v1&q2=v2',
+                    'GET',
+                    '/^user$/',
+                    [],
+                    'Request-body'
                 )
             )
         );
@@ -95,15 +100,15 @@ class HttpRequestMatcherTest extends TestCase
         $this->assertThat(
             $request,
             new HttpRequestMatcher(
-                url: 'https://hello-world.com/something?q1=v1&q2=v2',
-                method: 'GET',
-                userAgent: '/user/',
-                headers: [
-                         'test-header: test-header-value',
-                         'Host: hello-world.com',
-                     ],
-                body: 'Request-body',
-                allowOtherHeaders: false
+                'https://hello-world.com/something?q1=v1&q2=v2',
+                'GET',
+                '/user/',
+                [
+                    'test-header: test-header-value',
+                    'Host: hello-world.com',
+                ],
+                'Request-body',
+                false
             )
         );
     }
@@ -117,11 +122,11 @@ class HttpRequestMatcherTest extends TestCase
         $this->assertThat(
             $request,
             new HttpRequestMatcher(
-                url: 'https://hello-world.com/something?q1=v1&q2=v2',
-                method: 'GET',
-                userAgent: '/user/',
-                headers: ['test-header: test-header-value'],
-                body: 'Request-body',
+                'https://hello-world.com/something?q1=v1&q2=v2',
+                'GET',
+                '/user/',
+                ['test-header: test-header-value'],
+                'Request-body',
             )
         );
     }

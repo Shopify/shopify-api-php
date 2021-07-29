@@ -13,9 +13,9 @@ final class HttpResponseTest extends BaseTestCase
     public function testGetters()
     {
         $response = new HttpResponse(
-            status: 200,
-            headers: ['Header-1' => ['ABCD'], 'Header-2' => ['DCBA'], 'x-request-id' => ['test-request-id']],
-            body: '{"name": "Shoppity Shop"}',
+            200,
+            ['Header-1' => ['ABCD'], 'Header-2' => ['DCBA'], 'x-request-id' => ['test-request-id']],
+            '{"name": "Shoppity Shop"}',
         );
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEqualsCanonicalizing(
@@ -32,13 +32,13 @@ final class HttpResponseTest extends BaseTestCase
 
     public function testGetRequestIdReturnsNullIfHeaderIsMissing()
     {
-        $response = new HttpResponse(status: 200);
+        $response = new HttpResponse(200);
         $this->assertNull($response->getRequestId());
     }
 
     public function testGetDecodedBodyWillThrwoExceptionIfBodyIsNotJson()
     {
-        $response = new HttpResponse(body: "not-json");
+        $response = new HttpResponse(200, [], "not-json");
 
         $this->expectException(JsonException::class);
         $response->getDecodedBody();

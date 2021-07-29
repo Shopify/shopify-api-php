@@ -15,25 +15,20 @@ final class SessionTest extends BaseTestCase
 {
     public function testSessionGetterAndSetterFunctions()
     {
-        $session = new Session(
-            id: '12345',
-            shop: 'my-shop.myshopify.io',
-            isOnline: true,
-            state: 'asdf1234',
-        );
+        $session = new Session('12345', 'my-shop.myshopify.io', true, 'asdf1234');
         $session->setScope('read_products');
         $session->setExpires('January 25, 2021');
         $session->setAccessToken('24ssdf243u2ohfd21');
 
         $onlineAccessInfo = new AccessTokenOnlineUserInfo(
-            id: 1,
-            firstName: 'John',
-            lastName: 'Smith',
-            email: 'john@example.com',
-            emailVerified: true,
-            accountOwner: true,
-            locale: 'en',
-            collaborator: true,
+            1,
+            'John',
+            'Smith',
+            'john@example.com',
+            true,
+            true,
+            'en',
+            true,
         );
         $session->setOnlineAccessInfo($onlineAccessInfo);
 
@@ -50,12 +45,7 @@ final class SessionTest extends BaseTestCase
     public function testSetExpiresValues()
     {
         $date = new DateTime('@' . strtotime('+1 day'));
-        $session = new Session(
-            id: '12345',
-            shop: 'my-shop.myshopify.io',
-            isOnline: true,
-            state: 'asdf1234',
-        );
+        $session = new Session('12345', 'my-shop.myshopify.io', true, 'asdf1234');
 
         $session->setExpires((int)$date->format('U'));
         $this->assertEquals($date, $session->getExpires());
@@ -69,25 +59,20 @@ final class SessionTest extends BaseTestCase
 
     public function testClone()
     {
-        $session = new Session(
-            id: '12345',
-            shop: 'my-shop.myshopify.io',
-            isOnline: true,
-            state: 'asdf1234',
-        );
+        $session = new Session('12345', 'my-shop.myshopify.io', true, 'asdf1234');
         $session->setScope('read_products');
         $session->setExpires('January 25, 2021');
         $session->setAccessToken('24ssdf243u2ohfd21');
 
         $onlineAccessInfo = new AccessTokenOnlineUserInfo(
-            id: 1,
-            firstName: 'John',
-            lastName: 'Smith',
-            email: 'john@example.com',
-            emailVerified: true,
-            accountOwner: true,
-            locale: 'en',
-            collaborator: true,
+            1,
+            'John',
+            'Smith',
+            'john@example.com',
+            true,
+            true,
+            'en',
+            true,
         );
         $session->setOnlineAccessInfo($onlineAccessInfo);
 
@@ -106,12 +91,7 @@ final class SessionTest extends BaseTestCase
     {
         Context::$SCOPES = new Scopes('read_products');
 
-        $session = new Session(
-            id: '12345',
-            shop: 'my-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session('12345', 'my-shop.myshopify.io', true, '1234');
         $session->setScope('read_products');
         $session->setExpires(strtotime('+10 minutes'));
         $session->setAccessToken('totally_real_token');
@@ -123,12 +103,7 @@ final class SessionTest extends BaseTestCase
     {
         Context::$SCOPES = new Scopes('read_products,write_orders');
 
-        $session = new Session(
-            id: '12345',
-            shop: 'my-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session('12345', 'my-shop.myshopify.io', true, '1234');
         $session->setScope('read_products');
         $session->setExpires(strtotime('+10 minutes'));
         $session->setAccessToken('totally_real_token');
@@ -140,12 +115,7 @@ final class SessionTest extends BaseTestCase
     {
         Context::$SCOPES = new Scopes('read_products');
 
-        $session = new Session(
-            id: '12345',
-            shop: 'my-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session('12345', 'my-shop.myshopify.io', true, '1234');
         $session->setScope('read_products');
         $session->setExpires(strtotime('-10 minutes'));
         $session->setAccessToken('totally_real_token');
@@ -157,12 +127,7 @@ final class SessionTest extends BaseTestCase
     {
         Context::$SCOPES = new Scopes('read_products');
 
-        $session = new Session(
-            id: '12345',
-            shop: 'my-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $session = new Session('12345', 'my-shop.myshopify.io', true, '1234');
         $session->setScope('read_products');
         $session->setExpires(strtotime('+10 minutes'));
 

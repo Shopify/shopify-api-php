@@ -24,8 +24,12 @@ class Http
     private const RETRIABLE_STATUS_CODES = [429, 500];
     private const DEPRECATION_ALERT_SECONDS = 60;
 
-    public function __construct(private string $domain)
+    /** @var string */
+    private $domain;
+
+    public function __construct(string $domain)
     {
+        $this->domain = $domain;
     }
 
     /**
@@ -33,23 +37,16 @@ class Http
      *
      * @param string   $path    The URL path to request
      * @param array    $headers Any extra headers to send along with the request
-     * @param int|null $tries   How many times to attempt the request
-     *
      * @param array    $query   Parameters on a query to be added to the URL
+     * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public function get(string $path, array $headers = [], ?int $tries = null, array $query = []): HttpResponse
+    public function get(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
-        return $this->request(
-            path: $path,
-            method: self::METHOD_GET,
-            headers: $headers,
-            tries: $tries,
-            query: $query
-        );
+        return $this->request($path, self::METHOD_GET, null, $headers, $query, $tries);
     }
 
     /**
@@ -57,11 +54,10 @@ class Http
      *
      * @param string       $path     The URL path to request
      * @param string|array $body     The body of the request
-     * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
-     * @param int|null     $tries    How many times to attempt the request
-     *
      * @param array        $query    Parameters on a query to be added to the URL
+     * @param int|null     $tries    How many times to attempt the request
+     * @param string       $dataType The data type to expect in the response
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -69,21 +65,13 @@ class Http
      */
     public function post(
         string $path,
-        string|array $body,
-        string $dataType = self::DATA_TYPE_JSON,
+        $body,
         array $headers = [],
+        array $query = [],
         ?int $tries = null,
-        array $query = []
+        string $dataType = self::DATA_TYPE_JSON
     ): HttpResponse {
-        return $this->request(
-            path: $path,
-            method: self::METHOD_POST,
-            dataType: $dataType,
-            body: $body,
-            headers: $headers,
-            tries: $tries,
-            query: $query
-        );
+        return $this->request($path, self::METHOD_POST, $body, $headers, $query, $tries, $dataType);
     }
 
     /**
@@ -91,11 +79,10 @@ class Http
      *
      * @param string       $path     The URL path to request
      * @param string|array $body     The body of the request
-     * @param string       $dataType The data type to expect in the response
      * @param array        $headers  Any extra headers to send along with the request
-     * @param int|null     $tries    How many times to attempt the request
-     *
      * @param array        $query    Parameters on a query to be added to the URL
+     * @param int|null     $tries    How many times to attempt the request
+     * @param string       $dataType The data type to expect in the response
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -103,21 +90,13 @@ class Http
      */
     public function put(
         string $path,
-        string|array $body,
-        string $dataType = self::DATA_TYPE_JSON,
+        $body,
         array $headers = [],
+        array $query = [],
         ?int $tries = null,
-        array $query = []
+        string $dataType = self::DATA_TYPE_JSON
     ): HttpResponse {
-        return $this->request(
-            path: $path,
-            method: self::METHOD_PUT,
-            dataType: $dataType,
-            body: $body,
-            headers: $headers,
-            tries: $tries,
-            query: $query
-        );
+        return $this->request($path, self::METHOD_PUT, $body, $headers, $query, $tries, $dataType);
     }
 
     /**
@@ -125,22 +104,22 @@ class Http
      *
      * @param string   $path    The URL path to request
      * @param array    $headers Any extra headers to send along with the request
-     * @param int|null $tries   How many times to attempt the request
-     *
      * @param array    $query   Parameters on a query to be added to the URL
+     * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public function delete(string $path, array $headers = [], ?int $tries = null, array $query = []): HttpResponse
+    public function delete(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
         return $this->request(
-            path: $path,
-            method: self::METHOD_DELETE,
-            headers: $headers,
-            tries: $tries,
-            query: $query
+            $path,
+            self::METHOD_DELETE,
+            null,
+            $headers,
+            $query,
+            $tries,
         );
     }
 
@@ -149,12 +128,11 @@ class Http
      *
      * @param string            $path     The path to query
      * @param string            $method   The method to use
-     * @param string            $dataType The data type of the request
      * @param string|array|null $body     The request body to send
      * @param array             $headers  Any extra headers to send along with the request
-     * @param int|null          $tries    How many times to attempt the request
-     *
      * @param array             $query    Parameters on a query to be added to the URL
+     * @param int|null          $tries    How many times to attempt the request
+     * @param string            $dataType The data type of the request
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -163,12 +141,12 @@ class Http
     protected function request(
         string $path,
         string $method,
-        string $dataType = self::DATA_TYPE_JSON,
-        string|array $body = null,
+        $body = null,
         array $headers = [],
+        array $query = [],
         ?int $tries = null,
-        array $query = []
-    ): HttpResponse {
+        string $dataType = self::DATA_TYPE_JSON
+    ) {
         $maxTries = $tries ?? 1;
 
         $version = require dirname(__FILE__) . '/../version.php';
@@ -185,6 +163,10 @@ class Http
 
         $client = Context::$HTTP_CLIENT_FACTORY->client();
 
+        if (strpos($path, '/') !== 0) {
+            $path = "/$path";
+        }
+
         $url = (new Uri())
             ->withScheme('https')
             ->withHost($this->domain)
@@ -192,7 +174,7 @@ class Http
             ->withQuery(http_build_query($query));
 
         $request = new Request($method, $url, $headers);
-        $request = $request->withHeader(header: HttpHeaders::USER_AGENT, value: implode(' | ', $userAgentParts));
+        $request = $request->withHeader(HttpHeaders::USER_AGENT, implode(' | ', $userAgentParts));
 
         if ($body) {
             if (is_string($body)) {

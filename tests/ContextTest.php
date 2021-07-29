@@ -15,14 +15,7 @@ final class ContextTest extends BaseTestCase
 {
     public function testCanCreateContext()
     {
-        Context::initialize(
-            apiKey: 'ash',
-            apiSecretKey: 'steffi',
-            scopes: ['sleepy', 'kitty'],
-            hostName: 'my-friends-cats',
-            sessionStorage: new MockSessionStorage(),
-            isPrivateApp: false,
-        );
+        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], 'my-friends-cats', new MockSessionStorage());
 
         $this->assertEquals('ash', Context::$API_KEY);
         $this->assertEquals('steffi', Context::$API_SECRET_KEY);
@@ -39,13 +32,7 @@ final class ContextTest extends BaseTestCase
     // Context with different values has been set up in BaseTestCase
     public function testCanUpdateContext()
     {
-        Context::initialize(
-            apiKey: 'tuck',
-            apiSecretKey: 'rocky',
-            scopes: ['silly', 'doggo'],
-            hostName: 'yay-for-doggos',
-            sessionStorage: new MockSessionStorage(),
-        );
+        Context::initialize('tuck', 'rocky', ['silly', 'doggo'], 'yay-for-doggos', new MockSessionStorage());
 
         $this->assertEquals('tuck', Context::$API_KEY);
         $this->assertEquals('rocky', Context::$API_SECRET_KEY);
@@ -59,13 +46,7 @@ final class ContextTest extends BaseTestCase
         $this->expectExceptionMessage(
             'Cannot initialize Shopify API Library. Missing values for: apiKey, apiSecretKey, scopes, hostName'
         );
-        Context::initialize(
-            apiKey: '',
-            apiSecretKey: '',
-            scopes: [],
-            hostName: '',
-            sessionStorage: new MockSessionStorage(),
-        );
+        Context::initialize('', '', [], '', new MockSessionStorage());
     }
 
     public function testThrowsIfUninitialized()
@@ -84,12 +65,14 @@ final class ContextTest extends BaseTestCase
     public function testThrowsIfPrivateApp()
     {
         Context::initialize(
-            apiKey: 'ash',
-            apiSecretKey: 'steffi',
-            scopes: ['sleepy', 'kitty'],
-            hostName: 'my-friends-cats',
-            sessionStorage: new MockSessionStorage(),
-            isPrivateApp: true,
+            'ash',
+            'steffi',
+            ['sleepy', 'kitty'],
+            'my-friends-cats',
+            new MockSessionStorage(),
+            'unstable',
+            true,
+            true,
         );
         $this->expectException(\Shopify\Exception\PrivateAppException::class);
         $this->expectExceptionMessage('BOOOOOO');

@@ -9,6 +9,12 @@ use Shopify\Clients\HttpResponse;
 
 class HttpResponseMatcher extends Constraint
 {
+    /** @var int */
+    private $statusCode = 200;
+    /** @var array */
+    private $headers = [];
+    /** @var array|null */
+    private $decodedBody = null;
 
     /**
      * HttpResponseMatcher constructor.
@@ -18,10 +24,13 @@ class HttpResponseMatcher extends Constraint
      * @param array|null $decodedBody Body as an array
      */
     public function __construct(
-        private int $statusCode = 200,
-        private array $headers = [],
-        private array|null $decodedBody = null
+        int $statusCode = 200,
+        array $headers = [],
+        ?array $decodedBody = null
     ) {
+        $this->statusCode = $statusCode;
+        $this->headers = $headers;
+        $this->decodedBody = $decodedBody;
     }
 
     protected function matches($other): bool

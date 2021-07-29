@@ -6,8 +6,19 @@ namespace Shopify\Webhooks;
 
 final class RegisterResponse
 {
-    public function __construct(private bool $success, private string | array | null $body)
+    /** @var bool */
+    private $success;
+    /** @var string|array|null */
+    private $body;
+
+    /**
+     * @param bool              $success
+     * @param string|array|null $body
+     */
+    public function __construct(bool $success, $body)
     {
+        $this->success = $success;
+        $this->body = $body;
     }
 
     public function isSuccess(): bool
@@ -15,7 +26,10 @@ final class RegisterResponse
         return $this->success;
     }
 
-    public function getBody(): string | array | null
+    /**
+     * @return string|array|null
+     */
+    public function getBody()
     {
         return $this->body;
     }

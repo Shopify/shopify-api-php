@@ -8,10 +8,15 @@ final class Scopes
 {
     public const SCOPE_DELIMITER = ',';
 
-    private array $compressedScopes;
-    private array $expandedScopes;
+    /** @var array */
+    private $compressedScopes;
+    /** @var array */
+    private $expandedScopes;
 
-    public function __construct(string | array $scopes)
+    /**
+     * @param string|array $scopes
+     */
+    public function __construct($scopes)
     {
         if (is_string($scopes)) {
             $scopesArray = explode(self::SCOPE_DELIMITER, $scopes);
@@ -54,7 +59,7 @@ final class Scopes
      *
      * @return bool
      */
-    public function has(string | array | self $scopes): bool
+    public function has($scopes): bool
     {
         if (!($scopes instanceof self)) {
             $scopes = new self($scopes);
@@ -70,7 +75,7 @@ final class Scopes
      *
      * @return bool
      */
-    public function equals(string | array | self $scopes): bool
+    public function equals($scopes): bool
     {
         if (!($scopes instanceof self)) {
             $scopes = new self($scopes);

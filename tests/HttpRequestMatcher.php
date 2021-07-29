@@ -7,7 +7,18 @@ use Psr\Http\Message\RequestInterface;
 
 class HttpRequestMatcher extends Constraint
 {
-
+    /** @var string */
+    private $url;
+    /** @var string */
+    private $method;
+    /** @var string */
+    private $userAgent;
+    /** @var array */
+    private $headers = [];
+    /** @var string|null */
+    private $body = null;
+    /** @var bool */
+    private $allowOtherHeaders = true;
 
     /**
      * HttpRequestMatcher constructor.
@@ -20,13 +31,19 @@ class HttpRequestMatcher extends Constraint
      * @param bool        $allowOtherHeaders When true will assert for contains rather than equals
      */
     public function __construct(
-        private string $url,
-        private string $method,
-        private string $userAgent,
-        private array $headers = [],
-        private ?string $body = null,
-        private bool $allowOtherHeaders = true,
+        string $url,
+        string $method,
+        string $userAgent,
+        array $headers = [],
+        ?string $body = null,
+        bool $allowOtherHeaders = true
     ) {
+        $this->url = $url;
+        $this->method = $method;
+        $this->userAgent = $userAgent;
+        $this->headers = $headers;
+        $this->body = $body;
+        $this->allowOtherHeaders = $allowOtherHeaders;
     }
 
     protected function matches($other): bool
@@ -105,7 +122,12 @@ class HttpRequestMatcher extends Constraint
         return implode("\n", $diff);
     }
 
-    private function diffLine(string $header, null|string|array $expected, null|string|array $actual): string
+    /**
+     * @param string            $header
+     * @param null|string|array $expected
+     * @param null|string|array $actual
+     */
+    private function diffLine(string $header, $expected, $actual): string
     {
         if (is_array($expected)) {
             $expected = print_r($expected, true);

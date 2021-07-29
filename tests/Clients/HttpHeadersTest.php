@@ -9,7 +9,8 @@ use ShopifyTest\BaseTestCase;
 
 final class HttpHeadersTest extends BaseTestCase
 {
-    private array $rawHeaders = [
+    /** @var array */
+    private $rawHeaders = [
         'Content-Type' => 'application/json',
         'X-Custom-Header' => 1234,
         'X-Array-Header' => [1234, 4321],
@@ -48,8 +49,8 @@ final class HttpHeadersTest extends BaseTestCase
         $this->assertTrue($headers->has('Content-Type'));
         $this->assertTrue($headers->has('content-type'));
 
-        $this->assertTrue($headers->has('Content-Type', allowEmpty: false));
-        $this->assertTrue($headers->has('content-type', allowEmpty: false));
+        $this->assertTrue($headers->has('Content-Type', false));
+        $this->assertTrue($headers->has('content-type', false));
     }
 
     public function testHasAcceptsEmptyStrings()
@@ -66,8 +67,8 @@ final class HttpHeadersTest extends BaseTestCase
         $rawHeaders = ['Test-header' => ''];
         $headers = new HttpHeaders($rawHeaders);
 
-        $this->assertFalse($headers->has('Test-header', allowEmpty: false));
-        $this->assertFalse($headers->has('test-header', allowEmpty: false));
+        $this->assertFalse($headers->has('Test-header', false));
+        $this->assertFalse($headers->has('test-header', false));
     }
 
     public function testDiff()
@@ -92,8 +93,8 @@ final class HttpHeadersTest extends BaseTestCase
         $this->assertEquals([], $headers->diff(['Test-header']));
         $this->assertEquals([], $headers->diff(['test-header']));
 
-        $this->assertEquals(['Test-header'], $headers->diff(['Test-header'], allowEmpty: false));
-        $this->assertEquals(['test-header'], $headers->diff(['test-header'], allowEmpty: false));
+        $this->assertEquals(['Test-header'], $headers->diff(['Test-header'], false));
+        $this->assertEquals(['test-header'], $headers->diff(['test-header'], false));
     }
 
     public function testDiffMultipleValues()
@@ -104,8 +105,8 @@ final class HttpHeadersTest extends BaseTestCase
         $this->assertEquals([], $headers->diff(['Test-header', 'Test-header-2']));
         $this->assertEquals([], $headers->diff(['test-header', 'test-header-2']));
 
-        $this->assertEquals(['Test-header'], $headers->diff(['Test-header', 'Test-header-2'], allowEmpty: false));
-        $this->assertEquals(['test-header'], $headers->diff(['test-header', 'test-header-2'], allowEmpty: false));
+        $this->assertEquals(['Test-header'], $headers->diff(['Test-header', 'Test-header-2'], false));
+        $this->assertEquals(['test-header'], $headers->diff(['test-header', 'test-header-2'], false));
     }
 
     public function testGetIsCaseInsensitiveAndReturnsStrings()

@@ -9,17 +9,14 @@ use ShopifyTest\BaseTestCase;
 
 final class SessionStorageTest extends BaseTestCase
 {
-    private string $sessionId = 'test_session';
-    private Session $session;
+    /** @var string */
+    private $sessionId = 'test_session';
+    /** @var Session */
+    private $session;
 
     public function setUp(): void
     {
-        $this->session = new Session(
-            id: $this->sessionId,
-            shop: 'test-shop.myshopify.io',
-            isOnline: true,
-            state: '1234',
-        );
+        $this->session = new Session($this->sessionId, 'test-shop.myshopify.io', true, '1234');
         $this->session->setScope('read_products');
         $this->session->setExpires(strtotime('+1 day'));
         $this->session->setAccessToken('totally_real_access_token');

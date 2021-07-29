@@ -11,8 +11,8 @@ use ShopifyTest\BaseTestCase;
 
 final class StorefrontTest extends BaseTestCase
 {
-    private string $query =
-    <<<QUERY
+    /** @var string */
+    private $query = <<<QUERY
     {
         shop {
             name
@@ -20,7 +20,8 @@ final class StorefrontTest extends BaseTestCase
     }
     QUERY;
 
-    private array $successResponse = [
+    /** @var array */
+    private $successResponse = [
         'data' => [
             'shop' => [
                 'name' => 'Shoppity Shop',
@@ -32,24 +33,21 @@ final class StorefrontTest extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(
-                    statusCode: 200,
-                    body: $this->successResponse,
-                    headers: [HttpHeaders::X_REQUEST_ID => 'request_id'],
-                ),
-                url: "https://$this->domain/api/" . Context::$API_VERSION . '/graphql.json',
-                method: 'POST',
-                headers: [
+                $this->buildMockHttpResponse(200, $this->successResponse, [HttpHeaders::X_REQUEST_ID => 'request_id']),
+                "https://$this->domain/api/" . Context::$API_VERSION . '/graphql.json',
+                'POST',
+                null,
+                [
                     'Content-Type: application/graphql',
                     'X-Shopify-Storefront-Access-Token: test_token',
                 ],
-                body: $this->query,
+                $this->query,
             )
         ]);
 
         $client = new Storefront($this->domain, 'test_token');
 
-        $response = $client->query(data: $this->query);
+        $response = $client->query($this->query);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals($this->successResponse, $response->getDecodedBody());
         $this->assertEquals('request_id', $response->getRequestId());
@@ -62,24 +60,21 @@ final class StorefrontTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(
-                    statusCode: 200,
-                    body: $this->successResponse,
-                    headers: [HttpHeaders::X_REQUEST_ID => 'request_id'],
-                ),
-                url: "https://$this->domain/api/" . Context::$API_VERSION . '/graphql.json',
-                method: 'POST',
-                headers: [
+                $this->buildMockHttpResponse(200, $this->successResponse, [HttpHeaders::X_REQUEST_ID => 'request_id']),
+                "https://$this->domain/api/" . Context::$API_VERSION . '/graphql.json',
+                'POST',
+                null,
+                [
                     'Content-Type: application/graphql',
                     'X-Shopify-Storefront-Access-Token: private_token',
                 ],
-                body: $this->query,
+                $this->query,
             )
         ]);
 
         $client = new Storefront($this->domain);
 
-        $response = $client->query(data: $this->query);
+        $response = $client->query($this->query);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals($this->successResponse, $response->getDecodedBody());
         $this->assertEquals('request_id', $response->getRequestId());
@@ -91,24 +86,21 @@ final class StorefrontTest extends BaseTestCase
 
         $this->mockTransportRequests([
             new MockRequest(
-                response: $this->buildMockHttpResponse(
-                    statusCode: 200,
-                    body: $this->successResponse,
-                    headers: [HttpHeaders::X_REQUEST_ID => 'request_id'],
-                ),
-                url: "https://$this->domain/api/" . Context::$API_VERSION . '/graphql.json',
-                method: 'POST',
-                headers: [
+                $this->buildMockHttpResponse(200, $this->successResponse, [HttpHeaders::X_REQUEST_ID => 'request_id']),
+                "https://$this->domain/api/" . Context::$API_VERSION . '/graphql.json',
+                'POST',
+                null,
+                [
                     'Content-Type: application/graphql',
                     'X-Shopify-Storefront-Access-Token: test_token',
                 ],
-                body: $this->query,
+                $this->query,
             )
         ]);
 
         $client = new Storefront($this->domain, 'test_token');
 
-        $response = $client->query(data: $this->query);
+        $response = $client->query($this->query);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals($this->successResponse, $response->getDecodedBody());
         $this->assertEquals('request_id', $response->getRequestId());

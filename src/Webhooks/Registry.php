@@ -27,7 +27,7 @@ final class Registry
     public const DELIVERY_METHOD_PUB_SUB = 'pubsub';
 
     /** @var Handler[] */
-    private static array $REGISTRY = [];
+    private static $REGISTRY = [];
 
     /**
      * Sets the handler for the given topic. If a handler was previously set for the same topic, it will be overridden.
@@ -47,7 +47,7 @@ final class Registry
      *
      * @return Handler|null
      */
-    public static function getHandler(string $topic): Handler | null
+    public static function getHandler(string $topic): ?Handler
     {
         return self::$REGISTRY[$topic] ?? null;
     }
@@ -73,15 +73,23 @@ final class Registry
         string $topic,
         string $shop,
         string $accessToken,
-        ?string $deliveryMethod = self::DELIVERY_METHOD_HTTP,
+        ?string $deliveryMethod = self::DELIVERY_METHOD_HTTP
     ): RegisterResponse {
-
-        $method = match ($deliveryMethod) {
-            self::DELIVERY_METHOD_EVENT_BRIDGE => new EventBridge(),
-            self::DELIVERY_METHOD_PUB_SUB => new PubSub(),
-            self::DELIVERY_METHOD_HTTP => new HttpDelivery(),
-            default => throw new InvalidArgumentException("Unrecognized delivery method '$deliveryMethod'"),
-        };
+        /** @var DeliveryMethod */
+        $method = null;
+        switch ($deliveryMethod) {
+            case self::DELIVERY_METHOD_EVENT_BRIDGE:
+                $method = new EventBridge();
+                break;
+            case self::DELIVERY_METHOD_PUB_SUB:
+                $method = new PubSub();
+                break;
+            case self::DELIVERY_METHOD_HTTP:
+                $method = new HttpDelivery();
+                break;
+            default:
+                throw new InvalidArgumentException("Unrecognized delivery method '$deliveryMethod'");
+        }
 
         $callbackAddress = $method->getCallbackAddress($path);
 
@@ -174,7 +182,7 @@ final class Registry
         string $callbackAddress,
         DeliveryMethod $method
     ): array {
-        $checkResponse = $client->query(data: $method->buildCheckQuery($topic));
+        $checkResponse = $client->query($method->buildCheckQuery($topic));
 
         $checkStatusCode = $checkResponse->getStatusCode();
         $checkBody = $checkResponse->getDecodedBody();
@@ -215,11 +223,9 @@ final class Registry
         string $topic,
         string $callbackAddress,
         DeliveryMethod $deliveryMethod,
-        ?string $webhookId,
+        ?string $webhookId
     ): array {
-        $registerResponse = $client->query(
-            data: $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId),
-        );
+        $registerResponse = $client->query($deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId));
 
         $statusCode = $registerResponse->getStatusCode();
         $body = $registerResponse->getDecodedBody();
@@ -249,8 +255,8 @@ final class Registry
         $headers = new HttpHeaders($rawHeaders);
 
         $missingHeaders = $headers->diff(
-            headers: [HttpHeaders::X_SHOPIFY_HMAC, HttpHeaders::X_SHOPIFY_TOPIC, HttpHeaders::X_SHOPIFY_DOMAIN],
-            allowEmpty: false,
+            [HttpHeaders::X_SHOPIFY_HMAC, HttpHeaders::X_SHOPIFY_TOPIC, HttpHeaders::X_SHOPIFY_DOMAIN],
+            false,
         );
 
         if (!empty($missingHeaders)) {

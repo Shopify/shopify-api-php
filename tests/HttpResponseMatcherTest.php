@@ -9,7 +9,8 @@ use Shopify\Clients\HttpResponse;
 
 class HttpResponseMatcherTest extends TestCase
 {
-    private array $successResponse = [
+    /** @var array */
+    private $successResponse = [
         'products' => [
             'title' => 'Test Product',
             'amount' => 1,

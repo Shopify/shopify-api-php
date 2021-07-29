@@ -12,16 +12,7 @@ final class AccessTokenOnlineResponseTest extends BaseTestCase
 {
     public function testGetters()
     {
-        $user = new AccessTokenOnlineUserInfo(
-            id: 1234,
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john.doe@nowhere',
-            emailVerified: true,
-            accountOwner: true,
-            locale: 'en',
-            collaborator: true,
-        );
+        $user = new AccessTokenOnlineUserInfo(1234, 'John', 'Doe', 'john.doe@nowhere', true, true, 'en', true);
         $this->assertEquals(1234, $user->getId());
         $this->assertEquals('John', $user->getFirstName());
         $this->assertEquals('Doe', $user->getLastName());
@@ -31,13 +22,7 @@ final class AccessTokenOnlineResponseTest extends BaseTestCase
         $this->assertEquals('en', $user->getLocale());
         $this->assertTrue($user->isCollaborator());
 
-        $response = new AccessTokenOnlineResponse(
-            accessToken: 'test_token',
-            scope: 'test_scope',
-            expiresIn: 1234,
-            associatedUserScope: 'user_scope',
-            associatedUser: $user,
-        );
+        $response = new AccessTokenOnlineResponse('test_token', 'test_scope', 1234, 'user_scope', $user);
         $this->assertEquals('test_token', $response->getAccessToken());
         $this->assertEquals('test_scope', $response->getScope());
         $this->assertEquals(1234, $response->getExpiresIn());

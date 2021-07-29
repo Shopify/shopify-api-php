@@ -9,7 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class HttpResponse extends Response
 {
-    private ?string $requestId;
+    /** @var string|null */
+    private $requestId;
 
     /**
      * {@inheritDoc}
@@ -40,13 +41,11 @@ class HttpResponse extends Response
     /**
      * @return array|string|null Body
      */
-    public function getDecodedBody(): array|string|null
+    public function getDecodedBody()
     {
         $this->getBody()->rewind();
         $responseBody = $this->getBody()->getContents();
-        return $responseBody
-            ? json_decode(json: $responseBody, associative: true, flags: JSON_THROW_ON_ERROR)
-            : null;
+        return $responseBody ? json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR) : null;
     }
 
     /**

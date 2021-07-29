@@ -34,7 +34,7 @@ final class Utils
 
         $allowedDomainsRegexp = $myshopifyDomain ? "($myshopifyDomain)" : "(myshopify.com|myshopify.io)";
 
-        if (!preg_match($allowedDomainsRegexp, $name) && (!str_contains($name, "."))) {
+        if (!preg_match($allowedDomainsRegexp, $name) && (strpos($name, ".") === false)) {
             $name .= '.' . ($myshopifyDomain ?? 'myshopify.com');
         }
         $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
@@ -177,13 +177,13 @@ final class Utils
      */
     public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody): HttpResponse
     {
-        $session = self::loadCurrentSession($rawHeaders, $cookies, isOnline: true);
+        $session = self::loadCurrentSession($rawHeaders, $cookies, true);
         if (!$session) {
             throw new SessionNotFoundException("Could not find session for GraphQL proxy");
         }
 
         $client = new Graphql($session->getShop(), $session->getAccessToken());
 
-        return $client->proxy(data: $rawBody);
+        return $client->proxy($rawBody);
     }
 }

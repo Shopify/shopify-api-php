@@ -6,8 +6,15 @@ namespace Shopify\Webhooks;
 
 final class ProcessResponse
 {
-    public function __construct(private bool $success, private ?string $errorMessage = null)
+    /** @var bool */
+    private $success;
+    /** @var string|null */
+    private $errorMessage = null;
+
+    public function __construct(bool $success, ?string $errorMessage = null)
     {
+        $this->success = $success;
+        $this->errorMessage = $errorMessage;
     }
 
     /**
@@ -25,7 +32,7 @@ final class ProcessResponse
      *
      * @return string|null
      */
-    public function getErrorMessage(): string | null
+    public function getErrorMessage(): ?string
     {
         return $this->errorMessage;
     }

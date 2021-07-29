@@ -13,18 +13,25 @@ use Shopify\Utils;
  */
 class Session
 {
-    private ?string $scope = null;
-    private ?DateTime $expires = null;
-    private ?string $accessToken = null;
-    private ?AccessTokenOnlineUserInfo $onlineAccessInfo = null;
+    /** @var string|null */
+    private $scope = null;
+    /** @var DateTime|null */
+    private $expires = null;
+    /** @var string|null */
+    private $accessToken = null;
+    /** @var AccessTokenOnlineUserInfo|null */
+    private $onlineAccessInfo = null;
 
     public function __construct(
-        private string $id,
-        private string $shop,
-        private bool $isOnline,
-        private string $state,
+        string $id,
+        string $shop,
+        bool $isOnline,
+        string $state
     ) {
+        $this->id = $id;
         $this->shop = Utils::sanitizeShopDomain($shop);
+        $this->isOnline = $isOnline;
+        $this->state = $state;
     }
 
     public function getId(): string
@@ -42,12 +49,18 @@ class Session
         return $this->state;
     }
 
-    public function getScope(): string | null
+    /**
+     * @return string|null
+     */
+    public function getScope()
     {
         return $this->scope;
     }
 
-    public function getExpires(): DateTime | null
+    /**
+     * @return DateTime|null
+     */
+    public function getExpires()
     {
         return $this->expires;
     }
@@ -57,12 +70,18 @@ class Session
         return $this->isOnline;
     }
 
-    public function getAccessToken(): string | null
+    /**
+     * @return string|null
+     */
+    public function getAccessToken()
     {
         return $this->accessToken;
     }
 
-    public function getOnlineAccessInfo(): AccessTokenOnlineUserInfo | null
+    /**
+     * @return AccessTokenOnlineUserInfo|null
+     */
+    public function getOnlineAccessInfo()
     {
         return $this->onlineAccessInfo;
     }
@@ -73,9 +92,11 @@ class Session
     }
 
     /**
+     * @param string|int|DateTime $expires
+     *
      * @throws \Exception
      */
-    public function setExpires(string | int | DateTime $expires): void
+    public function setExpires($expires): void
     {
         $date = null;
         if ($expires) {
@@ -109,12 +130,7 @@ class Session
      */
     public function clone(string $newSessionId): Session
     {
-        $newSession = new Session(
-            id: $newSessionId,
-            shop: $this->shop,
-            isOnline: $this->isOnline,
-            state: $this->state,
-        );
+        $newSession = new Session($newSessionId, $this->shop, $this->isOnline, $this->state);
         $newSession->scope = $this->scope;
         $newSession->expires = $this->expires;
         $newSession->accessToken = $this->accessToken;

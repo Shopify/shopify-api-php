@@ -10,14 +10,14 @@ REST Admin API endpoints are organized by [resource](https://shopify.dev/docs/ad
 
 REST uses `get`, `post`, `put`, and `delete` requests to retrieve, create, update, and delete resources respectively.
 
-| Parameter | Type            | Required? | Default Value | Notes                                            |
-|:----------|:----------------|:---------:|:-------------:|:-------------------------------------------------|
-| path      | string          |    Yes    |               | The URL path to request                          |
-| headers   | array           |    No     |      []       | Any extra headers to send along with the request |
-| tries     | int             |    No     |     null      | How many times to attempt the request            |
-| query     | array           |    No     |      []       | Query parameters as an associative array         |
-| body      | string or array |    Yes    |               | Only `Post`, and `put` methods can have body     |
-| dataType  | No              |    Yes    |               | Only `Post`, and `put` methods can have body     |
+| Parameter | Type            | Required? | Default Value    | Notes                                            |
+|:----------|:----------------|:---------:|:----------------:|:-------------------------------------------------|
+| path      | string          |    Yes    |                  | The URL path to request                          |
+| body      | string or array |    No     |     null         | Only `Post`, and `put` methods can have body     |
+| headers   | array           |    No     |      []          | Any extra headers to send along with the request |
+| query     | array           |    No     |      []          | Query parameters as an associative array         |
+| tries     | int             |    No     |     null         | How many times to attempt the request            |
+| dataType  | No              |    No     | `DATA_TYPE_JSON` | Only `Post`, and `put` methods can have body     |
 
 In the following example we will retrieve a list of products from a shop using `Shopify\Clients\Rest` class.
 

@@ -23,7 +23,7 @@ $queryString = <<<QUERY
                 node {
                     id
                     title
-                    bodyHtml
+                    descriptionHtml
                 }
             }
         }

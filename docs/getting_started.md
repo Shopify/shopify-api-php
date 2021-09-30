@@ -4,7 +4,9 @@ Before you start building your app, you'll need to perform the steps below.
 
 ## Install dependencies
 
-To use this library, you'll need to have PHP 8 installed in your server.
+To use this library, you'll need to have at least PHP 7.3 installed in your server.
+
+The library is available on [Packagist](https://packagist.org/packages/shopify/shopify-api`). You can add it to your project's Composer dependencies with `composer require shopify/shopify-api`.
 
 ## Set up the library
 

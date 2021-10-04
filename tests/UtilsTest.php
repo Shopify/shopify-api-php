@@ -61,22 +61,36 @@ final class UtilsTest extends BaseTestCase
     public function testValidHmac()
     {
         // phpcs:ignore
-        $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&hmac=654619d4b5a4f54795c3f40db18e4ed8b825f0abce16d1d75ab57e10c5e09490&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
+        $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
         $params = Utils::getQueryParams($url);
-        $this->assertEquals(false, Utils::validateHmac(
+        $secret = 'test-secret';
+        $params['hmac'] = hash_hmac('sha256', http_build_query($params), $secret);
+
+        $this->assertEquals(true, Utils::validateHmac(
             $params,
-            'hush'
+            $secret
         ));
     }
 
     public function testInvalidHmac()
     {
         // phpcs:ignore
-        $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&hmac=asdf&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
+        $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
         $params = Utils::getQueryParams($url);
+        $secret = 'test-secret';
+        $params['hmac'] = hash_hmac('sha256', http_build_query($params), $secret);
+
+        // Check with a wrong secret
         $this->assertEquals(false, Utils::validateHmac(
             $params,
-            'asdf'
+            $secret . 'wrong'
+        ));
+
+        // Check with the correct secret but with an altered request
+        $params['foo'] = 'bar';
+        $this->assertEquals(false, Utils::validateHmac(
+            $params,
+            $secret
         ));
     }
 

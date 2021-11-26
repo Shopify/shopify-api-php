@@ -13,7 +13,7 @@ class OAuthCookie
     private $value;
     /** @var string */
     private $name;
-    /** @var int */
+    /** @var int|null */
     private $expire = 0;
     /** @var bool */
     private $secure = true;
@@ -23,7 +23,7 @@ class OAuthCookie
     public function __construct(
         string $value,
         string $name,
-        int $expire = 0,
+        ?int $expire = 0,
         bool $secure = true,
         bool $httpOnly = true
     ) {
@@ -44,7 +44,7 @@ class OAuthCookie
         return $this->name;
     }
 
-    public function getExpire(): int
+    public function getExpire(): ?int
     {
         return $this->expire;
     }

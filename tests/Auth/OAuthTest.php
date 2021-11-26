@@ -8,6 +8,7 @@ use Firebase\JWT\JWT;
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
 use Shopify\Auth\AccessTokenOnlineUserInfo;
+use Shopify\Auth\OAuthCookie;
 use Shopify\Context;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
@@ -57,11 +58,68 @@ final class OAuthTest extends BaseTestCase
     ];
 
     /**
+     * @dataProvider validBeginProvider
+     */
+    public function testValidBegin($isOnline)
+    {
+        $wasCallbackCalled = false;
+        $testCookieId = '';
+        $cookieCallback = function ($cookie) use (&$wasCallbackCalled, &$testCookieId) {
+            $wasCallbackCalled = true;
+            $testCookieId = $cookie->getValue();
+            return isset($testCookieId);
+        };
+
+        $returnUrl = OAuth::begin(
+            'shopname',
+            '/redirect',
+            $isOnline,
+            $cookieCallback,
+        );
+        $this->assertTrue($wasCallbackCalled);
+        $this->assertNotEmpty($testCookieId);
+
+        if ($isOnline) {
+            $grantOptions = 'per-user';
+        } else {
+            $grantOptions = '';
+        }
+        $generatedState = Context::$SESSION_STORAGE->loadSession($testCookieId)->getState();
+        $this->assertEquals(
+            // phpcs:ignore
+            "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=$grantOptions",
+            $returnUrl
+        );
+    }
+
+    public function validBeginProvider(): array
+    {
+        return [
+            'Online'  => [true],
+            'Offline' => [false],
+        ];
+    }
+
+    /**
      * @dataProvider validCallbackProvider
      */
     public function testValidCallback($isOnline, $isEmbedded)
     {
         Context::$IS_EMBEDDED_APP = $isEmbedded;
+
+        $wasCallbackCalled = false;
+        $testCookieId = '';
+        $testCookieExpiration = null;
+        $cookieCallback = function (OAuthCookie $cookie) use (
+            &$wasCallbackCalled,
+            &$testCookieId,
+            &$testCookieExpiration
+        ) {
+            $wasCallbackCalled = true;
+            $testCookieExpiration = $cookie->getExpire();
+            $testCookieId = $cookie->getValue();
+            return isset($testCookieId);
+        };
 
         $this->createTestSession($isOnline);
 
@@ -83,26 +141,32 @@ final class OAuthTest extends BaseTestCase
             'code' => 'real_code',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
-        OAuth::callback($mockCookies, $mockQuery);
+        $actualSession = OAuth::callback($mockCookies, $mockQuery, $cookieCallback);
+        $this->assertTrue($wasCallbackCalled);
+        $this->assertEquals($this->oauthSessionId, $testCookieId);
 
         $jwtSessionId = OAuth::getJwtSessionId($this->domain, '1');
 
         if ($isEmbedded && $isOnline) {
             // The OAuth session should have been replaced with a JWT-based session to allow App Bridge requests
             $this->assertNull(Context::$SESSION_STORAGE->loadSession($this->oauthSessionId));
-
-            $actualSession = Context::$SESSION_STORAGE->loadSession($jwtSessionId);
             $expectedSessionId = $jwtSessionId;
         } else {
             // There should not be a JWT session
             $this->assertNull(Context::$SESSION_STORAGE->loadSession($jwtSessionId));
-
-            $actualSession = Context::$SESSION_STORAGE->loadSession($this->oauthSessionId);
             $expectedSessionId = $this->oauthSessionId;
         }
 
         $expectedSession = $this->buildExpectedSession($expectedSessionId, $isOnline);
         $this->assertEquals($expectedSession, $actualSession);
+
+        if ($isEmbedded) {
+            $this->assertLessThanOrEqual(1, abs(time() - $testCookieExpiration)); // 1 second grace period
+        } elseif ($isOnline) {
+            $this->assertEquals($expectedSession->getExpires()->format('U'), $testCookieExpiration);
+        } else {
+            $this->assertNull($testCookieExpiration);
+        }
     }
 
     public function validCallbackProvider(): array
@@ -379,50 +443,6 @@ final class OAuthTest extends BaseTestCase
         $this->expectexception(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid shop domain: shopname.shop.ca');
         OAuth::begin('shopname.shop.ca', '/redirect', true);
-    }
-
-    public function testBeginFunctionReturnsProperUrlForOfflineAccess()
-    {
-        $wasCallbackCalled = false;
-        $returnUrl = OAuth::begin(
-            'shopname',
-            '/redirect',
-            false,
-            function () use (&$wasCallbackCalled) {
-                $wasCallbackCalled = true;
-                return true;
-            }
-        );
-        $this->assertTrue($wasCallbackCalled);
-        $mySessionId = 'offline_shopname.myshopify.com';
-        $generatedState = Context::$SESSION_STORAGE->loadSession($mySessionId)->getState();
-        $this->assertEquals(
-            // phpcs:ignore
-            "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=",
-            $returnUrl
-        );
-    }
-
-    public function testBeginFunctionReturnsProperUrlForOnlineAccessWithNoLeadingSlashOnRedirectRoute()
-    {
-        $testCookieId = '';
-        $returnUrl = OAuth::begin(
-            'shopname',
-            'redirect',
-            true,
-            function ($cookie) use (&$testCookieId) {
-                $testCookieId = $cookie->getValue();
-                return isset($testCookieId);
-            }
-        );
-        $this->assertNotEmpty($testCookieId);
-
-        $generatedState = Context::$SESSION_STORAGE->loadSession($testCookieId)->getState();
-        $this->assertEquals(
-            // phpcs:ignore
-            "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=per-user",
-            $returnUrl
-        );
     }
 
     public function testBeginRaisesErrorIfCookieNotSet()

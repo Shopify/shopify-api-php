@@ -61,25 +61,7 @@ class OAuth
 
         $mySessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($sanitizedShop);
 
-        $cookie = new OAuthCookie($mySessionId, self::SESSION_ID_COOKIE_NAME, strtotime('+1 minute'), true, true);
-
-        if ($setCookieFunction) {
-            $cookieSet = $setCookieFunction($cookie);
-        } else {
-            // @codeCoverageIgnoreStart
-            // cannot mock setcookie() function
-            $cookieSet = setcookie(
-                $cookie->getName(),
-                $cookie->getValue(),
-                $cookie->getExpire(),
-                "",
-                "",
-                $cookie->isSecure(),
-                $cookie->isHttpOnly(),
-            );
-            // @codeCoverageIgnoreEnd
-        }
-
+        $cookieSet = self::setCookieSessionId($setCookieFunction, $mySessionId, strtotime('+1 minute'));
         if (!$cookieSet) {
             throw new CookieSetException(
                 'OAuth Cookie could not be saved.'
@@ -118,10 +100,11 @@ class OAuth
      * Performs the OAuth callback steps, checking the returned parameters and fetching the access token, preparing the
      * session for further usage. If successful, the updated session is returned.
      *
-     * @param array $cookies HTTP request cookies, from which the OAuth session will be loaded. This must be a hash of
-     *                       cookie name => value pairs. Value will be forcibly cast to string so objects that implement
-     *                       toString will also work.
-     * @param array $query   The HTTP request URL query values.
+     * @param array         $cookies           HTTP request cookies, from which the OAuth session will be loaded. This
+     *                                         must be a hash of cookie name => value pairs. Value will be forcibly cast
+     *                                         to string so objects that implement toString will also work.
+     * @param array         $query             The HTTP request URL query values.
+     * @param null|callable $setCookieFunction An optional override for setting cookie in response.
      *
      * @return Session
      * @throws \Shopify\Exception\HttpRequestException
@@ -132,13 +115,13 @@ class OAuth
      * @throws \Shopify\Exception\SessionStorageException
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public static function callback(array $cookies, array $query): Session
+    public static function callback(array $cookies, array $query, ?callable $setCookieFunction = null): Session
     {
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp('OAuth is not allowed for private apps');
 
-        $sessionId = self::getCookieSessionId($cookies);
-        $session = Context::$SESSION_STORAGE->loadSession($sessionId);
+        $cookieSessionId = self::getCookieSessionId($cookies);
+        $session = Context::$SESSION_STORAGE->loadSession($cookieSessionId);
         if (!$session) {
             throw new OAuthSessionNotFoundException(
                 'You may have taken more than 60 seconds to complete the OAuth process and the session cannot be found'
@@ -179,6 +162,18 @@ class OAuth
         if (!$sessionStored) {
             throw new SessionStorageException(
                 'OAuth Session could not be saved. Please check your session storage functionality.',
+            );
+        }
+
+        $sessionExpiration = ($session->getExpires() ? (int)$session->getExpires()->format('U') : null);
+        $cookieSet = self::setCookieSessionId(
+            $setCookieFunction,
+            $cookieSessionId,
+            Context::$IS_EMBEDDED_APP ? time() : $sessionExpiration
+        );
+        if (!$cookieSet) {
+            throw new CookieSetException(
+                'OAuth Cookie could not be saved.'
             );
         }
 
@@ -271,6 +266,39 @@ class OAuth
         }
 
         return (string)$sessionId;
+    }
+
+    /**
+     * Sets the session ID in the right cookie.
+     *
+     * @param null|callable $setCookieFunction An optional override for setting cookie in response
+     * @param string        $sessionId         The ID of the session to save
+     * @param int           $expiration        Epoch timestamp (in s) when the cookie expires
+     *
+     * @return bool Whether the cookie was successfully set
+     */
+    private static function setCookieSessionId(?callable $setCookieFunction, $sessionId, $expiration): bool
+    {
+        $cookie = new OAuthCookie($sessionId, self::SESSION_ID_COOKIE_NAME, $expiration, true, true);
+
+        if ($setCookieFunction) {
+            $cookieSet = $setCookieFunction($cookie);
+        } else {
+            // @codeCoverageIgnoreStart
+            // cannot mock setcookie() function
+            $cookieSet = setcookie(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpire(),
+                "",
+                "",
+                $cookie->isSecure(),
+                $cookie->isHttpOnly(),
+            );
+            // @codeCoverageIgnoreEnd
+        }
+
+        return $cookieSet;
     }
 
     /**

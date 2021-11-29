@@ -25,6 +25,7 @@ use Ramsey\Uuid\Uuid;
 class OAuth
 {
     public const SESSION_ID_COOKIE_NAME = 'shopify_session_id';
+    public const SESSION_ID_SIG_COOKIE_NAME = 'shopify_session_id_sig';
     public const ACCESS_TOKEN_POST_PATH = '/admin/oauth/access_token';
 
     /**
@@ -260,7 +261,18 @@ class OAuth
      */
     private static function getCookieSessionId(array $cookies): string
     {
-        $sessionId = $cookies[self::SESSION_ID_COOKIE_NAME] ?? null;
+        $signature = $cookies[self::SESSION_ID_SIG_COOKIE_NAME] ?? null;
+        $cookieId = $cookies[self::SESSION_ID_COOKIE_NAME] ?? null;
+
+        $sessionId = null;
+        if ($signature && $cookieId) {
+            $expectedSignature = hash_hmac('sha256', $cookieId, Context::$API_SECRET_KEY);
+
+            if ($signature === $expectedSignature) {
+                $sessionId = $cookieId;
+            }
+        }
+
         if (!$sessionId) {
             throw new CookieNotFoundException("Could not find the current session id in the cookies");
         }
@@ -279,14 +291,27 @@ class OAuth
      */
     private static function setCookieSessionId(?callable $setCookieFunction, $sessionId, $expiration): bool
     {
+        $signature = hash_hmac('sha256', $sessionId, Context::$API_SECRET_KEY);
+        $signatureCookie = new OAuthCookie($signature, self::SESSION_ID_SIG_COOKIE_NAME, $expiration, true, true);
         $cookie = new OAuthCookie($sessionId, self::SESSION_ID_COOKIE_NAME, $expiration, true, true);
 
         if ($setCookieFunction) {
-            $cookieSet = $setCookieFunction($cookie);
+            $cookieSet = $setCookieFunction($signatureCookie);
+            $cookieSet = $cookieSet && $setCookieFunction($cookie);
         } else {
             // @codeCoverageIgnoreStart
             // cannot mock setcookie() function
             $cookieSet = setcookie(
+                $signatureCookie->getName(),
+                $signatureCookie->getValue(),
+                $signatureCookie->getExpire(),
+                "",
+                "",
+                $signatureCookie->isSecure(),
+                $signatureCookie->isHttpOnly(),
+            );
+
+            $cookieSet = $cookieSet && setcookie(
                 $cookie->getName(),
                 $cookie->getValue(),
                 $cookie->getExpire(),

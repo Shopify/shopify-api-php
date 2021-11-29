@@ -62,12 +62,11 @@ final class OAuthTest extends BaseTestCase
      */
     public function testValidBegin($isOnline)
     {
-        $wasCallbackCalled = false;
-        $testCookieId = '';
-        $cookieCallback = function ($cookie) use (&$wasCallbackCalled, &$testCookieId) {
-            $wasCallbackCalled = true;
-            $testCookieId = $cookie->getValue();
-            return isset($testCookieId);
+        /** @var OAuthCookie[] */
+        $cookiesSet = [];
+        $cookieCallback = function (OAuthCookie $cookie) use (&$cookiesSet) {
+            $cookiesSet[$cookie->getName()] = $cookie;
+            return !empty($cookie->getValue());
         };
 
         $returnUrl = OAuth::begin(
@@ -76,15 +75,20 @@ final class OAuthTest extends BaseTestCase
             $isOnline,
             $cookieCallback,
         );
-        $this->assertTrue($wasCallbackCalled);
-        $this->assertNotEmpty($testCookieId);
+        $this->assertNotEmpty($cookiesSet[OAuth::SESSION_ID_COOKIE_NAME]->getValue());
+        $this->assertEquals(
+            hash_hmac('sha256', $cookiesSet[OAuth::SESSION_ID_COOKIE_NAME]->getValue(), Context::$API_SECRET_KEY),
+            $cookiesSet[OAuth::SESSION_ID_SIG_COOKIE_NAME]->getValue()
+        );
 
         if ($isOnline) {
             $grantOptions = 'per-user';
         } else {
             $grantOptions = '';
         }
-        $generatedState = Context::$SESSION_STORAGE->loadSession($testCookieId)->getState();
+
+        $cookieSessionId = $cookiesSet[OAuth::SESSION_ID_COOKIE_NAME]->getValue();
+        $generatedState = Context::$SESSION_STORAGE->loadSession($cookieSessionId)->getState();
         $this->assertEquals(
             // phpcs:ignore
             "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=$grantOptions",
@@ -107,18 +111,11 @@ final class OAuthTest extends BaseTestCase
     {
         Context::$IS_EMBEDDED_APP = $isEmbedded;
 
-        $wasCallbackCalled = false;
-        $testCookieId = '';
-        $testCookieExpiration = null;
-        $cookieCallback = function (OAuthCookie $cookie) use (
-            &$wasCallbackCalled,
-            &$testCookieId,
-            &$testCookieExpiration
-        ) {
-            $wasCallbackCalled = true;
-            $testCookieExpiration = $cookie->getExpire();
-            $testCookieId = $cookie->getValue();
-            return isset($testCookieId);
+        /** @var OAuthCookie[] */
+        $cookiesSet = [];
+        $cookieCallback = function (OAuthCookie $cookie) use (&$cookiesSet) {
+            $cookiesSet[$cookie->getName()] = $cookie;
+            return !empty($cookie->getValue());
         };
 
         $this->createTestSession($isOnline);
@@ -134,7 +131,10 @@ final class OAuthTest extends BaseTestCase
             ),
         ]);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -142,8 +142,11 @@ final class OAuthTest extends BaseTestCase
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
         ];
         $actualSession = OAuth::callback($mockCookies, $mockQuery, $cookieCallback);
-        $this->assertTrue($wasCallbackCalled);
-        $this->assertEquals($this->oauthSessionId, $testCookieId);
+        $this->assertEquals($this->oauthSessionId, $cookiesSet[OAuth::SESSION_ID_COOKIE_NAME]->getValue());
+        $this->assertEquals(
+            hash_hmac('sha256', $cookiesSet[OAuth::SESSION_ID_COOKIE_NAME]->getValue(), Context::$API_SECRET_KEY),
+            $cookiesSet[OAuth::SESSION_ID_SIG_COOKIE_NAME]->getValue()
+        );
 
         $jwtSessionId = OAuth::getJwtSessionId($this->domain, '1');
 
@@ -160,12 +163,13 @@ final class OAuthTest extends BaseTestCase
         $expectedSession = $this->buildExpectedSession($expectedSessionId, $isOnline);
         $this->assertEquals($expectedSession, $actualSession);
 
+        $cookieExpiration = $cookiesSet[OAuth::SESSION_ID_COOKIE_NAME]->getExpire();
         if ($isEmbedded) {
-            $this->assertLessThanOrEqual(1, abs(time() - $testCookieExpiration)); // 1 second grace period
+            $this->assertLessThanOrEqual(1, abs(time() - $cookieExpiration)); // 1 second grace period
         } elseif ($isOnline) {
-            $this->assertEquals($expectedSession->getExpires()->format('U'), $testCookieExpiration);
+            $this->assertEquals($expectedSession->getExpires()->format('U'), $cookieExpiration);
         } else {
-            $this->assertNull($testCookieExpiration);
+            $this->assertNull($cookieExpiration);
         }
     }
 
@@ -188,11 +192,28 @@ final class OAuthTest extends BaseTestCase
         OAuth::callback([], []);
     }
 
+    public function testCallbackFailsWithInvalidSignature()
+    {
+        $this->createTestSession(false);
+
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => "Not the right signature",
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
+        $this->expectException(\Shopify\Exception\CookieNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the current session id in the cookies');
+        OAuth::callback($mockCookies, []);
+    }
+
     public function testCallbackFailsWithoutSession()
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => "👋 This is not the session you're looking for"];
+        $sessionId = "👋 This is not the session you're looking for";
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $sessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $sessionId,
+        ];
         $this->expectException(OAuthSessionNotFoundException::class);
         $this->expectExceptionMessage(
             'You may have taken more than 60 seconds to complete the OAuth process and the session cannot be found'
@@ -204,7 +225,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -219,7 +243,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -235,7 +262,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'state' => '1234',
             'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
@@ -249,7 +279,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => 'not-a-valid.domain',
             'state' => '1234',
@@ -265,7 +298,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'code' => 'real_code',
@@ -280,7 +316,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '4321',
@@ -296,7 +335,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -311,7 +353,10 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -329,7 +374,10 @@ final class OAuthTest extends BaseTestCase
 
         Context::$IS_PRIVATE_APP = true;
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -358,7 +406,10 @@ final class OAuthTest extends BaseTestCase
             ),
         ]);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -390,7 +441,10 @@ final class OAuthTest extends BaseTestCase
             ),
         ]);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -419,7 +473,10 @@ final class OAuthTest extends BaseTestCase
             ),
         ]);
 
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
@@ -498,7 +555,10 @@ final class OAuthTest extends BaseTestCase
     public function testGetCurrentSessionIdNonEmbeddedApp()
     {
         Context::$IS_EMBEDDED_APP = false;
-        $mockCookies = [OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId];
+        $mockCookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
+        ];
 
         $currentSessionId = OAuth::getCurrentSessionId([], $mockCookies, true);
         $this->assertEquals('test_oauth_session', $currentSessionId);

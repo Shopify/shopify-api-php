@@ -220,7 +220,10 @@ final class UtilsTest extends BaseTestCase
 
         $token = $this->encodeJwtPayload();
         $headers = ['Authorization' => "Bearer $token"];
-        $cookies = [OAuth::SESSION_ID_COOKIE_NAME => 'cookie_id'];
+        $cookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', 'cookie_id', Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => 'cookie_id',
+        ];
 
         // The session is valid and can be loaded from the headers
         Context::$IS_EMBEDDED_APP = true;
@@ -241,7 +244,10 @@ final class UtilsTest extends BaseTestCase
 
         $token = $this->encodeJwtPayload();
         $headers = ['Authorization' => "Bearer $token"];
-        $cookies = [OAuth::SESSION_ID_COOKIE_NAME => 'cookie_id'];
+        $cookies = [
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', 'cookie_id', Context::$API_SECRET_KEY),
+            OAuth::SESSION_ID_COOKIE_NAME => 'cookie_id',
+        ];
 
         // The session is valid and can be loaded from the cookies
         Context::$IS_EMBEDDED_APP = false;
@@ -311,7 +317,10 @@ final class UtilsTest extends BaseTestCase
             )
         ]);
 
-        $cookies = [OAuth::SESSION_ID_COOKIE_NAME => $sessionId];
+        $cookies = [
+            OAuth::SESSION_ID_COOKIE_NAME => $sessionId,
+            OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $sessionId, Context::$API_SECRET_KEY),
+        ];
         $response = Utils::graphqlProxy([], $cookies, $this->testGraphqlQuery);
 
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->testGraphqlResponse));

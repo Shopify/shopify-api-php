@@ -269,6 +269,35 @@ final class HttpTest extends BaseTestCase
         $client->get('test/path');
     }
 
+    public function testRetryAfterCanBeFloat()
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                // 1ms sleep time so we don't affect test run times
+                $this->buildMockHttpResponse(429, null, ['Retry-After' => 0.001]),
+                "https://$this->domain/test/path",
+                "GET",
+                "^Shopify Admin API Library for PHP v$this->version$",
+            ),
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $this->successResponse),
+                "https://$this->domain/test/path",
+                "GET",
+                null,
+                [],
+                null,
+                null,
+                true,
+                true,
+            ),
+        ]);
+
+        $client = new Http($this->domain);
+
+        $response = $client->get('test/path', [], [], 2);
+        $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
+    }
+
     public function testRetryLogicForAllRetriableCodes()
     {
         $this->mockTransportRequests([

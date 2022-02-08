@@ -1,5 +1,4 @@
-on:
-  [push,pull_request]
+on: [push, pull_request]
 name: CI
 jobs:
   CI:
@@ -10,9 +9,9 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "7.3"
           - "7.4"
           - "8.0"
+          - "8.1"
     steps:
       - uses: actions/checkout@master
 

@@ -163,14 +163,10 @@ class Http
 
         $client = Context::$HTTP_CLIENT_FACTORY->client();
 
-        if (strpos($path, '/') !== 0) {
-            $path = "/$path";
-        }
-
         $url = (new Uri())
             ->withScheme('https')
             ->withHost($this->domain)
-            ->withPath($path)
+            ->withPath($this->getRequestPath($path))
             ->withQuery(http_build_query($query));
 
         $request = new Request($method, $url, $headers);
@@ -215,6 +211,15 @@ class Http
         }
 
         return $response;
+    }
+
+    protected function getRequestPath(string $path): string
+    {
+        if (strpos($path, '/') !== 0) {
+            $path = "/$path";
+        }
+
+        return $path;
     }
 
     /**

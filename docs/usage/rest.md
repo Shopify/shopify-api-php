@@ -12,12 +12,12 @@ REST uses `get`, `post`, `put`, and `delete` requests to retrieve, create, updat
 
 | Parameter | Type            | Required? | Default Value    | Notes                                            |
 |:----------|:----------------|:---------:|:----------------:|:-------------------------------------------------|
-| path      | string          |    Yes    |                  | The URL path to request                          |
-| body      | string or array |    No     |     null         | Only `Post`, and `put` methods can have body     |
+| path      | string          |    Yes    |                  | The requested API endpoint path. This can be one of two formats:<ul><li>The path starting after the `/admin/api/{version}/` prefix, such as `'products'`, which executes `/admin/api/{version}/products.json`</li><li>The full path, such as `/admin/oauth/access_scopes.json`</li></ul>                          |
+| body      | string or array |    No     |     null         | Only `post`, and `put` methods can have body     |
 | headers   | array           |    No     |      []          | Any extra headers to send along with the request |
 | query     | array           |    No     |      []          | Query parameters as an associative array         |
 | tries     | int             |    No     |     null         | How many times to attempt the request            |
-| dataType  | No              |    No     | `DATA_TYPE_JSON` | Only `Post`, and `put` methods can have body     |
+| dataType  | No              |    No     | `DATA_TYPE_JSON` | Only `post`, and `put` methods can have body     |
 
 In the following example we will retrieve a list of products from a shop using `Shopify\Clients\Rest` class.
 

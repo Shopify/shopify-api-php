@@ -45,7 +45,7 @@ class Rest extends Http
         $headers[HttpHeaders::X_SHOPIFY_ACCESS_TOKEN] =
             Context::$IS_PRIVATE_APP ? Context::$API_SECRET_KEY : $this->accessToken;
 
-        $response = parent::request($this->getRestPath($path), $method, $body, $headers, $query, $tries, $dataType);
+        $response = parent::request($path, $method, $body, $headers, $query, $tries, $dataType);
 
         return new RestResponse(
             $response->getStatusCode(),
@@ -57,10 +57,17 @@ class Rest extends Http
         );
     }
 
-    private function getRestPath(string $path): string
+    protected function getRequestPath(string $path): string
     {
+        $path = parent::getRequestPath($path);
+        $path = preg_replace("/\.json$/", "", $path) . ".json";
+
         $apiVersion = Context::$API_VERSION;
-        return "admin/api/$apiVersion/$path.json";
+        if (strpos($path, "/admin") !== 0) {
+            $path = "/admin/api/$apiVersion$path";
+        }
+
+        return $path;
     }
 
     /**

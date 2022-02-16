@@ -9,7 +9,6 @@ use Shopify\Webhooks\DeliveryMethod;
 
 class PubSub extends DeliveryMethod
 {
-
     /**
      * @throws \Shopify\Exception\InvalidArgumentException
      */

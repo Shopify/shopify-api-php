@@ -9,7 +9,6 @@ use Shopify\Webhooks\DeliveryMethod;
 
 class EventBridge extends DeliveryMethod
 {
-
     /**
      * @throws \Shopify\Exception\InvalidArgumentException
      */

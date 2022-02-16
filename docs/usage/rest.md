@@ -6,9 +6,19 @@ You can read our [REST Admin API](https://shopify.dev/docs/admin-api/getting-sta
 
 ## Making your first REST request
 
-REST Admin API endpoints are organized by [resource](https://shopify.dev/docs/admin-api/rest/reference#selecting-apis-for-your-app) . You'll need to use different API endpoints depending on the service that your app provides.
+REST Admin API endpoints are organized by [resource](https://shopify.dev/docs/admin-api/rest/reference#selecting-apis-for-your-app) . You'll need to use different API endpoints depending on the service that your app provides. There are two different ways of doing that with this library:
+* [REST resources](#rest-resources)
+* [REST client](#rest-client)
 
-REST uses `get`, `post`, `put`, and `delete` requests to retrieve, create, update, and delete resources respectively.
+### REST resources
+
+REST resources are objects that represent the REST endpoints in the Admin API. This library provides classes for the endpoints in all supported versions of the API. We don't provide classes for the `unstable` version because it may change at any point, which would cause the resource classes to become outdated.
+
+The resource classes will provide methods for all endpoints described in [the REST reference docs](https://shopify.dev/api/admin-rest). Please see the references for how to use a specific resource.
+
+### REST client
+
+The REST client uses `get`, `post`, `put`, and `delete` requests to retrieve, create, update, and delete resources respectively.
 
 | Parameter | Type            | Required? | Default Value    | Notes                                            |
 |:----------|:----------------|:---------:|:----------------:|:-------------------------------------------------|

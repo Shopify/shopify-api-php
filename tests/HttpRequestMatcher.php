@@ -19,6 +19,8 @@ class HttpRequestMatcher extends Constraint
     private $body = null;
     /** @var bool */
     private $allowOtherHeaders = true;
+    /** @var mixed */
+    private $bodyDiff;
 
     /**
      * HttpRequestMatcher constructor.
@@ -38,7 +40,7 @@ class HttpRequestMatcher extends Constraint
         ?string $body = null,
         bool $allowOtherHeaders = true
     ) {
-        $this->url = $url;
+        $this->url = str_replace(["[", "]"], ["%5B", "%5D"], $url);
         $this->method = $method;
         $this->userAgent = $userAgent;
         $this->headers = $headers;
@@ -51,8 +53,7 @@ class HttpRequestMatcher extends Constraint
         if (!($other instanceof RequestInterface)) {
             return false;
         }
-        return
-            ($other->getUri() == $this->url)
+        return ($other->getUri() == $this->url)
             && ($other->getMethod() === $this->method)
             && $this->matchBody($other)
             && $this->matchHeadersWithoutUserAgent($other)
@@ -67,8 +68,8 @@ class HttpRequestMatcher extends Constraint
 
     private function matchBody(RequestInterface $request): bool
     {
-        $request->getBody()->rewind();
-        return $this->body === $request->getBody()->getContents();
+        $this->calculateBodyDiff($request);
+        return empty($this->bodyDiff);
     }
 
     private function matchHeadersWithoutUserAgent(RequestInterface $request): bool
@@ -82,10 +83,7 @@ class HttpRequestMatcher extends Constraint
             $header = explode(':', $expectedHeader, 2);
 
             $matchedHeaderValue = $request->getHeaderLine(trim($header[0])) === trim($header[1]);
-            if (
-                !($request->hasHeader(trim($header[0]))
-                && $matchedHeaderValue)
-            ) {
+            if (!($request->hasHeader(trim($header[0])) && $matchedHeaderValue)) {
                 return false;
             }
         }
@@ -104,7 +102,10 @@ class HttpRequestMatcher extends Constraint
         }
         if (!$this->matchBody($other)) {
             $other->getBody()->rewind();
-            $diff[] = $this->diffLine("Body", $this->body, $other->getBody()->getContents());
+            $diff[] = $this->diffLine("Method", $this->body, $other->getBody()->getContents());
+
+            $bodyDiff = json_encode($this->bodyDiff, true);
+            $diff[] = "  Diff:\n     $bodyDiff";
         }
 
         if (!$this->matchUserAgent($other)) {
@@ -143,5 +144,41 @@ class HttpRequestMatcher extends Constraint
     public function toString(): string
     {
         return "HttpRequestMatcher";
+    }
+
+    private function calculateBodyDiff(RequestInterface $request): void
+    {
+        $request->getBody()->rewind();
+        $contents = $request->getBody()->getContents();
+
+        $this->bodyDiff = $this->diffBody(
+            json_decode($this->body, true) ?: $this->body,
+            json_decode($contents, true) ?: $contents
+        );
+    }
+
+    private function diffBody($body1, $body2)
+    {
+        if (!(is_array($body1) && is_array($body2))) {
+            return $body1 !== $body2;
+        }
+
+        $difference = array();
+        foreach ($body1 as $key => $value) {
+            if (is_array($value)) {
+                if (!isset($body2[$key]) || !is_array($body2[$key])) {
+                    $difference[$key] = $value;
+                } else {
+                    $new_diff = $this->diffBody($value, $body2[$key]);
+                    if (!empty($new_diff)) {
+                        $difference[$key] = $new_diff;
+                    }
+                }
+            } elseif (!array_key_exists($key, $body2) || $body2[$key] !== $value) {
+                $difference[$key] = $value;
+            }
+        }
+
+        return $difference;
     }
 }

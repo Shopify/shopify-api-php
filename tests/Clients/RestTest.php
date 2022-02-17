@@ -84,6 +84,29 @@ class RestTest extends BaseTestCase
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
+    public function testAllowsFullPaths()
+    {
+        $headers = ['X-Test-Header' => 'test_value'];
+
+        $client = new Rest($this->domain, 'dummy-token');
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $this->successResponse),
+                "https://$this->domain/admin/custom_path.json",
+                'GET',
+                "Shopify Admin API Library for PHP v$this->version",
+                ['X-Test-Header: test_value', 'X-Shopify-Access-Token: dummy-token'],
+                null,
+                null,
+                false,
+            ),
+        ]);
+
+        $response = $client->get('/admin/custom_path', $headers);
+        $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
+    }
+
     public function testCanMakeGetRequestWithPathInQuery()
     {
         $client = new Rest($this->domain, 'dummy-token');

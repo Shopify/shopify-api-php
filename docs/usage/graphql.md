@@ -49,10 +49,11 @@ $queryUsingVariables = <<<QUERY
     }
 QUERY;
 $variables = [
-    "input" =>
+    "input" => [
         ["title" => "TARDIS"],
         ["descriptionHtml" => "Time and Relative Dimensions in Space"],
         ["productType" => "Time Lord technology"]
+    ]    
 ];
 $response = $client->query(['query' => $queryUsingVariables, 'variables' => $variables]);
 

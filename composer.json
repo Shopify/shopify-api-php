@@ -23,7 +23,8 @@
     "autoload": {
         "psr-4": {
             "Shopify\\": "src/"
-        }
+        },
+        "files": ["src/rest_resource_autoloader.php"]
     },
     "autoload-dev": {
         "psr-4": {
@@ -46,7 +47,7 @@
     },
     "scripts": {
         "test": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --color --testsuite default",
-        "test_rest_resources": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --color --testsuite rest_resources",
-        "lint": "./vendor/bin/phpcs --standard=PSR12 src tests"
+        "test_rest_resources": "./run_rest_resource_tests.sh",
+        "lint": "./vendor/bin/phpcs --standard=PSR12 --ignore=src/Rest/*/*,tests/Rest/* src tests"
     }
 }

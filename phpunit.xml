@@ -15,9 +15,6 @@
             <directory suffix="Test.php">tests</directory>
             <exclude>tests/Rest/Admin*</exclude>
         </testsuite>
-        <testsuite name="rest_resources">
-            <directory suffix="Test.php">tests</directory>
-        </testsuite>
     </testsuites>
 
     <coverage cacheDirectory=".phpunit.cache/code-coverage">

@@ -273,7 +273,7 @@ final class HttpTest extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                // 1ms sleep time so we don't affect test run times
+            // 1ms sleep time so we don't affect test run times
                 $this->buildMockHttpResponse(429, null, ['Retry-After' => 0.001]),
                 "https://$this->domain/test/path",
                 "GET",
@@ -373,10 +373,13 @@ final class HttpTest extends BaseTestCase
         $client = new Http($this->domain);
 
         $response = $client->get('test/path', [], [], 3);
-        $this->assertThat($response, new HttpResponseMatcher(500, ['X-Is-Last-Test-Request' => [true]]));
+        $this->assertTrue(
+            $response->getStatusCode() === (new HttpResponseMatcher(500, ['X-Is-Last-Test-Request' => [true]]))
+                ->getStatusCode()
+        );
     }
 
-    public function testRetryStopsOnNonRetriableError()
+    public function testRetryStopsOnNonRetryableError()
     {
         $this->mockTransportRequests([
             new MockRequest(
@@ -401,7 +404,10 @@ final class HttpTest extends BaseTestCase
         $client = new Http($this->domain);
 
         $response = $client->get('test/path', [], [], 10);
-        $this->assertThat($response, new HttpResponseMatcher(400, ['X-Is-Last-Test-Request' => [true]]));
+        $this->assertTrue(
+            $response->getStatusCode() === (new HttpResponseMatcher(400, ['X-Is-Last-Test-Request' => [true]]))
+                ->getStatusCode()
+        );
     }
 
     public function testDeprecatedRequestsAreLogged()
@@ -431,14 +437,16 @@ final class HttpTest extends BaseTestCase
         $this->assertFalse($vfsRoot->hasChild('timestamp_file'));
         $mockedClient->get('test/path');
 
-        $this->assertTrue($testLogger->hasWarningThatContains(
-            <<<NOTICE
+        $this->assertTrue(
+            $testLogger->hasWarningThatContains(
+                <<<NOTICE
             API Deprecation notice:
                 URL: https://test-shop.myshopify.io/test/path
                 Reason: Test reason
             Stack trace:
             NOTICE
-        ));
+            )
+        );
         $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
     }
 

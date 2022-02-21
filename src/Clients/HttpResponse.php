@@ -6,6 +6,7 @@ namespace Shopify\Clients;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
+use Shopify\Exception\InvalidJsonSyntaxException;
 
 class HttpResponse extends Response
 {
@@ -40,12 +41,22 @@ class HttpResponse extends Response
 
     /**
      * @return array|string|null Body
+     * @throws InvalidJsonSyntaxException
      */
     public function getDecodedBody()
     {
         $this->getBody()->rewind();
         $responseBody = $this->getBody()->getContents();
-        return $responseBody ? json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR) : null;
+        if ($responseBody === "") {
+            return "";
+        }
+
+        $decodedBody = $responseBody ? json_decode($responseBody, true) : null;
+        if ($decodedBody === null) {
+            throw new InvalidJsonSyntaxException();
+        }
+
+        return $decodedBody;
     }
 
     /**

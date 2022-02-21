@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Clients;
 
-use JsonException;
 use Shopify\Clients\HttpResponse;
+use Shopify\Exception\InvalidJsonSyntaxException;
 use ShopifyTest\BaseTestCase;
 
 final class HttpResponseTest extends BaseTestCase
@@ -36,11 +36,11 @@ final class HttpResponseTest extends BaseTestCase
         $this->assertNull($response->getRequestId());
     }
 
-    public function testGetDecodedBodyWillThrwoExceptionIfBodyIsNotJson()
+    public function testGetDecodedBodyWillThrowExceptionIfBodyIsNotJson()
     {
         $response = new HttpResponse(200, [], "not-json");
 
-        $this->expectException(JsonException::class);
+        $this->expectException(InvalidJsonSyntaxException::class);
         $response->getDecodedBody();
     }
 }

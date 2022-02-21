@@ -73,4 +73,9 @@ class HttpResponseMatcher extends Constraint
 
         return "## $header:\n `$actual` Doesn't match expected `$expected`";
     }
+
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
 }

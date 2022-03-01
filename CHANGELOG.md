@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- [#139](https://github.com/Shopify/shopify-php-api/pull/139) Add support for REST resources
 - [#134](https://github.com/Shopify/shopify-php-api/pull/134) ⚠️ [Breaking] Add support for PHP 8.1 and remove 7.3 from the supported list, since it's no longer supported
 - [#136](https://github.com/Shopify/shopify-php-api/pull/136) Allow full paths in REST requests
 

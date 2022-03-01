@@ -31,3 +31,7 @@ jobs:
 
       - name: Run tests
         run: composer test
+
+      # Enable this after adding the resources
+      # - name: Run REST resource tests
+      #   run: composer test_rest_resources

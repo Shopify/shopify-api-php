@@ -36,7 +36,8 @@
         "psr/log": "^1.1",
         "firebase/php-jwt": "^5.2",
         "psr/http-client": "^1.0",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+        "doctrine/inflector": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
@@ -44,7 +45,8 @@
         "mikey179/vfsstream": "^1.6"
     },
     "scripts": {
-        "test": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --color",
+        "test": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --color --testsuite default",
+        "test_rest_resources": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --color --testsuite rest_resources",
         "lint": "./vendor/bin/phpcs --standard=PSR12 src tests"
     }
 }

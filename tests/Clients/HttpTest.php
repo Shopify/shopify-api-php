@@ -69,6 +69,31 @@ final class HttpTest extends BaseTestCase
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
+    public function testGetRequestWithArrayInQuery()
+    {
+        $headers = ['X-Test-Header' => 'test_value'];
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $this->successResponse),
+                "https://$this->domain/test/path?array[]=value&hash[key1]=value1&hash[key2]=value2",
+                "GET",
+                "^Shopify Admin API Library for PHP v$this->version$",
+                ['X-Test-Header: test_value'],
+                null,
+                null,
+                false,
+            ),
+        ]);
+
+        $client = new Http($this->domain);
+        $response = $client->get(
+            'test/path',
+            $headers,
+            ["array" => ["value"], "hash" => ["key1" => "value1", "key2" => "value2"]]
+        );
+        $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
+    }
+
     public function testPostRequest()
     {
         $headers = ['X-Test-Header' => 'test_value'];

@@ -163,11 +163,13 @@ class Http
 
         $client = Context::$HTTP_CLIENT_FACTORY->client();
 
+        $query = preg_replace("/%5B[0-9]+%5D/", "%5B%5D", http_build_query($query));
+
         $url = (new Uri())
             ->withScheme('https')
             ->withHost($this->domain)
             ->withPath($this->getRequestPath($path))
-            ->withQuery(http_build_query($query));
+            ->withQuery($query);
 
         $request = new Request($method, $url, $headers);
         $request = $request->withHeader(HttpHeaders::USER_AGENT, implode(' | ', $userAgentParts));

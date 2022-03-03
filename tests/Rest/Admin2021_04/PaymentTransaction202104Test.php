@@ -47,7 +47,7 @@ final class PaymentTransaction202104Test extends BaseTestCase
         PaymentTransaction::transactions(
             $this->test_session,
             [],
-            ["payout_id" => 623721858],
+            ["payout_id" => "623721858"],
         );
     }
 

@@ -73,7 +73,7 @@ final class Order202107Test extends BaseTestCase
         Order::all(
             $this->test_session,
             [],
-            ["ids" => 1073459980],
+            ["ids" => "1073459980"],
         );
     }
 
@@ -177,7 +177,7 @@ final class Order202107Test extends BaseTestCase
         Order::all(
             $this->test_session,
             [],
-            ["since_id" => 123],
+            ["since_id" => "123"],
         );
     }
 
@@ -846,7 +846,7 @@ final class Order202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["order" => ["line_items" => [["title" => "Big Brown Bear Boots", "price" => 74.99, "grams" => 1300, "quantity" => 3, "tax_lines" => [["price" => 13.5, "rate" => 0.06, "title" => "State tax"]]]], "transactions" => [["kind" => "sale", "status" => "success", "amount" => 238.47]], "total_tax" => 13.5, "currency" => "EUR"]]),
+                json_encode(["order" => ["line_items" => [["title" => "Big Brown Bear Boots", "price" => 74.99, "grams" => "1300", "quantity" => 3, "tax_lines" => [["price" => 13.5, "rate" => 0.06, "title" => "State tax"]]]], "transactions" => [["kind" => "sale", "status" => "success", "amount" => 238.47]], "total_tax" => 13.5, "currency" => "EUR"]]),
             ),
         ]);
 
@@ -855,7 +855,7 @@ final class Order202107Test extends BaseTestCase
             [
                 "title" => "Big Brown Bear Boots",
                 "price" => 74.99,
-                "grams" => 1300,
+                "grams" => "1300",
                 "quantity" => 3,
                 "tax_lines" => [
                         [
@@ -894,7 +894,7 @@ final class Order202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["order" => ["line_items" => [["title" => "Red Leather Coat", "price" => 129.99, "grams" => 1700, "quantity" => 1], ["title" => "Blue Suede Shoes", "price" => 85.95, "grams" => 750, "quantity" => 1, "taxable" => false], ["title" => "Raspberry Beret", "price" => 19.99, "grams" => 320, "quantity" => 2]], "tax_lines" => [["price" => 10.2, "rate" => 0.06, "title" => "State tax"], ["price" => 4.25, "rate" => 0.025, "title" => "County tax"]], "total_tax" => 14.45]]),
+                json_encode(["order" => ["line_items" => [["title" => "Red Leather Coat", "price" => 129.99, "grams" => "1700", "quantity" => 1], ["title" => "Blue Suede Shoes", "price" => 85.95, "grams" => "750", "quantity" => 1, "taxable" => false], ["title" => "Raspberry Beret", "price" => 19.99, "grams" => "320", "quantity" => 2]], "tax_lines" => [["price" => 10.2, "rate" => 0.06, "title" => "State tax"], ["price" => 4.25, "rate" => 0.025, "title" => "County tax"]], "total_tax" => 14.45]]),
             ),
         ]);
 
@@ -903,20 +903,20 @@ final class Order202107Test extends BaseTestCase
             [
                 "title" => "Red Leather Coat",
                 "price" => 129.99,
-                "grams" => 1700,
+                "grams" => "1700",
                 "quantity" => 1
             ],
             [
                 "title" => "Blue Suede Shoes",
                 "price" => 85.95,
-                "grams" => 750,
+                "grams" => "750",
                 "quantity" => 1,
                 "taxable" => false
             ],
             [
                 "title" => "Raspberry Beret",
                 "price" => 19.99,
-                "grams" => 320,
+                "grams" => "320",
                 "quantity" => 2
             ]
         ];
@@ -1050,7 +1050,7 @@ final class Order202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["order" => ["line_items" => [["variant_id" => 447654529, "quantity" => 1]], "email" => "jane@example.com", "phone" => 18885551234, "billing_address" => ["first_name" => "John", "last_name" => "Smith", "address1" => "123 Fake Street", "phone" => "555-555-5555", "city" => "Fakecity", "province" => "Ontario", "country" => "Canada", "zip" => "K2P 1L4"], "shipping_address" => ["first_name" => "Jane", "last_name" => "Smith", "address1" => "123 Fake Street", "phone" => "777-777-7777", "city" => "Fakecity", "province" => "Ontario", "country" => "Canada", "zip" => "K2P 1L4"], "transactions" => [["kind" => "sale", "status" => "success", "amount" => 50.0]], "financial_status" => "paid", "discount_codes" => [["code" => "FAKE30", "amount" => "9.00", "type" => "percentage"]]]]),
+                json_encode(["order" => ["line_items" => [["variant_id" => 447654529, "quantity" => 1]], "email" => "jane@example.com", "phone" => "18885551234", "billing_address" => ["first_name" => "John", "last_name" => "Smith", "address1" => "123 Fake Street", "phone" => "555-555-5555", "city" => "Fakecity", "province" => "Ontario", "country" => "Canada", "zip" => "K2P 1L4"], "shipping_address" => ["first_name" => "Jane", "last_name" => "Smith", "address1" => "123 Fake Street", "phone" => "777-777-7777", "city" => "Fakecity", "province" => "Ontario", "country" => "Canada", "zip" => "K2P 1L4"], "transactions" => [["kind" => "sale", "status" => "success", "amount" => 50.0]], "financial_status" => "paid", "discount_codes" => [["code" => "FAKE30", "amount" => "9.00", "type" => "percentage"]]]]),
             ),
         ]);
 
@@ -1062,7 +1062,7 @@ final class Order202107Test extends BaseTestCase
             ]
         ];
         $order->email = "jane@example.com";
-        $order->phone = 18885551234;
+        $order->phone = "18885551234";
         $order->billing_address = [
             "first_name" => "John",
             "last_name" => "Smith",

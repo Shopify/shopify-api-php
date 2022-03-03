@@ -12,7 +12,7 @@ use Shopify\Rest\Base;
  * @property int|null $amount
  * @property string|null $description
  * @property int|null $id
- * @property string|null $test
+ * @property bool|null $test
  */
 class ApplicationCredit extends Base
 {

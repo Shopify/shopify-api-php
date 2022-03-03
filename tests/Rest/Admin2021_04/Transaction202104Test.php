@@ -46,7 +46,7 @@ final class Transaction202104Test extends BaseTestCase
 
         Transaction::all(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -72,8 +72,8 @@ final class Transaction202104Test extends BaseTestCase
 
         Transaction::all(
             $this->test_session,
-            ["order_id" => 450789469],
-            ["since_id" => 801038806],
+            ["order_id" => "450789469"],
+            ["since_id" => "801038806"],
         );
     }
 
@@ -213,7 +213,7 @@ final class Transaction202104Test extends BaseTestCase
 
         Transaction::count(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -240,7 +240,7 @@ final class Transaction202104Test extends BaseTestCase
         Transaction::find(
             $this->test_session,
             389404469,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }

@@ -46,7 +46,7 @@ final class Fulfillment202110Test extends BaseTestCase
 
         Fulfillment::all(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -72,8 +72,8 @@ final class Fulfillment202110Test extends BaseTestCase
 
         Fulfillment::all(
             $this->test_session,
-            ["order_id" => 450789469],
-            ["since_id" => 255858046],
+            ["order_id" => "450789469"],
+            ["since_id" => "255858046"],
         );
     }
 
@@ -93,14 +93,14 @@ final class Fulfillment202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment" => ["location_id" => 487838322, "tracking_number" => 123456789, "tracking_urls" => ["https://shipping.xyz/track.php?num=123456789", "https://anothershipper.corp/track.php?code=abc"], "notify_customer" => true]]),
+                json_encode(["fulfillment" => ["location_id" => 487838322, "tracking_number" => "123456789", "tracking_urls" => ["https://shipping.xyz/track.php?num=123456789", "https://anothershipper.corp/track.php?code=abc"], "notify_customer" => true]]),
             ),
         ]);
 
         $fulfillment = new Fulfillment($this->test_session);
         $fulfillment->order_id = 450789469;
         $fulfillment->location_id = 487838322;
-        $fulfillment->tracking_number = 123456789;
+        $fulfillment->tracking_number = "123456789";
         $fulfillment->tracking_urls = [
             "https://shipping.xyz/track.php?num=123456789",
             "https://anothershipper.corp/track.php?code=abc"
@@ -226,14 +226,14 @@ final class Fulfillment202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => 123456789, "tracking_company" => "4PX", "line_items" => [["id" => 518995019]]]]),
+                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => "123456789", "tracking_company" => "4PX", "line_items" => [["id" => 518995019]]]]),
             ),
         ]);
 
         $fulfillment = new Fulfillment($this->test_session);
         $fulfillment->order_id = 450789469;
         $fulfillment->location_id = 655441491;
-        $fulfillment->tracking_number = 123456789;
+        $fulfillment->tracking_number = "123456789";
         $fulfillment->tracking_company = "4PX";
         $fulfillment->line_items = [
             [
@@ -259,14 +259,14 @@ final class Fulfillment202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => 123456789010, "tracking_company" => "fed ex", "line_items" => [["id" => 518995019]]]]),
+                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => "123456789010", "tracking_company" => "fed ex", "line_items" => [["id" => 518995019]]]]),
             ),
         ]);
 
         $fulfillment = new Fulfillment($this->test_session);
         $fulfillment->order_id = 450789469;
         $fulfillment->location_id = 655441491;
-        $fulfillment->tracking_number = 123456789010;
+        $fulfillment->tracking_number = "123456789010";
         $fulfillment->tracking_company = "fed ex";
         $fulfillment->line_items = [
             [
@@ -292,14 +292,14 @@ final class Fulfillment202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => 123456789010, "tracking_company" => "fed ex", "tracking_url" => "https://www.new-fedex-tracking.com/?number=123456789010", "line_items" => [["id" => 518995019]]]]),
+                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => "123456789010", "tracking_company" => "fed ex", "tracking_url" => "https://www.new-fedex-tracking.com/?number=123456789010", "line_items" => [["id" => 518995019]]]]),
             ),
         ]);
 
         $fulfillment = new Fulfillment($this->test_session);
         $fulfillment->order_id = 450789469;
         $fulfillment->location_id = 655441491;
-        $fulfillment->tracking_number = 123456789010;
+        $fulfillment->tracking_number = "123456789010";
         $fulfillment->tracking_company = "fed ex";
         $fulfillment->tracking_url = "https://www.new-fedex-tracking.com/?number=123456789010";
         $fulfillment->line_items = [
@@ -359,14 +359,14 @@ final class Fulfillment202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => 1234567, "tracking_company" => "Custom Tracking Company", "line_items" => [["id" => 518995019]]]]),
+                json_encode(["fulfillment" => ["location_id" => 655441491, "tracking_number" => "1234567", "tracking_company" => "Custom Tracking Company", "line_items" => [["id" => 518995019]]]]),
             ),
         ]);
 
         $fulfillment = new Fulfillment($this->test_session);
         $fulfillment->order_id = 450789469;
         $fulfillment->location_id = 655441491;
-        $fulfillment->tracking_number = 1234567;
+        $fulfillment->tracking_number = "1234567";
         $fulfillment->tracking_company = "Custom Tracking Company";
         $fulfillment->line_items = [
             [
@@ -495,7 +495,7 @@ final class Fulfillment202110Test extends BaseTestCase
 
         Fulfillment::all(
             $this->test_session,
-            ["fulfillment_order_id" => 1046000859],
+            ["fulfillment_order_id" => "1046000859"],
             [],
         );
     }
@@ -521,7 +521,7 @@ final class Fulfillment202110Test extends BaseTestCase
 
         Fulfillment::count(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -548,7 +548,7 @@ final class Fulfillment202110Test extends BaseTestCase
         Fulfillment::find(
             $this->test_session,
             255858046,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -569,14 +569,14 @@ final class Fulfillment202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment" => ["tracking_number" => 987654321, "id" => 255858046]]),
+                json_encode(["fulfillment" => ["tracking_number" => "987654321", "id" => 255858046]]),
             ),
         ]);
 
         $fulfillment = new Fulfillment($this->test_session);
         $fulfillment->order_id = 450789469;
         $fulfillment->id = 255858046;
-        $fulfillment->tracking_number = 987654321;
+        $fulfillment->tracking_number = "987654321";
         $fulfillment->save();
     }
 
@@ -674,7 +674,7 @@ final class Fulfillment202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment" => ["notify_customer" => true, "tracking_info" => ["number" => 1111, "url" => "http://www.my-url.com", "company" => "my-company"]]]),
+                json_encode(["fulfillment" => ["notify_customer" => true, "tracking_info" => ["number" => "1111", "url" => "http://www.my-url.com", "company" => "my-company"]]]),
             ),
         ]);
 
@@ -682,7 +682,7 @@ final class Fulfillment202110Test extends BaseTestCase
         $fulfillment->id = 1069019908;
         $fulfillment->update_tracking(
             [],
-            ["fulfillment" => ["notify_customer" => true, "tracking_info" => ["number" => 1111, "url" => "http://www.my-url.com", "company" => "my-company"]]],
+            ["fulfillment" => ["notify_customer" => true, "tracking_info" => ["number" => "1111", "url" => "http://www.my-url.com", "company" => "my-company"]]],
         );
     }
 

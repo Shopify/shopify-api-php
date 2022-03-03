@@ -41,7 +41,7 @@ final class PriceRule202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["price_rule" => ["title" => "SUMMERSALE10OFF", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "value_type" => "fixed_amount", "value" => -10.0, "customer_selection" => "all", "starts_at" => "2017-01-19T17:59:10Z"]]),
+                json_encode(["price_rule" => ["title" => "SUMMERSALE10OFF", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "value_type" => "fixed_amount", "value" => "-10.0", "customer_selection" => "all", "starts_at" => "2017-01-19T17:59:10Z"]]),
             ),
         ]);
 
@@ -51,7 +51,7 @@ final class PriceRule202107Test extends BaseTestCase
         $price_rule->target_selection = "all";
         $price_rule->allocation_method = "across";
         $price_rule->value_type = "fixed_amount";
-        $price_rule->value = -10.0;
+        $price_rule->value = "-10.0";
         $price_rule->customer_selection = "all";
         $price_rule->starts_at = "2017-01-19T17:59:10Z";
         $price_rule->save();
@@ -73,7 +73,7 @@ final class PriceRule202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["price_rule" => ["title" => "15OFFCOLLECTION", "target_type" => "line_item", "target_selection" => "entitled", "allocation_method" => "across", "value_type" => "percentage", "value" => -15.0, "customer_selection" => "all", "entitled_collection_ids" => [841564295], "starts_at" => "2017-01-19T17:59:10Z"]]),
+                json_encode(["price_rule" => ["title" => "15OFFCOLLECTION", "target_type" => "line_item", "target_selection" => "entitled", "allocation_method" => "across", "value_type" => "percentage", "value" => "-15.0", "customer_selection" => "all", "entitled_collection_ids" => [841564295], "starts_at" => "2017-01-19T17:59:10Z"]]),
             ),
         ]);
 
@@ -83,7 +83,7 @@ final class PriceRule202107Test extends BaseTestCase
         $price_rule->target_selection = "entitled";
         $price_rule->allocation_method = "across";
         $price_rule->value_type = "percentage";
-        $price_rule->value = -15.0;
+        $price_rule->value = "-15.0";
         $price_rule->customer_selection = "all";
         $price_rule->entitled_collection_ids = [
             841564295
@@ -108,7 +108,7 @@ final class PriceRule202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["price_rule" => ["title" => "FREESHIPPING", "target_type" => "shipping_line", "target_selection" => "all", "allocation_method" => "each", "value_type" => "percentage", "value" => -100.0, "usage_limit" => 20, "customer_selection" => "all", "prerequisite_subtotal_range" => ["greater_than_or_equal_to" => 50.0], "starts_at" => "2017-01-19T17:59:10Z"]]),
+                json_encode(["price_rule" => ["title" => "FREESHIPPING", "target_type" => "shipping_line", "target_selection" => "all", "allocation_method" => "each", "value_type" => "percentage", "value" => "-100.0", "usage_limit" => 20, "customer_selection" => "all", "prerequisite_subtotal_range" => ["greater_than_or_equal_to" => "50.0"], "starts_at" => "2017-01-19T17:59:10Z"]]),
             ),
         ]);
 
@@ -118,11 +118,11 @@ final class PriceRule202107Test extends BaseTestCase
         $price_rule->target_selection = "all";
         $price_rule->allocation_method = "each";
         $price_rule->value_type = "percentage";
-        $price_rule->value = -100.0;
+        $price_rule->value = "-100.0";
         $price_rule->usage_limit = 20;
         $price_rule->customer_selection = "all";
         $price_rule->prerequisite_subtotal_range = [
-            "greater_than_or_equal_to" => 50.0
+            "greater_than_or_equal_to" => "50.0"
         ];
         $price_rule->starts_at = "2017-01-19T17:59:10Z";
         $price_rule->save();
@@ -144,7 +144,7 @@ final class PriceRule202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["price_rule" => ["title" => "5OFFCUSTOMERGROUP", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "value_type" => "fixed_amount", "value" => -5.0, "customer_selection" => "prerequisite", "prerequisite_saved_search_ids" => [789629109], "starts_at" => "2017-01-19T17:59:10Z"]]),
+                json_encode(["price_rule" => ["title" => "5OFFCUSTOMERGROUP", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "value_type" => "fixed_amount", "value" => "-5.0", "customer_selection" => "prerequisite", "prerequisite_saved_search_ids" => [789629109], "starts_at" => "2017-01-19T17:59:10Z"]]),
             ),
         ]);
 
@@ -154,7 +154,7 @@ final class PriceRule202107Test extends BaseTestCase
         $price_rule->target_selection = "all";
         $price_rule->allocation_method = "across";
         $price_rule->value_type = "fixed_amount";
-        $price_rule->value = -5.0;
+        $price_rule->value = "-5.0";
         $price_rule->customer_selection = "prerequisite";
         $price_rule->prerequisite_saved_search_ids = [
             789629109
@@ -179,14 +179,14 @@ final class PriceRule202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["price_rule" => ["title" => "Buy2iPodsGetiPodTouchForFree", "value_type" => "percentage", "value" => -100.0, "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "entitled", "allocation_method" => "each", "starts_at" => "2018-03-22T00:00:00-00:00", "prerequisite_collection_ids" => [841564295], "entitled_product_ids" => [921728736], "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => 2, "entitled_quantity" => 1], "allocation_limit" => 3]]),
+                json_encode(["price_rule" => ["title" => "Buy2iPodsGetiPodTouchForFree", "value_type" => "percentage", "value" => "-100.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "entitled", "allocation_method" => "each", "starts_at" => "2018-03-22T00:00:00-00:00", "prerequisite_collection_ids" => [841564295], "entitled_product_ids" => [921728736], "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => 2, "entitled_quantity" => 1], "allocation_limit" => 3]]),
             ),
         ]);
 
         $price_rule = new PriceRule($this->test_session);
         $price_rule->title = "Buy2iPodsGetiPodTouchForFree";
         $price_rule->value_type = "percentage";
-        $price_rule->value = -100.0;
+        $price_rule->value = "-100.0";
         $price_rule->customer_selection = "all";
         $price_rule->target_type = "line_item";
         $price_rule->target_selection = "entitled";

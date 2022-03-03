@@ -46,7 +46,7 @@ final class Refund202201Test extends BaseTestCase
 
         Refund::all(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -157,7 +157,7 @@ final class Refund202201Test extends BaseTestCase
         Refund::find(
             $this->test_session,
             509562969,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }

@@ -9,13 +9,13 @@ use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
- * @property array $rules
+ * @property array|array[] $rules
  * @property string $title
  * @property string|null $body_html
  * @property bool|null $disjunctive
  * @property string|null $handle
  * @property int|null $id
- * @property array|null $image
+ * @property string|array|null $image
  * @property string|null $published_at
  * @property string|null $published_scope
  * @property string|null $sort_order

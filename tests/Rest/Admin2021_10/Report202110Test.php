@@ -73,7 +73,7 @@ final class Report202110Test extends BaseTestCase
         Report::all(
             $this->test_session,
             [],
-            ["ids" => 517154478],
+            ["ids" => "517154478"],
         );
     }
 
@@ -151,7 +151,7 @@ final class Report202110Test extends BaseTestCase
         Report::all(
             $this->test_session,
             [],
-            ["since_id" => 123],
+            ["since_id" => "123"],
         );
     }
 

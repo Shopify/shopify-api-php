@@ -10,7 +10,7 @@ use Shopify\Rest\Base;
 
 /**
  * @property string|null $application_id
- * @property array|null $enabled_shared_webcredentials
+ * @property bool|null $enabled_shared_webcredentials
  * @property bool|null $enabled_universal_or_app_links
  * @property int|null $id
  * @property string|null $platform

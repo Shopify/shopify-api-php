@@ -73,7 +73,7 @@ final class CustomerSavedSearch202110Test extends BaseTestCase
         CustomerSavedSearch::all(
             $this->test_session,
             [],
-            ["since_id" => 20610973],
+            ["since_id" => "20610973"],
         );
     }
 
@@ -177,7 +177,7 @@ final class CustomerSavedSearch202110Test extends BaseTestCase
         CustomerSavedSearch::count(
             $this->test_session,
             [],
-            ["since_id" => 20610973],
+            ["since_id" => "20610973"],
         );
     }
 

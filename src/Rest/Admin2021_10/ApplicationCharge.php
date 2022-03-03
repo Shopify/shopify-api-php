@@ -13,10 +13,10 @@ use Shopify\Rest\Base;
  * @property string|null $created_at
  * @property int|null $id
  * @property string|null $name
- * @property string|null $price
+ * @property string|float|null $price
  * @property string|null $return_url
  * @property string|null $status
- * @property string|null $test
+ * @property bool|null $test
  * @property string|null $updated_at
  */
 class ApplicationCharge extends Base

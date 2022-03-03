@@ -73,7 +73,7 @@ final class Country202107Test extends BaseTestCase
         Country::all(
             $this->test_session,
             [],
-            ["since_id" => 359115488],
+            ["since_id" => "359115488"],
         );
     }
 

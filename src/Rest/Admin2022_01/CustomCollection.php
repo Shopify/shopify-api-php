@@ -13,7 +13,7 @@ use Shopify\Rest\Base;
  * @property string|null $body_html
  * @property string|null $handle
  * @property int|null $id
- * @property array|null $image
+ * @property string|array|null $image
  * @property bool|null $published
  * @property string|null $published_at
  * @property string|null $published_scope

@@ -11,7 +11,7 @@ use Shopify\Rest\Base;
 /**
  * @property string $key
  * @property string $namespace
- * @property array $value
+ * @property string|int|float $value
  * @property string|null $created_at
  * @property string|null $description
  * @property int|null $id

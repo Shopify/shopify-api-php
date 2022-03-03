@@ -46,7 +46,7 @@ final class LocationsForMove202107Test extends BaseTestCase
 
         LocationsForMove::all(
             $this->test_session,
-            ["fulfillment_order_id" => 1046000833],
+            ["fulfillment_order_id" => "1046000833"],
             [],
         );
     }

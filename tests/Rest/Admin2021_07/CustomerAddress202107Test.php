@@ -46,7 +46,7 @@ final class CustomerAddress202107Test extends BaseTestCase
 
         CustomerAddress::all(
             $this->test_session,
-            ["customer_id" => 207119551],
+            ["customer_id" => "207119551"],
             [],
         );
     }
@@ -72,8 +72,8 @@ final class CustomerAddress202107Test extends BaseTestCase
 
         CustomerAddress::all(
             $this->test_session,
-            ["customer_id" => 207119551],
-            ["limit" => 1],
+            ["customer_id" => "207119551"],
+            ["limit" => "1"],
         );
     }
 
@@ -138,7 +138,7 @@ final class CustomerAddress202107Test extends BaseTestCase
         CustomerAddress::find(
             $this->test_session,
             207119551,
-            ["customer_id" => 207119551],
+            ["customer_id" => "207119551"],
             [],
         );
     }
@@ -159,14 +159,14 @@ final class CustomerAddress202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["address" => ["id" => 207119551, "zip" => 90210]]),
+                json_encode(["address" => ["id" => 207119551, "zip" => "90210"]]),
             ),
         ]);
 
         $customer_address = new CustomerAddress($this->test_session);
         $customer_address->customer_id = 207119551;
         $customer_address->id = 207119551;
-        $customer_address->zip = 90210;
+        $customer_address->zip = "90210";
         $customer_address->save();
     }
 
@@ -192,7 +192,7 @@ final class CustomerAddress202107Test extends BaseTestCase
         CustomerAddress::delete(
             $this->test_session,
             1053317335,
-            ["customer_id" => 207119551],
+            ["customer_id" => "207119551"],
             [],
         );
     }
@@ -219,7 +219,7 @@ final class CustomerAddress202107Test extends BaseTestCase
         $customer_address = new CustomerAddress($this->test_session);
         $customer_address->customer_id = 207119551;
         $customer_address->set(
-            ["address_ids" => [1053317336], "operation" => "destroy"],
+            ["address_ids" => ["1053317336"], "operation" => "destroy"],
         );
     }
 

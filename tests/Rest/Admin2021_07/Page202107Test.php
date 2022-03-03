@@ -73,7 +73,7 @@ final class Page202107Test extends BaseTestCase
         Page::all(
             $this->test_session,
             [],
-            ["since_id" => 108828309],
+            ["since_id" => "108828309"],
         );
     }
 

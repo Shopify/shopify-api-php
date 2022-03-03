@@ -12,16 +12,16 @@ use Shopify\Rest\Base;
  * @property string|null $activated_on
  * @property string|null $billing_on
  * @property string|null $cancelled_on
- * @property string|null $capped_amount
+ * @property string|int|null $capped_amount
  * @property string|null $confirmation_url
  * @property string|null $created_at
  * @property int|null $id
  * @property string|null $name
- * @property string|null $price
+ * @property string|float|null $price
  * @property string|null $return_url
  * @property string|null $status
  * @property string|null $terms
- * @property string|null $test
+ * @property bool|null $test
  * @property int|null $trial_days
  * @property string|null $trial_ends_on
  * @property string|null $updated_at

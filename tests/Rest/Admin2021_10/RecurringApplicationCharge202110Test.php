@@ -185,7 +185,7 @@ final class RecurringApplicationCharge202110Test extends BaseTestCase
         RecurringApplicationCharge::all(
             $this->test_session,
             [],
-            ["since_id" => 455696195],
+            ["since_id" => "455696195"],
         );
     }
 
@@ -265,7 +265,7 @@ final class RecurringApplicationCharge202110Test extends BaseTestCase
         $recurring_application_charge = new RecurringApplicationCharge($this->test_session);
         $recurring_application_charge->id = 455696195;
         $recurring_application_charge->customize(
-            ["recurring_application_charge" => ["capped_amount" => 200]],
+            ["recurring_application_charge" => ["capped_amount" => "200"]],
         );
     }
 

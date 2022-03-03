@@ -72,7 +72,7 @@ final class DiscountCode202110Test extends BaseTestCase
 
         DiscountCode::all(
             $this->test_session,
-            ["price_rule_id" => 507328175],
+            ["price_rule_id" => "507328175"],
             [],
         );
     }
@@ -126,7 +126,7 @@ final class DiscountCode202110Test extends BaseTestCase
         DiscountCode::find(
             $this->test_session,
             507328175,
-            ["price_rule_id" => 507328175],
+            ["price_rule_id" => "507328175"],
             [],
         );
     }
@@ -153,7 +153,7 @@ final class DiscountCode202110Test extends BaseTestCase
         DiscountCode::delete(
             $this->test_session,
             507328175,
-            ["price_rule_id" => 507328175],
+            ["price_rule_id" => "507328175"],
             [],
         );
     }
@@ -233,7 +233,7 @@ final class DiscountCode202110Test extends BaseTestCase
 
         DiscountCode::get_all(
             $this->test_session,
-            ["price_rule_id" => 507328175, "batch_id" => 173232803],
+            ["price_rule_id" => "507328175", "batch_id" => "173232803"],
             [],
         );
     }
@@ -259,7 +259,7 @@ final class DiscountCode202110Test extends BaseTestCase
 
         DiscountCode::all(
             $this->test_session,
-            ["price_rule_id" => 507328175, "batch_id" => 173232803],
+            ["price_rule_id" => "507328175", "batch_id" => "173232803"],
             [],
         );
     }

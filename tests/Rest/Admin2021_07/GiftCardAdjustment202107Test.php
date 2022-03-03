@@ -46,7 +46,7 @@ final class GiftCardAdjustment202107Test extends BaseTestCase
 
         GiftCardAdjustment::all(
             $this->test_session,
-            ["gift_card_id" => 1035197676],
+            ["gift_card_id" => "1035197676"],
             [],
         );
     }
@@ -182,7 +182,7 @@ final class GiftCardAdjustment202107Test extends BaseTestCase
         GiftCardAdjustment::find(
             $this->test_session,
             9,
-            ["gift_card_id" => 1035197676],
+            ["gift_card_id" => "1035197676"],
             [],
         );
     }

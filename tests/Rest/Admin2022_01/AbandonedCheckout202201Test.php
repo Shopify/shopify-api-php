@@ -125,7 +125,7 @@ final class AbandonedCheckout202201Test extends BaseTestCase
         AbandonedCheckout::checkouts(
             $this->test_session,
             [],
-            ["limit" => 1],
+            ["limit" => "1"],
         );
     }
 

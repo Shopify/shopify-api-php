@@ -46,7 +46,7 @@ final class FulfillmentEvent202107Test extends BaseTestCase
 
         FulfillmentEvent::all(
             $this->test_session,
-            ["order_id" => 450789469, "fulfillment_id" => 255858046],
+            ["order_id" => "450789469", "fulfillment_id" => "255858046"],
             [],
         );
     }
@@ -100,7 +100,7 @@ final class FulfillmentEvent202107Test extends BaseTestCase
         FulfillmentEvent::find(
             $this->test_session,
             944956395,
-            ["order_id" => 450789469, "fulfillment_id" => 255858046],
+            ["order_id" => "450789469", "fulfillment_id" => "255858046"],
             [],
         );
     }
@@ -127,7 +127,7 @@ final class FulfillmentEvent202107Test extends BaseTestCase
         FulfillmentEvent::delete(
             $this->test_session,
             944956397,
-            ["order_id" => 450789469, "fulfillment_id" => 255858046],
+            ["order_id" => "450789469", "fulfillment_id" => "255858046"],
             [],
         );
     }

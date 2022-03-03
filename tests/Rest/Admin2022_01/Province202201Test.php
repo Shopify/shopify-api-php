@@ -46,7 +46,7 @@ final class Province202201Test extends BaseTestCase
 
         Province::all(
             $this->test_session,
-            ["country_id" => 879921427],
+            ["country_id" => "879921427"],
             [],
         );
     }
@@ -72,8 +72,8 @@ final class Province202201Test extends BaseTestCase
 
         Province::all(
             $this->test_session,
-            ["country_id" => 879921427],
-            ["since_id" => 536137098],
+            ["country_id" => "879921427"],
+            ["since_id" => "536137098"],
         );
     }
 
@@ -98,7 +98,7 @@ final class Province202201Test extends BaseTestCase
 
         Province::count(
             $this->test_session,
-            ["country_id" => 879921427],
+            ["country_id" => "879921427"],
             [],
         );
     }
@@ -125,7 +125,7 @@ final class Province202201Test extends BaseTestCase
         Province::find(
             $this->test_session,
             224293623,
-            ["country_id" => 879921427],
+            ["country_id" => "879921427"],
             [],
         );
     }

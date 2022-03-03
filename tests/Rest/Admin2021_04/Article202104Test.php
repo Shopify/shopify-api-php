@@ -46,7 +46,7 @@ final class Article202104Test extends BaseTestCase
 
         Article::all(
             $this->test_session,
-            ["blog_id" => 241253187],
+            ["blog_id" => "241253187"],
             [],
         );
     }
@@ -72,8 +72,8 @@ final class Article202104Test extends BaseTestCase
 
         Article::all(
             $this->test_session,
-            ["blog_id" => 241253187],
-            ["since_id" => 134645308],
+            ["blog_id" => "241253187"],
+            ["since_id" => "134645308"],
         );
     }
 
@@ -263,7 +263,7 @@ final class Article202104Test extends BaseTestCase
 
         Article::count(
             $this->test_session,
-            ["blog_id" => 241253187],
+            ["blog_id" => "241253187"],
             [],
         );
     }
@@ -290,7 +290,7 @@ final class Article202104Test extends BaseTestCase
         Article::find(
             $this->test_session,
             134645308,
-            ["blog_id" => 241253187],
+            ["blog_id" => "241253187"],
             [],
         );
     }
@@ -531,7 +531,7 @@ final class Article202104Test extends BaseTestCase
         Article::delete(
             $this->test_session,
             134645308,
-            ["blog_id" => 241253187],
+            ["blog_id" => "241253187"],
             [],
         );
     }
@@ -583,8 +583,8 @@ final class Article202104Test extends BaseTestCase
 
         Article::tags(
             $this->test_session,
-            ["blog_id" => 241253187],
-            ["limit" => 1, "popular" => 1],
+            ["blog_id" => "241253187"],
+            ["limit" => "1", "popular" => "1"],
         );
     }
 
@@ -635,7 +635,7 @@ final class Article202104Test extends BaseTestCase
 
         Article::tags(
             $this->test_session,
-            ["blog_id" => 241253187],
+            ["blog_id" => "241253187"],
             [],
         );
     }
@@ -662,7 +662,7 @@ final class Article202104Test extends BaseTestCase
         Article::tags(
             $this->test_session,
             [],
-            ["limit" => 1, "popular" => 1],
+            ["limit" => "1", "popular" => "1"],
         );
     }
 

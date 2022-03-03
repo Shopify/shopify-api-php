@@ -73,7 +73,7 @@ final class InventoryLevel202107Test extends BaseTestCase
         InventoryLevel::all(
             $this->test_session,
             [],
-            ["inventory_item_ids" => 808950810],
+            ["inventory_item_ids" => "808950810"],
         );
     }
 
@@ -99,7 +99,7 @@ final class InventoryLevel202107Test extends BaseTestCase
         InventoryLevel::all(
             $this->test_session,
             [],
-            ["location_ids" => 655441491],
+            ["location_ids" => "655441491"],
         );
     }
 
@@ -153,7 +153,7 @@ final class InventoryLevel202107Test extends BaseTestCase
         InventoryLevel::delete(
             $this->test_session,
             [],
-            ["inventory_item_id" => 808950810, "location_id" => 655441491],
+            ["inventory_item_id" => "808950810", "location_id" => "655441491"],
         );
     }
 

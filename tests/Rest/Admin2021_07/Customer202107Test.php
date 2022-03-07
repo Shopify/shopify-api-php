@@ -73,7 +73,7 @@ final class Customer202107Test extends BaseTestCase
         Customer::all(
             $this->test_session,
             [],
-            ["since_id" => 207119551],
+            ["since_id" => "207119551"],
         );
     }
 

@@ -46,8 +46,8 @@ final class Variant202104Test extends BaseTestCase
 
         Variant::all(
             $this->test_session,
-            ["product_id" => 632910392],
-            ["since_id" => 49148385],
+            ["product_id" => "632910392"],
+            ["since_id" => "49148385"],
         );
     }
 
@@ -72,7 +72,7 @@ final class Variant202104Test extends BaseTestCase
 
         Variant::all(
             $this->test_session,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             ["presentment_currencies" => "USD,CAD"],
         );
     }
@@ -98,7 +98,7 @@ final class Variant202104Test extends BaseTestCase
 
         Variant::all(
             $this->test_session,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }
@@ -124,7 +124,7 @@ final class Variant202104Test extends BaseTestCase
 
         Variant::count(
             $this->test_session,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }
@@ -352,7 +352,7 @@ final class Variant202104Test extends BaseTestCase
         Variant::delete(
             $this->test_session,
             808950810,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }

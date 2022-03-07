@@ -73,7 +73,7 @@ final class Webhook202104Test extends BaseTestCase
         Webhook::all(
             $this->test_session,
             [],
-            ["since_id" => 901431826],
+            ["since_id" => "901431826"],
         );
     }
 

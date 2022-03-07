@@ -73,7 +73,7 @@ final class Metafield202104Test extends BaseTestCase
         Metafield::all(
             $this->test_session,
             [],
-            ["since_id" => 721389482],
+            ["since_id" => "721389482"],
         );
     }
 
@@ -128,7 +128,7 @@ final class Metafield202104Test extends BaseTestCase
         Metafield::all(
             $this->test_session,
             [],
-            ["metafield" => ["owner_id" => 850703190, "owner_resource" => "product_image"]],
+            ["metafield" => ["owner_id" => "850703190", "owner_resource" => "product_image"]],
         );
     }
 

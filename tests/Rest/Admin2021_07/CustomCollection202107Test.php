@@ -73,7 +73,7 @@ final class CustomCollection202107Test extends BaseTestCase
         CustomCollection::all(
             $this->test_session,
             [],
-            ["since_id" => 841564295],
+            ["since_id" => "841564295"],
         );
     }
 
@@ -99,7 +99,7 @@ final class CustomCollection202107Test extends BaseTestCase
         CustomCollection::all(
             $this->test_session,
             [],
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
         );
     }
 
@@ -320,7 +320,7 @@ final class CustomCollection202107Test extends BaseTestCase
         CustomCollection::count(
             $this->test_session,
             [],
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
         );
     }
 

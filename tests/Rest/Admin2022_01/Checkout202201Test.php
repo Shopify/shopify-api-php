@@ -203,7 +203,7 @@ final class Checkout202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["checkout" => ["token" => "exuw7apwoycchjuwtiqg8nytfhphr62a", "email" => "john.smith@example.com", "shipping_address" => ["first_name" => "John", "last_name" => "Smith", "address1" => "126 York St.", "city" => "Los Angeles", "province_code" => "CA", "country_code" => "US", "phone" => "(123)456-7890", "zip" => 90002]]]),
+                json_encode(["checkout" => ["token" => "exuw7apwoycchjuwtiqg8nytfhphr62a", "email" => "john.smith@example.com", "shipping_address" => ["first_name" => "John", "last_name" => "Smith", "address1" => "126 York St.", "city" => "Los Angeles", "province_code" => "CA", "country_code" => "US", "phone" => "(123)456-7890", "zip" => "90002"]]]),
             ),
         ]);
 
@@ -218,7 +218,7 @@ final class Checkout202201Test extends BaseTestCase
             "province_code" => "CA",
             "country_code" => "US",
             "phone" => "(123)456-7890",
-            "zip" => 90002
+            "zip" => "90002"
         ];
         $checkout->save();
     }

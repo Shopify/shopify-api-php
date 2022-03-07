@@ -46,7 +46,7 @@ final class Image202107Test extends BaseTestCase
 
         Image::all(
             $this->test_session,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }
@@ -72,8 +72,8 @@ final class Image202107Test extends BaseTestCase
 
         Image::all(
             $this->test_session,
-            ["product_id" => 632910392],
-            ["since_id" => 850703190],
+            ["product_id" => "632910392"],
+            ["since_id" => "850703190"],
         );
     }
 
@@ -246,7 +246,7 @@ final class Image202107Test extends BaseTestCase
 
         Image::count(
             $this->test_session,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }
@@ -272,8 +272,8 @@ final class Image202107Test extends BaseTestCase
 
         Image::count(
             $this->test_session,
-            ["product_id" => 632910392],
-            ["since_id" => 850703190],
+            ["product_id" => "632910392"],
+            ["since_id" => "850703190"],
         );
     }
 
@@ -299,7 +299,7 @@ final class Image202107Test extends BaseTestCase
         Image::find(
             $this->test_session,
             850703190,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }
@@ -418,7 +418,7 @@ final class Image202107Test extends BaseTestCase
         Image::delete(
             $this->test_session,
             850703190,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }

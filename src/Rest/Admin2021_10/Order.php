@@ -78,7 +78,7 @@ use Shopify\Rest\Base;
  * @property string|null $total_price
  * @property array|null $total_price_set
  * @property array|null $total_shipping_price_set
- * @property string|null $total_tax
+ * @property string|float|null $total_tax
  * @property array|null $total_tax_set
  * @property string|null $total_tip_received
  * @property int|null $total_weight

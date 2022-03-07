@@ -71,7 +71,7 @@ final class DraftOrder202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["draft_order" => ["line_items" => [["title" => "Custom Tee", "price" => "20.00", "quantity" => 2]], "applied_discount" => ["description" => "Custom discount", "value_type" => "fixed_amount", "value" => 10.0, "amount" => "10.00", "title" => "Custom"], "customer" => ["id" => 207119551], "use_customer_default_address" => true]]),
+                json_encode(["draft_order" => ["line_items" => [["title" => "Custom Tee", "price" => "20.00", "quantity" => 2]], "applied_discount" => ["description" => "Custom discount", "value_type" => "fixed_amount", "value" => "10.0", "amount" => "10.00", "title" => "Custom"], "customer" => ["id" => 207119551], "use_customer_default_address" => true]]),
             ),
         ]);
 
@@ -86,7 +86,7 @@ final class DraftOrder202110Test extends BaseTestCase
         $draft_order->applied_discount = [
             "description" => "Custom discount",
             "value_type" => "fixed_amount",
-            "value" => 10.0,
+            "value" => "10.0",
             "amount" => "10.00",
             "title" => "Custom"
         ];
@@ -113,7 +113,7 @@ final class DraftOrder202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["draft_order" => ["line_items" => [["title" => "Custom Tee", "price" => "20.00", "quantity" => 1, "applied_discount" => ["description" => "Custom discount", "value_type" => "fixed_amount", "value" => 10.0, "amount" => 10.0, "title" => "Custom"]]]]]),
+                json_encode(["draft_order" => ["line_items" => [["title" => "Custom Tee", "price" => "20.00", "quantity" => 1, "applied_discount" => ["description" => "Custom discount", "value_type" => "fixed_amount", "value" => "10.0", "amount" => "10.0", "title" => "Custom"]]]]]),
             ),
         ]);
 
@@ -126,8 +126,8 @@ final class DraftOrder202110Test extends BaseTestCase
                 "applied_discount" => [
                         "description" => "Custom discount",
                         "value_type" => "fixed_amount",
-                        "value" => 10.0,
-                        "amount" => 10.0,
+                        "value" => "10.0",
+                        "amount" => "10.0",
                         "title" => "Custom"
                     ]
             ]
@@ -151,7 +151,7 @@ final class DraftOrder202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["draft_order" => ["line_items" => [["title" => "Custom Tee", "price" => "20.00", "quantity" => 1, "applied_discount" => ["description" => "Custom discount", "value_type" => "percentage", "value" => 10.0, "amount" => 2.0, "title" => "Custom"]]]]]),
+                json_encode(["draft_order" => ["line_items" => [["title" => "Custom Tee", "price" => "20.00", "quantity" => 1, "applied_discount" => ["description" => "Custom discount", "value_type" => "percentage", "value" => "10.0", "amount" => "2.0", "title" => "Custom"]]]]]),
             ),
         ]);
 
@@ -164,8 +164,8 @@ final class DraftOrder202110Test extends BaseTestCase
                 "applied_discount" => [
                         "description" => "Custom discount",
                         "value_type" => "percentage",
-                        "value" => 10.0,
-                        "amount" => 2.0,
+                        "value" => "10.0",
+                        "amount" => "2.0",
                         "title" => "Custom"
                     ]
             ]
@@ -276,7 +276,7 @@ final class DraftOrder202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["draft_order" => ["id" => 994118539, "applied_discount" => ["description" => "Custom discount", "value_type" => "percentage", "value" => 10.0, "amount" => "19.90", "title" => "Custom"]]]),
+                json_encode(["draft_order" => ["id" => 994118539, "applied_discount" => ["description" => "Custom discount", "value_type" => "percentage", "value" => "10.0", "amount" => "19.90", "title" => "Custom"]]]),
             ),
         ]);
 
@@ -285,7 +285,7 @@ final class DraftOrder202110Test extends BaseTestCase
         $draft_order->applied_discount = [
             "description" => "Custom discount",
             "value_type" => "percentage",
-            "value" => 10.0,
+            "value" => "10.0",
             "amount" => "19.90",
             "title" => "Custom"
         ];

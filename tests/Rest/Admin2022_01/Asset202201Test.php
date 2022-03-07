@@ -46,7 +46,7 @@ final class Asset202201Test extends BaseTestCase
 
         Asset::all(
             $this->test_session,
-            ["theme_id" => 828155753],
+            ["theme_id" => "828155753"],
             [],
         );
     }
@@ -180,7 +180,7 @@ final class Asset202201Test extends BaseTestCase
 
         Asset::all(
             $this->test_session,
-            ["theme_id" => 828155753],
+            ["theme_id" => "828155753"],
             ["asset" => ["key" => "templates/index.liquid"]],
         );
     }
@@ -206,7 +206,7 @@ final class Asset202201Test extends BaseTestCase
 
         Asset::delete(
             $this->test_session,
-            ["theme_id" => 828155753],
+            ["theme_id" => "828155753"],
             ["asset" => ["key" => "assets/bg-body.gif"]],
         );
     }

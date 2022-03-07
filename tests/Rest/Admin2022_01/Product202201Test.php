@@ -125,7 +125,7 @@ final class Product202201Test extends BaseTestCase
         Product::all(
             $this->test_session,
             [],
-            ["collection_id" => 841564295],
+            ["collection_id" => "841564295"],
         );
     }
 
@@ -151,7 +151,7 @@ final class Product202201Test extends BaseTestCase
         Product::all(
             $this->test_session,
             [],
-            ["since_id" => 632910392],
+            ["since_id" => "632910392"],
         );
     }
 
@@ -288,7 +288,7 @@ final class Product202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["product" => ["title" => "Burton Custom Freestyle 151", "body_html" => "<strong>Good snowboard!</strong>", "vendor" => "Burton", "product_type" => "Snowboard", "variants" => [["option1" => "First", "price" => "10.00", "sku" => 123], ["option1" => "Second", "price" => "20.00", "sku" => 123]]]]),
+                json_encode(["product" => ["title" => "Burton Custom Freestyle 151", "body_html" => "<strong>Good snowboard!</strong>", "vendor" => "Burton", "product_type" => "Snowboard", "variants" => [["option1" => "First", "price" => "10.00", "sku" => "123"], ["option1" => "Second", "price" => "20.00", "sku" => "123"]]]]),
             ),
         ]);
 
@@ -301,12 +301,12 @@ final class Product202201Test extends BaseTestCase
             [
                 "option1" => "First",
                 "price" => "10.00",
-                "sku" => 123
+                "sku" => "123"
             ],
             [
                 "option1" => "Second",
                 "price" => "20.00",
-                "sku" => 123
+                "sku" => "123"
             ]
         ];
         $product->save();
@@ -328,7 +328,7 @@ final class Product202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["product" => ["title" => "Burton Custom Freestyle 151", "body_html" => "<strong>Good snowboard!</strong>", "vendor" => "Burton", "product_type" => "Snowboard", "variants" => [["option1" => "Blue", "option2" => 155], ["option1" => "Black", "option2" => 159]], "options" => [["name" => "Color", "values" => ["Blue", "Black"]], ["name" => "Size", "values" => [155, 159]]]]]),
+                json_encode(["product" => ["title" => "Burton Custom Freestyle 151", "body_html" => "<strong>Good snowboard!</strong>", "vendor" => "Burton", "product_type" => "Snowboard", "variants" => [["option1" => "Blue", "option2" => "155"], ["option1" => "Black", "option2" => "159"]], "options" => [["name" => "Color", "values" => ["Blue", "Black"]], ["name" => "Size", "values" => ["155", "159"]]]]]),
             ),
         ]);
 
@@ -340,11 +340,11 @@ final class Product202201Test extends BaseTestCase
         $product->variants = [
             [
                 "option1" => "Blue",
-                "option2" => 155
+                "option2" => "155"
             ],
             [
                 "option1" => "Black",
-                "option2" => 159
+                "option2" => "159"
             ]
         ];
         $product->options = [
@@ -358,8 +358,8 @@ final class Product202201Test extends BaseTestCase
             [
                 "name" => "Size",
                 "values" => [
-                        155,
-                        159
+                        "155",
+                        "159"
                     ]
             ]
         ];
@@ -546,7 +546,7 @@ final class Product202201Test extends BaseTestCase
         Product::count(
             $this->test_session,
             [],
-            ["collection_id" => 841564295],
+            ["collection_id" => "841564295"],
         );
     }
 

@@ -99,7 +99,7 @@ final class Collect202201Test extends BaseTestCase
         Collect::all(
             $this->test_session,
             [],
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
         );
     }
 
@@ -125,7 +125,7 @@ final class Collect202201Test extends BaseTestCase
         Collect::all(
             $this->test_session,
             [],
-            ["collection_id" => 841564295],
+            ["collection_id" => "841564295"],
         );
     }
 
@@ -231,7 +231,7 @@ final class Collect202201Test extends BaseTestCase
         Collect::count(
             $this->test_session,
             [],
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
         );
     }
 
@@ -257,7 +257,7 @@ final class Collect202201Test extends BaseTestCase
         Collect::count(
             $this->test_session,
             [],
-            ["collection_id" => 841564295],
+            ["collection_id" => "841564295"],
         );
     }
 

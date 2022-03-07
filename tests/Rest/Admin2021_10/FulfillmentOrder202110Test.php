@@ -46,7 +46,7 @@ final class FulfillmentOrder202110Test extends BaseTestCase
 
         FulfillmentOrder::all(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }

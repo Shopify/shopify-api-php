@@ -73,7 +73,7 @@ final class UsageCharge202107Test extends BaseTestCase
 
         UsageCharge::all(
             $this->test_session,
-            ["recurring_application_charge_id" => 455696195],
+            ["recurring_application_charge_id" => "455696195"],
             [],
         );
     }
@@ -100,7 +100,7 @@ final class UsageCharge202107Test extends BaseTestCase
         UsageCharge::find(
             $this->test_session,
             1034618217,
-            ["recurring_application_charge_id" => 455696195],
+            ["recurring_application_charge_id" => "455696195"],
             [],
         );
     }

@@ -152,7 +152,7 @@ final class MarketingEvent202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["marketing_event" => ["id" => 998730532, "remote_id" => "1000:2000", "started_at" => "2022-02-02T00:00  00:00", "ended_at" => "2022-02-03T00:00  00:00", "scheduled_to_end_at" => "2022-02-04T00:00  00:00", "budget" => 11.1, "budget_type" => "daily", "currency" => "CAD", "utm_campaign" => "other", "utm_source" => "other", "utm_medium" => "other", "event_type" => "ad", "referring_domain" => "instagram.com"]]),
+                json_encode(["marketing_event" => ["id" => 998730532, "remote_id" => "1000:2000", "started_at" => "2022-02-02T00:00  00:00", "ended_at" => "2022-02-03T00:00  00:00", "scheduled_to_end_at" => "2022-02-04T00:00  00:00", "budget" => "11.1", "budget_type" => "daily", "currency" => "CAD", "utm_campaign" => "other", "utm_source" => "other", "utm_medium" => "other", "event_type" => "ad", "referring_domain" => "instagram.com"]]),
             ),
         ]);
 
@@ -162,7 +162,7 @@ final class MarketingEvent202107Test extends BaseTestCase
         $marketing_event->started_at = "2022-02-02T00:00  00:00";
         $marketing_event->ended_at = "2022-02-03T00:00  00:00";
         $marketing_event->scheduled_to_end_at = "2022-02-04T00:00  00:00";
-        $marketing_event->budget = 11.1;
+        $marketing_event->budget = "11.1";
         $marketing_event->budget_type = "daily";
         $marketing_event->currency = "CAD";
         $marketing_event->utm_campaign = "other";

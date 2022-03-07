@@ -15,12 +15,12 @@ use Shopify\Rest\Base;
  * @property string|null $handle
  * @property int|null $id
  * @property Image[]|null $images
- * @property array|null $options
+ * @property array|array[]|null $options
  * @property string|null $product_type
  * @property string|null $published_at
  * @property string|null $published_scope
  * @property string|null $status
- * @property string|null $tags
+ * @property string|string[]|null $tags
  * @property string|null $template_suffix
  * @property string|null $updated_at
  * @property Variant[]|null $variants

@@ -47,7 +47,7 @@ final class AssignedFulfillmentOrder202107Test extends BaseTestCase
         AssignedFulfillmentOrder::all(
             $this->test_session,
             [],
-            ["assignment_status" => "cancellation_requested", "location_ids" => [24826418]],
+            ["assignment_status" => "cancellation_requested", "location_ids" => ["24826418"]],
         );
     }
 

@@ -47,7 +47,7 @@ final class Comment202107Test extends BaseTestCase
         Comment::all(
             $this->test_session,
             [],
-            ["article_id" => 134645308, "blog_id" => 241253187],
+            ["article_id" => "134645308", "blog_id" => "241253187"],
         );
     }
 
@@ -73,7 +73,7 @@ final class Comment202107Test extends BaseTestCase
         Comment::all(
             $this->test_session,
             [],
-            ["blog_id" => 241253187],
+            ["blog_id" => "241253187"],
         );
     }
 
@@ -125,7 +125,7 @@ final class Comment202107Test extends BaseTestCase
         Comment::all(
             $this->test_session,
             [],
-            ["since_id" => 118373535],
+            ["since_id" => "118373535"],
         );
     }
 
@@ -151,7 +151,7 @@ final class Comment202107Test extends BaseTestCase
         Comment::count(
             $this->test_session,
             [],
-            ["article_id" => 134645308, "blog_id" => 241253187],
+            ["article_id" => "134645308", "blog_id" => "241253187"],
         );
     }
 
@@ -177,7 +177,7 @@ final class Comment202107Test extends BaseTestCase
         Comment::count(
             $this->test_session,
             [],
-            ["blog_id" => 241253187],
+            ["blog_id" => "241253187"],
         );
     }
 

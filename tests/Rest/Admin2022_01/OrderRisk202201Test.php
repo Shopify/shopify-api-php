@@ -77,7 +77,7 @@ final class OrderRisk202201Test extends BaseTestCase
 
         OrderRisk::all(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -104,7 +104,7 @@ final class OrderRisk202201Test extends BaseTestCase
         OrderRisk::find(
             $this->test_session,
             284138680,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -162,7 +162,7 @@ final class OrderRisk202201Test extends BaseTestCase
         OrderRisk::delete(
             $this->test_session,
             284138680,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }

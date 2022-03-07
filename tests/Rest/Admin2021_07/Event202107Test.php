@@ -98,7 +98,7 @@ final class Event202107Test extends BaseTestCase
 
         Event::all(
             $this->test_session,
-            ["order_id" => 450789469],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -124,8 +124,8 @@ final class Event202107Test extends BaseTestCase
 
         Event::all(
             $this->test_session,
-            ["order_id" => 450789469],
-            ["limit" => 1, "since_id" => 164748010],
+            ["order_id" => "450789469"],
+            ["limit" => "1", "since_id" => "164748010"],
         );
     }
 
@@ -150,7 +150,7 @@ final class Event202107Test extends BaseTestCase
 
         Event::all(
             $this->test_session,
-            ["product_id" => 921728736],
+            ["product_id" => "921728736"],
             [],
         );
     }
@@ -177,7 +177,7 @@ final class Event202107Test extends BaseTestCase
         Event::all(
             $this->test_session,
             [],
-            ["since_id" => 164748010],
+            ["since_id" => "164748010"],
         );
     }
 

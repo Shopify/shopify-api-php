@@ -99,7 +99,7 @@ final class ScriptTag202201Test extends BaseTestCase
         ScriptTag::all(
             $this->test_session,
             [],
-            ["since_id" => 421379493],
+            ["since_id" => "421379493"],
         );
     }
 

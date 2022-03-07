@@ -73,7 +73,7 @@ final class SmartCollection202201Test extends BaseTestCase
         SmartCollection::all(
             $this->test_session,
             [],
-            ["since_id" => 482865238],
+            ["since_id" => "482865238"],
         );
     }
 
@@ -99,7 +99,7 @@ final class SmartCollection202201Test extends BaseTestCase
         SmartCollection::all(
             $this->test_session,
             [],
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
         );
     }
 
@@ -346,7 +346,7 @@ final class SmartCollection202201Test extends BaseTestCase
         SmartCollection::count(
             $this->test_session,
             [],
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
         );
     }
 
@@ -604,7 +604,7 @@ final class SmartCollection202201Test extends BaseTestCase
         $smart_collection = new SmartCollection($this->test_session);
         $smart_collection->id = 482865238;
         $smart_collection->order(
-            ["products" => [921728736, 632910392]],
+            ["products" => ["921728736", "632910392"]],
         );
     }
 

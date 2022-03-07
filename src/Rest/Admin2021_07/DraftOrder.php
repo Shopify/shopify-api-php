@@ -19,7 +19,7 @@ use Shopify\Rest\Base;
  * @property int|null $id
  * @property string|null $invoice_sent_at
  * @property string|null $invoice_url
- * @property array|null $line_items
+ * @property array[]|null $line_items
  * @property string|null $name
  * @property string|null $note
  * @property array[]|null $note_attributes

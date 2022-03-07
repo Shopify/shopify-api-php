@@ -129,7 +129,7 @@ final class ApplicationCharge202104Test extends BaseTestCase
         ApplicationCharge::all(
             $this->test_session,
             [],
-            ["since_id" => 556467234],
+            ["since_id" => "556467234"],
         );
     }
 

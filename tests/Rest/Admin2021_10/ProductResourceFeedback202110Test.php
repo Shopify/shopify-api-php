@@ -105,7 +105,7 @@ final class ProductResourceFeedback202110Test extends BaseTestCase
 
         ProductResourceFeedback::all(
             $this->test_session,
-            ["product_id" => 632910392],
+            ["product_id" => "632910392"],
             [],
         );
     }

@@ -73,7 +73,7 @@ final class Redirect202104Test extends BaseTestCase
         Redirect::all(
             $this->test_session,
             [],
-            ["since_id" => 668809255],
+            ["since_id" => "668809255"],
         );
     }
 

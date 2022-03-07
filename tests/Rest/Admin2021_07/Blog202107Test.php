@@ -73,7 +73,7 @@ final class Blog202107Test extends BaseTestCase
         Blog::all(
             $this->test_session,
             [],
-            ["since_id" => 241253187],
+            ["since_id" => "241253187"],
         );
     }
 

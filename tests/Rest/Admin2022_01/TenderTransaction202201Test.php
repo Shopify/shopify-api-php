@@ -125,7 +125,7 @@ final class TenderTransaction202201Test extends BaseTestCase
         TenderTransaction::all(
             $this->test_session,
             [],
-            ["since_id" => 1011222896],
+            ["since_id" => "1011222896"],
         );
     }
 

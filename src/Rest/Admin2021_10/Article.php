@@ -15,7 +15,7 @@ use Shopify\Rest\Base;
  * @property string|null $created_at
  * @property string|null $handle
  * @property int|null $id
- * @property array|null $image
+ * @property string|array|null $image
  * @property Metafield[]|null $metafields
  * @property bool|null $published
  * @property string|null $published_at

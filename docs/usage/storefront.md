@@ -30,7 +30,7 @@ Below is an example of how you may query the Storefront API:
 
 ```php
 // Load the access token as per instructions above
-$storeFrontAccessToken = '<my token>';
+$storefrontAccessToken = '<my token>';
 // Shop from which we're fetching data
 $shop = 'my-shop.myshopify.com';
 

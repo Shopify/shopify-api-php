@@ -1,0 +1,12 @@
+name: shopify-php-api
+up:
+  - homebrew:
+      - composer
+  - custom:
+      name: Composer install
+      met?: 'composer install --dry-run 2>&1 | grep -q "Nothing to install"'
+      meet: composer install
+
+commands:
+  test:
+    run: composer test

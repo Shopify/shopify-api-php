@@ -1,0 +1,32 @@
+on: pull_request_target
+
+name: "Dependabot: auto-merge patch versions"
+
+jobs:
+  approve-dependabot-pr:
+    runs-on: self-hosted
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+    - name: Dependabot metadata
+      id: dependabot-metadata
+      uses: dependabot/fetch-metadata@v1.1.1
+      with:
+        github-token: '${{ secrets.GITHUB_TOKEN }}'
+    - name: Approve and /shipit Dependabot PRs for patch versions
+      if: ${{steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch'}}
+      uses: actions/github-script@v5
+      with:
+        script: |
+          await github.rest.pulls.createReview({
+            pull_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event: 'APPROVE',
+          })
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: '/shipit',
+          })

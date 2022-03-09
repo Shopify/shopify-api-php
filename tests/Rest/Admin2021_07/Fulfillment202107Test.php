@@ -612,11 +612,11 @@ final class Fulfillment202107Test extends BaseTestCase
             [
                 "fulfillment_order_id" => 1046000873,
                 "fulfillment_order_line_items" => [
-                        [
-                                    "id" => 1058737644,
-                                    "quantity" => 1
-                                ]
+                    [
+                        "id" => 1058737644,
+                        "quantity" => 1
                     ]
+                ]
             ]
         ];
         $fulfillment->save();

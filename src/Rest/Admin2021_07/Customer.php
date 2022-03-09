@@ -48,7 +48,6 @@ class Customer extends Base
         ["http_method" => "get", "operation" => "search", "ids" => [], "path" => "customers/search.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "customers/<id>.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "customers/<id>.json"],
-        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "customers/<id>.json"],
         ["http_method" => "post", "operation" => "account_activation_url", "ids" => ["id"], "path" => "customers/<id>/account_activation_url.json"],
         ["http_method" => "post", "operation" => "send_invite", "ids" => ["id"], "path" => "customers/<id>/send_invite.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "customers/count.json"],
@@ -76,31 +75,6 @@ class Customer extends Base
             $params,
         );
         return !empty($result) ? $result[0] : null;
-    }
-
-    /**
-     * @param Session $session
-     * @param int|string $id
-     * @param array $urlIds
-     * @param mixed[] $params
-     *
-     * @return array|null
-     */
-    public static function delete(
-        Session $session,
-        $id,
-        array $urlIds = [],
-        array $params = []
-    ): ?array {
-        $response = parent::request(
-            "delete",
-            "delete",
-            $session,
-            array_merge(["id" => $id], $urlIds),
-            $params,
-        );
-
-        return $response->getDecodedBody();
     }
 
     /**

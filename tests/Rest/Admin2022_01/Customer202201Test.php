@@ -87,7 +87,7 @@ final class Customer202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, ""),
-                "https://test-shop.myshopify.io/admin/api/2022-01/customers.json?updated_at_min=2022-02-02+21%3A51%3A21",
+                "https://test-shop.myshopify.io/admin/api/2022-01/customers.json?updated_at_min=2022-03-07+16%3A15%3A22",
                 "GET",
                 null,
                 [
@@ -99,7 +99,7 @@ final class Customer202201Test extends BaseTestCase
         Customer::all(
             $this->test_session,
             [],
-            ["updated_at_min" => "2022-02-02 21:51:21"],
+            ["updated_at_min" => "2022-03-07 16:15:22"],
         );
     }
 
@@ -113,7 +113,7 @@ final class Customer202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, ""),
-                "https://test-shop.myshopify.io/admin/api/2022-01/customers.json?ids=207119551%2C1073339489",
+                "https://test-shop.myshopify.io/admin/api/2022-01/customers.json?ids=207119551%2C1073339465",
                 "GET",
                 null,
                 [
@@ -125,7 +125,7 @@ final class Customer202201Test extends BaseTestCase
         Customer::all(
             $this->test_session,
             [],
-            ["ids" => "207119551,1073339489"],
+            ["ids" => "207119551,1073339465"],
         );
     }
 
@@ -460,14 +460,14 @@ final class Customer202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["customer" => ["id" => 207119551, "accepts_marketing" => true, "accepts_marketing_updated_at" => "2022-01-31T16:46:47-05:00", "marketing_opt_in_level" => "confirmed_opt_in"]]),
+                json_encode(["customer" => ["id" => 207119551, "accepts_marketing" => true, "accepts_marketing_updated_at" => "2022-03-05T11:19:35-05:00", "marketing_opt_in_level" => "confirmed_opt_in"]]),
             ),
         ]);
 
         $customer = new Customer($this->test_session);
         $customer->id = 207119551;
         $customer->accepts_marketing = true;
-        $customer->accepts_marketing_updated_at = "2022-01-31T16:46:47-05:00";
+        $customer->accepts_marketing_updated_at = "2022-03-05T11:19:35-05:00";
         $customer->marketing_opt_in_level = "confirmed_opt_in";
         $customer->save();
     }

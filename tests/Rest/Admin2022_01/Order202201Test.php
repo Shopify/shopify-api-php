@@ -61,7 +61,7 @@ final class Order202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, ""),
-                "https://test-shop.myshopify.io/admin/api/2022-01/orders.json?ids=1073459980",
+                "https://test-shop.myshopify.io/admin/api/2022-01/orders.json?ids=1073459963",
                 "GET",
                 null,
                 [
@@ -73,7 +73,7 @@ final class Order202201Test extends BaseTestCase
         Order::all(
             $this->test_session,
             [],
-            ["ids" => "1073459980"],
+            ["ids" => "1073459963"],
         );
     }
 
@@ -685,7 +685,7 @@ final class Order202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["refund" => ["note" => "Customer made a mistake", "shipping" => ["full_refund" => true], "refund_line_items" => [["line_item_id" => 466157049, "quantity" => 1, "restock_type" => "cancel", "location_id" => 24826418]], "transactions" => [["parent_id" => 1068278509, "amount" => "10.00", "kind" => "refund", "gateway" => "bogus"], ["parent_id" => 1068278510, "amount" => "100.00", "kind" => "refund", "gateway" => "gift_card"]]]]),
+                json_encode(["refund" => ["note" => "Customer made a mistake", "shipping" => ["full_refund" => true], "refund_line_items" => [["line_item_id" => 466157049, "quantity" => 1, "restock_type" => "cancel", "location_id" => 24826418]], "transactions" => [["parent_id" => 1068278470, "amount" => "10.00", "kind" => "refund", "gateway" => "bogus"], ["parent_id" => 1068278471, "amount" => "100.00", "kind" => "refund", "gateway" => "gift_card"]]]]),
             ),
         ]);
 
@@ -693,7 +693,7 @@ final class Order202201Test extends BaseTestCase
         $order->id = 450789469;
         $order->cancel(
             [],
-            ["refund" => ["note" => "Customer made a mistake", "shipping" => ["full_refund" => true], "refund_line_items" => [["line_item_id" => 466157049, "quantity" => 1, "restock_type" => "cancel", "location_id" => 24826418]], "transactions" => [["parent_id" => 1068278509, "amount" => "10.00", "kind" => "refund", "gateway" => "bogus"], ["parent_id" => 1068278510, "amount" => "100.00", "kind" => "refund", "gateway" => "gift_card"]]]],
+            ["refund" => ["note" => "Customer made a mistake", "shipping" => ["full_refund" => true], "refund_line_items" => [["line_item_id" => 466157049, "quantity" => 1, "restock_type" => "cancel", "location_id" => 24826418]], "transactions" => [["parent_id" => 1068278470, "amount" => "10.00", "kind" => "refund", "gateway" => "bogus"], ["parent_id" => 1068278471, "amount" => "100.00", "kind" => "refund", "gateway" => "gift_card"]]]],
         );
     }
 
@@ -858,12 +858,12 @@ final class Order202201Test extends BaseTestCase
                 "grams" => "1300",
                 "quantity" => 3,
                 "tax_lines" => [
-                        [
-                                    "price" => 13.5,
-                                    "rate" => 0.06,
-                                    "title" => "State tax"
-                                ]
+                    [
+                        "price" => 13.5,
+                        "rate" => 0.06,
+                        "title" => "State tax"
                     ]
+                ]
             ]
         ];
         $order->transactions = [

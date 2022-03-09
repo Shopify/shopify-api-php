@@ -124,12 +124,12 @@ final class DraftOrder202201Test extends BaseTestCase
                 "price" => "20.00",
                 "quantity" => 1,
                 "applied_discount" => [
-                        "description" => "Custom discount",
-                        "value_type" => "fixed_amount",
-                        "value" => "10.0",
-                        "amount" => "10.0",
-                        "title" => "Custom"
-                    ]
+                    "description" => "Custom discount",
+                    "value_type" => "fixed_amount",
+                    "value" => "10.0",
+                    "amount" => "10.0",
+                    "title" => "Custom"
+                ]
             ]
         ];
         $draft_order->save();
@@ -162,12 +162,12 @@ final class DraftOrder202201Test extends BaseTestCase
                 "price" => "20.00",
                 "quantity" => 1,
                 "applied_discount" => [
-                        "description" => "Custom discount",
-                        "value_type" => "percentage",
-                        "value" => "10.0",
-                        "amount" => "2.0",
-                        "title" => "Custom"
-                    ]
+                    "description" => "Custom discount",
+                    "value_type" => "percentage",
+                    "value" => "10.0",
+                    "amount" => "2.0",
+                    "title" => "Custom"
+                ]
             ]
         ];
         $draft_order->save();

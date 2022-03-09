@@ -351,16 +351,16 @@ final class Product202201Test extends BaseTestCase
             [
                 "name" => "Color",
                 "values" => [
-                        "Blue",
-                        "Black"
-                    ]
+                    "Blue",
+                    "Black"
+                ]
             ],
             [
                 "name" => "Size",
                 "values" => [
-                        "155",
-                        "159"
-                    ]
+                    "155",
+                    "159"
+                ]
             ]
         ];
         $product->save();

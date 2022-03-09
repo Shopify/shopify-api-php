@@ -87,7 +87,7 @@ final class Customer202107Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, ""),
-                "https://test-shop.myshopify.io/admin/api/2021-07/customers.json?updated_at_min=2022-02-02+21%3A51%3A21",
+                "https://test-shop.myshopify.io/admin/api/2021-07/customers.json?updated_at_min=2022-03-07+16%3A15%3A22",
                 "GET",
                 null,
                 [
@@ -99,7 +99,7 @@ final class Customer202107Test extends BaseTestCase
         Customer::all(
             $this->test_session,
             [],
-            ["updated_at_min" => "2022-02-02 21:51:21"],
+            ["updated_at_min" => "2022-03-07 16:15:22"],
         );
     }
 
@@ -113,7 +113,7 @@ final class Customer202107Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, ""),
-                "https://test-shop.myshopify.io/admin/api/2021-07/customers.json?ids=207119551%2C1073339489",
+                "https://test-shop.myshopify.io/admin/api/2021-07/customers.json?ids=207119551%2C1073339465",
                 "GET",
                 null,
                 [
@@ -125,7 +125,7 @@ final class Customer202107Test extends BaseTestCase
         Customer::all(
             $this->test_session,
             [],
-            ["ids" => "207119551,1073339489"],
+            ["ids" => "207119551,1073339465"],
         );
     }
 
@@ -135,50 +135,6 @@ final class Customer202107Test extends BaseTestCase
      * @return void
      */
     public function test_5(): void
-    {
-        $this->mockTransportRequests([
-            new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
-                "https://test-shop.myshopify.io/admin/api/2021-07/customers.json",
-                "POST",
-                null,
-                [
-                    "X-Shopify-Access-Token: this_is_a_test_token",
-                ],
-                json_encode(["customer" => ["first_name" => "Steve", "last_name" => "Lastnameson", "email" => "steve.lastnameson@example.com", "phone" => " 15142546011", "verified_email" => true, "addresses" => [["address1" => "123 Oak St", "city" => "Ottawa", "province" => "ON", "phone" => "555-1212", "zip" => "123 ABC", "last_name" => "Lastnameson", "first_name" => "Mother", "country" => "CA"]], "password" => "newpass", "password_confirmation" => "newpass", "send_email_welcome" => false]]),
-            ),
-        ]);
-
-        $customer = new Customer($this->test_session);
-        $customer->first_name = "Steve";
-        $customer->last_name = "Lastnameson";
-        $customer->email = "steve.lastnameson@example.com";
-        $customer->phone = " 15142546011";
-        $customer->verified_email = true;
-        $customer->addresses = [
-            [
-                "address1" => "123 Oak St",
-                "city" => "Ottawa",
-                "province" => "ON",
-                "phone" => "555-1212",
-                "zip" => "123 ABC",
-                "last_name" => "Lastnameson",
-                "first_name" => "Mother",
-                "country" => "CA"
-            ]
-        ];
-        $customer->password = "newpass";
-        $customer->password_confirmation = "newpass";
-        $customer->send_email_welcome = false;
-        $customer->save();
-    }
-
-    /**
-
-     *
-     * @return void
-     */
-    public function test_6(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
@@ -219,7 +175,7 @@ final class Customer202107Test extends BaseTestCase
      *
      * @return void
      */
-    public function test_7(): void
+    public function test_6(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
@@ -268,7 +224,7 @@ final class Customer202107Test extends BaseTestCase
      *
      * @return void
      */
-    public function test_8(): void
+    public function test_7(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
@@ -302,6 +258,50 @@ final class Customer202107Test extends BaseTestCase
             ]
         ];
         $customer->send_email_invite = true;
+        $customer->save();
+    }
+
+    /**
+
+     *
+     * @return void
+     */
+    public function test_8(): void
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, ""),
+                "https://test-shop.myshopify.io/admin/api/2021-07/customers.json",
+                "POST",
+                null,
+                [
+                    "X-Shopify-Access-Token: this_is_a_test_token",
+                ],
+                json_encode(["customer" => ["first_name" => "Steve", "last_name" => "Lastnameson", "email" => "steve.lastnameson@example.com", "phone" => " 15142546011", "verified_email" => true, "addresses" => [["address1" => "123 Oak St", "city" => "Ottawa", "province" => "ON", "phone" => "555-1212", "zip" => "123 ABC", "last_name" => "Lastnameson", "first_name" => "Mother", "country" => "CA"]], "password" => "newpass", "password_confirmation" => "newpass", "send_email_welcome" => false]]),
+            ),
+        ]);
+
+        $customer = new Customer($this->test_session);
+        $customer->first_name = "Steve";
+        $customer->last_name = "Lastnameson";
+        $customer->email = "steve.lastnameson@example.com";
+        $customer->phone = " 15142546011";
+        $customer->verified_email = true;
+        $customer->addresses = [
+            [
+                "address1" => "123 Oak St",
+                "city" => "Ottawa",
+                "province" => "ON",
+                "phone" => "555-1212",
+                "zip" => "123 ABC",
+                "last_name" => "Lastnameson",
+                "first_name" => "Mother",
+                "country" => "CA"
+            ]
+        ];
+        $customer->password = "newpass";
+        $customer->password_confirmation = "newpass";
+        $customer->send_email_welcome = false;
         $customer->save();
     }
 
@@ -460,14 +460,14 @@ final class Customer202107Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["customer" => ["id" => 207119551, "accepts_marketing" => true, "accepts_marketing_updated_at" => "2022-01-31T16:45:55-05:00", "marketing_opt_in_level" => "confirmed_opt_in"]]),
+                json_encode(["customer" => ["id" => 207119551, "accepts_marketing" => true, "accepts_marketing_updated_at" => "2022-03-05T11:18:55-05:00", "marketing_opt_in_level" => "confirmed_opt_in"]]),
             ),
         ]);
 
         $customer = new Customer($this->test_session);
         $customer->id = 207119551;
         $customer->accepts_marketing = true;
-        $customer->accepts_marketing_updated_at = "2022-01-31T16:45:55-05:00";
+        $customer->accepts_marketing_updated_at = "2022-03-05T11:18:55-05:00";
         $customer->marketing_opt_in_level = "confirmed_opt_in";
         $customer->save();
     }

@@ -10,7 +10,7 @@ use Shopify\Rest\Base;
 
 /**
  * @property string|null $amount
- * @property Currency|null $currency
+ * @property string|null $currency
  * @property string|null $evidence_due_by
  * @property string|null $evidence_sent_on
  * @property string|null $finalized_on
@@ -23,9 +23,7 @@ use Shopify\Rest\Base;
  */
 class Dispute extends Base
 {
-    protected static array $HAS_ONE = [
-        "currency" => Currency::class
-    ];
+    protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "shopify_payments/disputes.json"],

@@ -13,7 +13,7 @@ use Shopify\Rest\Base;
  * @property array|null $billing_address
  * @property string|null $completed_at
  * @property string|null $created_at
- * @property Currency|null $currency
+ * @property string|null $currency
  * @property Customer|null $customer
  * @property string|null $email
  * @property int|null $id
@@ -40,8 +40,7 @@ use Shopify\Rest\Base;
 class DraftOrder extends Base
 {
     protected static array $HAS_ONE = [
-        "customer" => Customer::class,
-        "currency" => Currency::class
+        "customer" => Customer::class
     ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [

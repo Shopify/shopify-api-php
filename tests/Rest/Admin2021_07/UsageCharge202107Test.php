@@ -34,7 +34,9 @@ final class UsageCharge202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["usage_charge" => ["id" => 1034618215, "description" => "Super Mega Plan 1000 emails", "price" => "1.00", "created_at" => "2022-02-03T16:42:27-05:00", "billing_on" => null, "balance_used" => 11.0, "balance_remaining" => 89.0, "risk_level" => 0]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/recurring_application_charges/455696195/usage_charges.json",
                 "POST",
                 null,
@@ -61,7 +63,9 @@ final class UsageCharge202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["usage_charges" => [["id" => 1034618218, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2022-02-03T16:42:30-05:00", "billing_on" => null, "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/recurring_application_charges/455696195/usage_charges.json",
                 "GET",
                 null,
@@ -87,7 +91,9 @@ final class UsageCharge202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["usage_charge" => ["id" => 1034618217, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2022-02-03T16:42:29-05:00", "billing_on" => null, "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/recurring_application_charges/455696195/usage_charges/1034618217.json",
                 "GET",
                 null,

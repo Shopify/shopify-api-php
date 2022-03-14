@@ -34,7 +34,9 @@ final class ProductResourceFeedback202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["resource_feedback" => ["created_at" => "2022-02-03T17:11:15-05:00", "updated_at" => "2022-02-03T17:11:15-05:00", "resource_id" => 632910392, "resource_type" => "Product", "resource_updated_at" => "2022-02-03T16:53:36-05:00", "messages" => ["Needs at least one image."], "feedback_generated_at" => "2022-02-03T17:11:14-05:00", "state" => "requires_action"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/products/632910392/resource_feedback.json",
                 "POST",
                 null,
@@ -65,7 +67,9 @@ final class ProductResourceFeedback202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["resource_feedback" => ["created_at" => "2022-02-03T17:11:16-05:00", "updated_at" => "2022-02-03T17:11:16-05:00", "resource_id" => 632910392, "resource_type" => "Product", "resource_updated_at" => "2022-02-03T16:53:36-05:00", "messages" => [], "feedback_generated_at" => "2022-02-03T17:11:15-05:00", "state" => "success"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/products/632910392/resource_feedback.json",
                 "POST",
                 null,
@@ -93,7 +97,9 @@ final class ProductResourceFeedback202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["resource_feedback" => [["created_at" => "2022-02-03T17:11:13-05:00", "updated_at" => "2022-02-03T17:11:13-05:00", "resource_id" => 632910392, "resource_type" => "Product", "resource_updated_at" => "2022-02-03T16:53:36-05:00", "messages" => ["Needs at least one image."], "feedback_generated_at" => "2022-02-03T16:11:13-05:00", "state" => "requires_action"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/products/632910392/resource_feedback.json",
                 "GET",
                 null,

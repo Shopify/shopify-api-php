@@ -34,7 +34,9 @@ final class ApplicationCredit202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["application_credit" => ["id" => 1031636133, "amount" => "5.00", "description" => "application credit for refund", "test" => null]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/application_credits.json",
                 "POST",
                 null,
@@ -60,7 +62,9 @@ final class ApplicationCredit202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["application_credit" => ["id" => 1031636134, "amount" => "5.00", "description" => "application credit for refund", "test" => true]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/application_credits.json",
                 "POST",
                 null,
@@ -87,7 +91,9 @@ final class ApplicationCredit202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["application_credits" => [["id" => 140583599, "amount" => "5.00", "description" => "credit for application refund", "test" => null]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/application_credits.json",
                 "GET",
                 null,
@@ -113,7 +119,9 @@ final class ApplicationCredit202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["application_credit" => ["id" => 140583599, "amount" => "5.00", "description" => "credit for application refund", "test" => null]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/application_credits/140583599.json",
                 "GET",
                 null,

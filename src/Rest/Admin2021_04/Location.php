@@ -13,7 +13,7 @@ use Shopify\Rest\Base;
  * @property string|null $address1
  * @property string|null $address2
  * @property string|null $city
- * @property Country|null $country
+ * @property string|null $country
  * @property string|null $country_code
  * @property string|null $created_at
  * @property int|null $id
@@ -22,17 +22,14 @@ use Shopify\Rest\Base;
  * @property string|null $localized_province_name
  * @property string|null $name
  * @property string|null $phone
- * @property Province|null $province
+ * @property string|null $province
  * @property string|null $province_code
  * @property string|null $updated_at
  * @property string|null $zip
  */
 class Location extends Base
 {
-    protected static array $HAS_ONE = [
-        "country" => Country::class,
-        "province" => Province::class
-    ];
+    protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "locations.json"],

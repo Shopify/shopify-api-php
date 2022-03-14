@@ -34,7 +34,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collections" => [["id" => 841564295, "handle" => "ipods", "title" => "IPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]], ["id" => 395646240, "handle" => "ipods_two", "title" => "IPods Two", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever. Again</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/395646240"], ["id" => 691652237, "handle" => "non-ipods", "title" => "Non Ipods", "updated_at" => "2013-02-01T19:00:00-05:00", "body_html" => "<p>No ipods here</p>", "published_at" => "2013-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/691652237"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json",
                 "GET",
                 null,
@@ -60,7 +62,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collections" => [["id" => 1063001393, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2022-02-03T17:11:58-05:00", "body_html" => null, "published_at" => "2022-02-03T17:11:58-05:00", "sort_order" => "best-selling", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001393"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json?since_id=841564295",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collections" => [["id" => 841564295, "handle" => "ipods", "title" => "IPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]], ["id" => 395646240, "handle" => "ipods_two", "title" => "IPods Two", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever. Again</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/395646240"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json?product_id=632910392",
                 "GET",
                 null,
@@ -112,7 +118,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collections" => [["id" => 841564295, "handle" => "ipods", "title" => "IPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]], ["id" => 395646240, "handle" => "ipods_two", "title" => "IPods Two", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever. Again</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/395646240"], ["id" => 691652237, "handle" => "non-ipods", "title" => "Non Ipods", "updated_at" => "2013-02-01T19:00:00-05:00", "body_html" => "<p>No ipods here</p>", "published_at" => "2013-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/691652237"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json?ids=395646240%2C691652237%2C841564295",
                 "GET",
                 null,
@@ -138,7 +146,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["id" => 1063001399, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2022-02-03T17:12:17-05:00", "body_html" => null, "published_at" => "2022-02-03T17:12:17-05:00", "sort_order" => "best-selling", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001399"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json",
                 "POST",
                 null,
@@ -163,7 +173,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["id" => 1063001400, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2022-02-03T17:12:18-05:00", "body_html" => null, "published_at" => null, "sort_order" => "best-selling", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001400"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json",
                 "POST",
                 null,
@@ -189,7 +201,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["id" => 1063001401, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2022-02-03T17:12:20-05:00", "body_html" => null, "published_at" => "2022-02-03T17:12:20-05:00", "sort_order" => "best-selling", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001401", "image" => ["created_at" => "2022-02-03T17:12:20-05:00", "alt" => "Rails Logo", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/rails_logo20220203-1526776-d99uw.gif?v=1643926340"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json",
                 "POST",
                 null,
@@ -218,7 +232,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["id" => 1063001402, "handle" => "ipods-1", "title" => "IPods", "updated_at" => "2022-02-03T17:12:23-05:00", "body_html" => null, "published_at" => "2022-02-03T17:12:23-05:00", "sort_order" => "best-selling", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001402"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json",
                 "POST",
                 null,
@@ -248,7 +264,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["id" => 1063001403, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2022-02-03T17:12:25-05:00", "body_html" => null, "published_at" => "2022-02-03T17:12:24-05:00", "sort_order" => "best-selling", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001403"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections.json",
                 "POST",
                 null,
@@ -281,7 +299,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 3]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/count.json",
                 "GET",
                 null,
@@ -307,7 +327,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 2]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/count.json?product_id=632910392",
                 "GET",
                 null,
@@ -333,7 +355,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["id" => 841564295, "handle" => "ipods", "title" => "IPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "products_count" => 1, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "GET",
                 null,
@@ -360,7 +384,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["body_html" => "<p>The best selling ipod ever</p>", "handle" => "ipods", "updated_at" => "2022-02-03T17:11:25-05:00", "id" => 841564295, "sort_order" => "manual", "title" => "IPods", "template_suffix" => null, "published_at" => "2008-02-01T19:00:00-05:00", "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -395,7 +421,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["title" => "IPods", "handle" => "ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 841564295, "updated_at" => "2022-02-03T17:11:26-05:00", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -428,7 +456,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["body_html" => "<p>5000 songs in your pocket</p>", "title" => "IPods", "handle" => "ipods", "id" => 841564295, "updated_at" => "2022-02-03T17:12:41-05:00", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -454,7 +484,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["title" => "IPods", "handle" => "ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 841564295, "updated_at" => "2022-02-03T17:12:44-05:00", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -489,7 +521,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["title" => "IPods", "handle" => "ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 841564295, "published_at" => "2022-02-03T17:12:45-05:00", "updated_at" => "2022-02-03T17:12:45-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -515,7 +549,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["title" => "IPods", "handle" => "ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 841564295, "published_at" => null, "updated_at" => "2022-02-03T17:12:47-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -541,7 +577,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["updated_at" => "2022-02-03T17:12:49-05:00", "id" => 841564295, "title" => "IPods", "handle" => "ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["created_at" => "2022-02-03T17:12:49-05:00", "alt" => "Rails logo", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/fd43f2c8883f6e9b680e3295fd990d2c.gif?v=1643926369"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -570,7 +608,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["custom_collection" => ["updated_at" => "2022-02-03T17:12:51-05:00", "id" => 841564295, "title" => "IPods", "handle" => "ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/841564295", "image" => ["alt" => "Rails logo", "created_at" => "2022-02-03T17:12:50-05:00", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/rails_logo20220203-1526776-i0aauu.gif?v=1643926371"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "PUT",
                 null,
@@ -598,7 +638,9 @@ final class CustomCollection202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/custom_collections/841564295.json",
                 "DELETE",
                 null,

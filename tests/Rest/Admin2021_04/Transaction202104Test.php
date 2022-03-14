@@ -34,7 +34,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["transactions" => [["id" => 179259969, "order_id" => 450789469, "kind" => "refund", "gateway" => "bogus", "status" => "success", "message" => null, "created_at" => "2005-08-05T12:59:12-04:00", "test" => false, "authorization" => "authorization-key", "location_id" => null, "user_id" => null, "parent_id" => 801038806, "processed_at" => "2005-08-05T12:59:12-04:00", "device_id" => null, "error_code" => null, "source_name" => "web", "receipt" => [], "currency_exchange_adjustment" => null, "amount" => "209.00", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/179259969"], ["id" => 389404469, "order_id" => 450789469, "kind" => "authorization", "gateway" => "bogus", "status" => "success", "message" => null, "created_at" => "2005-08-01T11:57:11-04:00", "test" => false, "authorization" => "authorization-key", "location_id" => null, "user_id" => null, "parent_id" => null, "processed_at" => "2005-08-01T11:57:11-04:00", "device_id" => null, "error_code" => null, "source_name" => "web", "payment_details" => ["credit_card_bin" => null, "avs_result_code" => null, "cvv_result_code" => null, "credit_card_number" => "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4242", "credit_card_company" => "Visa", "credit_card_name" => null, "credit_card_wallet" => null, "credit_card_expiration_month" => null, "credit_card_expiration_year" => null], "receipt" => ["testcase" => true, "authorization" => "123456"], "currency_exchange_adjustment" => null, "amount" => "598.94", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/389404469"], ["id" => 801038806, "order_id" => 450789469, "kind" => "capture", "gateway" => "bogus", "status" => "success", "message" => null, "created_at" => "2005-08-05T10:22:51-04:00", "test" => false, "authorization" => "authorization-key", "location_id" => null, "user_id" => null, "parent_id" => 389404469, "processed_at" => "2005-08-05T10:22:51-04:00", "device_id" => null, "error_code" => null, "source_name" => "web", "receipt" => [], "currency_exchange_adjustment" => null, "amount" => "250.94", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/801038806"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions.json",
                 "GET",
                 null,
@@ -60,7 +62,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["transactions" => [["id" => 1068278493, "order_id" => 450789469, "kind" => "capture", "gateway" => "bogus", "status" => "success", "message" => "Bogus Gateway: Forced success", "created_at" => "2022-02-03T16:39:30-05:00", "test" => true, "authorization" => null, "location_id" => null, "user_id" => null, "parent_id" => 389404469, "processed_at" => "2022-02-03T16:39:30-05:00", "device_id" => null, "error_code" => null, "source_name" => "755357713", "payment_details" => ["credit_card_bin" => null, "avs_result_code" => null, "cvv_result_code" => null, "credit_card_number" => "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4242", "credit_card_company" => "Visa", "credit_card_name" => null, "credit_card_wallet" => null, "credit_card_expiration_month" => null, "credit_card_expiration_year" => null], "receipt" => [], "currency_exchange_adjustment" => null, "amount" => "10.00", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/1068278493"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions.json?since_id=801038806",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["transaction" => ["id" => 1068278494, "order_id" => 450789469, "kind" => "capture", "gateway" => "bogus", "status" => "success", "message" => "Bogus Gateway: Forced success", "created_at" => "2022-02-03T16:39:36-05:00", "test" => true, "authorization" => null, "location_id" => null, "user_id" => null, "parent_id" => 389404469, "processed_at" => "2022-02-03T16:39:36-05:00", "device_id" => null, "error_code" => null, "source_name" => "755357713", "payment_details" => ["credit_card_bin" => null, "avs_result_code" => null, "cvv_result_code" => null, "credit_card_number" => "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4242", "credit_card_company" => "Visa", "credit_card_name" => null, "credit_card_wallet" => null, "credit_card_expiration_month" => null, "credit_card_expiration_year" => null], "receipt" => [], "currency_exchange_adjustment" => null, "amount" => "10.00", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/1068278494"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions.json",
                 "POST",
                 null,
@@ -115,7 +121,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["transaction" => ["id" => 1068278495, "order_id" => 450789469, "kind" => "void", "gateway" => "bogus", "status" => "success", "message" => "Bogus Gateway: Forced success", "created_at" => "2022-02-03T16:39:38-05:00", "test" => true, "authorization" => null, "location_id" => null, "user_id" => null, "parent_id" => 389404469, "processed_at" => "2022-02-03T16:39:38-05:00", "device_id" => null, "error_code" => null, "source_name" => "755357713", "payment_details" => ["credit_card_bin" => null, "avs_result_code" => null, "cvv_result_code" => null, "credit_card_number" => "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4242", "credit_card_company" => "Visa", "credit_card_name" => null, "credit_card_wallet" => null, "credit_card_expiration_month" => null, "credit_card_expiration_year" => null], "receipt" => [], "currency_exchange_adjustment" => null, "amount" => "0.00", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/1068278495"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions.json",
                 "POST",
                 null,
@@ -144,7 +152,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["transaction" => ["id" => 1068278496, "order_id" => 450789469, "kind" => "capture", "gateway" => "bogus", "status" => "success", "message" => "Bogus Gateway: Forced success", "created_at" => "2022-02-03T16:39:41-05:00", "test" => true, "authorization" => null, "location_id" => null, "user_id" => null, "parent_id" => 389404469, "processed_at" => "2022-02-03T16:39:41-05:00", "device_id" => null, "error_code" => null, "source_name" => "755357713", "payment_details" => ["credit_card_bin" => null, "avs_result_code" => null, "cvv_result_code" => null, "credit_card_number" => "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4242", "credit_card_company" => "Visa", "credit_card_name" => null, "credit_card_wallet" => null, "credit_card_expiration_month" => null, "credit_card_expiration_year" => null], "receipt" => [], "currency_exchange_adjustment" => null, "amount" => "10.00", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/1068278496"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions.json",
                 "POST",
                 null,
@@ -174,7 +184,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["transaction" => ["id" => 1068278497, "order_id" => 450789469, "kind" => "capture", "gateway" => "bogus", "status" => "success", "message" => "Bogus Gateway: Forced success", "created_at" => "2022-02-03T16:39:43-05:00", "test" => true, "authorization" => null, "location_id" => null, "user_id" => null, "parent_id" => 389404469, "processed_at" => "2022-02-03T16:39:43-05:00", "device_id" => null, "error_code" => null, "source_name" => "755357713", "payment_details" => ["credit_card_bin" => null, "avs_result_code" => null, "cvv_result_code" => null, "credit_card_number" => "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4242", "credit_card_company" => "Visa", "credit_card_name" => null, "credit_card_wallet" => null, "credit_card_expiration_month" => null, "credit_card_expiration_year" => null], "receipt" => [], "currency_exchange_adjustment" => null, "amount" => "598.94", "currency" => "USD", "admin_graphql_api_id" => "gid://shopify/OrderTransaction/1068278497"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions.json",
                 "POST",
                 null,
@@ -201,7 +213,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 3]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions/count.json",
                 "GET",
                 null,
@@ -227,7 +241,9 @@ final class Transaction202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["transaction" => ["id" => 389404469, "order_id" => 450789469, "kind" => "authorization", "gateway" => "bogus", "status" => "success", "message" => null, "created_at" => "2005-08-01T11:57:11-04:00", "test" => false, "authorization" => "authorization-key", "location_id" => null, "user_id" => null, "parent_id" => null, "processed_at" => "2005-08-01T11:57:11-04:00", "device_id" => null, "error_code" => null, "source_name" => "web", "payment_details" => ["credit_card_bin" => null, "avs_result_code" => null, "cvv_result_code" => null, "credit_card_number" => "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4242", "credit_card_company" => "Visa"], "receipt" => ["testcase" => true, "authorization" => "123456"], "currency_exchange_adjustment" => null, "amount" => "598.94", "currency" => "USD", "authorization_expires_at" => null, "extended_authorization_attributes" => [], "admin_graphql_api_id" => "gid://shopify/OrderTransaction/389404469"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/orders/450789469/transactions/389404469.json",
                 "GET",
                 null,

@@ -10,16 +10,14 @@ use Shopify\Rest\Base;
 
 /**
  * @property string $title
- * @property AccessScope|null $access_scope
+ * @property string|null $access_scope
  * @property string|null $access_token
  * @property string|null $created_at
  * @property int|null $id
  */
 class StorefrontAccessToken extends Base
 {
-    protected static array $HAS_ONE = [
-        "access_scope" => AccessScope::class
-    ];
+    protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "storefront_access_tokens.json"],

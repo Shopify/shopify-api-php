@@ -34,7 +34,9 @@ final class CollectionListing202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collection_listings" => [["collection_id" => 482865238, "updated_at" => "2022-02-03T16:53:36-05:00", "body_html" => "<p>The best selling ipod ever</p>", "default_product_image" => null, "handle" => "smart-ipods", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"], "title" => "Smart iPods", "sort_order" => "manual", "published_at" => "2017-08-31T20:00:00-04:00"], ["collection_id" => 841564295, "updated_at" => "2022-02-03T16:53:36-05:00", "body_html" => "<p>The best selling ipod ever</p>", "default_product_image" => null, "handle" => "ipods", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"], "title" => "IPods", "sort_order" => "manual", "published_at" => "2017-08-31T20:00:00-04:00"], ["collection_id" => 395646240, "updated_at" => "2022-02-03T16:53:36-05:00", "body_html" => "<p>The best selling ipod ever. Again</p>", "default_product_image" => ["id" => 850703190, "created_at" => "2022-02-03T16:53:36-05:00", "position" => 1, "updated_at" => "2022-02-03T16:53:36-05:00", "product_id" => 632910392, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/products/ipod-nano.png?v=1643925216", "variant_ids" => [], "width" => 123, "height" => 456], "handle" => "ipods_two", "image" => null, "title" => "IPods Two", "sort_order" => "manual", "published_at" => "2017-08-31T20:00:00-04:00"], ["collection_id" => 691652237, "updated_at" => "2022-02-03T16:53:36-05:00", "body_html" => "<p>No ipods here</p>", "default_product_image" => null, "handle" => "non-ipods", "image" => null, "title" => "Non Ipods", "sort_order" => "manual", "published_at" => "2017-08-31T20:00:00-04:00"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/collection_listings.json",
                 "GET",
                 null,
@@ -60,7 +62,9 @@ final class CollectionListing202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["product_ids" => [632910392]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/collection_listings/841564295/product_ids.json",
                 "GET",
                 null,
@@ -87,7 +91,9 @@ final class CollectionListing202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collection_listing" => ["collection_id" => 482865238, "updated_at" => "2022-02-03T16:53:36-05:00", "body_html" => "<p>The best selling ipod ever</p>", "default_product_image" => null, "handle" => "smart-ipods", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"], "title" => "Smart iPods", "sort_order" => "manual", "published_at" => "2017-08-31T20:00:00-04:00"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/collection_listings/482865238.json",
                 "GET",
                 null,
@@ -114,7 +120,9 @@ final class CollectionListing202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collection_listing" => ["collection_id" => 482865238, "updated_at" => "2022-02-03T16:53:36-05:00", "body_html" => "<p>The best selling ipod ever</p>", "default_product_image" => null, "handle" => "smart-ipods", "image" => ["created_at" => "2022-02-03T16:53:36-05:00", "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1643925216"], "title" => "Smart iPods", "sort_order" => "manual", "published_at" => "2017-08-31T20:00:00-04:00"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/collection_listings/482865238.json",
                 "PUT",
                 null,
@@ -139,7 +147,9 @@ final class CollectionListing202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/collection_listings/482865238.json",
                 "DELETE",
                 null,

@@ -34,7 +34,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blogs" => [["id" => 382285388, "handle" => "banana-blog", "title" => "A Gnu Blog", "updated_at" => "2006-02-02T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:14:40-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/382285388"], ["id" => 241253187, "handle" => "apple-blog", "title" => "Mah Blog", "updated_at" => "2006-02-01T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:14:40-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs.json",
                 "GET",
                 null,
@@ -60,7 +62,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blogs" => [["id" => 382285388, "handle" => "banana-blog", "title" => "A Gnu Blog", "updated_at" => "2006-02-02T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:14:40-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/382285388"], ["id" => 1008414258, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2022-02-03T17:15:51-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:15:51-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414258"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs.json?since_id=241253187",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["id" => 1008414261, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2022-02-03T17:16:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:16:00-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414261"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs.json",
                 "POST",
                 null,
@@ -111,7 +117,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["id" => 1008414262, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2022-02-03T17:16:03-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:16:03-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414262"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs.json",
                 "POST",
                 null,
@@ -144,7 +152,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 2]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs/count.json",
                 "GET",
                 null,
@@ -170,7 +180,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["id" => 241253187, "handle" => "apple-blog", "title" => "Mah Blog", "updated_at" => "2006-02-01T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:14:40-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs/241253187.json",
                 "GET",
                 null,
@@ -197,7 +209,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["id" => 241253187, "title" => "Mah Blog"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs/241253187.json?fields=id%2Ctitle",
                 "GET",
                 null,
@@ -224,7 +238,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["title" => "IPod Updates", "handle" => "apple-blog", "id" => 241253187, "updated_at" => "2022-02-03T17:16:08-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:14:40-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs/241253187.json",
                 "PUT",
                 null,
@@ -250,7 +266,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["title" => "IPod Updates", "handle" => "ipod-updates", "commentable" => "moderate", "id" => 241253187, "updated_at" => "2022-02-03T17:16:09-05:00", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:14:40-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs/241253187.json",
                 "PUT",
                 null,
@@ -278,7 +296,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["title" => "Mah Blog", "handle" => "apple-blog", "id" => 241253187, "updated_at" => "2022-02-03T17:16:11-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-02-03T17:14:40-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs/241253187.json",
                 "PUT",
                 null,
@@ -311,7 +331,9 @@ final class Blog202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/blogs/241253187.json",
                 "DELETE",
                 null,

@@ -34,7 +34,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rule" => ["id" => 996341483, "value_type" => "fixed_amount", "value" => "-10.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2017-01-19T12:59:10-05:00", "ends_at" => null, "created_at" => "2022-02-03T17:07:46-05:00", "updated_at" => "2022-02-03T17:07:46-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "prerequisite_to_entitlement_purchase" => ["prerequisite_amount" => null], "title" => "SUMMERSALE10OFF", "admin_graphql_api_id" => "gid://shopify/PriceRule/996341483"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules.json",
                 "POST",
                 null,
@@ -66,7 +68,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rule" => ["id" => 996341484, "value_type" => "percentage", "value" => "-15.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "entitled", "allocation_method" => "across", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2017-01-19T12:59:10-05:00", "ends_at" => null, "created_at" => "2022-02-03T17:07:48-05:00", "updated_at" => "2022-02-03T17:07:48-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [841564295], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "prerequisite_to_entitlement_purchase" => ["prerequisite_amount" => null], "title" => "15OFFCOLLECTION", "admin_graphql_api_id" => "gid://shopify/PriceRule/996341484"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules.json",
                 "POST",
                 null,
@@ -101,7 +105,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rule" => ["id" => 996341485, "value_type" => "percentage", "value" => "-100.0", "customer_selection" => "all", "target_type" => "shipping_line", "target_selection" => "all", "allocation_method" => "each", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => 20, "starts_at" => "2017-01-19T12:59:10-05:00", "ends_at" => null, "created_at" => "2022-02-03T17:07:49-05:00", "updated_at" => "2022-02-03T17:07:49-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => ["greater_than_or_equal_to" => "50.0"], "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "prerequisite_to_entitlement_purchase" => ["prerequisite_amount" => null], "title" => "FREESHIPPING", "admin_graphql_api_id" => "gid://shopify/PriceRule/996341485"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules.json",
                 "POST",
                 null,
@@ -137,7 +143,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rule" => ["id" => 996341486, "value_type" => "fixed_amount", "value" => "-5.0", "customer_selection" => "prerequisite", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2017-01-19T12:59:10-05:00", "ends_at" => null, "created_at" => "2022-02-03T17:07:50-05:00", "updated_at" => "2022-02-03T17:07:50-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [789629109], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "prerequisite_to_entitlement_purchase" => ["prerequisite_amount" => null], "title" => "5OFFCUSTOMERGROUP", "admin_graphql_api_id" => "gid://shopify/PriceRule/996341486"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules.json",
                 "POST",
                 null,
@@ -172,7 +180,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rule" => ["id" => 996341487, "value_type" => "percentage", "value" => "-100.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "entitled", "allocation_method" => "each", "allocation_limit" => 3, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2018-03-21T20:00:00-04:00", "ends_at" => null, "created_at" => "2022-02-03T17:07:52-05:00", "updated_at" => "2022-02-03T17:07:52-05:00", "entitled_product_ids" => [921728736], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [841564295], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => 2, "entitled_quantity" => 1], "prerequisite_to_entitlement_purchase" => ["prerequisite_amount" => null], "title" => "Buy2iPodsGetiPodTouchForFree", "admin_graphql_api_id" => "gid://shopify/PriceRule/996341487"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules.json",
                 "POST",
                 null,
@@ -215,7 +225,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rules" => [["id" => 507328175, "value_type" => "fixed_amount", "value" => "-10.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2022-01-28T16:53:36-05:00", "ends_at" => "2022-02-09T16:53:36-05:00", "created_at" => "2022-02-03T16:53:36-05:00", "updated_at" => "2022-02-03T16:53:36-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "title" => "SUMMERSALE10OFF", "admin_graphql_api_id" => "gid://shopify/PriceRule/507328175"], ["id" => 106886544, "value_type" => "fixed_amount", "value" => "-10.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2022-02-01T16:53:36-05:00", "ends_at" => "2022-02-05T16:53:36-05:00", "created_at" => "2022-02-03T16:53:36-05:00", "updated_at" => "2022-02-03T16:53:36-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "title" => "TENOFF", "admin_graphql_api_id" => "gid://shopify/PriceRule/106886544"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules.json",
                 "GET",
                 null,
@@ -241,7 +253,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rule" => ["id" => 507328175, "value_type" => "fixed_amount", "value" => "-10.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2022-01-28T16:53:36-05:00", "ends_at" => "2022-02-09T16:53:36-05:00", "created_at" => "2022-02-03T16:53:36-05:00", "updated_at" => "2022-02-03T17:07:53-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "prerequisite_to_entitlement_purchase" => ["prerequisite_amount" => null], "title" => "WINTER SALE", "admin_graphql_api_id" => "gid://shopify/PriceRule/507328175"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules/507328175.json",
                 "PUT",
                 null,
@@ -267,7 +281,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["price_rule" => ["id" => 507328175, "value_type" => "fixed_amount", "value" => "-10.0", "customer_selection" => "all", "target_type" => "line_item", "target_selection" => "all", "allocation_method" => "across", "allocation_limit" => null, "once_per_customer" => false, "usage_limit" => null, "starts_at" => "2022-01-28T16:53:36-05:00", "ends_at" => "2022-02-09T16:53:36-05:00", "created_at" => "2022-02-03T16:53:36-05:00", "updated_at" => "2022-02-03T16:53:36-05:00", "entitled_product_ids" => [], "entitled_variant_ids" => [], "entitled_collection_ids" => [], "entitled_country_ids" => [], "prerequisite_product_ids" => [], "prerequisite_variant_ids" => [], "prerequisite_collection_ids" => [], "prerequisite_saved_search_ids" => [], "prerequisite_customer_ids" => [], "prerequisite_subtotal_range" => null, "prerequisite_quantity_range" => null, "prerequisite_shipping_price_range" => null, "prerequisite_to_entitlement_quantity_ratio" => ["prerequisite_quantity" => null, "entitled_quantity" => null], "prerequisite_to_entitlement_purchase" => ["prerequisite_amount" => null], "title" => "SUMMERSALE10OFF", "admin_graphql_api_id" => "gid://shopify/PriceRule/507328175"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules/507328175.json",
                 "GET",
                 null,
@@ -294,7 +310,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules/507328175.json",
                 "DELETE",
                 null,
@@ -321,7 +339,9 @@ final class PriceRule202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 2]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/price_rules/count.json",
                 "GET",
                 null,

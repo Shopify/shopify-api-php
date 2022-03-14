@@ -34,7 +34,9 @@ final class Currency202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["currencies" => [["currency" => "CAD", "rate_updated_at" => "2018-01-23T19:01:01-05:00", "enabled" => true], ["currency" => "EUR", "rate_updated_at" => "2018-01-23T19:01:01-05:00", "enabled" => true], ["currency" => "JPY", "rate_updated_at" => "2018-01-23T19:01:01-05:00", "enabled" => true]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/currencies.json",
                 "GET",
                 null,

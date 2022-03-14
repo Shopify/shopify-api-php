@@ -34,7 +34,9 @@ final class MarketingEvent202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["marketing_events" => [["id" => 998730532, "event_type" => "post", "remote_id" => "12345678", "started_at" => "2022-01-15T10:56:18-05:00", "ended_at" => null, "scheduled_to_end_at" => null, "budget" => "10.11", "currency" => "GBP", "manage_url" => null, "preview_url" => null, "utm_campaign" => "1234567890", "utm_source" => "facebook", "utm_medium" => "facebook-post", "budget_type" => "daily", "description" => null, "marketing_channel" => "social", "paid" => false, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => null, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/998730532", "marketed_resources" => []]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events.json",
                 "GET",
                 null,
@@ -60,7 +62,9 @@ final class MarketingEvent202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["marketing_event" => ["id" => 1065859217, "event_type" => "ad", "remote_id" => null, "started_at" => "2022-12-15T00:00:00-05:00", "ended_at" => null, "scheduled_to_end_at" => null, "budget" => null, "currency" => null, "manage_url" => null, "preview_url" => null, "utm_campaign" => "Christmas2022", "utm_source" => "facebook", "utm_medium" => "cpc", "budget_type" => null, "description" => null, "marketing_channel" => "social", "paid" => true, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => 1063897334, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/1065859217", "marketed_resources" => []]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events.json",
                 "POST",
                 null,
@@ -92,7 +96,9 @@ final class MarketingEvent202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 1]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events/count.json",
                 "GET",
                 null,
@@ -118,7 +124,9 @@ final class MarketingEvent202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["marketing_event" => ["id" => 998730532, "event_type" => "post", "remote_id" => "12345678", "started_at" => "2022-01-15T10:56:18-05:00", "ended_at" => null, "scheduled_to_end_at" => null, "budget" => "10.11", "currency" => "GBP", "manage_url" => null, "preview_url" => null, "utm_campaign" => "1234567890", "utm_source" => "facebook", "utm_medium" => "facebook-post", "budget_type" => "daily", "description" => null, "marketing_channel" => "social", "paid" => false, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => null, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/998730532", "marketed_resources" => []]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events/998730532.json",
                 "GET",
                 null,
@@ -145,7 +153,9 @@ final class MarketingEvent202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["marketing_event" => ["started_at" => "2022-02-01T19:00:00-05:00", "ended_at" => "2022-02-02T19:00:00-05:00", "scheduled_to_end_at" => "2022-02-03T19:00:00-05:00", "remote_id" => "1000:2000", "currency" => "CAD", "budget" => "11.1", "budget_type" => "daily", "id" => 998730532, "event_type" => "post", "manage_url" => null, "preview_url" => null, "utm_campaign" => "1234567890", "utm_source" => "facebook", "utm_medium" => "facebook-post", "description" => null, "marketing_channel" => "social", "paid" => false, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => null, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/998730532", "marketed_resources" => []]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events/998730532.json",
                 "PUT",
                 null,
@@ -182,7 +192,9 @@ final class MarketingEvent202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events/998730532.json",
                 "DELETE",
                 null,
@@ -209,7 +221,9 @@ final class MarketingEvent202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["engagements" => [["occurred_on" => "2022-01-15", "fetched_at" => null, "views_count" => 0, "impressions_count" => null, "clicks_count" => 0, "favorites_count" => 0, "comments_count" => null, "shares_count" => null, "ad_spend" => "10.0", "currency_code" => null, "is_cumulative" => true, "unsubscribes_count" => null, "complaints_count" => null, "fails_count" => null, "sends_count" => null, "unique_views_count" => null, "unique_clicks_count" => null, "utc_offset" => null], ["occurred_on" => "2022-01-16", "fetched_at" => null, "views_count" => 100, "impressions_count" => null, "clicks_count" => 50, "favorites_count" => null, "comments_count" => null, "shares_count" => null, "ad_spend" => null, "currency_code" => null, "is_cumulative" => true, "unsubscribes_count" => null, "complaints_count" => null, "fails_count" => null, "sends_count" => null, "unique_views_count" => null, "unique_clicks_count" => null, "utc_offset" => null], ["occurred_on" => "2022-01-17", "fetched_at" => null, "views_count" => 200, "impressions_count" => null, "clicks_count" => 100, "favorites_count" => null, "comments_count" => null, "shares_count" => null, "ad_spend" => null, "currency_code" => null, "is_cumulative" => true, "unsubscribes_count" => null, "complaints_count" => null, "fails_count" => null, "sends_count" => null, "unique_views_count" => null, "unique_clicks_count" => null, "utc_offset" => null]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events/998730532/engagements.json",
                 "POST",
                 null,

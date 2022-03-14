@@ -10,7 +10,7 @@ use Shopify\Rest\Base;
 
 /**
  * @property string|null $amount
- * @property Currency|null $currency
+ * @property string|null $currency
  * @property int|null $id
  * @property int|null $order_id
  * @property array|null $payment_details
@@ -22,9 +22,7 @@ use Shopify\Rest\Base;
  */
 class TenderTransaction extends Base
 {
-    protected static array $HAS_ONE = [
-        "currency" => Currency::class
-    ];
+    protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "tender_transactions.json"]

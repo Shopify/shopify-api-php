@@ -34,7 +34,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirects" => [["id" => 304339089, "path" => "/products.php", "target" => "/products"], ["id" => 668809255, "path" => "/leopard", "target" => "/pages/macosx"], ["id" => 950115854, "path" => "/ibook", "target" => "/products/macbook"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects.json",
                 "GET",
                 null,
@@ -60,7 +62,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirects" => [["id" => 950115854, "path" => "/ibook", "target" => "/products/macbook"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects.json?since_id=668809255",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirect" => ["id" => 984542201, "path" => "/ipod", "target" => "/pages/itunes"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects.json",
                 "POST",
                 null,
@@ -112,7 +118,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirect" => ["id" => 984542202, "path" => "/forums", "target" => "http://forums.apple.com/"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects.json",
                 "POST",
                 null,
@@ -138,7 +146,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 3]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects/count.json",
                 "GET",
                 null,
@@ -164,7 +174,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirect" => ["id" => 668809255, "path" => "/leopard", "target" => "/pages/macosx"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects/668809255.json",
                 "GET",
                 null,
@@ -191,7 +203,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirect" => ["path" => "/tiger", "target" => "/pages/macosx", "id" => 668809255]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects/668809255.json",
                 "PUT",
                 null,
@@ -217,7 +231,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirect" => ["target" => "/pages/macpro", "path" => "/leopard", "id" => 668809255]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects/668809255.json",
                 "PUT",
                 null,
@@ -243,7 +259,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["redirect" => ["path" => "/powermac", "target" => "/pages/macpro", "id" => 950115854]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects/950115854.json",
                 "PUT",
                 null,
@@ -270,7 +288,9 @@ final class Redirect202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/redirects/668809255.json",
                 "DELETE",
                 null,

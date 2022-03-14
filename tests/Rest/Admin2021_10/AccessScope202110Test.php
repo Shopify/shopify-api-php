@@ -34,7 +34,9 @@ final class AccessScope202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["access_scopes" => [["handle" => "read_products"], ["handle" => "write_orders"], ["handle" => "read_orders"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/oauth/access_scopes.json",
                 "GET",
                 null,

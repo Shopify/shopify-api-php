@@ -14,12 +14,12 @@ use Shopify\Rest\Base;
  * @property bool|null $checkout_api_supported
  * @property string|null $city
  * @property string|null $cookie_consent_level
- * @property Country|null $country
+ * @property string|null $country
  * @property string|null $country_code
  * @property string|null $country_name
  * @property string|null $county_taxes
  * @property string|null $created_at
- * @property Currency|null $currency
+ * @property string|null $currency
  * @property string|null $customer_email
  * @property string|null $domain
  * @property bool|null $eligible_for_card_reader_giveaway
@@ -51,7 +51,7 @@ use Shopify\Rest\Base;
  * @property bool|null $pre_launch_enabled
  * @property string|null $primary_locale
  * @property int|null $primary_location_id
- * @property Province|null $province
+ * @property string|null $province
  * @property string|null $province_code
  * @property bool|null $requires_extra_payments_agreement
  * @property bool|null $setup_required
@@ -66,11 +66,7 @@ use Shopify\Rest\Base;
  */
 class Shop extends Base
 {
-    protected static array $HAS_ONE = [
-        "country" => Country::class,
-        "currency" => Currency::class,
-        "province" => Province::class
-    ];
+    protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "shop.json"]

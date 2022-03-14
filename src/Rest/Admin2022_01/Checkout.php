@@ -14,7 +14,7 @@ use Shopify\Rest\Base;
  * @property array|null $applied_discount
  * @property bool|null $buyer_accepts_marketing
  * @property string|null $created_at
- * @property Currency|null $currency
+ * @property string|null $currency
  * @property int|null $customer_id
  * @property DiscountCode|null $discount_code
  * @property string|null $email
@@ -44,7 +44,6 @@ use Shopify\Rest\Base;
 class Checkout extends Base
 {
     protected static array $HAS_ONE = [
-        "currency" => Currency::class,
         "discount_code" => DiscountCode::class,
         "order" => Order::class
     ];

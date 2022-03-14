@@ -34,7 +34,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["discount_code" => ["id" => 1054381140, "price_rule_id" => 507328175, "code" => "SUMMERSALE10OFF", "usage_count" => 0, "created_at" => "2022-02-03T16:43:10-05:00", "updated_at" => "2022-02-03T16:43:10-05:00"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/discount_codes.json",
                 "POST",
                 null,
@@ -60,7 +62,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["discount_codes" => [["id" => 507328175, "price_rule_id" => 507328175, "code" => "SUMMERSALE10OFF", "usage_count" => 0, "created_at" => "2022-02-03T16:32:42-05:00", "updated_at" => "2022-02-03T16:32:42-05:00"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/discount_codes.json",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["discount_code" => ["id" => 507328175, "price_rule_id" => 507328175, "code" => "WINTERSALE20OFF", "usage_count" => 0, "created_at" => "2022-02-03T16:32:42-05:00", "updated_at" => "2022-02-03T16:43:11-05:00"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/discount_codes/507328175.json",
                 "PUT",
                 null,
@@ -113,7 +119,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["discount_code" => ["id" => 507328175, "price_rule_id" => 507328175, "code" => "SUMMERSALE10OFF", "usage_count" => 0, "created_at" => "2022-02-03T16:32:42-05:00", "updated_at" => "2022-02-03T16:32:42-05:00"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/discount_codes/507328175.json",
                 "GET",
                 null,
@@ -140,7 +148,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/discount_codes/507328175.json",
                 "DELETE",
                 null,
@@ -167,7 +177,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 2]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/discount_codes/count.json",
                 "GET",
                 null,
@@ -193,7 +205,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["discount_code_creation" => ["id" => 989355120, "price_rule_id" => 507328175, "started_at" => null, "completed_at" => null, "created_at" => "2022-02-03T16:43:23-05:00", "updated_at" => "2022-02-03T16:43:23-05:00", "status" => "queued", "codes_count" => 3, "imported_count" => 0, "failed_count" => 0, "logs" => []]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/batch.json",
                 "POST",
                 null,
@@ -221,7 +235,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["discount_code_creation" => ["id" => 173232803, "price_rule_id" => 507328175, "started_at" => null, "completed_at" => null, "created_at" => "2022-02-03T16:32:42-05:00", "updated_at" => "2022-02-03T16:32:42-05:00", "status" => "queued", "codes_count" => 3, "imported_count" => 0, "failed_count" => 0, "logs" => []]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/batch/173232803.json",
                 "GET",
                 null,
@@ -247,7 +263,9 @@ final class DiscountCode202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["discount_codes" => [["id" => null, "code" => "foo", "errors" => []], ["id" => null, "code" => "", "errors" => []], ["id" => null, "code" => "bar", "errors" => []]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/price_rules/507328175/batch/173232803/discount_codes.json",
                 "GET",
                 null,

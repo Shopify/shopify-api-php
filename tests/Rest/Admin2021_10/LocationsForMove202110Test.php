@@ -34,7 +34,9 @@ final class LocationsForMove202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["locations_for_move" => [["location" => ["id" => 1072404548, "name" => "Alpha Location"], "message" => "Current location.", "movable" => false], ["location" => ["id" => 1072404549, "name" => "Bravo Location"], "message" => "No items are stocked at this location.", "movable" => false]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/fulfillment_orders/1046000833/locations_for_move.json",
                 "GET",
                 null,

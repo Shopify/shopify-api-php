@@ -34,7 +34,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["reports" => [["id" => 752357116, "name" => "Custom App Report 2", "shopify_ql" => "SHOW total_sales BY order_id FROM sales ORDER BY total_sales", "updated_at" => "2022-02-03T16:53:36-05:00", "category" => "custom_app_reports"], ["id" => 517154478, "name" => "Wholesale Sales Report", "shopify_ql" => "SHOW total_sales BY order_id FROM sales WHERE api_client_id == 123 SINCE -1m UNTIL today", "updated_at" => "2017-04-10T16:33:22-04:00", "category" => "custom_app_reports"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports.json",
                 "GET",
                 null,
@@ -60,7 +62,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["reports" => [["id" => 517154478, "name" => "Wholesale Sales Report", "shopify_ql" => "SHOW total_sales BY order_id FROM sales WHERE api_client_id == 123 SINCE -1m UNTIL today", "updated_at" => "2017-04-10T16:33:22-04:00", "category" => "custom_app_reports"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports.json?ids=517154478",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["reports" => [["id" => 752357116, "name" => "Custom App Report 2", "shopify_ql" => "SHOW total_sales BY order_id FROM sales ORDER BY total_sales", "updated_at" => "2022-02-03T16:53:36-05:00", "category" => "custom_app_reports"], ["id" => 517154478, "name" => "Wholesale Sales Report", "shopify_ql" => "SHOW total_sales BY order_id FROM sales WHERE api_client_id == 123 SINCE -1m UNTIL today", "updated_at" => "2017-04-10T16:33:22-04:00", "category" => "custom_app_reports"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports.json?updated_at_min=2005-07-31+15%3A57%3A11+EDT+-04%3A00",
                 "GET",
                 null,
@@ -112,7 +118,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["reports" => [["id" => 752357116, "shopify_ql" => "SHOW total_sales BY order_id FROM sales ORDER BY total_sales"], ["id" => 517154478, "shopify_ql" => "SHOW total_sales BY order_id FROM sales WHERE api_client_id == 123 SINCE -1m UNTIL today"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports.json?fields=id%2Cshopify_ql",
                 "GET",
                 null,
@@ -138,7 +146,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["reports" => [["id" => 517154478, "name" => "Wholesale Sales Report", "shopify_ql" => "SHOW total_sales BY order_id FROM sales WHERE api_client_id == 123 SINCE -1m UNTIL today", "updated_at" => "2017-04-10T16:33:22-04:00", "category" => "custom_app_reports"], ["id" => 752357116, "name" => "Custom App Report 2", "shopify_ql" => "SHOW total_sales BY order_id FROM sales ORDER BY total_sales", "updated_at" => "2022-02-03T16:53:36-05:00", "category" => "custom_app_reports"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports.json?since_id=123",
                 "GET",
                 null,
@@ -164,7 +174,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["report" => ["id" => 1016888665, "name" => "A new app report", "shopify_ql" => "SHOW total_sales BY order_id FROM sales SINCE -1m UNTIL today ORDER BY total_sales", "updated_at" => "2022-02-03T16:56:32-05:00", "category" => "custom_app_reports"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports.json",
                 "POST",
                 null,
@@ -190,7 +202,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["report" => ["id" => 517154478, "name" => "Wholesale Sales Report", "shopify_ql" => "SHOW total_sales BY order_id FROM sales WHERE api_client_id == 123 SINCE -1m UNTIL today", "updated_at" => "2017-04-10T16:33:22-04:00", "category" => "custom_app_reports"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports/517154478.json",
                 "GET",
                 null,
@@ -217,7 +231,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["report" => ["id" => 517154478, "shopify_ql" => "SHOW total_sales BY order_id FROM sales WHERE api_client_id == 123 SINCE -1m UNTIL today"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports/517154478.json?fields=id%2Cshopify_ql",
                 "GET",
                 null,
@@ -244,7 +260,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["report" => ["name" => "Changed Report Name", "shopify_ql" => "SHOW total_sales BY order_id FROM sales SINCE -12m UNTIL today ORDER BY total_sales", "id" => 517154478, "updated_at" => "2022-02-03T16:56:34-05:00", "category" => "custom_app_reports"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports/517154478.json",
                 "PUT",
                 null,
@@ -271,7 +289,9 @@ final class Report202104Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-04/reports/517154478.json",
                 "DELETE",
                 null,

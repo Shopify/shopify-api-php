@@ -34,7 +34,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collect" => ["id" => 1071559588, "collection_id" => 841564295, "product_id" => 921728736, "created_at" => "2022-02-03T17:18:06-05:00", "updated_at" => "2022-02-03T17:18:06-05:00", "position" => 2, "sort_value" => "0000000002"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects.json",
                 "POST",
                 null,
@@ -60,7 +62,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collects" => [["id" => 358268117, "collection_id" => 482865238, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 455204334, "collection_id" => 841564295, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 773559378, "collection_id" => 395646240, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 800915878, "collection_id" => 482865238, "product_id" => 921728736, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects.json",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collects" => [["id" => 358268117, "collection_id" => 482865238, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 455204334, "collection_id" => 841564295, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 773559378, "collection_id" => 395646240, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects.json?product_id=632910392",
                 "GET",
                 null,
@@ -112,7 +118,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collects" => [["id" => 455204334, "collection_id" => 841564295, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 1071559590, "collection_id" => 841564295, "product_id" => 921728736, "created_at" => "2022-02-03T17:18:22-05:00", "updated_at" => "2022-02-03T17:18:22-05:00", "position" => 2, "sort_value" => "0000000002"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects.json?collection_id=841564295",
                 "GET",
                 null,
@@ -138,7 +146,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects/455204334.json",
                 "DELETE",
                 null,
@@ -165,7 +175,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["collect" => ["id" => 455204334, "collection_id" => 841564295, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects/455204334.json",
                 "GET",
                 null,
@@ -192,7 +204,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 2]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects/count.json",
                 "GET",
                 null,
@@ -218,7 +232,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 2]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects/count.json?product_id=632910392",
                 "GET",
                 null,
@@ -244,7 +260,9 @@ final class Collect202107Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 1]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/collects/count.json?collection_id=841564295",
                 "GET",
                 null,

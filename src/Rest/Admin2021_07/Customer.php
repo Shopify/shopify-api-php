@@ -13,7 +13,7 @@ use Shopify\Rest\Base;
  * @property string|null $accepts_marketing_updated_at
  * @property array[]|null $addresses
  * @property string|null $created_at
- * @property Currency|null $currency
+ * @property string|null $currency
  * @property array|null $default_address
  * @property string|null $email
  * @property string|null $first_name
@@ -38,7 +38,6 @@ use Shopify\Rest\Base;
 class Customer extends Base
 {
     protected static array $HAS_ONE = [
-        "currency" => Currency::class,
         "metafield" => Metafield::class
     ];
     protected static array $HAS_MANY = [];

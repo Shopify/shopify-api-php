@@ -34,7 +34,9 @@ final class ApplePayCertificate202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["apple_pay_certificate" => ["id" => 1068938279, "status" => "issuing", "merchant_id" => null]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/apple_pay_certificates.json",
                 "POST",
                 null,
@@ -59,7 +61,9 @@ final class ApplePayCertificate202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["apple_pay_certificate" => ["id" => 1068938280, "status" => "csr", "merchant_id" => null]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/apple_pay_certificates/1068938280.json",
                 "GET",
                 null,
@@ -86,7 +90,9 @@ final class ApplePayCertificate202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["apple_pay_certificate" => ["id" => 1068938282, "status" => "completed", "merchant_id" => "merchant.something"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/apple_pay_certificates/1068938282.json",
                 "PUT",
                 null,
@@ -114,7 +120,9 @@ final class ApplePayCertificate202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/apple_pay_certificates/1068938283.json",
                 "DELETE",
                 null,
@@ -141,7 +149,9 @@ final class ApplePayCertificate202201Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["csr" => ["key" => "YXBwbGUtcGF5LWNzcg==\n"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/apple_pay_certificates/1068938281/csr.json",
                 "GET",
                 null,

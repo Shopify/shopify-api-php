@@ -10,10 +10,10 @@ use Shopify\Rest\Base;
 
 /**
  * @property int|null $api_client_id
- * @property Balance|null $balance
+ * @property float|null $balance
  * @property string|null $code
  * @property string|null $created_at
- * @property Currency|null $currency
+ * @property string|null $currency
  * @property int|null $customer_id
  * @property string|null $disabled_at
  * @property string|null $expires_on
@@ -29,10 +29,7 @@ use Shopify\Rest\Base;
  */
 class GiftCard extends Base
 {
-    protected static array $HAS_ONE = [
-        "balance" => Balance::class,
-        "currency" => Currency::class
-    ];
+    protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "gift_cards.json"],

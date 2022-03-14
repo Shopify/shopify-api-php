@@ -34,7 +34,9 @@ final class CarrierService202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["carrier_service" => ["id" => 1036894963, "name" => "Shipping Rate Provider", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894963", "format" => "json", "callback_url" => "http://shippingrateprovider.com/"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/carrier_services.json",
                 "POST",
                 null,
@@ -61,7 +63,9 @@ final class CarrierService202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["carrier_services" => [["id" => 1036894965, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894965", "format" => "json", "callback_url" => "http://example.com/"], ["id" => 260046840, "name" => "ups_shipping", "active" => true, "service_discovery" => true, "carrier_service_type" => "legacy", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/260046840"]]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/carrier_services.json",
                 "GET",
                 null,
@@ -87,7 +91,9 @@ final class CarrierService202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["carrier_service" => ["active" => false, "id" => 1036894964, "name" => "Some new name", "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894964", "format" => "json", "callback_url" => "http://example.com/"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/carrier_services/1036894964.json",
                 "PUT",
                 null,
@@ -114,7 +120,9 @@ final class CarrierService202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["carrier_service" => ["id" => 1036894966, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894966", "format" => "json", "callback_url" => "http://example.com/"]]
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/carrier_services/1036894966.json",
                 "GET",
                 null,
@@ -141,7 +149,9 @@ final class CarrierService202110Test extends BaseTestCase
     {
         $this->mockTransportRequests([
             new MockRequest(
-                $this->buildMockHttpResponse(200, ""),
+                $this->buildMockHttpResponse(200, json_encode(
+                  []
+                )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/carrier_services/1036894967.json",
                 "DELETE",
                 null,

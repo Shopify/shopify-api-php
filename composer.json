@@ -35,7 +35,7 @@
         "php": "^7.4 || ^8.0 || ^8.1",
         "ramsey/uuid": "^4.1",
         "psr/log": "^1.1",
-        "firebase/php-jwt": "^5.2",
+        "firebase/php-jwt": "^5.2 || ^6.0",
         "psr/http-client": "^1.0",
         "guzzlehttp/guzzle": "^7.0",
         "doctrine/inflector": "^2.0"

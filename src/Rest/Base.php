@@ -67,11 +67,7 @@ abstract class Base
 
     public function __get(string $name)
     {
-        if (!array_key_exists($name, $this->setProps) && in_array($name, $this->getProperties())) {
-            return null;
-        }
-
-        return $this->setProps[$name];
+        return array_key_exists($name, $this->setProps) ? $this->setProps[$name] : null;
     }
 
     public function __set(string $name, $value): void

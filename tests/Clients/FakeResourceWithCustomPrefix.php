@@ -13,6 +13,8 @@ use Shopify\Rest\Base;
  */
 final class FakeResourceWithCustomPrefix extends Base
 {
+    public static string $API_VERSION = "unstable";
+
     /** @var Base[] */
     protected static array $HAS_ONE = [];
 

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -27,18 +26,19 @@ use Shopify\Rest\Base;
  */
 class FulfillmentOrder extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillment_orders.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "fulfillment_orders/<id>.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillment_orders.json"],
         ["http_method" => "post", "operation" => "cancel", "ids" => ["id"], "path" => "fulfillment_orders/<id>/cancel.json"],
         ["http_method" => "post", "operation" => "close", "ids" => ["id"], "path" => "fulfillment_orders/<id>/close.json"],
+        ["http_method" => "post", "operation" => "hold", "ids" => ["id"], "path" => "fulfillment_orders/<id>/hold.json"],
         ["http_method" => "post", "operation" => "move", "ids" => ["id"], "path" => "fulfillment_orders/<id>/move.json"],
         ["http_method" => "post", "operation" => "open", "ids" => ["id"], "path" => "fulfillment_orders/<id>/open.json"],
-        ["http_method" => "post", "operation" => "reschedule", "ids" => ["id"], "path" => "fulfillment_orders/<id>/reschedule.json"],
-        ["http_method" => "post", "operation" => "hold", "ids" => ["id"], "path" => "fulfillment_orders/<id>/hold.json"],
-        ["http_method" => "post", "operation" => "release_hold", "ids" => ["id"], "path" => "fulfillment_orders/<id>/release_hold.json"]
+        ["http_method" => "post", "operation" => "release_hold", "ids" => ["id"], "path" => "fulfillment_orders/<id>/release_hold.json"],
+        ["http_method" => "post", "operation" => "reschedule", "ids" => ["id"], "path" => "fulfillment_orders/<id>/reschedule.json"]
     ];
 
     /**
@@ -132,6 +132,32 @@ class FulfillmentOrder extends Base
 
     /**
      * @param mixed[] $params Allowed indexes:
+     *     reason,
+     *     reason_notes,
+     *     notify_merchant
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function hold(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "post",
+            "hold",
+            $this->session,
+            ["id" => $this->id],
+            $params,
+            $body,
+            $this,
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param mixed[] $params Allowed indexes:
      *     new_location_id
      * @param array|string $body
      *
@@ -183,39 +209,13 @@ class FulfillmentOrder extends Base
      *
      * @return array|null
      */
-    public function reschedule(
+    public function release_hold(
         array $params = [],
         $body = []
     ): ?array {
         $response = parent::request(
             "post",
-            "reschedule",
-            $this->session,
-            ["id" => $this->id],
-            $params,
-            $body,
-            $this,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param mixed[] $params Allowed indexes:
-     *     reason,
-     *     reason_notes,
-     *     notify_merchant
-     * @param array|string $body
-     *
-     * @return array|null
-     */
-    public function hold(
-        array $params = [],
-        $body = []
-    ): ?array {
-        $response = parent::request(
-            "post",
-            "hold",
+            "release_hold",
             $this->session,
             ["id" => $this->id],
             $params,
@@ -232,13 +232,13 @@ class FulfillmentOrder extends Base
      *
      * @return array|null
      */
-    public function release_hold(
+    public function reschedule(
         array $params = [],
         $body = []
     ): ?array {
         $response = parent::request(
             "post",
-            "release_hold",
+            "reschedule",
             $this->session,
             ["id" => $this->id],
             $params,

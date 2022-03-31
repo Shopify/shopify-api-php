@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -21,11 +20,12 @@ use Shopify\Rest\Base;
  */
 class Province extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => ["country_id"], "path" => "countries/<country_id>/provinces.json"],
         ["http_method" => "get", "operation" => "count", "ids" => ["country_id"], "path" => "countries/<country_id>/provinces/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["country_id"], "path" => "countries/<country_id>/provinces.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["country_id", "id"], "path" => "countries/<country_id>/provinces/<id>.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["country_id", "id"], "path" => "countries/<country_id>/provinces/<id>.json"]
     ];

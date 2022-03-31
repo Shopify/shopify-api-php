@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\AssignedFulfillmentOrder;
+use Shopify\Rest\Admin2021_10\AssignedFulfillmentOrder;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 
@@ -35,7 +35,7 @@ final class AssignedFulfillmentOrder202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_orders" => [["id" => 1046000832, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_requested", "status" => "in_progress", "supported_actions" => ["cancel_fulfillment_order", "create_fulfillment"], "destination" => ["id" => 1046000823, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@hostmail.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "555-625-1199", "province" => "Kentucky", "zip" => "40202"], "line_items" => [["id" => 1058737571, "shop_id" => 548380009, "fulfillment_order_id" => 1046000832, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app", "assigned_location" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null]]]]
+                  ["fulfillment_orders" => [["id" => 1046000803, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_requested", "status" => "in_progress", "supported_actions" => ["revert_to_unfulfilled", "create_fulfillment"], "destination" => ["id" => 1046000797, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@mail.example.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "555-625-1199", "province" => "Kentucky", "zip" => "40202"], "line_items" => [["id" => 1058737508, "shop_id" => 548380009, "fulfillment_order_id" => 1046000803, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app", "assigned_location" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null]]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/assigned_fulfillment_orders.json?assignment_status=cancellation_requested&location_ids%5B%5D=24826418",
                 "GET",

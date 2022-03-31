@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -27,6 +26,7 @@ use Shopify\Rest\Base;
  * @property array|null $payment_terms
  * @property array|null $shipping_address
  * @property array|null $shipping_line
+ * @property string|null $source_name
  * @property string|null $status
  * @property float|null $subtotal_price
  * @property string|null $tags
@@ -40,19 +40,20 @@ use Shopify\Rest\Base;
  */
 class DraftOrder extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [
         "customer" => Customer::class
     ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "draft_orders.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "draft_orders.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "draft_orders/<id>.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "draft_orders/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "draft_orders/<id>.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "draft_orders/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "draft_orders.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "draft_orders/<id>.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "draft_orders.json"],
         ["http_method" => "post", "operation" => "send_invoice", "ids" => ["id"], "path" => "draft_orders/<id>/send_invoice.json"],
-        ["http_method" => "put", "operation" => "complete", "ids" => ["id"], "path" => "draft_orders/<id>/complete.json"]
+        ["http_method" => "put", "operation" => "complete", "ids" => ["id"], "path" => "draft_orders/<id>/complete.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "draft_orders/<id>.json"]
     ];
 
     /**

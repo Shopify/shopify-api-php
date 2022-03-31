@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_10;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -19,16 +18,17 @@ use Shopify\Rest\Base;
  */
 class Payment extends Base
 {
+    public static string $API_VERSION = "2021-10";
     protected static array $HAS_ONE = [
         "transaction" => Transaction::class,
         "checkout" => Checkout::class
     ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "post", "operation" => "post", "ids" => ["checkout_id"], "path" => "checkouts/<checkout_id>/payments.json"],
+        ["http_method" => "get", "operation" => "count", "ids" => ["checkout_id"], "path" => "checkouts/<checkout_id>/payments/count.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["checkout_id"], "path" => "checkouts/<checkout_id>/payments.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["checkout_id", "id"], "path" => "checkouts/<checkout_id>/payments/<id>.json"],
-        ["http_method" => "get", "operation" => "count", "ids" => ["checkout_id"], "path" => "checkouts/<checkout_id>/payments/count.json"]
+        ["http_method" => "post", "operation" => "post", "ids" => ["checkout_id"], "path" => "checkouts/<checkout_id>/payments.json"]
     ];
 
     /**

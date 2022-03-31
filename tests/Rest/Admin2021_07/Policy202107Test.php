@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\Policy;
+use Shopify\Rest\Admin2021_07\Policy;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 
@@ -35,7 +35,7 @@ final class Policy202107Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["policies" => [["body" => "You have 30 days to get a refund", "created_at" => "2022-02-03T17:07:44-05:00", "updated_at" => "2022-02-03T17:07:44-05:00", "handle" => "refund-policy", "title" => "Refund policy", "url" => "https://jsmith.myshopify.com/548380009/policies/878590289"]]]
+                  ["policies" => [["body" => "You have 30 days to get a refund", "created_at" => "2022-03-30T19:16:52-04:00", "updated_at" => "2022-03-30T19:16:52-04:00", "handle" => "refund-policy", "title" => "Refund policy", "url" => "https://jsmith.myshopify.com/548380009/policies/878590288"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-07/policies.json",
                 "GET",

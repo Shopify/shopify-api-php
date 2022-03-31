@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -28,16 +27,17 @@ use Shopify\Rest\Base;
  */
 class CustomerAddress extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => ["customer_id"], "path" => "customers/<customer_id>/addresses.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => ["customer_id"], "path" => "customers/<customer_id>/addresses.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/addresses/<id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/addresses/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/addresses/<id>.json"],
-        ["http_method" => "put", "operation" => "set", "ids" => ["customer_id"], "path" => "customers/<customer_id>/addresses/set.json"],
-        ["http_method" => "put", "operation" => "default", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/addresses/<id>/default.json"]
+        ["http_method" => "get", "operation" => "get", "ids" => ["customer_id"], "path" => "customers/<customer_id>/addresses.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/addresses/<id>.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => ["customer_id"], "path" => "customers/<customer_id>/addresses.json"],
+        ["http_method" => "put", "operation" => "default", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/addresses/<id>/default.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/addresses/<id>.json"],
+        ["http_method" => "put", "operation" => "set", "ids" => ["customer_id"], "path" => "customers/<customer_id>/addresses/set.json"]
     ];
 
     /**
@@ -120,6 +120,29 @@ class CustomerAddress extends Base
     }
 
     /**
+     * @param mixed[] $params
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function default(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "put",
+            "default",
+            $this->session,
+            ["customer_id" => $this->customer_id, "id" => $this->id],
+            $params,
+            $body,
+            $this,
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
      * @param mixed[] $params Allowed indexes:
      *     address_ids,
      *     operation
@@ -136,29 +159,6 @@ class CustomerAddress extends Base
             "set",
             $this->session,
             ["customer_id" => $this->customer_id],
-            $params,
-            $body,
-            $this,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param mixed[] $params
-     * @param array|string $body
-     *
-     * @return array|null
-     */
-    public function default(
-        array $params = [],
-        $body = []
-    ): ?array {
-        $response = parent::request(
-            "put",
-            "default",
-            $this->session,
-            ["customer_id" => $this->customer_id, "id" => $this->id],
             $params,
             $body,
             $this,

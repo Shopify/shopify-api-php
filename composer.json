@@ -1,5 +1,5 @@
 {
-    "name": "commentsold/shopify-api",
+    "name": "shopify/shopify-api",
     "description": "CS FORK: Shopify API Library for PHP",
     "type": "library",
     "license": "MIT",

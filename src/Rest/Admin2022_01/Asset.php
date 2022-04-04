@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -22,13 +21,14 @@ use Shopify\Rest\Base;
  */
 class Asset extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
+        ["http_method" => "delete", "operation" => "delete", "ids" => ["theme_id"], "path" => "themes/<theme_id>/assets.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["theme_id"], "path" => "themes/<theme_id>/assets.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["theme_id"], "path" => "themes/<theme_id>/assets.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["theme_id"], "path" => "themes/<theme_id>/assets.json"],
-        ["http_method" => "delete", "operation" => "delete", "ids" => ["theme_id"], "path" => "themes/<theme_id>/assets.json"]
+        ["http_method" => "put", "operation" => "put", "ids" => ["theme_id"], "path" => "themes/<theme_id>/assets.json"]
     ];
     protected static string $PRIMARY_KEY = "key";
 

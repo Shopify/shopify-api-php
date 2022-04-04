@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_07;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -29,16 +28,17 @@ use Shopify\Rest\Base;
  */
 class MarketingEvent extends Base
 {
+    public static string $API_VERSION = "2021-07";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "marketing_events.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "marketing_events.json"],
-        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "marketing_events/count.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "marketing_events/<id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "marketing_events/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "marketing_events/<id>.json"],
-        ["http_method" => "post", "operation" => "engagements", "ids" => ["id"], "path" => "marketing_events/<id>/engagements.json"]
+        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "marketing_events/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "marketing_events.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "marketing_events/<id>.json"],
+        ["http_method" => "post", "operation" => "engagements", "ids" => ["id"], "path" => "marketing_events/<id>/engagements.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "marketing_events.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "marketing_events/<id>.json"]
     ];
 
     /**

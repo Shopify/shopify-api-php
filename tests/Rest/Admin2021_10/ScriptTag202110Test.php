@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\ScriptTag;
+use Shopify\Rest\Admin2021_10\ScriptTag;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 
@@ -35,7 +35,7 @@ final class ScriptTag202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tags" => [["id" => 421379493, "src" => "https://js-aplenty.com/bar.js", "event" => "onload", "created_at" => "2022-02-03T17:14:40-05:00", "updated_at" => "2022-02-03T17:14:40-05:00", "display_scope" => "all"], ["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-02-03T17:14:40-05:00", "updated_at" => "2022-02-03T17:14:40-05:00", "display_scope" => "all"]]]
+                  ["script_tags" => [["id" => 421379493, "src" => "https://js-aplenty.com/bar.js", "event" => "onload", "created_at" => "2022-03-30T19:40:01-04:00", "updated_at" => "2022-03-30T19:40:01-04:00", "display_scope" => "all"], ["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-03-30T19:40:01-04:00", "updated_at" => "2022-03-30T19:40:01-04:00", "display_scope" => "all"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/script_tags.json",
                 "GET",
@@ -63,7 +63,7 @@ final class ScriptTag202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tags" => [["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-02-03T17:14:40-05:00", "updated_at" => "2022-02-03T17:14:40-05:00", "display_scope" => "all"]]]
+                  ["script_tags" => [["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-03-30T19:40:01-04:00", "updated_at" => "2022-03-30T19:40:01-04:00", "display_scope" => "all"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/script_tags.json?src=https%3A%2F%2Fjs-aplenty.com%2Ffoo.js",
                 "GET",
@@ -91,7 +91,7 @@ final class ScriptTag202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tags" => [["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-02-03T17:14:40-05:00", "updated_at" => "2022-02-03T17:14:40-05:00", "display_scope" => "all"]]]
+                  ["script_tags" => [["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-03-30T19:40:01-04:00", "updated_at" => "2022-03-30T19:40:01-04:00", "display_scope" => "all"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/script_tags.json?since_id=421379493",
                 "GET",
@@ -119,7 +119,7 @@ final class ScriptTag202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tag" => ["id" => 870402691, "src" => "https://djavaskripped.org/fancy.js", "event" => "onload", "created_at" => "2022-02-03T17:15:30-05:00", "updated_at" => "2022-02-03T17:15:30-05:00", "display_scope" => "all", "cache" => false]]
+                  ["script_tag" => ["id" => 870402687, "src" => "https://djavaskripped.org/fancy.js", "event" => "onload", "created_at" => "2022-03-30T19:47:07-04:00", "updated_at" => "2022-03-30T19:47:07-04:00", "display_scope" => "all", "cache" => false]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/script_tags.json",
                 "POST",
@@ -175,7 +175,7 @@ final class ScriptTag202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tag" => ["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-02-03T17:14:40-05:00", "updated_at" => "2022-02-03T17:14:40-05:00", "display_scope" => "all", "cache" => false]]
+                  ["script_tag" => ["id" => 596726825, "src" => "https://js-aplenty.com/foo.js", "event" => "onload", "created_at" => "2022-03-30T19:40:01-04:00", "updated_at" => "2022-03-30T19:40:01-04:00", "display_scope" => "all", "cache" => false]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/script_tags/596726825.json",
                 "GET",
@@ -204,7 +204,7 @@ final class ScriptTag202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tag" => ["src" => "https://somewhere-else.com/another.js", "cache" => false, "id" => 596726825, "event" => "onload", "created_at" => "2022-02-03T17:14:40-05:00", "updated_at" => "2022-02-03T17:15:35-05:00", "display_scope" => "all"]]
+                  ["script_tag" => ["src" => "https://somewhere-else.com/another.js", "cache" => false, "id" => 596726825, "event" => "onload", "created_at" => "2022-03-30T19:40:01-04:00", "updated_at" => "2022-03-30T19:47:09-04:00", "display_scope" => "all"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/script_tags/596726825.json",
                 "PUT",

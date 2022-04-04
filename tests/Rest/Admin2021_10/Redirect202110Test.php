@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\Redirect;
+use Shopify\Rest\Admin2021_10\Redirect;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 
@@ -91,7 +91,7 @@ final class Redirect202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["redirect" => ["id" => 984542201, "path" => "/ipod", "target" => "/pages/itunes"]]
+                  ["redirect" => ["id" => 984542199, "path" => "/ipod", "target" => "/pages/itunes"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/redirects.json",
                 "POST",
@@ -119,7 +119,7 @@ final class Redirect202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["redirect" => ["id" => 984542202, "path" => "/forums", "target" => "http://forums.apple.com/"]]
+                  ["redirect" => ["id" => 984542200, "path" => "/forums", "target" => "http://forums.apple.com/"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/redirects.json",
                 "POST",

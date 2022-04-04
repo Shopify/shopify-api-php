@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_07;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -24,12 +23,13 @@ use Shopify\Rest\Base;
  */
 class GiftCardAdjustment extends Base
 {
+    public static string $API_VERSION = "2021-07";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => ["gift_card_id"], "path" => "gift_cards/<gift_card_id>/adjustments.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => ["gift_card_id"], "path" => "gift_cards/<gift_card_id>/adjustments.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["gift_card_id", "id"], "path" => "gift_cards/<gift_card_id>/adjustments/9.json"]
+        ["http_method" => "get", "operation" => "get", "ids" => ["gift_card_id", "id"], "path" => "gift_cards/<gift_card_id>/adjustments/2.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => ["gift_card_id"], "path" => "gift_cards/<gift_card_id>/adjustments.json"]
     ];
 
     /**

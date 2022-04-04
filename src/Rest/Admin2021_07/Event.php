@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_07;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -22,12 +21,13 @@ use Shopify\Rest\Base;
  */
 class Event extends Base
 {
+    public static string $API_VERSION = "2021-07";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
+        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "events/count.json"],
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "events.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "events/<id>.json"],
-        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "events/count.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["order_id"], "path" => "orders/<order_id>/events.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["product_id"], "path" => "products/<product_id>/events.json"]
     ];

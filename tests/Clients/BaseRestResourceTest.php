@@ -6,6 +6,7 @@ namespace ShopifyTest\Clients;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
+use Shopify\Exception\RestResourceException;
 use Shopify\Exception\RestResourceRequestException;
 use ShopifyTest\BaseTestCase;
 
@@ -444,5 +445,13 @@ final class BaseRestResourceTest extends BaseTestCase
 
         $resource = FakeResourceWithCustomPrefix::find($this->session, 1);
         $this->assertEquals([1, "attribute"], [$resource->id, $resource->attribute]);
+    }
+
+    public function testThrowsOnMismatchedApiVersion()
+    {
+        Context::$API_VERSION = "2022-04";
+
+        $this->expectException(RestResourceException::class);
+        new FakeResource($this->session);
     }
 }

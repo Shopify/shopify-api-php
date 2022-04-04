@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\Country;
+use Shopify\Rest\Admin2021_10\Country;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 
@@ -91,7 +91,7 @@ final class Country202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["country" => ["id" => 1070231513, "name" => "France", "code" => "FR", "tax_name" => "TVA", "tax" => 0.2, "provinces" => []]]
+                  ["country" => ["id" => 1070231511, "name" => "France", "code" => "FR", "tax_name" => "TVA", "tax" => 0.2, "provinces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/countries.json",
                 "POST",
@@ -118,7 +118,7 @@ final class Country202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["country" => ["id" => 1070231514, "name" => "France", "code" => "FR", "tax_name" => "TVA", "tax" => 0.2, "provinces" => []]]
+                  ["country" => ["id" => 1070231512, "name" => "France", "code" => "FR", "tax_name" => "TVA", "tax" => 0.2, "provinces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/countries.json",
                 "POST",

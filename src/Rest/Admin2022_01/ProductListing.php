@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -25,18 +24,19 @@ use Shopify\Rest\Base;
  */
 class ProductListing extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [
         "images" => Image::class,
         "variants" => Variant::class
     ];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "product_listings.json"],
-        ["http_method" => "get", "operation" => "product_ids", "ids" => [], "path" => "product_listings/product_ids.json"],
+        ["http_method" => "delete", "operation" => "delete", "ids" => ["product_id"], "path" => "product_listings/<product_id>.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "product_listings/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "product_listings.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["product_id"], "path" => "product_listings/<product_id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["product_id"], "path" => "product_listings/<product_id>.json"],
-        ["http_method" => "delete", "operation" => "delete", "ids" => ["product_id"], "path" => "product_listings/<product_id>.json"]
+        ["http_method" => "get", "operation" => "product_ids", "ids" => [], "path" => "product_listings/product_ids.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["product_id"], "path" => "product_listings/<product_id>.json"]
     ];
     protected static string $PRIMARY_KEY = "product_id";
 
@@ -114,6 +114,30 @@ class ProductListing extends Base
     /**
      * @param Session $session
      * @param array $urlIds
+     * @param mixed[] $params
+     *
+     * @return array|null
+     */
+    public static function count(
+        Session $session,
+        array $urlIds = [],
+        array $params = []
+    ): ?array {
+        $response = parent::request(
+            "get",
+            "count",
+            $session,
+            [],
+            $params,
+            [],
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param Session $session
+     * @param array $urlIds
      * @param mixed[] $params Allowed indexes:
      *     limit
      *
@@ -127,30 +151,6 @@ class ProductListing extends Base
         $response = parent::request(
             "get",
             "product_ids",
-            $session,
-            [],
-            $params,
-            [],
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param Session $session
-     * @param array $urlIds
-     * @param mixed[] $params
-     *
-     * @return array|null
-     */
-    public static function count(
-        Session $session,
-        array $urlIds = [],
-        array $params = []
-    ): ?array {
-        $response = parent::request(
-            "get",
-            "count",
             $session,
             [],
             $params,

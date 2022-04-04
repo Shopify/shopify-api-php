@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\InventoryLevel;
+use Shopify\Rest\Admin2022_01\InventoryLevel;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 
@@ -35,7 +35,7 @@ final class InventoryLevel202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["inventory_levels" => [["inventory_item_id" => 808950810, "location_id" => 487838322, "available" => 9, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"], ["inventory_item_id" => 39072856, "location_id" => 487838322, "available" => 27, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/548380009?inventory_item_id=39072856"], ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 1, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"], ["inventory_item_id" => 39072856, "location_id" => 655441491, "available" => 3, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"]]]
+                  ["inventory_levels" => [["inventory_item_id" => 808950810, "location_id" => 487838322, "available" => 9, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"], ["inventory_item_id" => 39072856, "location_id" => 487838322, "available" => 27, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/548380009?inventory_item_id=39072856"], ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 1, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"], ["inventory_item_id" => 39072856, "location_id" => 655441491, "available" => 3, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/inventory_levels.json?inventory_item_ids=808950810%2C39072856&location_ids=655441491%2C487838322",
                 "GET",
@@ -63,7 +63,7 @@ final class InventoryLevel202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["inventory_levels" => [["inventory_item_id" => 808950810, "location_id" => 487838322, "available" => 9, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"], ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 1, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"]]]
+                  ["inventory_levels" => [["inventory_item_id" => 808950810, "location_id" => 487838322, "available" => 9, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/548380009?inventory_item_id=808950810"], ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 1, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/inventory_levels.json?inventory_item_ids=808950810",
                 "GET",
@@ -91,7 +91,7 @@ final class InventoryLevel202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["inventory_levels" => [["inventory_item_id" => 49148385, "location_id" => 655441491, "available" => 2, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=49148385"], ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 1, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"], ["inventory_item_id" => 457924702, "location_id" => 655441491, "available" => 4, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=457924702"], ["inventory_item_id" => 39072856, "location_id" => 655441491, "available" => 3, "updated_at" => "2022-02-03T17:14:40-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"]]]
+                  ["inventory_levels" => [["inventory_item_id" => 49148385, "location_id" => 655441491, "available" => 2, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=49148385"], ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 1, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"], ["inventory_item_id" => 457924702, "location_id" => 655441491, "available" => 4, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=457924702"], ["inventory_item_id" => 39072856, "location_id" => 655441491, "available" => 3, "updated_at" => "2022-03-30T19:20:40-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=39072856"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/inventory_levels.json?location_ids=655441491",
                 "GET",
@@ -119,7 +119,7 @@ final class InventoryLevel202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["inventory_level" => ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 6, "updated_at" => "2022-02-03T17:17:55-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"]]
+                  ["inventory_level" => ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 6, "updated_at" => "2022-03-30T19:26:48-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/inventory_levels/adjust.json",
                 "POST",
@@ -177,7 +177,7 @@ final class InventoryLevel202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["inventory_level" => ["inventory_item_id" => 457924702, "location_id" => 844681632, "available" => 0, "updated_at" => "2022-02-03T17:18:03-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/844681632?inventory_item_id=457924702"]]
+                  ["inventory_level" => ["inventory_item_id" => 457924702, "location_id" => 844681632, "available" => 0, "updated_at" => "2022-03-30T19:26:54-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/844681632?inventory_item_id=457924702"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/inventory_levels/connect.json",
                 "POST",
@@ -207,7 +207,7 @@ final class InventoryLevel202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["inventory_level" => ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 42, "updated_at" => "2022-02-03T17:17:38-05:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"]]
+                  ["inventory_level" => ["inventory_item_id" => 808950810, "location_id" => 655441491, "available" => 42, "updated_at" => "2022-03-30T19:26:58-04:00", "admin_graphql_api_id" => "gid://shopify/InventoryLevel/655441491?inventory_item_id=808950810"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/inventory_levels/set.json",
                 "POST",

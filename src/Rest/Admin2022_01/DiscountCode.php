@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -18,19 +17,20 @@ use Shopify\Rest\Base;
  */
 class DiscountCode extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "post", "operation" => "post", "ids" => ["price_rule_id"], "path" => "price_rules/<price_rule_id>/discount_codes.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["price_rule_id"], "path" => "price_rules/<price_rule_id>/discount_codes.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["price_rule_id", "id"], "path" => "price_rules/<price_rule_id>/discount_codes/<id>.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["price_rule_id", "id"], "path" => "price_rules/<price_rule_id>/discount_codes/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["price_rule_id", "id"], "path" => "price_rules/<price_rule_id>/discount_codes/<id>.json"],
-        ["http_method" => "get", "operation" => "lookup", "ids" => [], "path" => "discount_codes/lookup.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "discount_codes/count.json"],
-        ["http_method" => "post", "operation" => "batch", "ids" => ["price_rule_id"], "path" => "price_rules/<price_rule_id>/batch.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["price_rule_id", "batch_id"], "path" => "price_rules/<price_rule_id>/batch/<batch_id>/discount_codes.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["price_rule_id"], "path" => "price_rules/<price_rule_id>/discount_codes.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["price_rule_id", "id"], "path" => "price_rules/<price_rule_id>/discount_codes/<id>.json"],
         ["http_method" => "get", "operation" => "get_all", "ids" => ["price_rule_id", "batch_id"], "path" => "price_rules/<price_rule_id>/batch/<batch_id>.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["price_rule_id", "batch_id"], "path" => "price_rules/<price_rule_id>/batch/<batch_id>/discount_codes.json"]
+        ["http_method" => "get", "operation" => "lookup", "ids" => [], "path" => "discount_codes/lookup.json"],
+        ["http_method" => "post", "operation" => "batch", "ids" => ["price_rule_id"], "path" => "price_rules/<price_rule_id>/batch.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => ["price_rule_id"], "path" => "price_rules/<price_rule_id>/discount_codes.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["price_rule_id", "id"], "path" => "price_rules/<price_rule_id>/discount_codes/<id>.json"]
     ];
 
     /**
@@ -107,31 +107,6 @@ class DiscountCode extends Base
      * @param Session $session
      * @param array $urlIds
      * @param mixed[] $params Allowed indexes:
-     *     code
-     *
-     * @return array|null
-     */
-    public static function lookup(
-        Session $session,
-        array $urlIds = [],
-        array $params = []
-    ): ?array {
-        $response = parent::request(
-            "get",
-            "lookup",
-            $session,
-            [],
-            $params,
-            [],
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param Session $session
-     * @param array $urlIds
-     * @param mixed[] $params Allowed indexes:
      *     times_used,
      *     times_used_min,
      *     times_used_max
@@ -174,6 +149,31 @@ class DiscountCode extends Base
             "get_all",
             $session,
             $urlIds,
+            $params,
+            [],
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param Session $session
+     * @param array $urlIds
+     * @param mixed[] $params Allowed indexes:
+     *     code
+     *
+     * @return array|null
+     */
+    public static function lookup(
+        Session $session,
+        array $urlIds = [],
+        array $params = []
+    ): ?array {
+        $response = parent::request(
+            "get",
+            "lookup",
+            $session,
+            [],
             $params,
             [],
         );

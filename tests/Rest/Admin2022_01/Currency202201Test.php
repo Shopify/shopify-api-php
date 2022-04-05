@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\Currency;
+use Shopify\Rest\Admin2022_01\Currency;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 

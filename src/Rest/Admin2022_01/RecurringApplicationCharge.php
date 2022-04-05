@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -28,13 +27,14 @@ use Shopify\Rest\Base;
  */
 class RecurringApplicationCharge extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "recurring_application_charges.json"],
+        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "recurring_application_charges/<id>.json"],
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "recurring_application_charges.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "recurring_application_charges/<id>.json"],
-        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "recurring_application_charges/<id>.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "recurring_application_charges.json"],
         ["http_method" => "put", "operation" => "customize", "ids" => ["id"], "path" => "recurring_application_charges/<id>/customize.json"]
     ];
 

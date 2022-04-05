@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -24,16 +23,17 @@ use Shopify\Rest\Base;
  */
 class SmartCollection extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "smart_collections.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "smart_collections.json"],
-        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "smart_collections/count.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "smart_collections/<id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "smart_collections/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "smart_collections/<id>.json"],
-        ["http_method" => "put", "operation" => "order", "ids" => ["id"], "path" => "smart_collections/<id>/order.json"]
+        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "smart_collections/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "smart_collections.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "smart_collections/<id>.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "smart_collections.json"],
+        ["http_method" => "put", "operation" => "order", "ids" => ["id"], "path" => "smart_collections/<id>/order.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "smart_collections/<id>.json"]
     ];
 
     /**

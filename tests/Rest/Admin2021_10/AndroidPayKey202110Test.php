@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\AndroidPayKey;
+use Shopify\Rest\Admin2021_10\AndroidPayKey;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 
@@ -35,7 +35,7 @@ final class AndroidPayKey202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["android_pay_key" => ["id" => 964811899, "public_key" => "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM 616y8SrKwaVOSu4U8=\n"]]
+                  ["android_pay_key" => ["id" => 964811896, "public_key" => "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM 616y8SrKwaVOSu4U8=\n"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/android_pay_keys.json",
                 "POST",
@@ -62,9 +62,9 @@ final class AndroidPayKey202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["android_pay_key" => ["id" => 964811897, "public_key" => "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM 616y8SrKwaVOSu4U8=\n"]]
+                  ["android_pay_key" => ["id" => 964811894, "public_key" => "BPI5no5liIrAC3knvJnxSoMW09D0KwbJOnv TaAmd3Fur3wYlD85yFaJABZC\n1qb/14GtM 616y8SrKwaVOSu4U8=\n"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2021-10/android_pay_keys/964811897.json",
+                "https://test-shop.myshopify.io/admin/api/2021-10/android_pay_keys/964811894.json",
                 "GET",
                 null,
                 [
@@ -75,7 +75,7 @@ final class AndroidPayKey202110Test extends BaseTestCase
 
         AndroidPayKey::find(
             $this->test_session,
-            964811897,
+            964811894,
             [],
             [],
         );
@@ -93,7 +93,7 @@ final class AndroidPayKey202110Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   []
                 )),
-                "https://test-shop.myshopify.io/admin/api/2021-10/android_pay_keys/964811898.json",
+                "https://test-shop.myshopify.io/admin/api/2021-10/android_pay_keys/964811895.json",
                 "DELETE",
                 null,
                 [
@@ -104,7 +104,7 @@ final class AndroidPayKey202110Test extends BaseTestCase
 
         AndroidPayKey::delete(
             $this->test_session,
-            964811898,
+            964811895,
             [],
             [],
         );

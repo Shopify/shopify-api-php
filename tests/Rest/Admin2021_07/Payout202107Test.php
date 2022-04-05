@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\Payout;
+use Shopify\Rest\Admin2021_07\Payout;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 

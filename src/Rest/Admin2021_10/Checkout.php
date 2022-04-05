@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_10;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -30,7 +29,9 @@ use Shopify\Rest\Base;
  * @property array|null $shipping_address
  * @property array|null $shipping_line
  * @property array|null $shipping_rate
+ * @property string|null $source_identifier
  * @property string|null $source_name
+ * @property string|null $source_url
  * @property string|null $subtotal_price
  * @property array[]|null $tax_lines
  * @property bool|null $taxes_included
@@ -43,6 +44,7 @@ use Shopify\Rest\Base;
  */
 class Checkout extends Base
 {
+    public static string $API_VERSION = "2021-10";
     protected static array $HAS_ONE = [
         "discount_code" => DiscountCode::class,
         "order" => Order::class
@@ -51,11 +53,11 @@ class Checkout extends Base
         "gift_cards" => GiftCard::class
     ];
     protected static array $PATHS = [
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "checkouts.json"],
-        ["http_method" => "post", "operation" => "complete", "ids" => ["token"], "path" => "checkouts/<token>/complete.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["token"], "path" => "checkouts/<token>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["token"], "path" => "checkouts/<token>.json"],
-        ["http_method" => "get", "operation" => "shipping_rates", "ids" => ["token"], "path" => "checkouts/<token>/shipping_rates.json"]
+        ["http_method" => "get", "operation" => "shipping_rates", "ids" => ["token"], "path" => "checkouts/<token>/shipping_rates.json"],
+        ["http_method" => "post", "operation" => "complete", "ids" => ["token"], "path" => "checkouts/<token>/complete.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "checkouts.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["token"], "path" => "checkouts/<token>.json"]
     ];
     protected static string $PRIMARY_KEY = "token";
 

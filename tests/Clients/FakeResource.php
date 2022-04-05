@@ -16,6 +16,8 @@ use Shopify\Rest\Base;
  */
 final class FakeResource extends Base
 {
+    public static string $API_VERSION = "unstable";
+
     protected static array $HAS_ONE = [
         "has_one_attribute" => FakeResource::class,
     ];

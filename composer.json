@@ -23,8 +23,7 @@
     "autoload": {
         "psr-4": {
             "Shopify\\": "src/"
-        },
-        "files": ["src/rest_resource_autoloader.php"]
+        }
     },
     "autoload-dev": {
         "psr-4": {

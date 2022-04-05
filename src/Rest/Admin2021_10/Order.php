@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_10;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -62,7 +61,9 @@ use Shopify\Rest\Base;
  * @property Refund[]|null $refunds
  * @property array|null $shipping_address
  * @property array[]|null $shipping_lines
+ * @property string|null $source_identifier
  * @property string|null $source_name
+ * @property string|null $source_url
  * @property float|null $subtotal_price
  * @property array|null $subtotal_price_set
  * @property string|null $tags
@@ -87,6 +88,7 @@ use Shopify\Rest\Base;
  */
 class Order extends Base
 {
+    public static string $API_VERSION = "2021-10";
     protected static array $HAS_ONE = [
         "customer" => Customer::class
     ];
@@ -96,15 +98,15 @@ class Order extends Base
         "refunds" => Refund::class
     ];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "orders.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "orders/<id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "orders/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "orders/<id>.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "orders/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "orders.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "orders/<id>.json"],
+        ["http_method" => "post", "operation" => "cancel", "ids" => ["id"], "path" => "orders/<id>/cancel.json"],
         ["http_method" => "post", "operation" => "close", "ids" => ["id"], "path" => "orders/<id>/close.json"],
         ["http_method" => "post", "operation" => "open", "ids" => ["id"], "path" => "orders/<id>/open.json"],
-        ["http_method" => "post", "operation" => "cancel", "ids" => ["id"], "path" => "orders/<id>/cancel.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "orders.json"]
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "orders.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "orders/<id>.json"]
     ];
 
     /**
@@ -220,6 +222,35 @@ class Order extends Base
     }
 
     /**
+     * @param mixed[] $params Allowed indexes:
+     *     amount,
+     *     currency,
+     *     restock,
+     *     reason,
+     *     email,
+     *     refund
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function cancel(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "post",
+            "cancel",
+            $this->session,
+            ["id" => $this->id],
+            $params,
+            $body,
+            $this,
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
      * @param mixed[] $params
      * @param array|string $body
      *
@@ -255,35 +286,6 @@ class Order extends Base
         $response = parent::request(
             "post",
             "open",
-            $this->session,
-            ["id" => $this->id],
-            $params,
-            $body,
-            $this,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param mixed[] $params Allowed indexes:
-     *     amount,
-     *     currency,
-     *     restock,
-     *     reason,
-     *     email,
-     *     refund
-     * @param array|string $body
-     *
-     * @return array|null
-     */
-    public function cancel(
-        array $params = [],
-        $body = []
-    ): ?array {
-        $response = parent::request(
-            "post",
-            "cancel",
             $this->session,
             ["id" => $this->id],
             $params,

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_10;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -28,20 +27,20 @@ use Shopify\Rest\Base;
  */
 class Article extends Base
 {
+    public static string $API_VERSION = "2021-10";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [
         "metafields" => Metafield::class
     ];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles.json"],
-        ["http_method" => "get", "operation" => "count", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles/count.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/articles/<id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/articles/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/articles/<id>.json"],
         ["http_method" => "get", "operation" => "authors", "ids" => [], "path" => "articles/authors.json"],
-        ["http_method" => "get", "operation" => "tags", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles/tags.json"],
-        ["http_method" => "get", "operation" => "tags", "ids" => [], "path" => "articles/tags.json"]
+        ["http_method" => "get", "operation" => "count", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/articles/<id>.json"],
+        ["http_method" => "get", "operation" => "tags", "ids" => [], "path" => "articles/tags.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/articles/<id>.json"]
     ];
 
     /**
@@ -129,6 +128,30 @@ class Article extends Base
 
     /**
      * @param Session $session
+     * @param array $urlIds
+     * @param mixed[] $params
+     *
+     * @return array|null
+     */
+    public static function authors(
+        Session $session,
+        array $urlIds = [],
+        array $params = []
+    ): ?array {
+        $response = parent::request(
+            "get",
+            "authors",
+            $session,
+            [],
+            $params,
+            [],
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param Session $session
      * @param array $urlIds Allowed indexes:
      *     blog_id
      * @param mixed[] $params Allowed indexes:
@@ -166,33 +189,6 @@ class Article extends Base
      *
      * @return array|null
      */
-    public static function authors(
-        Session $session,
-        array $urlIds = [],
-        array $params = []
-    ): ?array {
-        $response = parent::request(
-            "get",
-            "authors",
-            $session,
-            [],
-            $params,
-            [],
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param Session $session
-     * @param array $urlIds Allowed indexes:
-     *     blog_id
-     * @param mixed[] $params Allowed indexes:
-     *     limit,
-     *     popular
-     *
-     * @return array|null
-     */
     public static function tags(
         Session $session,
         array $urlIds = [],
@@ -202,7 +198,7 @@ class Article extends Base
             "get",
             "tags",
             $session,
-            $urlIds,
+            [],
             $params,
             [],
         );

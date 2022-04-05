@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -29,21 +28,15 @@ use Shopify\Rest\Base;
  */
 class Fulfillment extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillments.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillments.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["fulfillment_order_id"], "path" => "fulfillment_orders/<fulfillment_order_id>/fulfillments.json"],
         ["http_method" => "get", "operation" => "count", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillments/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["fulfillment_order_id"], "path" => "fulfillment_orders/<fulfillment_order_id>/fulfillments.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillments.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "fulfillments.json"],
-        ["http_method" => "post", "operation" => "update_tracking", "ids" => ["id"], "path" => "fulfillments/<id>/update_tracking.json"],
-        ["http_method" => "post", "operation" => "complete", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>/complete.json"],
-        ["http_method" => "post", "operation" => "open", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>/open.json"],
-        ["http_method" => "post", "operation" => "cancel", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>/cancel.json"],
-        ["http_method" => "post", "operation" => "cancel", "ids" => ["id"], "path" => "fulfillments/<id>/cancel.json"]
+        ["http_method" => "post", "operation" => "update_tracking", "ids" => ["id"], "path" => "fulfillments/<id>/update_tracking.json"]
     ];
 
     /**
@@ -73,8 +66,8 @@ class Fulfillment extends Base
     /**
      * @param Session $session
      * @param array $urlIds Allowed indexes:
-     *     order_id
      *     fulfillment_order_id
+     *     order_id
      * @param mixed[] $params Allowed indexes:
      *     created_at_max,
      *     created_at_min,
@@ -142,75 +135,6 @@ class Fulfillment extends Base
             "update_tracking",
             $this->session,
             ["id" => $this->id],
-            $params,
-            $body,
-            $this,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param mixed[] $params
-     * @param array|string $body
-     *
-     * @return array|null
-     */
-    public function complete(
-        array $params = [],
-        $body = []
-    ): ?array {
-        $response = parent::request(
-            "post",
-            "complete",
-            $this->session,
-            ["order_id" => $this->order_id, "id" => $this->id],
-            $params,
-            $body,
-            $this,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param mixed[] $params
-     * @param array|string $body
-     *
-     * @return array|null
-     */
-    public function open(
-        array $params = [],
-        $body = []
-    ): ?array {
-        $response = parent::request(
-            "post",
-            "open",
-            $this->session,
-            ["order_id" => $this->order_id, "id" => $this->id],
-            $params,
-            $body,
-            $this,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param mixed[] $params
-     * @param array|string $body
-     *
-     * @return array|null
-     */
-    public function cancel(
-        array $params = [],
-        $body = []
-    ): ?array {
-        $response = parent::request(
-            "post",
-            "cancel",
-            $this->session,
-            ["order_id" => $this->order_id, "id" => $this->id],
             $params,
             $body,
             $this,

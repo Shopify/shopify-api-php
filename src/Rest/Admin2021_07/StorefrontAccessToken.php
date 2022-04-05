@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_07;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -17,12 +16,13 @@ use Shopify\Rest\Base;
  */
 class StorefrontAccessToken extends Base
 {
+    public static string $API_VERSION = "2021-07";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "storefront_access_tokens.json"],
+        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "storefront_access_tokens/<id>.json"],
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "storefront_access_tokens.json"],
-        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "storefront_access_tokens/<id>.json"]
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "storefront_access_tokens.json"]
     ];
 
     /**

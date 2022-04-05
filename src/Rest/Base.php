@@ -9,11 +9,13 @@ use Shopify\Clients\Rest;
 use Shopify\Clients\RestResponse;
 use Doctrine\Inflector\InflectorFactory;
 use ReflectionClass;
+use Shopify\Context;
 use Shopify\Exception\RestResourceException;
 use Shopify\Exception\RestResourceRequestException;
 
 abstract class Base
 {
+    public static string $API_VERSION;
     public static ?array $NEXT_PAGE_QUERY = null;
     public static ?array $PREV_PAGE_QUERY = null;
 
@@ -35,6 +37,14 @@ abstract class Base
 
     public function __construct(Session $session, array $fromData = null)
     {
+        if (Context::$API_VERSION !== static::$API_VERSION) {
+            $contextVersion = Context::$API_VERSION;
+            $thisVersion = static::$API_VERSION;
+            throw new RestResourceException(
+                "Current Context::\$API_VERSION '$contextVersion' does not match resource version '$thisVersion'",
+            );
+        }
+
         $this->originalState = [];
         $this->setProps = [];
         $this->session = $session;

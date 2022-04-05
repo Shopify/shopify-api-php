@@ -6,7 +6,7 @@ namespace ShopifyTest\Rest;
 
 use Shopify\Auth\Session;
 use Shopify\Context;
-use Shopify\Rest\Event;
+use Shopify\Rest\Admin2021_07\Event;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\Clients\MockRequest;
 

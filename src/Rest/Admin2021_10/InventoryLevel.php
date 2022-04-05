@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2021_10;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -16,12 +15,13 @@ use Shopify\Rest\Base;
  */
 class InventoryLevel extends Base
 {
+    public static string $API_VERSION = "2021-10";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
+        ["http_method" => "delete", "operation" => "delete", "ids" => [], "path" => "inventory_levels.json"],
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "inventory_levels.json"],
         ["http_method" => "post", "operation" => "adjust", "ids" => [], "path" => "inventory_levels/adjust.json"],
-        ["http_method" => "delete", "operation" => "delete", "ids" => [], "path" => "inventory_levels.json"],
         ["http_method" => "post", "operation" => "connect", "ids" => [], "path" => "inventory_levels/connect.json"],
         ["http_method" => "post", "operation" => "set", "ids" => [], "path" => "inventory_levels/set.json"]
     ];

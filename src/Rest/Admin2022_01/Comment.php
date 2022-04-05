@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest;
+namespace Shopify\Rest\Admin2022_01;
 
 use Shopify\Auth\Session;
-use Shopify\Clients\RestResponse;
 use Shopify\Rest\Base;
 
 /**
@@ -25,19 +24,20 @@ use Shopify\Rest\Base;
  */
 class Comment extends Base
 {
+    public static string $API_VERSION = "2022-01";
     protected static array $HAS_ONE = [];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "comments.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "comments/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "comments.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "comments/<id>.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "comments/<id>.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "comments.json"],
-        ["http_method" => "post", "operation" => "spam", "ids" => ["id"], "path" => "comments/<id>/spam.json"],
-        ["http_method" => "post", "operation" => "not_spam", "ids" => ["id"], "path" => "comments/<id>/not_spam.json"],
         ["http_method" => "post", "operation" => "approve", "ids" => ["id"], "path" => "comments/<id>/approve.json"],
+        ["http_method" => "post", "operation" => "not_spam", "ids" => ["id"], "path" => "comments/<id>/not_spam.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "comments.json"],
         ["http_method" => "post", "operation" => "remove", "ids" => ["id"], "path" => "comments/<id>/remove.json"],
-        ["http_method" => "post", "operation" => "restore", "ids" => ["id"], "path" => "comments/<id>/restore.json"]
+        ["http_method" => "post", "operation" => "restore", "ids" => ["id"], "path" => "comments/<id>/restore.json"],
+        ["http_method" => "post", "operation" => "spam", "ids" => ["id"], "path" => "comments/<id>/spam.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "comments/<id>.json"]
     ];
 
     /**
@@ -131,13 +131,13 @@ class Comment extends Base
      *
      * @return array|null
      */
-    public function spam(
+    public function approve(
         array $params = [],
         $body = []
     ): ?array {
         $response = parent::request(
             "post",
-            "spam",
+            "approve",
             $this->session,
             ["id" => $this->id],
             $params,
@@ -161,29 +161,6 @@ class Comment extends Base
         $response = parent::request(
             "post",
             "not_spam",
-            $this->session,
-            ["id" => $this->id],
-            $params,
-            $body,
-            $this,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param mixed[] $params
-     * @param array|string $body
-     *
-     * @return array|null
-     */
-    public function approve(
-        array $params = [],
-        $body = []
-    ): ?array {
-        $response = parent::request(
-            "post",
-            "approve",
             $this->session,
             ["id" => $this->id],
             $params,
@@ -230,6 +207,29 @@ class Comment extends Base
         $response = parent::request(
             "post",
             "restore",
+            $this->session,
+            ["id" => $this->id],
+            $params,
+            $body,
+            $this,
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param mixed[] $params
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function spam(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "post",
+            "spam",
             $this->session,
             ["id" => $this->id],
             $params,

@@ -15,25 +15,25 @@ use Shopify\Exception\RestResourceRequestException;
 
 abstract class Base
 {
-    public static string $API_VERSION;
-    public static ?array $NEXT_PAGE_QUERY = null;
-    public static ?array $PREV_PAGE_QUERY = null;
+    public static $API_VERSION;
+    public static $NEXT_PAGE_QUERY = null;
+    public static $PREV_PAGE_QUERY = null;
 
     /** @var Base[] */
-    protected static array $HAS_ONE = [];
+    protected static $HAS_ONE = [];
 
     /** @var Base[] */
-    protected static array $HAS_MANY = [];
+    protected static $HAS_MANY = [];
 
     /** @var array[] */
-    protected static array $PATHS = [];
+    protected static $PATHS = [];
 
-    protected static string $PRIMARY_KEY = "id";
-    protected static ?string $CUSTOM_PREFIX = null;
+    protected static $PRIMARY_KEY = "id";
+    protected static $CUSTOM_PREFIX = null;
 
-    private array $originalState;
-    private array $setProps;
-    protected Session $session;
+    private $originalState;
+    private $setProps;
+    protected $session;
 
     public function __construct(Session $session, array $fromData = null)
     {

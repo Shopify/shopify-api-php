@@ -16,17 +16,17 @@ use Shopify\Rest\Base;
  */
 final class FakeResource extends Base
 {
-    public static string $API_VERSION = "unstable";
+    public static $API_VERSION = "unstable";
 
-    protected static array $HAS_ONE = [
+    protected static $HAS_ONE = [
         "has_one_attribute" => FakeResource::class,
     ];
 
-    protected static array $HAS_MANY = [
+    protected static $HAS_MANY = [
         "has_many_attribute" => FakeResource::class,
     ];
 
-    protected static array $PATHS = [
+    protected static $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "fake_resources.json"],
         ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "fake_resources.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "fake_resources/<id>.json"],

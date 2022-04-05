@@ -14,8 +14,8 @@ final class BaseRestResourceTest extends BaseTestCase
 {
     use PaginationTestHelper;
 
-    private ?Session $session = null;
-    private string $prefix = "https://test-shop.myshopify.io/admin/api/unstable";
+    private $session = null;
+    private $prefix = "https://test-shop.myshopify.io/admin/api/unstable";
 
     public function setUp(): void
     {

@@ -307,6 +307,34 @@ final class BaseRestResourceTest extends BaseTestCase
         $resource->save();
     }
 
+    public function testIgnoresUnsaveableAttribute()
+    {
+        $requestBody = ["fake_resource" => ["attribute" => "attribute"]];
+        $responseBody = ["fake_resource" => ["id" => 1, "attribute" => "attribute"]];
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $responseBody),
+                "{$this->prefix}/fake_resources.json",
+                "POST",
+                null,
+                ["X-Shopify-Access-Token: access-token"],
+                json_encode($requestBody),
+                null,
+                true,
+                false,
+                true
+            ),
+        ]);
+
+        $resource = new FakeResource($this->session);
+        $resource->attribute = "attribute";
+        $resource->unsaveable_attribute = "unsaveable_attribute";
+
+        $resource->save();
+        $this->assertNull($resource->id);
+    }
+
     public function testDeletesExistingResource()
     {
         $this->mockTransportRequests([

@@ -82,7 +82,9 @@ class BaseTestCase extends TestCase
                 $request->method,
                 "/$request->userAgent/",
                 $request->headers,
-                $request->body ?? ""
+                $request->body ?? "",
+                true,
+                $request->identicalBody
             );
 
             $requestMatchers[] = [$matcher];

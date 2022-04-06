@@ -24,6 +24,8 @@ final class MockRequest
     public $allowOtherHeaders = true;
     /** @var bool */
     public $isRetry = false;
+    /** @var bool */
+    public $identicalBody = false;
 
     public function __construct(
         array $response,
@@ -34,7 +36,8 @@ final class MockRequest
         ?string $body = null,
         ?string $error = null,
         bool $allowOtherHeaders = true,
-        bool $isRetry = false
+        bool $isRetry = false,
+        bool $identicalBody = false
     ) {
         $this->response = $response;
         $this->url = $url;
@@ -45,6 +48,7 @@ final class MockRequest
         $this->error = $error;
         $this->allowOtherHeaders = $allowOtherHeaders;
         $this->isRetry = $isRetry;
+        $this->identicalBody = $identicalBody;
 
         array_unshift($this->headers, 'Host: test-shop.myshopify.io');
     }

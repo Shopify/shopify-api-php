@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - [#168](https://github.com/Shopify/shopify-php-api/pull/168) Allow REST resources to configure a deny list of attributes to be excluded when saving
+- [#169](https://github.com/Shopify/shopify-php-api/pull/169) Allow loading dynamic fields returned by the API, and fix an issue when loading object arrays from API response data
 
 ## v2.0.0 - 2022-04-04
 

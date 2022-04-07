@@ -26,6 +26,8 @@ final class FakeResource extends Base
         "has_many_attribute" => FakeResource::class,
     ];
 
+    protected static array $READ_ONLY_ATTRIBUTES = ["unsaveable_attribute"];
+
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "fake_resources.json"],
         ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "fake_resources.json"],

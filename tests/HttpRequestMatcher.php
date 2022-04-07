@@ -21,6 +21,8 @@ class HttpRequestMatcher extends Constraint
     private $allowOtherHeaders = true;
     /** @var mixed */
     private $bodyDiff;
+    /** @var bool */
+    private $identicalBody;
 
     /**
      * HttpRequestMatcher constructor.
@@ -31,6 +33,7 @@ class HttpRequestMatcher extends Constraint
      * @param array       $headers           Expected Http Headers other than User-Agent
      * @param string|null $body              Expected Http Headers
      * @param bool        $allowOtherHeaders When true will assert for contains rather than equals
+     * @param bool        $identicalBody     Whether the received body should match the expected one exactly
      */
     public function __construct(
         string $url,
@@ -38,7 +41,8 @@ class HttpRequestMatcher extends Constraint
         string $userAgent,
         array $headers = [],
         ?string $body = null,
-        bool $allowOtherHeaders = true
+        bool $allowOtherHeaders = true,
+        bool $identicalBody = false
     ) {
         $this->url = str_replace(["[", "]"], ["%5B", "%5D"], $url);
         $this->method = $method;
@@ -46,6 +50,7 @@ class HttpRequestMatcher extends Constraint
         $this->headers = $headers;
         $this->body = $body;
         $this->allowOtherHeaders = $allowOtherHeaders;
+        $this->identicalBody = $identicalBody;
     }
 
     protected function matches($other): bool
@@ -155,6 +160,14 @@ class HttpRequestMatcher extends Constraint
             json_decode($this->body, true) ?: $this->body,
             json_decode($contents, true) ?: $contents
         );
+
+        // If the diff is empty and we're looking for identical bodies, invert the diff to ensure it's still empty
+        if ($this->identicalBody && empty($this->bodyDiff)) {
+            $this->bodyDiff = $this->diffBody(
+                json_decode($contents, true) ?: $contents,
+                json_decode($this->body, true) ?: $this->body
+            );
+        }
     }
 
     private function diffBody($body1, $body2)

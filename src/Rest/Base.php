@@ -31,6 +31,9 @@ abstract class Base
     protected static string $PRIMARY_KEY = "id";
     protected static ?string $CUSTOM_PREFIX = null;
 
+    /** @var string[] */
+    protected static array $READ_ONLY_ATTRIBUTES = [];
+
     private array $originalState;
     private array $setProps;
     protected Session $session;
@@ -359,6 +362,10 @@ abstract class Base
         $data = [];
 
         foreach ($this->getProperties() as $prop) {
+            if (in_array($prop, static::$READ_ONLY_ATTRIBUTES)) {
+                continue;
+            }
+
             $includeProp = !empty($this->$prop) || array_key_exists($prop, $this->setProps);
             if (self::isHasManyAttribute($prop)) {
                 if ($includeProp) {

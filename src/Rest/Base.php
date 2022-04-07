@@ -32,7 +32,7 @@ abstract class Base
     protected static ?string $CUSTOM_PREFIX = null;
 
     /** @var string[] */
-    protected static array $ATTRIBUTE_SAVE_DENY_LIST = [];
+    protected static array $READ_ONLY_ATTRIBUTES = [];
 
     private array $originalState;
     private array $setProps;
@@ -362,7 +362,7 @@ abstract class Base
         $data = [];
 
         foreach ($this->getProperties() as $prop) {
-            if (in_array($prop, static::$ATTRIBUTE_SAVE_DENY_LIST)) {
+            if (in_array($prop, static::$READ_ONLY_ATTRIBUTES)) {
                 continue;
             }
 

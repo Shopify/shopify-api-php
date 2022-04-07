@@ -98,6 +98,44 @@ abstract class Base
         return static::$PREV_PAGE_QUERY;
     }
 
+    public function toArray(): array
+    {
+        $data = [];
+
+        foreach ($this->getProperties() as $prop) {
+            if (in_array($prop, static::$READ_ONLY_ATTRIBUTES)) {
+                continue;
+            }
+
+            $includeProp = !empty($this->$prop) || array_key_exists($prop, $this->setProps);
+            if (self::isHasManyAttribute($prop)) {
+                if ($includeProp) {
+                    $data[$prop] = [];
+                    /** @var self $assoc */
+                    foreach ($this->$prop as $assoc) {
+                        if (empty($assoc) || is_array($assoc)) {
+                            array_push($data[$prop], $assoc);
+                        } else {
+                            array_push($data[$prop], $assoc->toArray());
+                        }
+                    }
+                }
+            } elseif (self::isHasOneAttribute($prop)) {
+                if ($includeProp) {
+                    if (empty($this->$prop) || is_array($this->$prop)) {
+                        $data[$prop] = $this->$prop;
+                    } else {
+                        $data[$prop] = $this->$prop->toArray();
+                    }
+                }
+            } elseif ($includeProp) {
+                $data[$prop] = $this->$prop;
+            }
+        }
+
+        return $data;
+    }
+
     protected static function getJsonBodyName(): string
     {
         $className = preg_replace("/^([A-z_0-9]+\\\)*([A-z_]+)/", "$2", static::class);
@@ -232,12 +270,16 @@ abstract class Base
         $pluralClass = self::pluralize($className);
 
         if (!empty($body)) {
-            if (array_key_exists($className, $body)) {
-                array_push($objects, self::createInstance($body[$className], $session));
-            } elseif (array_key_exists($pluralClass, $body)) {
+            if (array_key_exists($pluralClass, $body)) {
                 foreach ($body[$pluralClass] as $entry) {
                     array_push($objects, self::createInstance($entry, $session));
                 }
+            } elseif (array_key_exists($className, $body) && array_key_exists(0, $body[$className])) {
+                foreach ($body[$className] as $entry) {
+                    array_push($objects, self::createInstance($entry, $session));
+                }
+            } elseif (array_key_exists($className, $body)) {
+                array_push($objects, self::createInstance($body[$className], $session));
             }
         }
 
@@ -278,15 +320,11 @@ abstract class Base
     {
         $instance->originalState = [];
 
-        foreach ($instance->getProperties() as $prop) {
-            if (!array_key_exists($prop, $data)) {
-                continue;
-            }
-
+        foreach ($data as $prop => $value) {
             if (self::isHasManyAttribute($prop)) {
                 $attrList = [];
-                if (!empty($data[$prop])) {
-                    foreach ($data[$prop] as $elementData) {
+                if (!empty($value)) {
+                    foreach ($value as $elementData) {
                         array_push(
                             $attrList,
                             static::$HAS_MANY[$prop]::createInstance($elementData, $instance->session)
@@ -296,15 +334,15 @@ abstract class Base
 
                 $instance->setProperty($prop, $attrList);
             } elseif (self::isHasOneAttribute($prop)) {
-                if (!empty($data[$prop])) {
+                if (!empty($value)) {
                     $instance->setProperty(
                         $prop,
-                        static::$HAS_ONE[$prop]::createInstance($data[$prop], $instance->session)
+                        static::$HAS_ONE[$prop]::createInstance($value, $instance->session)
                     );
                 }
             } else {
-                $instance->setProperty($prop, $data[$prop]);
-                $instance->originalState[$prop] = $data[$prop];
+                $instance->setProperty($prop, $value);
+                $instance->originalState[$prop] = $value;
             }
         }
     }
@@ -355,43 +393,5 @@ abstract class Base
         }
 
         return array_unique(array_merge($props, array_keys($this->setProps)));
-    }
-
-    private function toArray(): array
-    {
-        $data = [];
-
-        foreach ($this->getProperties() as $prop) {
-            if (in_array($prop, static::$READ_ONLY_ATTRIBUTES)) {
-                continue;
-            }
-
-            $includeProp = !empty($this->$prop) || array_key_exists($prop, $this->setProps);
-            if (self::isHasManyAttribute($prop)) {
-                if ($includeProp) {
-                    $data[$prop] = [];
-                    /** @var self $assoc */
-                    foreach ($this->$prop as $assoc) {
-                        if (empty($assoc) || is_array($assoc)) {
-                            array_push($data[$prop], $assoc);
-                        } else {
-                            array_push($data[$prop], $assoc->toArray());
-                        }
-                    }
-                }
-            } elseif (self::isHasOneAttribute($prop)) {
-                if ($includeProp) {
-                    if (empty($this->$prop) || is_array($this->$prop)) {
-                        $data[$prop] = $this->$prop;
-                    } else {
-                        $data[$prop] = $this->$prop->toArray();
-                    }
-                }
-            } elseif ($includeProp) {
-                $data[$prop] = $this->$prop;
-            }
-        }
-
-        return $data;
     }
 }

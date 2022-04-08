@@ -264,6 +264,27 @@ final class BaseRestResourceTest extends BaseTestCase
         $resource->save();
     }
 
+    public function testLoadsUnknownAttribute()
+    {
+        $body = ["fake_resource" => ["attribute" => "value", "unknown?" => "some-value"]];
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, json_encode($body)),
+                "{$this->prefix}/fake_resources/1.json",
+                "GET",
+                null,
+                ["X-Shopify-Access-Token: access-token"],
+            ),
+        ]);
+
+        $resource = FakeResource::find($this->session, 1);
+
+        $this->assertEquals("value", $resource->attribute);
+        $this->assertEquals("some-value", $resource->{"unknown?"});
+        $this->assertEquals("some-value", $resource->toArray()["unknown?"]);
+    }
+
     public function testSavesWithUnknownAttribute()
     {
         $body = ["fake_resource" => ["unknown" => "some-value"]];

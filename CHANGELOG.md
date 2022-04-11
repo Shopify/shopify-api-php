@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v2.0.1 - 2022-04-11
+
 ### Added
 
 - [#168](https://github.com/Shopify/shopify-php-api/pull/168) Allow REST resources to configure a deny list of attributes to be excluded when saving

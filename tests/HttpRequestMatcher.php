@@ -157,15 +157,15 @@ class HttpRequestMatcher extends Constraint
         $contents = $request->getBody()->getContents();
 
         $this->bodyDiff = $this->diffBody(
-            json_decode($this->body, true) ?: $this->body,
-            json_decode($contents, true) ?: $contents
+            json_decode((string)$this->body, true) ?: $this->body,
+            json_decode((string)$contents, true) ?: $contents
         );
 
         // If the diff is empty and we're looking for identical bodies, invert the diff to ensure it's still empty
         if ($this->identicalBody && empty($this->bodyDiff)) {
             $this->bodyDiff = $this->diffBody(
-                json_decode($contents, true) ?: $contents,
-                json_decode($this->body, true) ?: $this->body
+                json_decode((string)$contents, true) ?: $contents,
+                json_decode((string)$this->body, true) ?: $this->body
             );
         }
     }

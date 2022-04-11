@@ -39,6 +39,7 @@ class Article extends Base
         ["http_method" => "get", "operation" => "get", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/articles/<id>.json"],
         ["http_method" => "get", "operation" => "tags", "ids" => [], "path" => "articles/tags.json"],
+        ["http_method" => "get", "operation" => "tags", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles/tags.json"],
         ["http_method" => "post", "operation" => "post", "ids" => ["blog_id"], "path" => "blogs/<blog_id>/articles.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/articles/<id>.json"]
     ];
@@ -184,8 +185,11 @@ class Article extends Base
 
     /**
      * @param Session $session
-     * @param array $urlIds
-     * @param mixed[] $params
+     * @param array $urlIds Allowed indexes:
+     *     blog_id
+     * @param mixed[] $params Allowed indexes:
+     *     limit,
+     *     popular
      *
      * @return array|null
      */
@@ -198,7 +202,7 @@ class Article extends Base
             "get",
             "tags",
             $session,
-            [],
+            $urlIds,
             $params,
             [],
         );

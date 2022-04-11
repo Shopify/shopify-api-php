@@ -91,7 +91,7 @@ final class FulfillmentService202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_service" => ["id" => 1061774488, "name" => "Jupiter Fulfillment", "email" => null, "service_name" => "Jupiter Fulfillment", "handle" => "jupiter-fulfillment", "fulfillment_orders_opt_in" => false, "include_pending_stock" => false, "provider_id" => null, "location_id" => 1072404545, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/1061774488"]]
+                  ["fulfillment_service" => ["id" => 1061774488, "name" => "Jupiter Fulfillment", "email" => null, "service_name" => "Jupiter Fulfillment", "handle" => "jupiter-fulfillment", "fulfillment_orders_opt_in" => false, "include_pending_stock" => false, "provider_id" => null, "location_id" => 1072404543, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/1061774488"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/fulfillment_services.json",
                 "POST",
@@ -160,7 +160,7 @@ final class FulfillmentService202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment_service" => ["id" => 755357713, "name" => "New Fulfillment Service Name"]]),
+                json_encode(["fulfillment_service" => ["name" => "New Fulfillment Service Name"]]),
             ),
         ]);
 

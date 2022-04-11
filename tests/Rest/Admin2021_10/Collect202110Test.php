@@ -35,7 +35,7 @@ final class Collect202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["collect" => ["id" => 1071559575, "collection_id" => 841564295, "product_id" => 921728736, "created_at" => "2022-03-30T19:40:41-04:00", "updated_at" => "2022-03-30T19:40:41-04:00", "position" => 2, "sort_value" => "0000000002"]]
+                  ["collect" => ["id" => 1071559578, "collection_id" => 841564295, "product_id" => 921728736, "created_at" => "2022-04-05T13:09:41-04:00", "updated_at" => "2022-04-05T13:09:41-04:00", "position" => 2, "sort_value" => "0000000002"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/collects.json",
                 "POST",
@@ -119,7 +119,7 @@ final class Collect202110Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["collects" => [["id" => 455204334, "collection_id" => 841564295, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 1071559577, "collection_id" => 841564295, "product_id" => 921728736, "created_at" => "2022-03-30T19:40:55-04:00", "updated_at" => "2022-03-30T19:40:55-04:00", "position" => 2, "sort_value" => "0000000002"]]]
+                  ["collects" => [["id" => 455204334, "collection_id" => 841564295, "product_id" => 632910392, "created_at" => null, "updated_at" => null, "position" => 1, "sort_value" => "0000000001"], ["id" => 1071559580, "collection_id" => 841564295, "product_id" => 921728736, "created_at" => "2022-04-05T13:09:56-04:00", "updated_at" => "2022-04-05T13:09:56-04:00", "position" => 2, "sort_value" => "0000000002"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2021-10/collects.json?collection_id=841564295",
                 "GET",

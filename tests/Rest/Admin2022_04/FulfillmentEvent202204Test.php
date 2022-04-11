@@ -35,7 +35,7 @@ final class FulfillmentEvent202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_events" => [["id" => 944956391, "fulfillment_id" => 255858046, "status" => "in_transit", "message" => null, "happened_at" => "2022-03-30T19:46:49-04:00", "city" => null, "province" => null, "country" => null, "zip" => null, "address1" => null, "latitude" => null, "longitude" => null, "shop_id" => 548380009, "created_at" => "2022-03-30T19:46:49-04:00", "updated_at" => "2022-03-30T19:46:49-04:00", "estimated_delivery_at" => null, "order_id" => 450789469, "admin_graphql_api_id" => "gid://shopify/FulfillmentEvent/944956391"]]]
+                  ["fulfillment_events" => [["id" => 944956391, "fulfillment_id" => 255858046, "status" => "in_transit", "message" => null, "happened_at" => "2022-04-05T12:55:35-04:00", "city" => null, "province" => null, "country" => null, "zip" => null, "address1" => null, "latitude" => null, "longitude" => null, "shop_id" => 548380009, "created_at" => "2022-04-05T12:55:35-04:00", "updated_at" => "2022-04-05T12:55:35-04:00", "estimated_delivery_at" => null, "order_id" => 450789469, "admin_graphql_api_id" => "gid://shopify/FulfillmentEvent/944956391"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/orders/450789469/fulfillments/255858046/events.json",
                 "GET",
@@ -63,7 +63,7 @@ final class FulfillmentEvent202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_event" => ["id" => 944956393, "fulfillment_id" => 255858046, "status" => "in_transit", "message" => null, "happened_at" => "2022-03-30T19:46:52-04:00", "city" => null, "province" => null, "country" => null, "zip" => null, "address1" => null, "latitude" => null, "longitude" => null, "shop_id" => 548380009, "created_at" => "2022-03-30T19:46:52-04:00", "updated_at" => "2022-03-30T19:46:52-04:00", "estimated_delivery_at" => null, "order_id" => 450789469, "admin_graphql_api_id" => "gid://shopify/FulfillmentEvent/944956393"]]
+                  ["fulfillment_event" => ["id" => 944956393, "fulfillment_id" => 255858046, "status" => "in_transit", "message" => null, "happened_at" => "2022-04-05T12:55:38-04:00", "city" => null, "province" => null, "country" => null, "zip" => null, "address1" => null, "latitude" => null, "longitude" => null, "shop_id" => 548380009, "created_at" => "2022-04-05T12:55:38-04:00", "updated_at" => "2022-04-05T12:55:38-04:00", "estimated_delivery_at" => null, "order_id" => 450789469, "admin_graphql_api_id" => "gid://shopify/FulfillmentEvent/944956393"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/orders/450789469/fulfillments/255858046/events.json",
                 "POST",
@@ -92,7 +92,7 @@ final class FulfillmentEvent202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_event" => ["id" => 944956392, "fulfillment_id" => 255858046, "status" => "in_transit", "message" => null, "happened_at" => "2022-03-30T19:46:50-04:00", "city" => null, "province" => null, "country" => null, "zip" => null, "address1" => null, "latitude" => null, "longitude" => null, "shop_id" => 548380009, "created_at" => "2022-03-30T19:46:50-04:00", "updated_at" => "2022-03-30T19:46:50-04:00", "estimated_delivery_at" => null, "order_id" => 450789469, "admin_graphql_api_id" => "gid://shopify/FulfillmentEvent/944956392"]]
+                  ["fulfillment_event" => ["id" => 944956392, "fulfillment_id" => 255858046, "status" => "in_transit", "message" => null, "happened_at" => "2022-04-05T12:55:36-04:00", "city" => null, "province" => null, "country" => null, "zip" => null, "address1" => null, "latitude" => null, "longitude" => null, "shop_id" => 548380009, "created_at" => "2022-04-05T12:55:36-04:00", "updated_at" => "2022-04-05T12:55:36-04:00", "estimated_delivery_at" => null, "order_id" => 450789469, "admin_graphql_api_id" => "gid://shopify/FulfillmentEvent/944956392"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/orders/450789469/fulfillments/255858046/events/944956392.json",
                 "GET",

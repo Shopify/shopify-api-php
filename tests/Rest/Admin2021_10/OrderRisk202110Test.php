@@ -133,7 +133,7 @@ final class OrderRisk202110Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["risk" => ["id" => 284138680, "message" => "After further review, this is a legitimate order", "recommendation" => "accept", "source" => "External", "cause_cancel" => false, "score" => 0.0]]),
+                json_encode(["risk" => ["message" => "After further review, this is a legitimate order", "recommendation" => "accept", "source" => "External", "cause_cancel" => false, "score" => 0.0]]),
             ),
         ]);
 

@@ -48,6 +48,10 @@ class Variant extends Base
         ["http_method" => "post", "operation" => "post", "ids" => ["product_id"], "path" => "products/<product_id>/variants.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "variants/<id>.json"]
     ];
+    protected static array $READ_ONLY_ATTRIBUTES = [
+        "inventory_quantity",
+        "inventory_quantity_adjustment"
+    ];
 
     /**
      * @param Session $session

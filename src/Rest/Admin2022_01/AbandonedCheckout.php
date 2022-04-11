@@ -59,7 +59,6 @@ class AbandonedCheckout extends Base
         "discount_codes" => DiscountCode::class
     ];
     protected static array $PATHS = [
-        ["http_method" => "get", "operation" => "checkouts", "ids" => [], "path" => "checkouts.json"],
         ["http_method" => "get", "operation" => "checkouts", "ids" => [], "path" => "checkouts.json"]
     ];
 
@@ -67,13 +66,13 @@ class AbandonedCheckout extends Base
      * @param Session $session
      * @param array $urlIds
      * @param mixed[] $params Allowed indexes:
+     *     limit,
      *     since_id,
      *     created_at_min,
      *     created_at_max,
      *     updated_at_min,
      *     updated_at_max,
-     *     status,
-     *     limit
+     *     status
      *
      * @return array|null
      */

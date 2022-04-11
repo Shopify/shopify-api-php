@@ -35,7 +35,7 @@ final class CarrierService202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["carrier_service" => ["id" => 1036894956, "name" => "Shipping Rate Provider", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894956", "format" => "json", "callback_url" => "http://shippingrateprovider.com/"]]
+                  ["carrier_service" => ["id" => 1036894957, "name" => "Shipping Rate Provider", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894957", "format" => "json", "callback_url" => "http://shippingrateprovider.com/"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services.json",
                 "POST",
@@ -64,7 +64,7 @@ final class CarrierService202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["carrier_services" => [["id" => 1036894958, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894958", "format" => "json", "callback_url" => "http://example.com/"], ["id" => 260046840, "name" => "ups_shipping", "active" => true, "service_discovery" => true, "carrier_service_type" => "legacy", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/260046840"]]]
+                  ["carrier_services" => [["id" => 1036894959, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894959", "format" => "json", "callback_url" => "http://example.com/"], ["id" => 260046840, "name" => "ups_shipping", "active" => true, "service_discovery" => true, "carrier_service_type" => "legacy", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/260046840"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services.json",
                 "GET",
@@ -92,20 +92,20 @@ final class CarrierService202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["carrier_service" => ["active" => false, "id" => 1036894957, "name" => "Some new name", "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894957", "format" => "json", "callback_url" => "http://example.com/"]]
+                  ["carrier_service" => ["active" => false, "id" => 1036894958, "name" => "Some new name", "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894958", "format" => "json", "callback_url" => "http://example.com/"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services/1036894957.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services/1036894958.json",
                 "PUT",
                 null,
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["carrier_service" => ["id" => 1036894957, "name" => "Some new name", "active" => false]]),
+                json_encode(["carrier_service" => ["name" => "Some new name", "active" => false]]),
             ),
         ]);
 
         $carrier_service = new CarrierService($this->test_session);
-        $carrier_service->id = 1036894957;
+        $carrier_service->id = 1036894958;
         $carrier_service->name = "Some new name";
         $carrier_service->active = false;
         $carrier_service->save();
@@ -121,9 +121,9 @@ final class CarrierService202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["carrier_service" => ["id" => 1036894959, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894959", "format" => "json", "callback_url" => "http://example.com/"]]
+                  ["carrier_service" => ["id" => 1036894960, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894960", "format" => "json", "callback_url" => "http://example.com/"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services/1036894959.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services/1036894960.json",
                 "GET",
                 null,
                 [
@@ -134,7 +134,7 @@ final class CarrierService202204Test extends BaseTestCase
 
         CarrierService::find(
             $this->test_session,
-            1036894959,
+            1036894960,
             [],
             [],
         );
@@ -152,7 +152,7 @@ final class CarrierService202204Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   []
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services/1036894960.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/carrier_services/1036894954.json",
                 "DELETE",
                 null,
                 [
@@ -163,7 +163,7 @@ final class CarrierService202204Test extends BaseTestCase
 
         CarrierService::delete(
             $this->test_session,
-            1036894960,
+            1036894954,
             [],
             [],
         );

@@ -212,7 +212,7 @@ final class Redirect202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["redirect" => ["id" => 668809255, "path" => "/tiger"]]),
+                json_encode(["redirect" => ["path" => "/tiger"]]),
             ),
         ]);
 
@@ -240,7 +240,7 @@ final class Redirect202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["redirect" => ["id" => 668809255, "target" => "/pages/macpro"]]),
+                json_encode(["redirect" => ["target" => "/pages/macpro"]]),
             ),
         ]);
 
@@ -268,7 +268,7 @@ final class Redirect202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["redirect" => ["id" => 950115854, "path" => "/powermac", "target" => "/pages/macpro"]]),
+                json_encode(["redirect" => ["path" => "/powermac", "target" => "/pages/macpro"]]),
             ),
         ]);
 

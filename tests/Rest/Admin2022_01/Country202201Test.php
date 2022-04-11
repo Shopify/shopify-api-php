@@ -211,7 +211,7 @@ final class Country202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["country" => ["id" => 879921427, "tax" => 0.05]]),
+                json_encode(["country" => ["tax" => 0.05]]),
             ),
         ]);
 

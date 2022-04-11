@@ -28,7 +28,7 @@ class GiftCardAdjustment extends Base
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => ["gift_card_id"], "path" => "gift_cards/<gift_card_id>/adjustments.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["gift_card_id", "id"], "path" => "gift_cards/<gift_card_id>/adjustments/2.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["gift_card_id", "id"], "path" => "gift_cards/<gift_card_id>/adjustments/<id>.json"],
         ["http_method" => "post", "operation" => "post", "ids" => ["gift_card_id"], "path" => "gift_cards/<gift_card_id>/adjustments.json"]
     ];
 

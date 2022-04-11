@@ -63,7 +63,7 @@ final class MarketingEvent202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["marketing_event" => ["id" => 1065859216, "event_type" => "ad", "remote_id" => null, "started_at" => "2022-12-15T00:00:00-05:00", "ended_at" => null, "scheduled_to_end_at" => null, "budget" => null, "currency" => null, "manage_url" => null, "preview_url" => null, "utm_campaign" => "Christmas2022", "utm_source" => "facebook", "utm_medium" => "cpc", "budget_type" => null, "description" => null, "marketing_channel" => "social", "paid" => true, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => 1063897333, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/1065859216", "marketed_resources" => []]]
+                  ["marketing_event" => ["id" => 1065859216, "event_type" => "ad", "remote_id" => null, "started_at" => "2022-12-14T19:00:00-05:00", "ended_at" => null, "scheduled_to_end_at" => null, "budget" => null, "currency" => null, "manage_url" => null, "preview_url" => null, "utm_campaign" => "Christmas2022", "utm_source" => "facebook", "utm_medium" => "cpc", "budget_type" => null, "description" => null, "marketing_channel" => "social", "paid" => true, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => 1063897333, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/1065859216", "marketed_resources" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/marketing_events.json",
                 "POST",
@@ -162,16 +162,16 @@ final class MarketingEvent202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["marketing_event" => ["id" => 998730532, "remote_id" => "1000:2000", "started_at" => "2022-02-02T00:00  00:00", "ended_at" => "2022-02-03T00:00  00:00", "scheduled_to_end_at" => "2022-02-04T00:00  00:00", "budget" => "11.1", "budget_type" => "daily", "currency" => "CAD", "utm_campaign" => "other", "utm_source" => "other", "utm_medium" => "other", "event_type" => "ad", "referring_domain" => "instagram.com"]]),
+                json_encode(["marketing_event" => ["remote_id" => "1000:2000", "started_at" => "2022-02-02T00:00 +00:00", "ended_at" => "2022-02-03T00:00 +00:00", "scheduled_to_end_at" => "2022-02-04T00:00 +00:00", "budget" => "11.1", "budget_type" => "daily", "currency" => "CAD", "utm_campaign" => "other", "utm_source" => "other", "utm_medium" => "other", "event_type" => "ad", "referring_domain" => "instagram.com"]]),
             ),
         ]);
 
         $marketing_event = new MarketingEvent($this->test_session);
         $marketing_event->id = 998730532;
         $marketing_event->remote_id = "1000:2000";
-        $marketing_event->started_at = "2022-02-02T00:00  00:00";
-        $marketing_event->ended_at = "2022-02-03T00:00  00:00";
-        $marketing_event->scheduled_to_end_at = "2022-02-04T00:00  00:00";
+        $marketing_event->started_at = "2022-02-02T00:00 +00:00";
+        $marketing_event->ended_at = "2022-02-03T00:00 +00:00";
+        $marketing_event->scheduled_to_end_at = "2022-02-04T00:00 +00:00";
         $marketing_event->budget = "11.1";
         $marketing_event->budget_type = "daily";
         $marketing_event->currency = "CAD";

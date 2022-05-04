@@ -235,7 +235,7 @@ final class BaseRestResourceTest extends BaseTestCase
         $requestBody = ["fake_resource" => [
             "id" => 1,
             "has_one_attribute" => ["attribute" => "attribute1"],
-            "has_many_attribute" => [["attribute" => "attribute2"]],
+            "has_many_attribute" => [["attribute" => "attribute2"],["attribute" => "attribute3"]],
         ]];
         $responseBody = ["fake_resource" => ["id" => 1, "attribute" => "attribute"]];
 
@@ -256,10 +256,13 @@ final class BaseRestResourceTest extends BaseTestCase
         $child2 = new FakeResource($this->session);
         $child2->attribute = "attribute2";
 
+        $child3 = new FakeResource($this->session);
+        $child3->attribute = "attribute3";
+
         $resource = new FakeResource($this->session);
         $resource->id = 1;
         $resource->has_one_attribute = $child1;
-        $resource->has_many_attribute = [$child2];
+        $resource->has_many_attribute = [$child2, $child3];
 
         $resource->save();
     }
@@ -354,6 +357,28 @@ final class BaseRestResourceTest extends BaseTestCase
 
         $resource->save();
         $this->assertNull($resource->id);
+    }
+
+    public function toArrayIncludesReadOnlyAttributes()
+    {
+        $resource = new FakeResource($this->session);
+        $resource->attribute = "attribute";
+        $resource->unsaveable_attribute = "unsaveable_attribute";
+
+        $array = $resource->toArray();
+        $this->assertEquals("attribute", $array["attribute"]);
+        $this->assertEquals("unsaveable_attribute", $array["unsaveable_attribute"]);
+    }
+
+    public function toArrayExcludesReadOnlyAttributesWithSavingArgEqualTrue()
+    {
+        $resource = new FakeResource($this->session);
+        $resource->attribute = "attribute";
+        $resource->unsaveable_attribute = "unsaveable_attribute";
+
+        $array = $resource->toArray(true);
+        $this->assertEquals("attribute", $array["attribute"]);
+        $this->assertArrayNotHasKey("unsaveable_attribute", $array);
     }
 
     public function testDeletesExistingResource()

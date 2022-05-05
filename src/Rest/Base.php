@@ -387,7 +387,11 @@ abstract class Base
         return array_unique(array_merge($props, array_keys($this->setProps)));
     }
 
-    private function subAttributeToArray(array|null|Base $attribute, bool $saving): array|null
+    /**
+     * @param array|null|Base $attribute
+     * @return array|null
+     */
+    private function subAttributeToArray($attribute, bool $saving)
     {
         if (is_array($attribute)) {
             $subAttribute = static::createInstance($attribute, $this->session);

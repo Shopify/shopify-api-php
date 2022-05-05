@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#180](https://github.com/Shopify/shopify-php-api/pull/180) Add optional `saving` parameter to `toArray` of `Base` class - default is `false` and will include read-only attributes in returned array; `true` used for `save` when committing via API to Shopify, which excludes read-only attributes.
+
 ## v2.0.1 - 2022-04-11
 
 ### Added

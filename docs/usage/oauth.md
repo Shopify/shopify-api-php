@@ -16,7 +16,6 @@ Create a route for starting the OAuth method such as `/login`. In this route, th
 | `setCookieFunction` | `callable` | No | - | An override function to set cookies in the HTTP request. In order to be framework-agnostic, the built-in `setcookie` method is applied. If that method does not work for your chosen framework, a function that sets cookies can be passed in. |
 
  An example of the custom set cookie function with Yii. Similar functions can be created for any frameworks that do not rely on the PHP `setcookie` function, but we **strongly recommend storing secure and signed cookies** in your app to help prevent session hijacking.
-
 ```php
 OAuth::begin(..., ..., ..., function (Shopify\Auth\OAuthCookie $cookie) {
     $cookies = Yii::$app->response->cookies;

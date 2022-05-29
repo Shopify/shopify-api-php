@@ -57,25 +57,27 @@ abstract class Base
         }
     }
 
-    public function save($updateObject = false): void
+    public function save($updateObject = false): array|string|null
     {
-        $data = self::dataDiff($this->toArray(true), $this->originalState);
+        $data = self::dataDiff($this->toArray(), $this->originalState);
 
         $method = !empty($data[static::$PRIMARY_KEY]) ? "put" : "post";
 
         $saveBody = [static::getJsonBodyName() => $data];
         $response = self::request($method, $method, $this->session, [], [], $saveBody, $this);
 
-        if ($updateObject) {
-            $body = $response->getDecodedBody();
 
-            self::createInstance($body[$this->getJsonBodyName()], $this->session, $this);
+        $body = $response->getDecodedBody();
+        if ($updateObject) {
+            self::setInstanceData($this, $body[$this->getJsonBodyName()]);
         }
+
+        return $body;
     }
 
-    public function saveAndUpdate(): void
+    public function saveAndUpdate(): array|string|null
     {
-        $this->save(true);
+        return $this->save(true);
     }
 
     public function __get(string $name)

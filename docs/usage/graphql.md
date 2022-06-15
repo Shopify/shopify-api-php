@@ -29,7 +29,7 @@ $queryString = <<<QUERY
         }
     }
 QUERY;
-$products = $client->query($queryString);
+$response = $client->query($queryString);
 
 // do something with the returned data
 ```

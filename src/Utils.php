@@ -175,9 +175,9 @@ final class Utils
      * @throws \Shopify\Exception\SessionNotFoundException
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody): HttpResponse
+    public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody, bool $isOnline = false): HttpResponse
     {
-        $session = self::loadCurrentSession($rawHeaders, $cookies, true);
+        $session = self::loadCurrentSession($rawHeaders, $cookies, $isOnline);
         if (!$session) {
             throw new SessionNotFoundException("Could not find session for GraphQL proxy");
         }

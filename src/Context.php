@@ -10,6 +10,7 @@ use Shopify\Auth\Scopes;
 use Shopify\Auth\SessionStorage;
 use Shopify\Clients\HttpClientFactory;
 use Shopify\Exception\MissingArgumentException;
+use Shopify\Exception\InvalidArgumentException;
 use Shopify\Exception\PrivateAppException;
 use Shopify\Exception\UninitializedContextException;
 
@@ -69,7 +70,7 @@ class Context
         $scopes,
         string $hostName,
         SessionStorage $sessionStorage,
-        string $apiVersion = 'unstable',
+        string $apiVersion = ApiVersion::LATEST,
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
         string $privateAppStorefrontAccessToken = null,
@@ -97,6 +98,10 @@ class Context
             throw new MissingArgumentException(
                 "Cannot initialize Shopify API Library. Missing values for: $missing"
             );
+        }
+
+        if (!ApiVersion::isValid($apiVersion)) {
+            throw new InvalidArgumentException("Invalid API version: $apiVersion");
         }
 
         self::$API_KEY = $apiKey;

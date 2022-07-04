@@ -73,7 +73,7 @@ final class RegistryTest extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -81,7 +81,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerAddResponse),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -89,7 +89,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseExisting),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -97,7 +97,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerUpdateResponse),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -119,7 +119,7 @@ final class RegistryTest extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -127,7 +127,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerAddEventBridgeResponse),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -135,7 +135,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkEventBridgeResponseExisting),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -143,7 +143,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerUpdateEventBridgeResponse),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -178,7 +178,7 @@ final class RegistryTest extends BaseTestCase
             [
                 new MockRequest(
                     $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-                    "https://$this->domain/admin/api/unstable/graphql.json",
+                    "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
@@ -186,7 +186,7 @@ final class RegistryTest extends BaseTestCase
                 ),
                 new MockRequest(
                     $this->buildMockHttpResponse(200, $this->registerPubSubResponse),
-                    "https://$this->domain/admin/api/unstable/graphql.json",
+                    "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
@@ -194,7 +194,7 @@ final class RegistryTest extends BaseTestCase
                 ),
                 new MockRequest(
                     $this->buildMockHttpResponse(200, $this->pubSubWebhookCheckResponse),
-                    "https://$this->domain/admin/api/unstable/graphql.json",
+                    "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
@@ -202,7 +202,7 @@ final class RegistryTest extends BaseTestCase
                 ),
                 new MockRequest(
                     $this->buildMockHttpResponse(200, $this->registerUpdatePubSubResponse),
-                    "https://$this->domain/admin/api/unstable/graphql.json",
+                    "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
@@ -285,7 +285,7 @@ final class RegistryTest extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -293,7 +293,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerAddResponse),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -301,7 +301,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseExisting),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -351,7 +351,7 @@ final class RegistryTest extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(403),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -369,7 +369,7 @@ final class RegistryTest extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseEmpty),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
@@ -377,7 +377,7 @@ final class RegistryTest extends BaseTestCase
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(403),
-                "https://$this->domain/admin/api/unstable/graphql.json",
+                "https://$this->domain/admin/api/" . Context::$API_VERSION . "/graphql.json",
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],

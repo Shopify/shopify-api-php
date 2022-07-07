@@ -353,7 +353,7 @@ final class BaseRestResourceTest extends BaseTestCase
 
         $resource = new FakeResource($this->session);
         $resource->attribute = "attribute";
-        $resource->unsaveable_attribute = "unsaveable_attribute";
+        // $resource->unsaveable_attribute = "unsaveable_attribute";
 
         $resource->save();
         $this->assertNull($resource->id);

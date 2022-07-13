@@ -51,6 +51,18 @@ Accepted arguments:
 
 This method will return whether the `hmac` key in `params` is valid.
 
+## `validateSignature`
+
+Determines if a request is valid by checking the HMAC hash received in a request.
+
+Accepted arguments:
+| Parameter | Type | Required | Default Value | Notes |
+| --- | --- | :---: | :---: | --- |
+| `params` | `array` | Yes | - | Query parameters from a URL |
+| `secret` | `string` | Yes | - | The secret key associated with the app in the Partners Dashboard |
+
+This method will return whether the `signature` key in `params` is valid.
+
 ## `decodeSessionToken`
 
 Decodes the given session token (JWT) and extracts its payload, using `Context::$API_SECRET_KEY` as the secret.

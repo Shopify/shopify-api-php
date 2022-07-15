@@ -12,6 +12,7 @@ use Shopify\Clients\HttpResponse;
 use Shopify\Exception\InvalidArgumentException;
 use Shopify\Exception\SessionNotFoundException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 /**
  * Class to store all util functions
@@ -157,7 +158,7 @@ final class Utils
      */
     public static function decodeSessionToken(string $jwt): array
     {
-        $payload = JWT::decode($jwt, Context::$API_SECRET_KEY, array('HS256'));
+        $payload = JWT::decode($jwt, new Key(Context::$API_SECRET_KEY, 'HS256'));
         return (array) $payload;
     }
 

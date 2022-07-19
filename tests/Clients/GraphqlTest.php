@@ -22,9 +22,9 @@ final class GraphqlTest extends BaseTestCase
 
     /** @var array */
     private $testQueryArray = [
-          [
-              'shop' => 'name',
-          ],
+        [
+            'shop' => 'name',
+        ],
     ];
 
     /** @var string */
@@ -98,7 +98,7 @@ final class GraphqlTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_decode($this->querySuccessResponse, true)),
                 "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 'POST',
-                "Shopify Admin API Library for PHP v$this->version",
+                "Shopify API Library v$this->version",
                 [
                     'Content-Type: application/graphql',
                     'Content-Length: ' . strlen($this->testQueryString),
@@ -124,7 +124,7 @@ final class GraphqlTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_decode($this->querySuccessResponse, true)),
                 "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 'POST',
-                "Shopify Admin API Library for PHP v$this->version",
+                "Shopify API Library v$this->version",
                 [
                     'Content-Type: application/json',
                     'Content-Length: ' . strlen(json_encode($this->testQueryArray)),
@@ -151,7 +151,7 @@ final class GraphqlTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_decode($this->mutationSuccessResponse, true)),
                 "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 'POST',
-                "Shopify Admin API Library for PHP v$this->version",
+                "Shopify API Library v$this->version",
                 [
                     'Content-Type: application/json',
                     'Content-Length: ' . strlen(json_encode($query)),
@@ -179,7 +179,7 @@ final class GraphqlTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_decode($this->querySuccessResponse, true)),
                 "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                 'POST',
-                "Shopify Admin API Library for PHP v$this->version",
+                "Shopify API Library v$this->version",
                 [
                     'Content-Type: application/graphql',
                     'Content-Length: ' . strlen($this->testQueryString),
@@ -215,7 +215,7 @@ final class GraphqlTest extends BaseTestCase
                     $this->buildMockHttpResponse(200, json_decode($this->querySuccessResponse, true)),
                     "https://$this->domain/admin/api/" . Context::$API_VERSION . '/graphql.json',
                     'POST',
-                    "Shopify Admin API Library for PHP v$this->version",
+                    "Shopify API Library v$this->version",
                     [
                         'Content-Type: application/json',
                         'Content-Length: ' . strlen($queryToProxy),

@@ -150,7 +150,8 @@ class Http
         $maxTries = $tries ?? 1;
 
         $version = require dirname(__FILE__) . '/../version.php';
-        $userAgentParts = ["Shopify Admin API Library for PHP v$version"];
+        $phpVersion = phpversion();
+        $userAgentParts = ["Shopify API Library v$version", "PHP $phpVersion"];
 
         if (Context::$USER_AGENT_PREFIX) {
             array_unshift($userAgentParts, Context::$USER_AGENT_PREFIX);

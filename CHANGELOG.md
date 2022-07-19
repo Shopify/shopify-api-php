@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#204](https://github.com/Shopify/shopify-api-php/pull/204) Refactor the `User-Agent` header sent by the library to include the PHP version
+
 ## v3.0.0 - 2022-07-04
 
 - [#197](https://github.com/Shopify/shopify-api-php/pull/197) ⚠️ [Breaking] Add REST resources for July 2022 API version, remove support and REST resources for July 2021 (`2021-07`) API version

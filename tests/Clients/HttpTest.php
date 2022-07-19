@@ -35,7 +35,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 ['X-Test-Header: test_value'],
                 null,
                 null,
@@ -56,7 +56,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path?path=some_path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 ['X-Test-Header: test_value'],
                 null,
                 null,
@@ -77,7 +77,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path?array[]=value&hash[key1]=value1&hash[key2]=value2",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 ['X-Test-Header: test_value'],
                 null,
                 null,
@@ -106,7 +106,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path?path=some_path",
                 "POST",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 [
                     'Content-Type: application/json',
                     "Content-Length: $bodyLength",
@@ -138,7 +138,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path?path=some_path",
                 "PUT",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 [
                     'Content-Type: application/json',
                     "Content-Length: $bodyLength",
@@ -166,7 +166,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path?path=some_path",
                 "DELETE",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 ['X-Test-Header: test_value'],
                 null,
                 null,
@@ -190,7 +190,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path",
                 "POST",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 [
                     'Content-Type: application/json',
                     "Content-Length: $bodyLength",
@@ -214,7 +214,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 [],
                 null,
                 null,
@@ -230,7 +230,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Extra user agent | Shopify Admin API Library for PHP v$this->version$",
+                "^Extra user agent | Shopify API Library v$this->version | PHP $this->phpVersion$",
                 [],
                 null,
                 null,
@@ -247,7 +247,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(200, $this->successResponse),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Test default user agent | Shopify Admin API Library for PHP v$this->version$",
+                "^Test default user agent | Shopify API Library v$this->version | PHP $this->phpVersion$",
                 [],
                 null,
                 null,
@@ -257,7 +257,8 @@ final class HttpTest extends BaseTestCase
 
         $client->get('test/path');
 
-        $userAgent = "^Extra user agent | Test default user agent | Shopify Admin API Library for PHP v$this->version$";
+        $userAgent = "^Extra user agent | Test default user agent | " .
+            "Shopify API Library v$this->version | PHP $this->phpVersion$";
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->successResponse),
@@ -281,7 +282,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
                 [],
                 null,
                 'Test error!',
@@ -302,7 +303,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(429, null, ['Retry-After' => 0.001]),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->successResponse),
@@ -330,7 +331,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(429, null, ['Retry-After' => 0]),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(500),
@@ -369,7 +370,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(500),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(500),
@@ -408,7 +409,7 @@ final class HttpTest extends BaseTestCase
                 $this->buildMockHttpResponse(500),
                 "https://$this->domain/test/path",
                 "GET",
-                "^Shopify Admin API Library for PHP v$this->version$",
+                "^Shopify API Library v$this->version | PHP $this->phpVersion$",
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(400, null, ['X-Is-Last-Test-Request' => true]),

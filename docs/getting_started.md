@@ -14,8 +14,8 @@ The first thing your app will need to do to use this library is to set up your c
 
 | Param | Type | Required? | Default | Notes |
 | --- | --- | :---: | :---: | --- |
-| `apiKey` | `string` | Yes | - | App API key from the Partners dashboard |
-| `apiSecretKey` | `string` | Yes | - | App API secret from the Partners dashboard |
+| `apiKey` | `string` | Yes | - | For **public apps**, the App API key from the Partners dashboard<br/>For **private apps**, the API key from your private app page |
+| `apiSecretKey` | `string` | Yes | - | For **public apps**, the App API secret from the Partners dashboard<br/>For **private apps**, the password from your private app page |
 | `scopes` | `string \| array` | Yes | - | App scopes |
 | `hostName` | `string` | Yes | - | App host name e.g. `my-app.my-domain.ca` |
 | `sessionStorage` | `SessionStorage` | Yes | - | Session storage strategy. Read our [notes on session handling](issues.md#notes-on-session-handling) for more information |

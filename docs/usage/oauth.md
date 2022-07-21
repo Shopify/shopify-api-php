@@ -17,7 +17,7 @@ Create a route for starting the OAuth method such as `/login`. In this route, th
 
  An example of the custom set cookie function with Yii. Similar functions can be created for any frameworks that do not rely on the PHP `setcookie` function, but we **strongly recommend storing secure and signed cookies** in your app to help prevent session hijacking.
 ```php
-function () use (Shopify\Auth\OAuthCookie $cookie) {
+OAuth::begin(..., ..., ..., function (Shopify\Auth\OAuthCookie $cookie) {
     $cookies = Yii::$app->response->cookies;
     $cookies->add(new \yii\web\Cookie([
         'name' => $cookie->getName(),
@@ -28,7 +28,7 @@ function () use (Shopify\Auth\OAuthCookie $cookie) {
     ]));
 
     return true;
-}
+});
 ```
 
 ## OAuth callback

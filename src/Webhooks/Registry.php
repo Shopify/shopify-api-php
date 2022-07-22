@@ -53,6 +53,18 @@ final class Registry
     }
 
     /**
+     * Remove the handler for the given topic.
+     *
+     * @param  string  $topic  The topic to remove. May be a string or a value from the Topics class
+     */
+    public static function removeHandler(string $topic): void
+    {
+        if (isset(self::$REGISTRY[$topic])) {
+            unset(self::$REGISTRY[$topic]);
+        }
+    }
+
+    /**
      * Registers a new webhook for this app with Shopify.
      *
      * @param string        $path           The URL path for the callback. If using EventBridge, this is the full

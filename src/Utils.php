@@ -186,4 +186,26 @@ final class Utils
 
         return $client->proxy($rawBody);
     }
+
+    /**
+     * Returns the appropriate URL for the host that should load the embedded app.
+     *
+     * @param string $host The host value received from Shopify
+     *
+     * @return string
+     */
+    public static function getEmbeddedAppUrl(string $host): string
+    {
+        if (empty($host)) {
+            throw new InvalidArgumentException("Host value cannot be empty");
+        }
+
+        $decodedHost = base64_decode($host, true);
+        if (!$decodedHost) {
+            throw new InvalidArgumentException("Host was not a valid base64 string");
+        }
+
+        $apiKey = Context::$API_KEY;
+        return "https://$decodedHost/apps/$apiKey";
+    }
 }

@@ -110,3 +110,15 @@ Accepted arguments:
 | `rawBody` | `string` | Yes | - | The raw HTTP request payload |
 
 This method will return a `HttpResponse` object. Please refer to the [GraphQL client documentation](./graphql.md) for more information.
+
+## `getEmbeddedAppUrl`
+
+Produces the Shopify URL that should load the embedded app, and ensures the embedded app URL is properly constructed and brings the merchant to the right place.
+It's more reliable than using the shop param.
+
+Accepted arguments:
+| Parameter | Type | Required | Default Value | Notes |
+| --- | --- | :---: | :---: | --- |
+| `host` | `string` | Yes | - | Base64-encoded host argument received from Shopify |
+
+This method will return a `string` containing the URL.

@@ -326,6 +326,26 @@ final class UtilsTest extends BaseTestCase
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->testGraphqlResponse));
     }
 
+    public function testGetEmbeddedAppUrlThrowsOnEmptyHost()
+    {
+        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
+        Utils::getEmbeddedAppUrl("");
+    }
+
+    public function testGetEmbeddedAppUrlThrowsOnInvalidHost()
+    {
+        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
+        Utils::getEmbeddedAppUrl("!@#$%^&*()");
+    }
+
+    public function testGetEmbeddedAppUrlReturnsTheCorrectURL()
+    {
+        Context::$API_KEY = "my-app-key";
+        $url = "my-app-url.io/path";
+
+        $this->assertEquals("https://$url/apps/my-app-key", Utils::getEmbeddedAppUrl(base64_encode($url)));
+    }
+
     private function encodeJwtPayload(): string
     {
         $payload = [
@@ -353,10 +373,10 @@ final class UtilsTest extends BaseTestCase
 
     /** @var array */
     private $testGraphqlResponse = [
-      "data" => [
-        "shop" => [
-          "name" => "Shoppity Shop",
+        "data" => [
+            "shop" => [
+                "name" => "Shoppity Shop",
+            ],
         ],
-      ],
     ];
 }

@@ -113,7 +113,7 @@ This method will return a `HttpResponse` object. Please refer to the [GraphQL cl
 
 ## `getEmbeddedAppUrl`
 
-Produces the Shopify URL that should load the embedded app, and ensures that embedded app URL is properly constructed and brings the merchant to the right place.
+Produces the Shopify URL that should load the embedded app, and ensures the embedded app URL is properly constructed and brings the merchant to the right place.
 It's more reliable than using the shop param.
 
 Accepted arguments:

@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v3.1.0 - 2022-08-04
+
 - [#209](https://github.com/Shopify/shopify-api-php/pull/209) Add `getEmbeddedAppUrl` utils method to load the embedded app in the right Shopify host
 
 ## v3.0.0 - 2022-07-04

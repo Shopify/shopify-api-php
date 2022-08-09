@@ -6,11 +6,11 @@ namespace ShopifyTest\Clients;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Log\Test\TestLogger;
 use Shopify\Clients\Http;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
 use ShopifyTest\HttpResponseMatcher;
+use ShopifyTest\LogMock;
 
 final class HttpTest extends BaseTestCase
 {
@@ -442,7 +442,7 @@ final class HttpTest extends BaseTestCase
             ->method('getApiDeprecationTimestampFilePath')
             ->willReturn(vfsStream::url('test/timestamp_file'));
 
-        $testLogger = new TestLogger();
+        $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
 
         $this->mockTransportRequests([
@@ -480,7 +480,7 @@ final class HttpTest extends BaseTestCase
             ->method('getApiDeprecationTimestampFilePath')
             ->willReturn(vfsStream::url('test/timestamp_file'));
 
-        $testLogger = new TestLogger();
+        $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
 
         $this->mockTransportRequests([

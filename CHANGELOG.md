@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#210](https://github.com/Shopify/shopify-api-php/pull/210) Add `ext-json` as a dependency in `composer.json`
+
 ## v3.1.0 - 2022-08-04
 
 - [#209](https://github.com/Shopify/shopify-api-php/pull/209) Add `getEmbeddedAppUrl` utils method to load the embedded app in the right Shopify host

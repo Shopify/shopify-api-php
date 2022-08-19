@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - [#211](https://github.com/Shopify/shopify-api-php/pull/211) Change requirement of `psr/log` from `^1.1` to `^1.1 || ^2.0 || ^3.0`
+- [#212](https://github.com/Shopify/shopify-api-php/pull/212) Allow a scheme in the `Context::$HOST_NAME` URL to enable support for HTTP apps
 
 ## v3.1.0 - 2022-08-04
 

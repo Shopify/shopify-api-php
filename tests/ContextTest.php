@@ -20,6 +20,7 @@ final class ContextTest extends BaseTestCase
         $this->assertEquals('steffi', Context::$API_SECRET_KEY);
         $this->assertEquals(new Scopes(['sleepy', 'kitty']), Context::$SCOPES);
         $this->assertEquals('my-friends-cats', Context::$HOST_NAME);
+        $this->assertEquals('https', Context::$HOST_SCHEME);
 
         // This should not trigger the exception
         Context::throwIfUninitialized();
@@ -113,5 +114,31 @@ final class ContextTest extends BaseTestCase
 
         Context::log('Emerg log', LogLevel::EMERGENCY);
         $this->assertTrue($testLogger->hasEmergency('Emerg log'));
+    }
+
+    /**
+     * @dataProvider canSetHostSchemeProvider
+     */
+    public function testCanSetHostScheme($host, $expectedScheme)
+    {
+        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], $host, new MockSessionStorage());
+
+        $this->assertEquals('my-friends-cats.io', Context::$HOST_NAME);
+        $this->assertEquals($expectedScheme, Context::$HOST_SCHEME);
+    }
+
+    public function canSetHostSchemeProvider()
+    {
+        return [
+            ['my-friends-cats.io', 'https'],
+            ['https://my-friends-cats.io', 'https'],
+            ['http://my-friends-cats.io', 'http'],
+        ];
+    }
+
+    public function testFailsOnInvalidHost()
+    {
+        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
+        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], 'not-a-host-!@#$%^&*()', new MockSessionStorage());
     }
 }

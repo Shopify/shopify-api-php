@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ShopifyTest;
 
 use Psr\Log\LogLevel;
-use Psr\Log\Test\TestLogger;
 use ReflectionClass;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
@@ -82,7 +81,7 @@ final class ContextTest extends BaseTestCase
 
     public function testCanAddOverrideLogger()
     {
-        $testLogger = new TestLogger();
+        $testLogger = new LogMock();
 
         Context::log('Logging something!', LogLevel::DEBUG);
         $this->assertEmpty($testLogger->records);

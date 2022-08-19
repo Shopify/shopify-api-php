@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - [#210](https://github.com/Shopify/shopify-api-php/pull/210) Add `ext-json` as a dependency in `composer.json`
+- [#212](https://github.com/Shopify/shopify-api-php/pull/212) Allow a scheme in the `Context::$HOST_NAME` URL to enable support for HTTP apps
 
 ## v3.1.0 - 2022-08-04
 

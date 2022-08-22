@@ -157,6 +157,7 @@ final class Utils
      */
     public static function decodeSessionToken(string $jwt): array
     {
+        JWT::$leeway = 10;
         $payload = JWT::decode($jwt, Context::$API_SECRET_KEY, array('HS256'));
         return (array) $payload;
     }

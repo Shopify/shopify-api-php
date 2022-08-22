@@ -6,6 +6,7 @@ namespace ShopifyTest;
 
 use DateTime;
 use Firebase\JWT\JWT;
+use Firebase\JWT\ExpiredException;
 use Shopify\Context;
 use Shopify\Utils;
 use Shopify\Auth\OAuth;
@@ -199,6 +200,33 @@ final class UtilsTest extends BaseTestCase
         $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
         $actualPayload = Utils::decodeSessionToken($jwt);
         $this->assertEquals($payload, $actualPayload);
+    }
+
+    public function testDecodeExpiredSessionTokenFails()
+    {
+        $payload = [
+            'iss' => 'test-shop.myshopify.io/admin',
+            'dest' => 'test-shop.myshopify.io',
+            'aud' => Context::$API_KEY,
+            'sub' => '1',
+            'exp' => strtotime('-7 seconds'),
+            'nbf' => 1234,
+            'iat' => 1234,
+            'jti' => '4321',
+            'sid' => 'abc123'
+        ];
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+
+        // Within leeway period - should still work
+        $actualPayload = Utils::decodeSessionToken($jwt);
+        $this->assertEquals($payload, $actualPayload);
+
+        $payload['exp'] = strtotime('-1 minute');
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+
+        // Outside of leeway period - should throw an exception
+        $this->expectException(\Firebase\JWT\ExpiredException::class);
+        Utils::decodeSessionToken($jwt);
     }
 
     public function testGraphqlProxyFailsWithNoSession()

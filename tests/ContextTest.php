@@ -119,20 +119,22 @@ final class ContextTest extends BaseTestCase
     /**
      * @dataProvider canSetHostSchemeProvider
      */
-    public function testCanSetHostScheme($host, $expectedScheme)
+    public function testCanSetHostScheme($host, $expectedScheme, $expectedHost)
     {
         Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], $host, new MockSessionStorage());
 
-        $this->assertEquals('my-friends-cats.io', Context::$HOST_NAME);
+        $this->assertEquals($expectedHost, Context::$HOST_NAME);
         $this->assertEquals($expectedScheme, Context::$HOST_SCHEME);
     }
 
     public function canSetHostSchemeProvider()
     {
         return [
-            ['my-friends-cats.io', 'https'],
-            ['https://my-friends-cats.io', 'https'],
-            ['http://my-friends-cats.io', 'http'],
+            ['my-friends-cats.io', 'https', 'my-friends-cats.io'],
+            ['https://my-friends-cats.io', 'https', 'my-friends-cats.io'],
+            ['http://my-friends-cats.io', 'http', 'my-friends-cats.io'],
+            ['http://localhost', 'http', 'localhost'],
+            ['http://localhost:1234', 'http', 'localhost:1234'],
         ];
     }
 

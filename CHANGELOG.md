@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#218](https://github.com/Shopify/shopify-api-php/pull/218) Fix issue that failed when setting `Context::$HOST_NAME` with a port
+
 ## v3.2.0 - 2022-09-21
 
 - [#213](https://github.com/Shopify/shopify-api-php/pull/213) Add 10s leeway when decoding session token JWTs

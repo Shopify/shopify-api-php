@@ -114,10 +114,12 @@ class Context
             throw new InvalidArgumentException("Invalid host: $hostName");
         }
 
+        $host = $parsedUrl["host"] . (array_key_exists("port", $parsedUrl) ? ":{$parsedUrl["port"]}" : "");
+
         self::$API_KEY = $apiKey;
         self::$API_SECRET_KEY = $apiSecretKey;
         self::$SCOPES = $authScopes;
-        self::$HOST_NAME = $parsedUrl["host"];
+        self::$HOST_NAME = $host;
         self::$HOST_SCHEME = $parsedUrl["scheme"];
         self::$SESSION_STORAGE = $sessionStorage;
         self::$HTTP_CLIENT_FACTORY = new HttpClientFactory();

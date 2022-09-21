@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v3.2.0 - 2022-09-21
+
 - [#213](https://github.com/Shopify/shopify-api-php/pull/213) Add 10s leeway when decoding session token JWTs
 - [#211](https://github.com/Shopify/shopify-api-php/pull/211) Change requirement of `psr/log` from `^1.1` to `^1.1 || ^2.0 || ^3.0`
 - [#210](https://github.com/Shopify/shopify-api-php/pull/210) Add `ext-json` as a dependency in `composer.json`

@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace Shopify\Rest\Admin2022_04;
@@ -36,7 +40,14 @@ class Fulfillment extends Base
         ["http_method" => "get", "operation" => "get", "ids" => ["fulfillment_order_id"], "path" => "fulfillment_orders/<fulfillment_order_id>/fulfillments.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillments.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>.json"],
-        ["http_method" => "post", "operation" => "update_tracking", "ids" => ["id"], "path" => "fulfillments/<id>/update_tracking.json"]
+        ["http_method" => "post", "operation" => "cancel", "ids" => ["id"], "path" => "fulfillments/<id>/cancel.json"],
+        ["http_method" => "post", "operation" => "cancel", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>/cancel.json"],
+        ["http_method" => "post", "operation" => "complete", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>/complete.json"],
+        ["http_method" => "post", "operation" => "open", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>/open.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "fulfillments.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => ["order_id"], "path" => "orders/<order_id>/fulfillments.json"],
+        ["http_method" => "post", "operation" => "update_tracking", "ids" => ["id"], "path" => "fulfillments/<id>/update_tracking.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/fulfillments/<id>.json"]
     ];
 
     /**
@@ -115,6 +126,75 @@ class Fulfillment extends Base
             $urlIds,
             $params,
             [],
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param mixed[] $params
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function cancel(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "post",
+            "cancel",
+            $this->session,
+            ["id" => $this->id, "order_id" => $this->order_id],
+            $params,
+            $body,
+            $this,
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param mixed[] $params
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function complete(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "post",
+            "complete",
+            $this->session,
+            ["order_id" => $this->order_id, "id" => $this->id],
+            $params,
+            $body,
+            $this,
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param mixed[] $params
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function open(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "post",
+            "open",
+            $this->session,
+            ["order_id" => $this->order_id, "id" => $this->id],
+            $params,
+            $body,
+            $this,
         );
 
         return $response->getDecodedBody();

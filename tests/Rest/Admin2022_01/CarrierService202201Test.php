@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -35,7 +39,7 @@ final class CarrierService202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["carrier_service" => ["id" => 1036894957, "name" => "Shipping Rate Provider", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894957", "format" => "json", "callback_url" => "http://shippingrateprovider.com/"]]
+                  ["carrier_service" => ["id" => 1036894956, "name" => "Shipping Rate Provider", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894956", "format" => "json", "callback_url" => "http://shipping.example.com/"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/carrier_services.json",
                 "POST",
@@ -43,13 +47,13 @@ final class CarrierService202201Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["carrier_service" => ["name" => "Shipping Rate Provider", "callback_url" => "http://shippingrateprovider.com", "service_discovery" => true]]),
+                json_encode(["carrier_service" => ["name" => "Shipping Rate Provider", "callback_url" => "http://shipping.example.com", "service_discovery" => true]]),
             ),
         ]);
 
         $carrier_service = new CarrierService($this->test_session);
         $carrier_service->name = "Shipping Rate Provider";
-        $carrier_service->callback_url = "http://shippingrateprovider.com";
+        $carrier_service->callback_url = "http://shipping.example.com";
         $carrier_service->service_discovery = true;
         $carrier_service->save();
     }
@@ -64,7 +68,7 @@ final class CarrierService202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["carrier_services" => [["id" => 1036894959, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894959", "format" => "json", "callback_url" => "http://example.com/"], ["id" => 260046840, "name" => "ups_shipping", "active" => true, "service_discovery" => true, "carrier_service_type" => "legacy", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/260046840"]]]
+                  ["carrier_services" => [["id" => 1036894960, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894960", "format" => "json", "callback_url" => "http://example.com/"], ["id" => 260046840, "name" => "ups_shipping", "active" => true, "service_discovery" => true, "carrier_service_type" => "legacy", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/260046840"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/carrier_services.json",
                 "GET",
@@ -121,9 +125,9 @@ final class CarrierService202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["carrier_service" => ["id" => 1036894960, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894960", "format" => "json", "callback_url" => "http://example.com/"]]
+                  ["carrier_service" => ["id" => 1036894954, "name" => "Purolator", "active" => true, "service_discovery" => true, "carrier_service_type" => "api", "admin_graphql_api_id" => "gid://shopify/DeliveryCarrierService/1036894954", "format" => "json", "callback_url" => "http://example.com/"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-01/carrier_services/1036894960.json",
+                "https://test-shop.myshopify.io/admin/api/2022-01/carrier_services/1036894954.json",
                 "GET",
                 null,
                 [
@@ -134,7 +138,7 @@ final class CarrierService202201Test extends BaseTestCase
 
         CarrierService::find(
             $this->test_session,
-            1036894960,
+            1036894954,
             [],
             [],
         );
@@ -152,7 +156,7 @@ final class CarrierService202201Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   []
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-01/carrier_services/1036894954.json",
+                "https://test-shop.myshopify.io/admin/api/2022-01/carrier_services/1036894957.json",
                 "DELETE",
                 null,
                 [
@@ -163,7 +167,7 @@ final class CarrierService202201Test extends BaseTestCase
 
         CarrierService::delete(
             $this->test_session,
-            1036894954,
+            1036894957,
             [],
             [],
         );

@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace Shopify\Rest\Admin2022_04;
@@ -118,7 +122,11 @@ class GiftCard extends Base
      *     order,
      *     query,
      *     limit,
-     *     fields
+     *     fields,
+     *     created_at_min,
+     *     created_at_max,
+     *     updated_at_min,
+     *     updated_at_max
      *
      * @return array|null
      */

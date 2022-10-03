@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -91,7 +95,7 @@ final class FulfillmentService202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_service" => ["id" => 1061774488, "name" => "Jupiter Fulfillment", "email" => null, "service_name" => "Jupiter Fulfillment", "handle" => "jupiter-fulfillment", "fulfillment_orders_opt_in" => false, "include_pending_stock" => false, "provider_id" => null, "location_id" => 1072404543, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/1061774488"]]
+                  ["fulfillment_service" => ["id" => 1061774487, "name" => "Jupiter Fulfillment", "email" => null, "service_name" => "Jupiter Fulfillment", "handle" => "jupiter-fulfillment", "fulfillment_orders_opt_in" => false, "include_pending_stock" => false, "provider_id" => null, "location_id" => 1072404542, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/1061774487"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/fulfillment_services.json",
                 "POST",

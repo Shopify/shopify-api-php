@@ -95,7 +95,7 @@ final class FulfillmentService202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_service" => ["id" => 1061774487, "name" => "Jupiter Fulfillment", "email" => null, "service_name" => "Jupiter Fulfillment", "handle" => "jupiter-fulfillment", "fulfillment_orders_opt_in" => true, "include_pending_stock" => false, "provider_id" => null, "location_id" => 1072404542, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/1061774487", "permits_sku_sharing" => false]]
+                  ["fulfillment_service" => ["id" => 1061774488, "name" => "Jupiter Fulfillment", "email" => null, "service_name" => "Jupiter Fulfillment", "handle" => "jupiter-fulfillment", "fulfillment_orders_opt_in" => true, "include_pending_stock" => false, "provider_id" => null, "location_id" => 1072404543, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/1061774488", "permits_sku_sharing" => true]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/fulfillment_services.json",
                 "POST",
@@ -103,7 +103,7 @@ final class FulfillmentService202207Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["fulfillment_service" => ["name" => "Jupiter Fulfillment", "callback_url" => "http://google.com", "inventory_management" => true, "tracking_support" => true, "requires_shipping_method" => true, "format" => "json", "fulfillment_orders_opt_in" => true]]),
+                json_encode(["fulfillment_service" => ["name" => "Jupiter Fulfillment", "callback_url" => "http://google.com", "inventory_management" => true, "tracking_support" => true, "requires_shipping_method" => true, "format" => "json", "permits_sku_sharing" => true, "fulfillment_orders_opt_in" => true]]),
             ),
         ]);
 
@@ -114,6 +114,7 @@ final class FulfillmentService202207Test extends BaseTestCase
         $fulfillment_service->tracking_support = true;
         $fulfillment_service->requires_shipping_method = true;
         $fulfillment_service->format = "json";
+        $fulfillment_service->permits_sku_sharing = true;
         $fulfillment_service->fulfillment_orders_opt_in = true;
         $fulfillment_service->save();
     }

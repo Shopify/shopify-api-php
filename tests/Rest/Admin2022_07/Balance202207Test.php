@@ -39,7 +39,7 @@ final class Balance202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["balance" => [["currency" => "USD", "amount" => "53.99"]]]
+                  ["balance" => [["amount" => "53.99", "currency" => "USD"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/shopify_payments/balance.json",
                 "GET",

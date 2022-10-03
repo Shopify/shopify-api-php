@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -37,7 +41,7 @@ final class LocationsForMove202201Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   ["locations_for_move" => [["location" => ["id" => 1072404544, "name" => "Alpha Location"], "message" => "Current location.", "movable" => false], ["location" => ["id" => 1072404545, "name" => "Bravo Location"], "message" => "No items are stocked at this location.", "movable" => false]]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-01/fulfillment_orders/1046000783/locations_for_move.json",
+                "https://test-shop.myshopify.io/admin/api/2022-01/fulfillment_orders/1046000830/locations_for_move.json",
                 "GET",
                 null,
                 [
@@ -48,7 +52,7 @@ final class LocationsForMove202201Test extends BaseTestCase
 
         LocationsForMove::all(
             $this->test_session,
-            ["fulfillment_order_id" => "1046000783"],
+            ["fulfillment_order_id" => "1046000830"],
             [],
         );
     }

@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace Shopify\Rest\Admin2022_01;
@@ -45,6 +49,7 @@ class Metafield extends Base
         ["http_method" => "delete", "operation" => "delete", "ids" => ["order_id", "id"], "path" => "orders/<order_id>/metafields/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["page_id", "id"], "path" => "pages/<page_id>/metafields/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["product_image_id", "id"], "path" => "product_images/<product_image_id>/metafields/<id>.json"],
+        ["http_method" => "delete", "operation" => "delete", "ids" => ["product_image_id", "id"], "path" => "product_images/<product_image_id>/metafields/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["product_id", "id"], "path" => "products/<product_id>/metafields/<id>.json"],
         ["http_method" => "delete", "operation" => "delete", "ids" => ["variant_id", "id"], "path" => "variants/<variant_id>/metafields/<id>.json"],
         ["http_method" => "get", "operation" => "count", "ids" => ["article_id"], "path" => "articles/<article_id>/metafields/count.json"],
@@ -54,6 +59,7 @@ class Metafield extends Base
         ["http_method" => "get", "operation" => "count", "ids" => ["draft_order_id"], "path" => "draft_orders/<draft_order_id>/metafields/count.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "metafields/count.json"],
         ["http_method" => "get", "operation" => "count", "ids" => ["order_id"], "path" => "orders/<order_id>/metafields/count.json"],
+        ["http_method" => "get", "operation" => "count", "ids" => ["page_id"], "path" => "pages/<page_id>/metafields/count.json"],
         ["http_method" => "get", "operation" => "count", "ids" => ["page_id"], "path" => "pages/<page_id>/metafields/count.json"],
         ["http_method" => "get", "operation" => "count", "ids" => ["product_image_id"], "path" => "product_images/<product_image_id>/metafields/count.json"],
         ["http_method" => "get", "operation" => "count", "ids" => ["product_id"], "path" => "products/<product_id>/metafields/count.json"],
@@ -67,8 +73,8 @@ class Metafield extends Base
         ["http_method" => "get", "operation" => "get", "ids" => ["customer_id"], "path" => "customers/<customer_id>/metafields.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/metafields/<id>.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["draft_order_id"], "path" => "draft_orders/<draft_order_id>/metafields.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["draft_order_id"], "path" => "draft_orders/<draft_order_id>/metafields.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["draft_order_id", "id"], "path" => "draft_orders/<draft_order_id>/metafields/<id>.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "metafields.json"],
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "metafields.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "metafields/<id>.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["order_id"], "path" => "orders/<order_id>/metafields.json"],
@@ -76,6 +82,7 @@ class Metafield extends Base
         ["http_method" => "get", "operation" => "get", "ids" => ["page_id"], "path" => "pages/<page_id>/metafields.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["page_id", "id"], "path" => "pages/<page_id>/metafields/<id>.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["product_image_id"], "path" => "product_images/<product_image_id>/metafields.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["product_image_id", "id"], "path" => "product_images/<product_image_id>/metafields/<id>.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["product_image_id", "id"], "path" => "product_images/<product_image_id>/metafields/<id>.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["product_id"], "path" => "products/<product_id>/metafields.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["product_id", "id"], "path" => "products/<product_id>/metafields/<id>.json"],
@@ -88,11 +95,13 @@ class Metafield extends Base
         ["http_method" => "post", "operation" => "post", "ids" => ["draft_order_id"], "path" => "draft_orders/<draft_order_id>/metafields.json"],
         ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "metafields.json"],
         ["http_method" => "post", "operation" => "post", "ids" => ["order_id"], "path" => "orders/<order_id>/metafields.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => ["order_id"], "path" => "orders/<order_id>/metafields.json"],
         ["http_method" => "post", "operation" => "post", "ids" => ["page_id"], "path" => "pages/<page_id>/metafields.json"],
         ["http_method" => "post", "operation" => "post", "ids" => ["product_image_id"], "path" => "product_images/<product_image_id>/metafields.json"],
         ["http_method" => "post", "operation" => "post", "ids" => ["product_id"], "path" => "products/<product_id>/metafields.json"],
         ["http_method" => "post", "operation" => "post", "ids" => ["variant_id"], "path" => "variants/<variant_id>/metafields.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["article_id", "id"], "path" => "articles/<article_id>/metafields/<id>.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/metafields/<id>.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["blog_id", "id"], "path" => "blogs/<blog_id>/metafields/<id>.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["collection_id", "id"], "path" => "collections/<collection_id>/metafields/<id>.json"],
         ["http_method" => "put", "operation" => "put", "ids" => ["customer_id", "id"], "path" => "customers/<customer_id>/metafields/<id>.json"],
@@ -119,7 +128,8 @@ class Metafield extends Base
      *     product_image_id
      *     product_id
      *     variant_id
-     * @param mixed[] $params
+     * @param mixed[] $params Allowed indexes:
+     *     fields
      *
      * @return Metafield|null
      */
@@ -194,8 +204,8 @@ class Metafield extends Base
      *     updated_at_max,
      *     namespace,
      *     key,
-     *     type,
      *     value_type,
+     *     type,
      *     fields,
      *     metafield
      *

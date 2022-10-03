@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace Shopify\Rest\Admin2022_01;
@@ -32,7 +36,7 @@ use Shopify\Rest\Base;
  * @property bool|null $taxable
  * @property string|null $title
  * @property string|null $updated_at
- * @property int|null $weight
+ * @property float|null $weight
  * @property string|null $weight_unit
  */
 class Variant extends Base

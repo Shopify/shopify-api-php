@@ -17,7 +17,9 @@ class ApiVersion
     /** @var string */
     public const JULY_2022 = "2022-07";
     /** @var string */
-    public const LATEST = self::JULY_2022;
+    public const OCTOBER_2022 = "2022-10";
+    /** @var string */
+    public const LATEST = self::OCTOBER_2022;
 
     private static $ALL_VERSIONS = [
         self::UNSTABLE,
@@ -25,6 +27,7 @@ class ApiVersion
         self::JANUARY_2022,
         self::APRIL_2022,
         self::JULY_2022,
+        self::OCTOBER_2022,
     ];
 
     public static function isValid(string $version): bool

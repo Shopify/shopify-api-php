@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -35,7 +39,7 @@ final class Policy202201Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["policies" => [["body" => "You have 30 days to get a refund", "created_at" => "2022-04-05T13:05:51-04:00", "updated_at" => "2022-04-05T13:05:51-04:00", "handle" => "refund-policy", "title" => "Refund policy", "url" => "https://jsmith.myshopify.com/548380009/policies/878590288"]]]
+                  ["policies" => [["body" => "You have 30 days to get a refund", "created_at" => "2022-10-03T12:52:45-04:00", "updated_at" => "2022-10-03T12:52:45-04:00", "handle" => "refund-policy", "title" => "Refund policy", "url" => "https://jsmith.myshopify.com/548380009/policies/878590288"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-01/policies.json",
                 "GET",

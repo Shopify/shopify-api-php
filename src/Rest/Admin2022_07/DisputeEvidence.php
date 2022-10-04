@@ -27,7 +27,7 @@ use Shopify\Rest\Base;
  * @property array|null $product_description
  * @property string|null $refund_policy_disclosure
  * @property string|null $refund_refusal_explanation
- * @property array|null $shipping_address_attributes
+ * @property array|null $shipping_address
  * @property bool|null $submitted
  * @property string|null $uncategorized_text
  * @property string|null $updated_on

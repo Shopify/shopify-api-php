@@ -122,7 +122,11 @@ class GiftCard extends Base
      *     order,
      *     query,
      *     limit,
-     *     fields
+     *     fields,
+     *     created_at_min,
+     *     created_at_max,
+     *     updated_at_min,
+     *     updated_at_max
      *
      * @return array|null
      */

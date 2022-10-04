@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace Shopify\Rest\Admin2022_04;
@@ -13,6 +17,7 @@ use Shopify\Rest\Base;
  * @property array|null $delivery_method
  * @property array|null $destination
  * @property string|null $fulfill_at
+ * @property string|null $fulfill_by
  * @property array[]|null $fulfillment_holds
  * @property int|null $id
  * @property array|null $international_duties

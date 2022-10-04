@@ -50,6 +50,7 @@ class Customer extends Base
     ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
+        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "customers/<id>.json"],
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "customers/count.json"],
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "customers.json"],
         ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "customers/<id>.json"],
@@ -82,6 +83,31 @@ class Customer extends Base
             $params,
         );
         return !empty($result) ? $result[0] : null;
+    }
+
+    /**
+     * @param Session $session
+     * @param int|string $id
+     * @param array $urlIds
+     * @param mixed[] $params
+     *
+     * @return array|null
+     */
+    public static function delete(
+        Session $session,
+        $id,
+        array $urlIds = [],
+        array $params = []
+    ): ?array {
+        $response = parent::request(
+            "delete",
+            "delete",
+            $session,
+            array_merge(["id" => $id], $urlIds),
+            $params,
+        );
+
+        return $response->getDecodedBody();
     }
 
     /**

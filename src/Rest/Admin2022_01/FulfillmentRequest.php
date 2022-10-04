@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace Shopify\Rest\Admin2022_01;
@@ -47,7 +51,9 @@ class FulfillmentRequest extends Base
 
     /**
      * @param mixed[] $params Allowed indexes:
-     *     message
+     *     message,
+     *     reason,
+     *     line_items
      * @param array|string $body
      *
      * @return array|null

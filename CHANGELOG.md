@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v4.0.0 - 2022-10-04
+
+- [#221](https://github.com/Shopify/shopify-api-php/pull/221) ⚠️ [Breaking] Add REST resources for October 2022 API version, remove support and REST resources for October 2021 (`2021-10`) API version
+
 ## v3.2.1 - 2022-09-21
 
 - [#218](https://github.com/Shopify/shopify-api-php/pull/218) Fix issue that failed when setting `Context::$HOST_NAME` with a port

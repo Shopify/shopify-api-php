@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#222](https://github.com/Shopify/shopify-api-php/pull/222) Add support for `Context::$CUSTOM_SHOP_DOMAINS` setting
+
 ## v4.0.0 - 2022-10-04
 
 - [#221](https://github.com/Shopify/shopify-api-php/pull/221) ⚠️ [Breaking] Add REST resources for October 2022 API version, remove support and REST resources for October 2021 (`2021-10`) API version

@@ -28,16 +28,16 @@ final class UtilsTest extends BaseTestCase
 
     public function testSanitizeShopDomainOnBadShopDomains()
     {
-        $this->assertEquals(null, Utils::sanitizeShopDomain('myshop.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('myshopify.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('shopify.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('my shop'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('store.myshopify.com.evil.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('/foo/bar'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('/foo.myshopify.io.evil.ru'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('%0a123.myshopify.io'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('foo.bar.myshopify.io'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('https://my-shop.myshopify.com', 'myshopify.io'));
+        $this->assertNull(Utils::sanitizeShopDomain('myshop.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('myshopify.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('shopify.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('my shop'));
+        $this->assertNull(Utils::sanitizeShopDomain('store.myshopify.com.evil.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('/foo/bar'));
+        $this->assertNull(Utils::sanitizeShopDomain('/foo.myshopify.io.evil.ru'));
+        $this->assertNull(Utils::sanitizeShopDomain('%0a123.myshopify.io'));
+        $this->assertNull(Utils::sanitizeShopDomain('foo.bar.myshopify.io'));
+        $this->assertNull(Utils::sanitizeShopDomain('https://my-shop.myshopify.com', 'myshopify.io'));
     }
 
     public function testSanitizeShopDomainOnCustomShopDomains()
@@ -57,6 +57,35 @@ final class UtilsTest extends BaseTestCase
             'myshopify.io'
         ));
         $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain(' MY-SHOP ', 'myshopify.io'));
+    }
+
+    /**
+     * @dataProvider sanitizeShopWithCustomDomainsProvider
+     */
+    public function testSanitizeShopWithCustomDomains($domains, $test, $expected)
+    {
+        Context::$CUSTOM_SHOP_DOMAINS = $domains;
+
+        $this->assertEquals($expected, Utils::sanitizeShopDomain($test));
+    }
+
+    public function sanitizeShopWithCustomDomainsProvider()
+    {
+        return [
+            [
+                ['*.special-domain-1.io', '.special-domain-2.io'],
+                'my-shop.special-domain-1.io',
+                'my-shop.special-domain-1.io'
+            ],
+            [
+                ['*.special-domain-1.io', '.special-domain-2.io'],
+                'my-shop.special-domain-2.io',
+                'my-shop.special-domain-2.io'
+            ],
+            [['.special-domain-1.io'], 'my-shop.special-domain-1.io', 'my-shop.special-domain-1.io'],
+            [['special-domain-1.io'], 'my-shop.special-domain-1.io', 'my-shop.special-domain-1.io'],
+            [['*.special-domain-1.io', '.special-domain-2.io'], 'my-shop.special-domain-3.io', null],
+        ];
     }
 
     public function testValidHmac()

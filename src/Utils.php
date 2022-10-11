@@ -32,7 +32,20 @@ final class Utils
     {
         $name = trim(strtolower($shop));
 
-        $allowedDomainsRegexp = $myshopifyDomain ? "($myshopifyDomain)" : "(myshopify.com|myshopify.io)";
+        if ($myshopifyDomain) {
+            $allowedDomains = [preg_replace("/^\*?\.?(.*)/", "$1", $myshopifyDomain)];
+        } else {
+            $allowedDomains = ["myshopify.com", "myshopify.io"];
+        }
+
+        if (Context::$CUSTOM_SHOP_DOMAINS) {
+            $allowedDomains = array_merge(
+                $allowedDomains,
+                preg_replace("/^\*?\.?(.*)/", "$1", Context::$CUSTOM_SHOP_DOMAINS)
+            );
+        }
+
+        $allowedDomainsRegexp = "(" . implode("|", $allowedDomains) . ")";
 
         if (!preg_match($allowedDomainsRegexp, $name) && (strpos($name, ".") === false)) {
             $name .= '.' . ($myshopifyDomain ?? 'myshopify.com');

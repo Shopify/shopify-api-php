@@ -40,6 +40,8 @@ class Context
     public static $USER_AGENT_PREFIX = null;
     /** @var LoggerInterface|null */
     public static $LOGGER = null;
+    /** @var string[] */
+    public static $CUSTOM_SHOP_DOMAINS = null;
 
     /** @var int */
     public static $RETRY_TIME_IN_SECONDS = 1;
@@ -63,6 +65,7 @@ class Context
      * @param string               $userAgentPrefix                 Prefix for user agent header sent with a request
      * @param LoggerInterface|null $logger                          App logger, so the library can add its own logs to
      *                                                              it
+     * @param string[]             $customShopDomains               One or more regexps to use when validating domains
      *
      * @throws \Shopify\Exception\MissingArgumentException
      */
@@ -77,7 +80,8 @@ class Context
         bool $isPrivateApp = false,
         string $privateAppStorefrontAccessToken = null,
         string $userAgentPrefix = '',
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        array $customShopDomains = []
     ): void {
         $authScopes = new Scopes($scopes);
 
@@ -129,6 +133,7 @@ class Context
         self::$PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = $privateAppStorefrontAccessToken;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
         self::$LOGGER = $logger;
+        self::$CUSTOM_SHOP_DOMAINS = $customShopDomains;
 
         self::$IS_INITIALIZED = true;
     }

@@ -6,6 +6,7 @@ namespace ShopifyTest;
 
 use Psr\Log\LogLevel;
 use ReflectionClass;
+use Shopify\ApiVersion;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
 use ShopifyTest\Auth\MockSessionStorage;
@@ -142,5 +143,27 @@ final class ContextTest extends BaseTestCase
     {
         $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
         Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], 'not-a-host-!@#$%^&*()', new MockSessionStorage());
+    }
+
+    public function testCanSetCustomShopDomains()
+    {
+        $domains = ['*.special-domain-1.io', '*.special-domain-2.io'];
+
+        Context::initialize(
+            'ash',
+            'steffi',
+            ['sleepy', 'kitty'],
+            'my-friends-cats',
+            new MockSessionStorage(),
+            ApiVersion::LATEST,
+            true,
+            false,
+            null,
+            '',
+            null,
+            $domains
+        );
+
+        $this->assertEquals($domains, Context::$CUSTOM_SHOP_DOMAINS);
     }
 }

@@ -6,7 +6,6 @@ namespace ShopifyTest;
 
 use DateTime;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use Shopify\Context;
 use Shopify\Utils;
 use Shopify\Auth\OAuth;

@@ -10,6 +10,7 @@ use Shopify\Auth\Scopes;
 use Shopify\Auth\SessionStorage;
 use Shopify\Clients\HttpClientFactory;
 use Shopify\Exception\MissingArgumentException;
+use Shopify\Exception\InvalidArgumentException;
 use Shopify\Exception\PrivateAppException;
 use Shopify\Exception\UninitializedContextException;
 
@@ -23,6 +24,8 @@ class Context
     public static $SCOPES;
     /** @var string */
     public static $HOST_NAME = null;
+    /** @var string */
+    public static $HOST_SCHEME = null;
     /** @var SessionStorage */
     public static $SESSION_STORAGE = null;
     /** @var string */
@@ -37,6 +40,8 @@ class Context
     public static $USER_AGENT_PREFIX = null;
     /** @var LoggerInterface|null */
     public static $LOGGER = null;
+    /** @var string[] */
+    public static $CUSTOM_SHOP_DOMAINS = null;
 
     /** @var int */
     public static $RETRY_TIME_IN_SECONDS = 1;
@@ -51,7 +56,7 @@ class Context
      * @param string               $apiKey                          App API key
      * @param string               $apiSecretKey                    App API secret
      * @param string|array         $scopes                          App scopes
-     * @param string               $hostName                        App host name e.g. www.google.ca
+     * @param string               $hostName                        App host name e.g. www.google.ca. May include scheme
      * @param SessionStorage       $sessionStorage                  Session storage strategy
      * @param string               $apiVersion                      App API key, defaults to unstable
      * @param bool                 $isEmbeddedApp                   Whether the app is an embedded app, defaults to true
@@ -60,6 +65,7 @@ class Context
      * @param string               $userAgentPrefix                 Prefix for user agent header sent with a request
      * @param LoggerInterface|null $logger                          App logger, so the library can add its own logs to
      *                                                              it
+     * @param string[]             $customShopDomains               One or more regexps to use when validating domains
      *
      * @throws \Shopify\Exception\MissingArgumentException
      */
@@ -69,12 +75,13 @@ class Context
         $scopes,
         string $hostName,
         SessionStorage $sessionStorage,
-        string $apiVersion = 'unstable',
+        string $apiVersion = ApiVersion::LATEST,
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
         string $privateAppStorefrontAccessToken = null,
         string $userAgentPrefix = '',
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        array $customShopDomains = []
     ): void {
         $authScopes = new Scopes($scopes);
 
@@ -99,10 +106,25 @@ class Context
             );
         }
 
+        if (!ApiVersion::isValid($apiVersion)) {
+            throw new InvalidArgumentException("Invalid API version: $apiVersion");
+        }
+
+        if (!preg_match("/http(s)?:\/\//", $hostName)) {
+            $hostName = "https://$hostName";
+        }
+        $parsedUrl = parse_url($hostName);
+        if (!is_array($parsedUrl)) {
+            throw new InvalidArgumentException("Invalid host: $hostName");
+        }
+
+        $host = $parsedUrl["host"] . (array_key_exists("port", $parsedUrl) ? ":{$parsedUrl["port"]}" : "");
+
         self::$API_KEY = $apiKey;
         self::$API_SECRET_KEY = $apiSecretKey;
         self::$SCOPES = $authScopes;
-        self::$HOST_NAME = $hostName;
+        self::$HOST_NAME = $host;
+        self::$HOST_SCHEME = $parsedUrl["scheme"];
         self::$SESSION_STORAGE = $sessionStorage;
         self::$HTTP_CLIENT_FACTORY = new HttpClientFactory();
         self::$API_VERSION = $apiVersion;
@@ -111,6 +133,7 @@ class Context
         self::$PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = $privateAppStorefrontAccessToken;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
         self::$LOGGER = $logger;
+        self::$CUSTOM_SHOP_DOMAINS = $customShopDomains;
 
         self::$IS_INITIALIZED = true;
     }
@@ -125,7 +148,7 @@ class Context
         if (!self::$IS_INITIALIZED) {
             throw new UninitializedContextException(
                 'Context has not been properly initialized. ' .
-                'Please call the .initialize() method to set up your app context object.'
+                    'Please call the .initialize() method to set up your app context object.'
             );
         }
     }

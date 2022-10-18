@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace Shopify\Rest\Admin2022_01;
@@ -183,6 +187,7 @@ class DraftOrder extends Base
 
     /**
      * @param mixed[] $params Allowed indexes:
+     *     payment_gateway_id,
      *     payment_pending
      * @param array|string $body
      *

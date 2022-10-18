@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -63,7 +67,7 @@ final class MarketingEvent202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["marketing_event" => ["id" => 1065859216, "event_type" => "ad", "remote_id" => null, "started_at" => "2022-12-14T19:00:00-05:00", "ended_at" => null, "scheduled_to_end_at" => null, "budget" => null, "currency" => null, "manage_url" => null, "preview_url" => null, "utm_campaign" => "Christmas2022", "utm_source" => "facebook", "utm_medium" => "cpc", "budget_type" => null, "description" => null, "marketing_channel" => "social", "paid" => true, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => 1063897333, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/1065859216", "marketed_resources" => []]]
+                  ["marketing_event" => ["id" => 1069063883, "event_type" => "ad", "remote_id" => null, "started_at" => "2022-12-15T00:00:00-05:00", "ended_at" => null, "scheduled_to_end_at" => null, "budget" => null, "currency" => null, "manage_url" => null, "preview_url" => null, "utm_campaign" => "Christmas2022", "utm_source" => "facebook", "utm_medium" => "cpc", "budget_type" => null, "description" => null, "marketing_channel" => "social", "paid" => true, "referring_domain" => "facebook.com", "breadcrumb_id" => null, "marketing_activity_id" => 1063897333, "admin_graphql_api_id" => "gid://shopify/MarketingEvent/1069063883", "marketed_resources" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/marketing_events.json",
                 "POST",

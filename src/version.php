@@ -1,5 +1,5 @@
 <?php
 
 // @codeCoverageIgnoreStart
-return '2.0.1';
+return '4.1.0';
 // @codeCoverageIgnoreEnd

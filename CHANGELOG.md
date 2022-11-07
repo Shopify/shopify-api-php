@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v4.1.1 - 2022-11-07
+
+- [#186](https://github.com/Shopify/shopify-api-php/pull/186) Update the `php-jwt` package
+
 ## v4.1.0 - 2022-10-11
 
 - [#222](https://github.com/Shopify/shopify-api-php/pull/222) Add support for `Context::$CUSTOM_SHOP_DOMAINS` setting

@@ -6,7 +6,6 @@ namespace ShopifyTest;
 
 use DateTime;
 use Firebase\JWT\JWT;
-use Firebase\JWT\ExpiredException;
 use Shopify\Context;
 use Shopify\Utils;
 use Shopify\Auth\OAuth;
@@ -226,7 +225,7 @@ final class UtilsTest extends BaseTestCase
             'jti' => '4321',
             'sid' => 'abc123'
         ];
-        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
         $actualPayload = Utils::decodeSessionToken($jwt);
         $this->assertEquals($payload, $actualPayload);
     }
@@ -244,14 +243,14 @@ final class UtilsTest extends BaseTestCase
             'jti' => '4321',
             'sid' => 'abc123'
         ];
-        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
 
         // Within leeway period - should still work
         $actualPayload = Utils::decodeSessionToken($jwt);
         $this->assertEquals($payload, $actualPayload);
 
         $payload['exp'] = strtotime('-1 minute');
-        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
 
         // Outside of leeway period - should throw an exception
         $this->expectException(\Firebase\JWT\ExpiredException::class);
@@ -416,7 +415,7 @@ final class UtilsTest extends BaseTestCase
             "jti" => "f8912129-1af6-4cad-9ca3-76b0f7621087",
             "sid" => "aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
         ];
-        return JWT::encode($payload, Context::$API_SECRET_KEY);
+        return JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
     }
 
     /** @var string */

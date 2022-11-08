@@ -60,8 +60,10 @@ final class OAuthTest extends BaseTestCase
     /**
      * @dataProvider validBeginProvider
      */
-    public function testValidBegin($isOnline)
+    public function testValidBegin($isOnline, $hostScheme)
     {
+        Context::$HOST_SCHEME = $hostScheme;
+
         /** @var OAuthCookie[] */
         $cookiesSet = [];
         $cookieCallback = function (OAuthCookie $cookie) use (&$cookiesSet) {
@@ -91,7 +93,7 @@ final class OAuthTest extends BaseTestCase
         $generatedState = Context::$SESSION_STORAGE->loadSession($cookieSessionId)->getState();
         $this->assertEquals(
             // phpcs:ignore
-            "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=https%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=$grantOptions",
+            "https://shopname.myshopify.com/admin/oauth/authorize?client_id=ash&scope=sleepy%2Ckitty&redirect_uri=$hostScheme%3A%2F%2Fwww.my-friends-cats.com%2Fredirect&state={$generatedState}&grant_options%5B%5D=$grantOptions",
             $returnUrl
         );
     }
@@ -99,8 +101,10 @@ final class OAuthTest extends BaseTestCase
     public function validBeginProvider(): array
     {
         return [
-            'Online'  => [true],
-            'Offline' => [false],
+            'Online, HTTPS'  => [true, 'https'],
+            'Online, HTTP'  => [true, 'http'],
+            'Offline, HTTPS' => [false, 'https'],
+            'Offline, HTTP' => [false, 'http'],
         ];
     }
 
@@ -666,6 +670,6 @@ final class OAuthTest extends BaseTestCase
             "jti" => "f8912129-1af6-4cad-9ca3-76b0f7621087",
             "sid" => "aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
         ];
-        return JWT::encode($payload, Context::$API_SECRET_KEY);
+        return JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
     }
 }

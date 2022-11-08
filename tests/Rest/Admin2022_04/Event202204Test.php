@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -35,6 +39,62 @@ final class Event202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
+                  ["events" => [["id" => 365755215, "subject_id" => 632910392, "created_at" => "2008-01-10T07:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Nano - 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/632910392\">IPod Nano - 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Nano - 8GB.", "path" => "/admin/products/632910392"], ["id" => 677313116, "subject_id" => 921728736, "created_at" => "2008-01-10T08:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Touch 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/921728736\">IPod Touch 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Touch 8GB.", "path" => "/admin/products/921728736"]]]
+                )),
+                "https://test-shop.myshopify.io/admin/api/2022-04/events.json?since_id=164748010",
+                "GET",
+                null,
+                [
+                    "X-Shopify-Access-Token: this_is_a_test_token",
+                ],
+            ),
+        ]);
+
+        Event::all(
+            $this->test_session,
+            [],
+            ["since_id" => "164748010"],
+        );
+    }
+
+    /**
+
+     *
+     * @return void
+     */
+    public function test_2(): void
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["events" => []]
+                )),
+                "https://test-shop.myshopify.io/admin/api/2022-04/events.json?filter=Product&verb=destroy",
+                "GET",
+                null,
+                [
+                    "X-Shopify-Access-Token: this_is_a_test_token",
+                ],
+            ),
+        ]);
+
+        Event::all(
+            $this->test_session,
+            [],
+            ["filter" => "Product", "verb" => "destroy"],
+        );
+    }
+
+    /**
+
+     *
+     * @return void
+     */
+    public function test_3(): void
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, json_encode(
                   ["events" => [["id" => 164748010, "subject_id" => 450789469, "created_at" => "2008-01-10T06:00:00-05:00", "subject_type" => "Order", "verb" => "confirmed", "arguments" => ["#1001", "Bob Norman"], "body" => null, "message" => "Received new order <a href=\"https://jsmith.myshopify.com/admin/orders/450789469\">#1001</a> by Bob Norman.", "author" => "Shopify", "description" => "Received new order #1001 by Bob Norman.", "path" => "/admin/orders/450789469"], ["id" => 365755215, "subject_id" => 632910392, "created_at" => "2008-01-10T07:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Nano - 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/632910392\">IPod Nano - 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Nano - 8GB.", "path" => "/admin/products/632910392"], ["id" => 677313116, "subject_id" => 921728736, "created_at" => "2008-01-10T08:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Touch 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/921728736\">IPod Touch 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Touch 8GB.", "path" => "/admin/products/921728736"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/events.json",
@@ -49,62 +109,6 @@ final class Event202204Test extends BaseTestCase
         Event::all(
             $this->test_session,
             [],
-            [],
-        );
-    }
-
-    /**
-
-     *
-     * @return void
-     */
-    public function test_2(): void
-    {
-        $this->mockTransportRequests([
-            new MockRequest(
-                $this->buildMockHttpResponse(200, json_encode(
-                  ["events" => [["id" => 677313116, "subject_id" => 921728736, "created_at" => "2008-01-10T08:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Touch 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/921728736\">IPod Touch 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Touch 8GB.", "path" => "/admin/products/921728736"]]]
-                )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/events.json?created_at_min=2008-01-10+12%3A30%3A00%2B00%3A00",
-                "GET",
-                null,
-                [
-                    "X-Shopify-Access-Token: this_is_a_test_token",
-                ],
-            ),
-        ]);
-
-        Event::all(
-            $this->test_session,
-            [],
-            ["created_at_min" => "2008-01-10 12:30:00+00:00"],
-        );
-    }
-
-    /**
-
-     *
-     * @return void
-     */
-    public function test_3(): void
-    {
-        $this->mockTransportRequests([
-            new MockRequest(
-                $this->buildMockHttpResponse(200, json_encode(
-                  ["events" => [["id" => 103105390, "subject_id" => 450789469, "created_at" => "2008-01-10T05:00:00-05:00", "subject_type" => "Order", "verb" => "authorization_success", "arguments" => ["389404469", "210.94", "USD"], "body" => null, "message" => "A transaction was authorized.", "author" => "Shopify", "description" => "A transaction was authorized.", "path" => "/admin/orders/450789469"], ["id" => 164748010, "subject_id" => 450789469, "created_at" => "2008-01-10T06:00:00-05:00", "subject_type" => "Order", "verb" => "confirmed", "arguments" => ["#1001", "Bob Norman"], "body" => null, "message" => "Received new order <a href=\"https://jsmith.myshopify.com/admin/orders/450789469\">#1001</a> by Bob Norman.", "author" => "Shopify", "description" => "Received new order #1001 by Bob Norman.", "path" => "/admin/orders/450789469"], ["id" => 852065041, "subject_id" => 450789469, "created_at" => "2008-01-10T09:00:00-05:00", "subject_type" => "Order", "verb" => "placed", "arguments" => [], "body" => null, "message" => "This order was created for Bob Norman from draft order <a href=\"https://jsmith.myshopify.com/admin/draft_orders/72885271\">#D4</a>.", "author" => "Shopify", "description" => "This order was created for Bob Norman from draft order #D4.", "path" => "/admin/orders/450789469"]]]
-                )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/orders/450789469/events.json",
-                "GET",
-                null,
-                [
-                    "X-Shopify-Access-Token: this_is_a_test_token",
-                ],
-            ),
-        ]);
-
-        Event::all(
-            $this->test_session,
-            ["order_id" => "450789469"],
             [],
         );
     }
@@ -147,9 +151,9 @@ final class Event202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["events" => [["id" => 677313116, "subject_id" => 921728736, "created_at" => "2008-01-10T08:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Touch 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/921728736\">IPod Touch 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Touch 8GB.", "path" => "/admin/products/921728736"]]]
+                  ["events" => [["id" => 103105390, "subject_id" => 450789469, "created_at" => "2008-01-10T05:00:00-05:00", "subject_type" => "Order", "verb" => "authorization_success", "arguments" => ["389404469", "210.94", "USD"], "body" => null, "message" => "A transaction was authorized.", "author" => "Shopify", "description" => "A transaction was authorized.", "path" => "/admin/orders/450789469"], ["id" => 164748010, "subject_id" => 450789469, "created_at" => "2008-01-10T06:00:00-05:00", "subject_type" => "Order", "verb" => "confirmed", "arguments" => ["#1001", "Bob Norman"], "body" => null, "message" => "Received new order <a href=\"https://jsmith.myshopify.com/admin/orders/450789469\">#1001</a> by Bob Norman.", "author" => "Shopify", "description" => "Received new order #1001 by Bob Norman.", "path" => "/admin/orders/450789469"], ["id" => 852065041, "subject_id" => 450789469, "created_at" => "2008-01-10T09:00:00-05:00", "subject_type" => "Order", "verb" => "placed", "arguments" => [], "body" => null, "message" => "This order was created for Bob Norman from draft order <a href=\"https://jsmith.myshopify.com/admin/draft_orders/72885271\">#D4</a>.", "author" => "Shopify", "description" => "This order was created for Bob Norman from draft order #D4.", "path" => "/admin/orders/450789469"]]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/products/921728736/events.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/orders/450789469/events.json",
                 "GET",
                 null,
                 [
@@ -160,7 +164,7 @@ final class Event202204Test extends BaseTestCase
 
         Event::all(
             $this->test_session,
-            ["product_id" => "921728736"],
+            ["order_id" => "450789469"],
             [],
         );
     }
@@ -171,34 +175,6 @@ final class Event202204Test extends BaseTestCase
      * @return void
      */
     public function test_6(): void
-    {
-        $this->mockTransportRequests([
-            new MockRequest(
-                $this->buildMockHttpResponse(200, json_encode(
-                  ["events" => [["id" => 365755215, "subject_id" => 632910392, "created_at" => "2008-01-10T07:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Nano - 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/632910392\">IPod Nano - 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Nano - 8GB.", "path" => "/admin/products/632910392"], ["id" => 677313116, "subject_id" => 921728736, "created_at" => "2008-01-10T08:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Touch 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/921728736\">IPod Touch 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Touch 8GB.", "path" => "/admin/products/921728736"]]]
-                )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/events.json?since_id=164748010",
-                "GET",
-                null,
-                [
-                    "X-Shopify-Access-Token: this_is_a_test_token",
-                ],
-            ),
-        ]);
-
-        Event::all(
-            $this->test_session,
-            [],
-            ["since_id" => "164748010"],
-        );
-    }
-
-    /**
-
-     *
-     * @return void
-     */
-    public function test_7(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
@@ -226,14 +202,42 @@ final class Event202204Test extends BaseTestCase
      *
      * @return void
      */
+    public function test_7(): void
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["events" => [["id" => 677313116, "subject_id" => 921728736, "created_at" => "2008-01-10T08:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Touch 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/921728736\">IPod Touch 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Touch 8GB.", "path" => "/admin/products/921728736"]]]
+                )),
+                "https://test-shop.myshopify.io/admin/api/2022-04/products/921728736/events.json",
+                "GET",
+                null,
+                [
+                    "X-Shopify-Access-Token: this_is_a_test_token",
+                ],
+            ),
+        ]);
+
+        Event::all(
+            $this->test_session,
+            ["product_id" => "921728736"],
+            [],
+        );
+    }
+
+    /**
+
+     *
+     * @return void
+     */
     public function test_8(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["events" => []]
+                  ["events" => [["id" => 677313116, "subject_id" => 921728736, "created_at" => "2008-01-10T08:00:00-05:00", "subject_type" => "Product", "verb" => "create", "arguments" => ["IPod Touch 8GB"], "body" => null, "message" => "Product was created: <a href=\"https://jsmith.myshopify.com/admin/products/921728736\">IPod Touch 8GB</a>.", "author" => "Shopify", "description" => "Product was created: IPod Touch 8GB.", "path" => "/admin/products/921728736"]]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/events.json?filter=Product&verb=destroy",
+                "https://test-shop.myshopify.io/admin/api/2022-04/events.json?created_at_min=2008-01-10+12%3A30%3A00%2B00%3A00",
                 "GET",
                 null,
                 [
@@ -245,7 +249,7 @@ final class Event202204Test extends BaseTestCase
         Event::all(
             $this->test_session,
             [],
-            ["filter" => "Product", "verb" => "destroy"],
+            ["created_at_min" => "2008-01-10 12:30:00+00:00"],
         );
     }
 
@@ -288,34 +292,6 @@ final class Event202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["count" => 1]
-                )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/events/count.json?created_at_min=2008-01-10T13%3A00%3A00%2B00%3A00",
-                "GET",
-                null,
-                [
-                    "X-Shopify-Access-Token: this_is_a_test_token",
-                ],
-            ),
-        ]);
-
-        Event::count(
-            $this->test_session,
-            [],
-            ["created_at_min" => "2008-01-10T13:00:00+00:00"],
-        );
-    }
-
-    /**
-
-     *
-     * @return void
-     */
-    public function test_11(): void
-    {
-        $this->mockTransportRequests([
-            new MockRequest(
-                $this->buildMockHttpResponse(200, json_encode(
                   ["count" => 3]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/events/count.json",
@@ -331,6 +307,34 @@ final class Event202204Test extends BaseTestCase
             $this->test_session,
             [],
             [],
+        );
+    }
+
+    /**
+
+     *
+     * @return void
+     */
+    public function test_11(): void
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["count" => 1]
+                )),
+                "https://test-shop.myshopify.io/admin/api/2022-04/events/count.json?created_at_min=2008-01-10T13%3A00%3A00%2B00%3A00",
+                "GET",
+                null,
+                [
+                    "X-Shopify-Access-Token: this_is_a_test_token",
+                ],
+            ),
+        ]);
+
+        Event::count(
+            $this->test_session,
+            [],
+            ["created_at_min" => "2008-01-10T13:00:00+00:00"],
         );
     }
 

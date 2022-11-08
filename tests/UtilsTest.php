@@ -27,16 +27,16 @@ final class UtilsTest extends BaseTestCase
 
     public function testSanitizeShopDomainOnBadShopDomains()
     {
-        $this->assertEquals(null, Utils::sanitizeShopDomain('myshop.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('myshopify.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('shopify.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('my shop'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('store.myshopify.com.evil.com'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('/foo/bar'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('/foo.myshopify.io.evil.ru'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('%0a123.myshopify.io'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('foo.bar.myshopify.io'));
-        $this->assertEquals(null, Utils::sanitizeShopDomain('https://my-shop.myshopify.com', 'myshopify.io'));
+        $this->assertNull(Utils::sanitizeShopDomain('myshop.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('myshopify.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('shopify.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('my shop'));
+        $this->assertNull(Utils::sanitizeShopDomain('store.myshopify.com.evil.com'));
+        $this->assertNull(Utils::sanitizeShopDomain('/foo/bar'));
+        $this->assertNull(Utils::sanitizeShopDomain('/foo.myshopify.io.evil.ru'));
+        $this->assertNull(Utils::sanitizeShopDomain('%0a123.myshopify.io'));
+        $this->assertNull(Utils::sanitizeShopDomain('foo.bar.myshopify.io'));
+        $this->assertNull(Utils::sanitizeShopDomain('https://my-shop.myshopify.com', 'myshopify.io'));
     }
 
     public function testSanitizeShopDomainOnCustomShopDomains()
@@ -56,6 +56,35 @@ final class UtilsTest extends BaseTestCase
             'myshopify.io'
         ));
         $this->assertEquals('my-shop.myshopify.io', Utils::sanitizeShopDomain(' MY-SHOP ', 'myshopify.io'));
+    }
+
+    /**
+     * @dataProvider sanitizeShopWithCustomDomainsProvider
+     */
+    public function testSanitizeShopWithCustomDomains($domains, $test, $expected)
+    {
+        Context::$CUSTOM_SHOP_DOMAINS = $domains;
+
+        $this->assertEquals($expected, Utils::sanitizeShopDomain($test));
+    }
+
+    public function sanitizeShopWithCustomDomainsProvider()
+    {
+        return [
+            [
+                ['*.special-domain-1.io', '.special-domain-2.io'],
+                'my-shop.special-domain-1.io',
+                'my-shop.special-domain-1.io'
+            ],
+            [
+                ['*.special-domain-1.io', '.special-domain-2.io'],
+                'my-shop.special-domain-2.io',
+                'my-shop.special-domain-2.io'
+            ],
+            [['.special-domain-1.io'], 'my-shop.special-domain-1.io', 'my-shop.special-domain-1.io'],
+            [['special-domain-1.io'], 'my-shop.special-domain-1.io', 'my-shop.special-domain-1.io'],
+            [['*.special-domain-1.io', '.special-domain-2.io'], 'my-shop.special-domain-3.io', null],
+        ];
     }
 
     public function testValidHmac()
@@ -234,9 +263,36 @@ final class UtilsTest extends BaseTestCase
             'jti' => '4321',
             'sid' => 'abc123'
         ];
-        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY);
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
         $actualPayload = Utils::decodeSessionToken($jwt);
         $this->assertEquals($payload, $actualPayload);
+    }
+
+    public function testDecodeExpiredSessionTokenFails()
+    {
+        $payload = [
+            'iss' => 'test-shop.myshopify.io/admin',
+            'dest' => 'test-shop.myshopify.io',
+            'aud' => Context::$API_KEY,
+            'sub' => '1',
+            'exp' => strtotime('-7 seconds'),
+            'nbf' => 1234,
+            'iat' => 1234,
+            'jti' => '4321',
+            'sid' => 'abc123'
+        ];
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
+
+        // Within leeway period - should still work
+        $actualPayload = Utils::decodeSessionToken($jwt);
+        $this->assertEquals($payload, $actualPayload);
+
+        $payload['exp'] = strtotime('-1 minute');
+        $jwt = JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
+
+        // Outside of leeway period - should throw an exception
+        $this->expectException(\Firebase\JWT\ExpiredException::class);
+        Utils::decodeSessionToken($jwt);
     }
 
     public function testGraphqlProxyFailsWithNoSession()
@@ -364,6 +420,26 @@ final class UtilsTest extends BaseTestCase
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->testGraphqlResponse));
     }
 
+    public function testGetEmbeddedAppUrlThrowsOnEmptyHost()
+    {
+        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
+        Utils::getEmbeddedAppUrl("");
+    }
+
+    public function testGetEmbeddedAppUrlThrowsOnInvalidHost()
+    {
+        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
+        Utils::getEmbeddedAppUrl("!@#$%^&*()");
+    }
+
+    public function testGetEmbeddedAppUrlReturnsTheCorrectURL()
+    {
+        Context::$API_KEY = "my-app-key";
+        $url = "my-app-url.io/path";
+
+        $this->assertEquals("https://$url/apps/my-app-key", Utils::getEmbeddedAppUrl(base64_encode($url)));
+    }
+
     private function encodeJwtPayload(): string
     {
         $payload = [
@@ -377,7 +453,7 @@ final class UtilsTest extends BaseTestCase
             "jti" => "f8912129-1af6-4cad-9ca3-76b0f7621087",
             "sid" => "aaea182f2732d44c23057c0fea584021a4485b2bd25d3eb7fd349313ad24c685"
         ];
-        return JWT::encode($payload, Context::$API_SECRET_KEY);
+        return JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
     }
 
     /** @var string */
@@ -391,10 +467,10 @@ final class UtilsTest extends BaseTestCase
 
     /** @var array */
     private $testGraphqlResponse = [
-      "data" => [
-        "shop" => [
-          "name" => "Shoppity Shop",
+        "data" => [
+            "shop" => [
+                "name" => "Shoppity Shop",
+            ],
         ],
-      ],
     ];
 }

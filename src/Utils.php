@@ -12,6 +12,7 @@ use Shopify\Clients\HttpResponse;
 use Shopify\Exception\InvalidArgumentException;
 use Shopify\Exception\SessionNotFoundException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 /**
  * Class to store all util functions
@@ -32,7 +33,20 @@ final class Utils
     {
         $name = trim(strtolower($shop));
 
-        $allowedDomainsRegexp = $myshopifyDomain ? "($myshopifyDomain)" : "(myshopify.com|myshopify.io)";
+        if ($myshopifyDomain) {
+            $allowedDomains = [preg_replace("/^\*?\.?(.*)/", "$1", $myshopifyDomain)];
+        } else {
+            $allowedDomains = ["myshopify.com", "myshopify.io"];
+        }
+
+        if (Context::$CUSTOM_SHOP_DOMAINS) {
+            $allowedDomains = array_merge(
+                $allowedDomains,
+                preg_replace("/^\*?\.?(.*)/", "$1", Context::$CUSTOM_SHOP_DOMAINS)
+            );
+        }
+
+        $allowedDomainsRegexp = "(" . implode("|", $allowedDomains) . ")";
 
         if (!preg_match($allowedDomainsRegexp, $name) && (strpos($name, ".") === false)) {
             $name .= '.' . ($myshopifyDomain ?? 'myshopify.com');
@@ -182,7 +196,8 @@ final class Utils
      */
     public static function decodeSessionToken(string $jwt): array
     {
-        $payload = JWT::decode($jwt, Context::$API_SECRET_KEY, array('HS256'));
+        JWT::$leeway = 10;
+        $payload = JWT::decode($jwt, new Key(Context::$API_SECRET_KEY, 'HS256'));
         return (array) $payload;
     }
 
@@ -210,5 +225,27 @@ final class Utils
         $client = new Graphql($session->getShop(), $session->getAccessToken());
 
         return $client->proxy($rawBody);
+    }
+
+    /**
+     * Returns the appropriate URL for the host that should load the embedded app.
+     *
+     * @param string $host The host value received from Shopify
+     *
+     * @return string
+     */
+    public static function getEmbeddedAppUrl(string $host): string
+    {
+        if (empty($host)) {
+            throw new InvalidArgumentException("Host value cannot be empty");
+        }
+
+        $decodedHost = base64_decode($host, true);
+        if (!$decodedHost) {
+            throw new InvalidArgumentException("Host was not a valid base64 string");
+        }
+
+        $apiKey = Context::$API_KEY;
+        return "https://$decodedHost/apps/$apiKey";
     }
 }

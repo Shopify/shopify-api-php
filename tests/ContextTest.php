@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ShopifyTest;
 
 use Psr\Log\LogLevel;
-use Psr\Log\Test\TestLogger;
 use ReflectionClass;
+use Shopify\ApiVersion;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
 use ShopifyTest\Auth\MockSessionStorage;
@@ -21,6 +21,7 @@ final class ContextTest extends BaseTestCase
         $this->assertEquals('steffi', Context::$API_SECRET_KEY);
         $this->assertEquals(new Scopes(['sleepy', 'kitty']), Context::$SCOPES);
         $this->assertEquals('my-friends-cats', Context::$HOST_NAME);
+        $this->assertEquals('https', Context::$HOST_SCHEME);
 
         // This should not trigger the exception
         Context::throwIfUninitialized();
@@ -81,7 +82,7 @@ final class ContextTest extends BaseTestCase
 
     public function testCanAddOverrideLogger()
     {
-        $testLogger = new TestLogger();
+        $testLogger = new LogMock();
 
         Context::log('Logging something!', LogLevel::DEBUG);
         $this->assertEmpty($testLogger->records);
@@ -114,5 +115,55 @@ final class ContextTest extends BaseTestCase
 
         Context::log('Emerg log', LogLevel::EMERGENCY);
         $this->assertTrue($testLogger->hasEmergency('Emerg log'));
+    }
+
+    /**
+     * @dataProvider canSetHostSchemeProvider
+     */
+    public function testCanSetHostScheme($host, $expectedScheme, $expectedHost)
+    {
+        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], $host, new MockSessionStorage());
+
+        $this->assertEquals($expectedHost, Context::$HOST_NAME);
+        $this->assertEquals($expectedScheme, Context::$HOST_SCHEME);
+    }
+
+    public function canSetHostSchemeProvider()
+    {
+        return [
+            ['my-friends-cats.io', 'https', 'my-friends-cats.io'],
+            ['https://my-friends-cats.io', 'https', 'my-friends-cats.io'],
+            ['http://my-friends-cats.io', 'http', 'my-friends-cats.io'],
+            ['http://localhost', 'http', 'localhost'],
+            ['http://localhost:1234', 'http', 'localhost:1234'],
+        ];
+    }
+
+    public function testFailsOnInvalidHost()
+    {
+        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
+        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], 'not-a-host-!@#$%^&*()', new MockSessionStorage());
+    }
+
+    public function testCanSetCustomShopDomains()
+    {
+        $domains = ['*.special-domain-1.io', '*.special-domain-2.io'];
+
+        Context::initialize(
+            'ash',
+            'steffi',
+            ['sleepy', 'kitty'],
+            'my-friends-cats',
+            new MockSessionStorage(),
+            ApiVersion::LATEST,
+            true,
+            false,
+            null,
+            '',
+            null,
+            $domains
+        );
+
+        $this->assertEquals($domains, Context::$CUSTOM_SHOP_DOMAINS);
     }
 }

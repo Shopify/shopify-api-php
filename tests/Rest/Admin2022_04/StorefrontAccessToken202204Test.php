@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -35,7 +39,7 @@ final class StorefrontAccessToken202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["storefront_access_token" => ["access_token" => "acb63aef87d74a49eb3f4b994a5e342b", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2022-04-05T12:56:06-04:00", "id" => 1003303990, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/1003303990", "title" => "Test"]]
+                  ["storefront_access_token" => ["access_token" => "45ca0032e77093b648d94244e45fab27", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2022-10-03T13:03:45-04:00", "id" => 1003303990, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/1003303990", "title" => "Test"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/storefront_access_tokens.json",
                 "POST",
@@ -62,7 +66,7 @@ final class StorefrontAccessToken202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["storefront_access_tokens" => [["access_token" => "378d95641257a4ab3feff967ee234f4d", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2022-04-05T12:51:55-04:00", "id" => 755357713, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/755357713", "title" => "API Client Extension"]]]
+                  ["storefront_access_tokens" => [["access_token" => "378d95641257a4ab3feff967ee234f4d", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2022-10-03T12:44:45-04:00", "id" => 755357713, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/755357713", "title" => "API Client Extension"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/storefront_access_tokens.json",
                 "GET",

@@ -1,5 +1,9 @@
 <?php
 
+/***********************************************************************************************************************
+* This file is auto-generated. If you have an issue, please create a GitHub issue.                                     *
+***********************************************************************************************************************/
+
 declare(strict_types=1);
 
 namespace ShopifyTest\Rest;
@@ -35,7 +39,7 @@ final class Balance202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["balance" => [["currency" => "USD", "amount" => "53.99"]]]
+                  ["balance" => [["amount" => "53.99", "currency" => "USD"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/shopify_payments/balance.json",
                 "GET",

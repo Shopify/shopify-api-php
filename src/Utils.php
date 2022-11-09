@@ -182,6 +182,7 @@ final class Utils
      * @param array  $rawHeaders The headers from the HTTP request
      * @param array  $cookies    The cookies from the HTTP request
      * @param string $rawBody    The raw HTTP request payload
+     * @param string $isOnline   The type of auth access token  
      *
      * @return HttpResponse
      * @throws \Psr\Http\Client\ClientExceptionInterface
@@ -190,9 +191,9 @@ final class Utils
      * @throws \Shopify\Exception\SessionNotFoundException
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody): HttpResponse
+    public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody, bool $isOnline=true): HttpResponse
     {
-        $session = self::loadCurrentSession($rawHeaders, $cookies, true);
+        $session = self::loadCurrentSession($rawHeaders, $cookies, $isOnline);
         if (!$session) {
             throw new SessionNotFoundException("Could not find session for GraphQL proxy");
         }

@@ -116,10 +116,7 @@ final class Utils
 
         $computedHmac = hash_hmac('sha256', $queryString, $secret);
 
-        return hash_equals(
-            $params['hmac'],
-            $computedHmac
-        );
+        return hash_equals($params['hmac'], $computedHmac);
     }
 
     /**

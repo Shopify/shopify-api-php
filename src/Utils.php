@@ -70,10 +70,7 @@ final class Utils
      */
     public static function validateHmac(array $params, string $secret): bool
     {
-        if (
-            empty($params['hmac'])
-            || empty($secret)
-        ) {
+        if (empty($params['hmac']) || empty($secret)) {
             return false;
         }
 

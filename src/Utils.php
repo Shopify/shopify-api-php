@@ -70,12 +70,56 @@ final class Utils
      */
     public static function validateHmac(array $params, string $secret): bool
     {
-        $hmac = $params['hmac'] ?? '';
-        unset($params['hmac']);
+        if (
+            empty($params['hmac'])
+            || empty($secret)
+        ) {
+            return false;
+        }
 
-        $computedHmac = hash_hmac('sha256', http_build_query($params), $secret);
+        // Build query string
+        $queryParameterCount = 0;
+        $queryString = '';
+        foreach ($params as $key => $value) {
+            if ($key !== 'hmac') {
+                if ($queryParameterCount) {
+                    $queryString .= '&';
+                }
+                if (is_array($value)) {
+                    $valuesCount = 0;
+                    $values = '';
+                    foreach ($value as $v) {
+                        if ($valuesCount) {
+                            $values .= ', ';
+                        }
+                        $values .= sprintf(
+                            '"%s"',
+                            $v
+                        );
+                        $valuesCount++;
+                    }
+                    $queryString .= sprintf(
+                        '%s=[%s]',
+                        urlencode($key),
+                        $values
+                    );
+                } else {
+                    $queryString .= sprintf(
+                        '%s=%s',
+                        urlencode($key),
+                        urlencode($value)
+                    );
+                }
+                $queryParameterCount++;
+            }
+        }
 
-        return hash_equals($hmac, $computedHmac);
+        $computedHmac = hash_hmac('sha256', $queryString, $secret);
+
+        return hash_equals(
+            $params['hmac'],
+            $computedHmac
+        );
     }
 
     /**

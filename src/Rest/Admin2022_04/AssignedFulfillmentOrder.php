@@ -31,6 +31,16 @@ class AssignedFulfillmentOrder extends Base
     ];
 
     /**
+
+     *
+     * @return string
+     */
+    protected static function getJsonResponseBodyName(): string
+    {
+        return "fulfillment_order";
+    }
+
+    /**
      * @param Session $session
      * @param array $urlIds
      * @param mixed[] $params Allowed indexes:

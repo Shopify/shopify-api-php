@@ -34,3 +34,6 @@ jobs:
 
       - name: Run REST resource tests
         run: composer test_rest_resources
+
+      - name: Check dependencies are listed
+        run: vendor/bin/composer-require-checker

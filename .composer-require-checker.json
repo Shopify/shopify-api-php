@@ -1,9 +1,0 @@
-{
-  "symbol-whitelist": [
-    "GuzzleHttp\\Psr7\\Request",
-    "GuzzleHttp\\Psr7\\Response",
-    "GuzzleHttp\\Psr7\\Uri",
-    "GuzzleHttp\\Psr7\\Utils",
-    "Psr\\Http\\Message\\ResponseInterface"
-  ]
-}

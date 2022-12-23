@@ -36,4 +36,4 @@ jobs:
         run: composer test_rest_resources
 
       - name: Check dependencies are listed
-        run: vendor/bin/composer-require-checker --config-file=.composer-require-checker.json
+        run: vendor/bin/composer-require-checker

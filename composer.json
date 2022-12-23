@@ -32,6 +32,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0 || ^8.1",
+        "ext-ctype": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ramsey/uuid": "^4.1",

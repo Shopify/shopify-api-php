@@ -34,6 +34,7 @@
         "php": "^7.4 || ^8.0 || ^8.1",
         "ext-ctype": "*",
         "ext-hash": "*",
+        "ext-json": "*",
         "ext-mbstring": "*",
         "ramsey/uuid": "^4.1",
         "psr/log": "^1.1 || ^2.0 || ^3.0",

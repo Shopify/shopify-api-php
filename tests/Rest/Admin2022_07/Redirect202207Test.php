@@ -266,7 +266,7 @@ final class Redirect202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["redirect" => ["id" => 984542199, "path" => "/ipod", "target" => "/pages/itunes"]]
+                  ["redirect" => ["id" => 984542200, "path" => "/ipod", "target" => "/pages/itunes"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/redirects.json",
                 "POST",
@@ -294,7 +294,7 @@ final class Redirect202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["redirect" => ["id" => 984542200, "path" => "/forums", "target" => "http://forums.apple.com/"]]
+                  ["redirect" => ["id" => 984542199, "path" => "/forums", "target" => "http://forums.apple.com/"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/redirects.json",
                 "POST",

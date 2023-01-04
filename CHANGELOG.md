@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#235](https://github.com/Shopify/shopify-api-php/pull/235) Fixed an error when parsing the JSON response body for the `AssignedFulfillmentOrder` resource
+
 ## v4.1.1 - 2022-11-07
 
 - [#186](https://github.com/Shopify/shopify-api-php/pull/186) Update the `php-jwt` package

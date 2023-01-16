@@ -162,7 +162,7 @@ class FulfillmentOrder extends Base
 
     /**
      * @param mixed[] $params Allowed indexes:
-     *     new_location_id
+     *     fulfillment_order
      * @param array|string $body
      *
      * @return array|null

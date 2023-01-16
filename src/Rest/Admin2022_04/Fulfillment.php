@@ -201,7 +201,9 @@ class Fulfillment extends Base
     }
 
     /**
-     * @param mixed[] $params
+     * @param mixed[] $params Allowed indexes:
+     *     notify_customer,
+     *     tracking_info
      * @param array|string $body
      *
      * @return array|null

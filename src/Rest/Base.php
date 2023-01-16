@@ -134,6 +134,12 @@ abstract class Base
         return strtolower(preg_replace("/([a-z])([A-Z])/", "$1_$2", $className));
     }
 
+    protected static function getJsonResponseBodyName(): string
+    {
+        $className = preg_replace("/^([A-z_0-9]+\\\)*([A-z_]+)/", "$2", static::class);
+        return strtolower(preg_replace("/([a-z])([A-Z])/", "$1_$2", $className));
+    }
+
     /**
      * @param string[]|int[] $ids
      *
@@ -258,7 +264,7 @@ abstract class Base
         $objects = [];
 
         $body = $response->getDecodedBody();
-        $className = static::getJsonBodyName();
+        $className = static::getJsonResponseBodyName();
         $pluralClass = self::pluralize($className);
 
         if (!empty($body)) {

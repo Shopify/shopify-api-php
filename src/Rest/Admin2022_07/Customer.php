@@ -140,7 +140,11 @@ class Customer extends Base
     /**
      * @param Session $session
      * @param array $urlIds
-     * @param mixed[] $params
+     * @param mixed[] $params Allowed indexes:
+     *     created_at_min,
+     *     created_at_max,
+     *     updated_at_min,
+     *     updated_at_max
      *
      * @return array|null
      */

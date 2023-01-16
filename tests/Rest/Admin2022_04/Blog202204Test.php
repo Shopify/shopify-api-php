@@ -39,7 +39,7 @@ final class Blog202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["blogs" => [["id" => 382285388, "handle" => "banana-blog", "title" => "A Gnu Blog", "updated_at" => "2006-02-02T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T12:44:45-04:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/382285388"], ["id" => 241253187, "handle" => "apple-blog", "title" => "Mah Blog", "updated_at" => "2006-02-01T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T12:44:45-04:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]]
+                  ["blogs" => [["id" => 382285388, "handle" => "banana-blog", "title" => "A Gnu Blog", "updated_at" => "2006-02-02T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:21:36-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/382285388"], ["id" => 241253187, "handle" => "apple-blog", "title" => "Mah Blog", "updated_at" => "2006-02-01T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:21:36-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs.json",
                 "GET",
@@ -67,7 +67,7 @@ final class Blog202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["blogs" => [["id" => 382285388, "handle" => "banana-blog", "title" => "A Gnu Blog", "updated_at" => "2006-02-02T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T12:44:45-04:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/382285388"], ["id" => 1008414252, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2022-10-03T13:06:38-04:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T13:06:38-04:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414252"]]]
+                  ["blogs" => [["id" => 382285388, "handle" => "banana-blog", "title" => "A Gnu Blog", "updated_at" => "2006-02-02T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:21:36-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/382285388"], ["id" => 1008414253, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2023-01-03T12:46:27-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:46:27-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414253"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs.json?since_id=241253187",
                 "GET",
@@ -95,7 +95,7 @@ final class Blog202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["blog" => ["id" => 1008414248, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2022-10-03T13:06:19-04:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T13:06:19-04:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414248"]]
+                  ["blog" => ["id" => 1008414251, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2023-01-03T12:46:18-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:46:18-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414251"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs.json",
                 "POST",
@@ -122,7 +122,7 @@ final class Blog202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["blog" => ["id" => 1008414250, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2022-10-03T13:06:31-04:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T13:06:31-04:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414250"]]
+                  ["blog" => ["id" => 1008414254, "handle" => "apple-main-blog", "title" => "Apple main blog", "updated_at" => "2023-01-03T12:46:35-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:46:34-05:00", "template_suffix" => null, "tags" => "", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/1008414254"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs.json",
                 "POST",
@@ -185,6 +185,35 @@ final class Blog202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
+                  ["blog" => ["id" => 241253187, "handle" => "apple-blog", "title" => "Mah Blog", "updated_at" => "2006-02-01T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:21:36-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                )),
+                "https://test-shop.myshopify.io/admin/api/2022-04/blogs/241253187.json",
+                "GET",
+                null,
+                [
+                    "X-Shopify-Access-Token: this_is_a_test_token",
+                ],
+            ),
+        ]);
+
+        Blog::find(
+            $this->test_session,
+            241253187,
+            [],
+            [],
+        );
+    }
+
+    /**
+
+     *
+     * @return void
+     */
+    public function test_7(): void
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, json_encode(
                   ["blog" => ["id" => 241253187, "title" => "Mah Blog"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs/241253187.json?fields=id%2Ctitle",
@@ -209,28 +238,34 @@ final class Blog202204Test extends BaseTestCase
      *
      * @return void
      */
-    public function test_7(): void
+    public function test_8(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["blog" => ["id" => 241253187, "handle" => "apple-blog", "title" => "Mah Blog", "updated_at" => "2006-02-01T19:00:00-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T12:44:45-04:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                  ["blog" => ["title" => "Mah Blog", "handle" => "apple-blog", "id" => 241253187, "updated_at" => "2023-01-03T12:45:58-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:21:36-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs/241253187.json",
-                "GET",
+                "PUT",
                 null,
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
+                json_encode(["blog" => ["metafields" => [["key" => "sponsor", "value" => "Shopify", "type" => "single_line_text_field", "namespace" => "global"]]]]),
             ),
         ]);
 
-        Blog::find(
-            $this->test_session,
-            241253187,
-            [],
-            [],
-        );
+        $blog = new Blog($this->test_session);
+        $blog->id = 241253187;
+        $blog->metafields = [
+            [
+                "key" => "sponsor",
+                "value" => "Shopify",
+                "type" => "single_line_text_field",
+                "namespace" => "global"
+            ]
+        ];
+        $blog->save();
     }
 
     /**
@@ -238,12 +273,12 @@ final class Blog202204Test extends BaseTestCase
      *
      * @return void
      */
-    public function test_8(): void
+    public function test_9(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["blog" => ["title" => "IPod Updates", "handle" => "apple-blog", "id" => 241253187, "updated_at" => "2022-10-03T13:06:22-04:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T12:44:45-04:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                  ["blog" => ["title" => "IPod Updates", "handle" => "apple-blog", "id" => 241253187, "updated_at" => "2023-01-03T12:46:23-05:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:21:36-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs/241253187.json",
                 "PUT",
@@ -266,12 +301,12 @@ final class Blog202204Test extends BaseTestCase
      *
      * @return void
      */
-    public function test_9(): void
+    public function test_10(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["blog" => ["title" => "IPod Updates", "handle" => "ipod-updates", "commentable" => "moderate", "id" => 241253187, "updated_at" => "2022-10-03T13:06:29-04:00", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T12:44:45-04:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
+                  ["blog" => ["title" => "IPod Updates", "handle" => "ipod-updates", "commentable" => "moderate", "id" => 241253187, "updated_at" => "2023-01-03T12:46:11-05:00", "feedburner" => null, "feedburner_location" => null, "created_at" => "2023-01-03T12:21:36-05:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/blogs/241253187.json",
                 "PUT",
@@ -288,41 +323,6 @@ final class Blog202204Test extends BaseTestCase
         $blog->title = "IPod Updates";
         $blog->handle = "ipod-updates";
         $blog->commentable = "moderate";
-        $blog->save();
-    }
-
-    /**
-
-     *
-     * @return void
-     */
-    public function test_10(): void
-    {
-        $this->mockTransportRequests([
-            new MockRequest(
-                $this->buildMockHttpResponse(200, json_encode(
-                  ["blog" => ["title" => "Mah Blog", "handle" => "apple-blog", "id" => 241253187, "updated_at" => "2022-10-03T13:06:34-04:00", "commentable" => "no", "feedburner" => null, "feedburner_location" => null, "created_at" => "2022-10-03T12:44:45-04:00", "template_suffix" => null, "tags" => "Announcing, Mystery", "admin_graphql_api_id" => "gid://shopify/OnlineStoreBlog/241253187"]]
-                )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/blogs/241253187.json",
-                "PUT",
-                null,
-                [
-                    "X-Shopify-Access-Token: this_is_a_test_token",
-                ],
-                json_encode(["blog" => ["metafields" => [["key" => "sponsor", "value" => "Shopify", "type" => "single_line_text_field", "namespace" => "global"]]]]),
-            ),
-        ]);
-
-        $blog = new Blog($this->test_session);
-        $blog->id = 241253187;
-        $blog->metafields = [
-            [
-                "key" => "sponsor",
-                "value" => "Shopify",
-                "type" => "single_line_text_field",
-                "namespace" => "global"
-            ]
-        ];
         $blog->save();
     }
 

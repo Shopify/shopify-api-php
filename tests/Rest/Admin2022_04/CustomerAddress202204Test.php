@@ -153,23 +153,24 @@ final class CustomerAddress202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  []
+                  ["customer_address" => ["customer_id" => 207119551, "address1" => "Apartment 23", "address2" => "Chestnut Street 92", "country" => "United States", "province" => "Kentucky", "zip" => "40202", "city" => "Louisville", "first_name" => null, "last_name" => null, "company" => null, "phone" => "555-625-1199", "id" => 207119551, "name" => "", "province_code" => "KY", "country_code" => "US", "country_name" => "United States", "default" => true]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses/1053317293.json",
-                "DELETE",
+                "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses/207119551.json",
+                "PUT",
                 null,
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
+                json_encode(["address" => ["address1" => "Apartment 23", "address2" => "Chestnut Street 92"]]),
             ),
         ]);
 
-        CustomerAddress::delete(
-            $this->test_session,
-            1053317293,
-            ["customer_id" => "207119551"],
-            [],
-        );
+        $customer_address = new CustomerAddress($this->test_session);
+        $customer_address->customer_id = 207119551;
+        $customer_address->id = 207119551;
+        $customer_address->address1 = "Apartment 23";
+        $customer_address->address2 = "Chestnut Street 92";
+        $customer_address->save();
     }
 
     /**
@@ -182,7 +183,36 @@ final class CustomerAddress202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["customer_address" => ["id" => 1053317291, "customer_id" => 207119551, "first_name" => "Samuel", "last_name" => "de Champlain", "company" => "Fancy Co.", "address1" => "1 Rue des Carrieres", "address2" => "Suite 1234", "city" => "Montreal", "province" => "Quebec", "country" => "Canada", "zip" => "G1R 4P5", "phone" => "819-555-5555", "name" => "Samuel de Champlain", "province_code" => "QC", "country_code" => "CA", "country_name" => "Canada", "default" => false]]
+                  []
+                )),
+                "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses/1053317306.json",
+                "DELETE",
+                null,
+                [
+                    "X-Shopify-Access-Token: this_is_a_test_token",
+                ],
+            ),
+        ]);
+
+        CustomerAddress::delete(
+            $this->test_session,
+            1053317306,
+            ["customer_id" => "207119551"],
+            [],
+        );
+    }
+
+    /**
+
+     *
+     * @return void
+     */
+    public function test_7(): void
+    {
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, json_encode(
+                  ["customer_address" => ["id" => 1053317303, "customer_id" => 207119551, "first_name" => "Samuel", "last_name" => "de Champlain", "company" => "Fancy Co.", "address1" => "1 Rue des Carrieres", "address2" => "Suite 1234", "city" => "Montreal", "province" => "Quebec", "country" => "Canada", "zip" => "G1R 4P5", "phone" => "819-555-5555", "name" => "Samuel de Champlain", "province_code" => "QC", "country_code" => "CA", "country_name" => "Canada", "default" => false]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses.json",
                 "POST",
@@ -218,14 +248,14 @@ final class CustomerAddress202204Test extends BaseTestCase
      *
      * @return void
      */
-    public function test_7(): void
+    public function test_8(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
                   []
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses/set.json?address_ids%5B%5D=1053317292&operation=destroy",
+                "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses/set.json?address_ids%5B%5D=1053317305&operation=destroy",
                 "PUT",
                 null,
                 [
@@ -237,7 +267,7 @@ final class CustomerAddress202204Test extends BaseTestCase
         $customer_address = new CustomerAddress($this->test_session);
         $customer_address->customer_id = 207119551;
         $customer_address->set(
-            ["address_ids" => ["1053317292"], "operation" => "destroy"],
+            ["address_ids" => ["1053317305"], "operation" => "destroy"],
         );
     }
 
@@ -246,14 +276,14 @@ final class CustomerAddress202204Test extends BaseTestCase
      *
      * @return void
      */
-    public function test_8(): void
+    public function test_9(): void
     {
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["customer_address" => ["id" => 1053317290, "customer_id" => 207119551, "first_name" => "Bob", "last_name" => "Norman", "company" => null, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "province" => "Kentucky", "country" => "United States", "zip" => "40202", "phone" => "555-625-1199", "name" => "Bob Norman", "province_code" => "KY", "country_code" => "US", "country_name" => "United States", "default" => true]]
+                  ["customer_address" => ["id" => 1053317304, "customer_id" => 207119551, "first_name" => "Bob", "last_name" => "Norman", "company" => null, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "province" => "Kentucky", "country" => "United States", "zip" => "40202", "phone" => "555-625-1199", "name" => "Bob Norman", "province_code" => "KY", "country_code" => "US", "country_name" => "United States", "default" => true]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses/1053317290/default.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/customers/207119551/addresses/1053317304/default.json",
                 "PUT",
                 null,
                 [
@@ -264,7 +294,7 @@ final class CustomerAddress202204Test extends BaseTestCase
 
         $customer_address = new CustomerAddress($this->test_session);
         $customer_address->customer_id = 207119551;
-        $customer_address->id = 1053317290;
+        $customer_address->id = 1053317304;
         $customer_address->default(
             [],
         );

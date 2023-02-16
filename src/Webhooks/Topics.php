@@ -8,7 +8,7 @@ namespace Shopify\Webhooks;
  * Contains a list of known webhook topics.
  *
  * For an up-to-date list of topics, you can visit
- * https://shopify.dev/docs/admin-api/graphql/reference/events/webhooksubscriptiontopic
+ * https://shopify.dev/docs/api/admin-graphql/latest/enums/webhooksubscriptiontopic
  */
 final class Topics
 {

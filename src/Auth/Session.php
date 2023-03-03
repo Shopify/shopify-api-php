@@ -13,6 +13,14 @@ use Shopify\Utils;
  */
 class Session
 {
+    /** @var string */
+    private $id;
+    /** @var string */
+    private $shop;
+    /** @var bool */
+    private $isOnline;
+    /** @var string */
+    private $state;
     /** @var string|null */
     private $scope = null;
     /** @var DateTime|null */

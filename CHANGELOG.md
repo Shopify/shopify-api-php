@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#250](https://github.com/Shopify/shopify-api-php/pull/250) [bugfix] Do not use class dynamic properties
+
 ## v4.3.0 - 2023-04-12
 
 - [#259](https://github.com/Shopify/shopify-api-php/pull/259) Added support for 2023-04 API version, updated auto-generated REST resources

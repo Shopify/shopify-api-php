@@ -8,7 +8,7 @@ use Shopify\Auth\Session;
 use Shopify\Rest\Base;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $attribute
  * @property FakeResource $has_one_attribute
  * @property FakeResource[] $has_many_attribute

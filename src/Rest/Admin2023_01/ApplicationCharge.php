@@ -14,6 +14,7 @@ use Shopify\Rest\Base;
 /**
  * @property string|null $confirmation_url
  * @property string|null $created_at
+ * @property Currency|null $currency
  * @property int|null $id
  * @property string|null $name
  * @property string|float|null $price
@@ -25,7 +26,9 @@ use Shopify\Rest\Base;
 class ApplicationCharge extends Base
 {
     public static string $API_VERSION = "2023-01";
-    protected static array $HAS_ONE = [];
+    protected static array $HAS_ONE = [
+        "currency" => Currency::class
+    ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "application_charges.json"],

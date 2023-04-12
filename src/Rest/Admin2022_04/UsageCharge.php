@@ -13,6 +13,7 @@ use Shopify\Rest\Base;
 
 /**
  * @property string|null $created_at
+ * @property Currency|null $currency
  * @property string|null $description
  * @property int|null $id
  * @property int|null $price
@@ -22,7 +23,9 @@ use Shopify\Rest\Base;
 class UsageCharge extends Base
 {
     public static string $API_VERSION = "2022-04";
-    protected static array $HAS_ONE = [];
+    protected static array $HAS_ONE = [
+        "currency" => Currency::class
+    ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "get", "ids" => ["recurring_application_charge_id"], "path" => "recurring_application_charges/<recurring_application_charge_id>/usage_charges.json"],

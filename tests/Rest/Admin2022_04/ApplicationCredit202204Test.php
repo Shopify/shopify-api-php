@@ -39,7 +39,7 @@ final class ApplicationCredit202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credit" => ["id" => 1031636125, "amount" => "5.00", "description" => "application credit for refund", "test" => null]]
+                  ["application_credit" => ["id" => 1031636125, "amount" => "5.00", "description" => "application credit for refund", "test" => null, "currency" => "USD"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/application_credits.json",
                 "POST",
@@ -67,7 +67,7 @@ final class ApplicationCredit202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credit" => ["id" => 1031636129, "amount" => "5.00", "description" => "application credit for refund", "test" => true]]
+                  ["application_credit" => ["id" => 1031636129, "amount" => "5.00", "description" => "application credit for refund", "test" => true, "currency" => "USD"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/application_credits.json",
                 "POST",
@@ -96,7 +96,7 @@ final class ApplicationCredit202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credits" => [["id" => 140583599, "amount" => "5.00", "description" => "credit for application refund", "test" => null]]]
+                  ["application_credits" => [["id" => 140583599, "amount" => "5.00", "description" => "credit for application refund", "test" => null, "currency" => "USD"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/application_credits.json",
                 "GET",
@@ -124,7 +124,7 @@ final class ApplicationCredit202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credit" => ["id" => 140583599, "amount" => "5.00", "description" => "credit for application refund", "test" => null]]
+                  ["application_credit" => ["id" => 140583599, "amount" => "5.00", "description" => "credit for application refund", "test" => null, "currency" => "USD"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/application_credits/140583599.json",
                 "GET",

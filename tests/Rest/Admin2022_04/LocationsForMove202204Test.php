@@ -39,9 +39,9 @@ final class LocationsForMove202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["locations_for_move" => [["location" => ["id" => 1072404544, "name" => "Alpha Location"], "message" => "Current location.", "movable" => false], ["location" => ["id" => 1072404545, "name" => "Bravo Location"], "message" => "No items are stocked at this location.", "movable" => false]]]
+                  ["locations_for_move" => [["location" => ["id" => 1072404542, "name" => "Alpha Location"], "message" => "Current location.", "movable" => false], ["location" => ["id" => 1072404543, "name" => "Bravo Location"], "message" => "No items are stocked at this location.", "movable" => false]]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000829/locations_for_move.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000823/locations_for_move.json",
                 "GET",
                 null,
                 [
@@ -52,7 +52,7 @@ final class LocationsForMove202204Test extends BaseTestCase
 
         LocationsForMove::all(
             $this->test_session,
-            ["fulfillment_order_id" => "1046000829"],
+            ["fulfillment_order_id" => "1046000823"],
             [],
         );
     }

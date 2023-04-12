@@ -39,7 +39,7 @@ final class Policy202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["policies" => [["body" => "You have 30 days to get a refund", "created_at" => "2023-01-03T12:39:49-05:00", "updated_at" => "2023-01-03T12:39:49-05:00", "handle" => "refund-policy", "title" => "Refund policy", "url" => "https://jsmith.myshopify.com/548380009/policies/878590288"]]]
+                  ["policies" => [["body" => "You have 30 days to get a refund", "created_at" => "2023-04-04T17:40:45-04:00", "updated_at" => "2023-04-04T17:40:45-04:00", "handle" => "refund-policy", "title" => "Refund policy", "url" => "https://jsmith.myshopify.com/548380009/policies/878590288"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/policies.json",
                 "GET",

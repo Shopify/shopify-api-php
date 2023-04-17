@@ -14,7 +14,7 @@ use Shopify\Rest\Base;
 /**
  * @property string $key
  * @property string $namespace
- * @property string|int|float $value
+ * @property string|int|float|bool|string $value
  * @property int|null $article_id
  * @property int|null $blog_id
  * @property int|null $collection_id

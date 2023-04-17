@@ -9,6 +9,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [#236](https://github.com/Shopify/shopify-api-php/pull/236) [bugfix] Correct requirements in `composer.json`
 
+## v4.3.0 - 2023-04-12
+
+- [#259](https://github.com/Shopify/shopify-api-php/pull/259) Added support for 2023-04 API version, updated auto-generated REST resources
+
 ## v4.2.0 - 2023-01-05
 
 - [#235](https://github.com/Shopify/shopify-api-php/pull/235) Fixed an error when parsing the JSON response body for the `AssignedFulfillmentOrder` resource

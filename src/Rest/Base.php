@@ -333,9 +333,11 @@ abstract class Base
                 $instance->setProperty($prop, $attrList);
             } elseif (self::isHasOneAttribute($prop)) {
                 if (!empty($value)) {
+                    $valueArray = is_array($value) ? $value : [$prop => $value];
+
                     $instance->setProperty(
                         $prop,
-                        static::$HAS_ONE[$prop]::createInstance($value, $instance->session)
+                        static::$HAS_ONE[$prop]::createInstance($valueArray, $instance->session)
                     );
                 }
             } else {

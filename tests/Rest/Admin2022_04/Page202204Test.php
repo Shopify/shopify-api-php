@@ -95,7 +95,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["id" => 1025371373, "title" => "Warranty information", "shop_id" => 548380009, "handle" => "warranty-information", "body_html" => "<h2>Warranty</h2>\n<p>Returns accepted if we receive items <strong>30 days after purchase</strong>.</p>", "author" => "Shopify API", "created_at" => "2023-01-03T12:23:38-05:00", "updated_at" => "2023-01-03T12:23:38-05:00", "published_at" => "2023-01-03T12:23:38-05:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/1025371373"]]
+                  ["page" => ["id" => 1025371374, "title" => "Warranty information", "shop_id" => 548380009, "handle" => "warranty-information", "body_html" => "<h2>Warranty</h2>\n<p>Returns accepted if we receive items <strong>30 days after purchase</strong>.</p>", "author" => "Shopify API", "created_at" => "2023-04-04T17:21:05-04:00", "updated_at" => "2023-04-04T17:21:05-04:00", "published_at" => "2023-04-04T17:21:05-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/1025371374"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages.json",
                 "POST",
@@ -123,7 +123,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["id" => 1025371369, "title" => "Warranty information", "shop_id" => 548380009, "handle" => "warranty-information", "body_html" => "<h2>Warranty</h2>\n<p>Returns accepted if we receive items <strong>30 days after purchase</strong>.</p>", "author" => "Shopify API", "created_at" => "2023-01-03T12:22:57-05:00", "updated_at" => "2023-01-03T12:22:57-05:00", "published_at" => "2023-01-03T12:22:57-05:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/1025371369"]]
+                  ["page" => ["id" => 1025371372, "title" => "Warranty information", "shop_id" => 548380009, "handle" => "warranty-information", "body_html" => "<h2>Warranty</h2>\n<p>Returns accepted if we receive items <strong>30 days after purchase</strong>.</p>", "author" => "Shopify API", "created_at" => "2023-04-04T17:20:37-04:00", "updated_at" => "2023-04-04T17:20:37-04:00", "published_at" => "2023-04-04T17:20:37-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/1025371372"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages.json",
                 "POST",
@@ -159,7 +159,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["id" => 1025371374, "title" => "Warranty information", "shop_id" => 548380009, "handle" => "warranty-information", "body_html" => "<h2>Warranty</h2>\n<p>Returns accepted if we receive items <strong>30 days after purchase</strong>.</p>", "author" => "Shopify API", "created_at" => "2023-01-03T12:23:49-05:00", "updated_at" => "2023-01-03T12:23:49-05:00", "published_at" => null, "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/1025371374"]]
+                  ["page" => ["id" => 1025371370, "title" => "Warranty information", "shop_id" => 548380009, "handle" => "warranty-information", "body_html" => "<h2>Warranty</h2>\n<p>Returns accepted if we receive items <strong>30 days after purchase</strong>.</p>", "author" => "Shopify API", "created_at" => "2023-04-04T17:20:30-04:00", "updated_at" => "2023-04-04T17:20:30-04:00", "published_at" => null, "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/1025371370"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages.json",
                 "POST",
@@ -245,7 +245,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["shop_id" => 548380009, "title" => "Terms of Services", "handle" => "tos", "body_html" => "<p>We make <strong>perfect</strong> stuff, we don't need a warranty.</p>", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-01-03T12:23:26-05:00", "published_at" => "2008-07-15T20:00:00-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
+                  ["page" => ["shop_id" => 548380009, "title" => "Terms of Services", "handle" => "tos", "body_html" => "<p>We make <strong>perfect</strong> stuff, we don't need a warranty.</p>", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-04-04T17:20:54-04:00", "published_at" => "2008-07-15T20:00:00-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages/131092082.json",
                 "PUT",
@@ -280,7 +280,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["shop_id" => 548380009, "published_at" => null, "title" => "Terms of Services", "handle" => "tos", "body_html" => "<p>We make <strong>perfect</strong> stuff, we don't need a warranty.</p>", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-01-03T12:23:07-05:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
+                  ["page" => ["shop_id" => 548380009, "published_at" => null, "title" => "Terms of Services", "handle" => "tos", "body_html" => "<p>We make <strong>perfect</strong> stuff, we don't need a warranty.</p>", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-04-04T17:20:42-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages/131092082.json",
                 "PUT",
@@ -308,7 +308,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["shop_id" => 548380009, "published_at" => "2023-01-03T12:23:46-05:00", "title" => "Terms of Services", "handle" => "tos", "body_html" => "<p>We make <strong>perfect</strong> stuff, we don't need a warranty.</p>", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-01-03T12:23:46-05:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
+                  ["page" => ["shop_id" => 548380009, "published_at" => "2023-04-04T17:20:31-04:00", "title" => "Terms of Services", "handle" => "tos", "body_html" => "<p>We make <strong>perfect</strong> stuff, we don't need a warranty.</p>", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-04-04T17:20:31-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages/131092082.json",
                 "PUT",
@@ -336,7 +336,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["shop_id" => 548380009, "author" => "Christopher Gorski", "body_html" => "<p>Returns accepted if we receive the items <strong>14 days</strong> after purchase.</p>", "handle" => "new-warranty", "title" => "New warranty", "id" => 131092082, "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-01-03T12:23:28-05:00", "published_at" => "2008-07-15T20:00:00-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
+                  ["page" => ["shop_id" => 548380009, "author" => "Christopher Gorski", "body_html" => "<p>Returns accepted if we receive the items <strong>14 days</strong> after purchase.</p>", "handle" => "new-warranty", "title" => "New warranty", "id" => 131092082, "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-04-04T17:20:43-04:00", "published_at" => "2008-07-15T20:00:00-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages/131092082.json",
                 "PUT",
@@ -367,7 +367,7 @@ final class Page202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["page" => ["shop_id" => 548380009, "body_html" => "<p>Returns accepted if we receive the items 14 days after purchase.</p>", "title" => "Terms of Services", "handle" => "tos", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-01-03T12:23:08-05:00", "published_at" => "2008-07-15T20:00:00-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
+                  ["page" => ["shop_id" => 548380009, "body_html" => "<p>Returns accepted if we receive the items 14 days after purchase.</p>", "title" => "Terms of Services", "handle" => "tos", "id" => 131092082, "author" => "Dennis", "created_at" => "2008-07-15T20:00:00-04:00", "updated_at" => "2023-04-04T17:20:35-04:00", "published_at" => "2008-07-15T20:00:00-04:00", "template_suffix" => null, "admin_graphql_api_id" => "gid://shopify/OnlineStorePage/131092082"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/pages/131092082.json",
                 "PUT",

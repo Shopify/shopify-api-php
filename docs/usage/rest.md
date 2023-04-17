@@ -2,11 +2,11 @@
 
 REST Admin API lets you build apps and other integrations for the Shopify admin using REST. With the API, you can create apps that offer functionality at every stage of a store's operation, including shipping, fulfillment, and product management.
 
-You can read our [REST Admin API](https://shopify.dev/docs/admin-api/getting-started#rest-admin-api) documentation and [REST Admin API reference](https://shopify.dev/docs/admin-api/rest/reference) for more information.
+You can read our [REST Admin API](https://shopify.dev/docs/api/admin/getting-started#rest-admin-api) documentation and [REST Admin API reference](https://shopify.dev/docs/api/admin-rest) for more information.
 
 ## Making your first REST request
 
-REST Admin API endpoints are organized by [resource](https://shopify.dev/docs/admin-api/rest/reference#selecting-apis-for-your-app) . You'll need to use different API endpoints depending on the service that your app provides. There are two different ways of doing that with this library:
+REST Admin API endpoints are organized by [resource](https://shopify.dev/docs/api/admin/rest/reference#selecting-apis-for-your-app) . You'll need to use different API endpoints depending on the service that your app provides. There are two different ways of doing that with this library:
 * [REST resources](#rest-resources)
 * [REST client](#rest-client)
 
@@ -14,7 +14,7 @@ REST Admin API endpoints are organized by [resource](https://shopify.dev/docs/ad
 
 REST resources are objects that represent the REST endpoints in the Admin API. This library provides classes for the endpoints in all supported versions of the API. We don't provide classes for the `unstable` version because it may change at any point, which would cause the resource classes to become outdated.
 
-The resource classes will provide methods for all endpoints described in [the REST reference docs](https://shopify.dev/api/admin-rest). Please see the references for how to use a specific resource.
+The resource classes will provide methods for all endpoints described in [the REST reference docs](https://shopify.dev/docs/api/admin-rest). Please see the references for how to use a specific resource.
 
 ### REST client
 
@@ -42,7 +42,7 @@ This request returns an instance of `Shopify\Clients\RestResponse`. The response
 
 ## Pagination
 
-REST endpoints support cursor-based pagination. When you send a request to a REST endpoint that supports cursor-based pagination, the response body returns the first page of results, and a response header returns links to the next page, and the previous page of results (if applicable). For more information check [Make paginated requests to the REST Admin API](https://shopify.dev/tutorials/make-paginated-requests-to-rest-admin-api) tutorial.
+REST endpoints support cursor-based pagination. When you send a request to a REST endpoint that supports cursor-based pagination, the response body returns the first page of results, and a response header returns links to the next page, and the previous page of results (if applicable). For more information check [Make paginated requests to the REST Admin API](https://shopify.dev/docs/api/usage/pagination-rest).
 
 `Shopify\Clients\Rest` helps you manage pagination by giving you the information you need. The response object of a `get` operation includes pagination information. To retrieve the pagination information call `$result->getPageInfo()`.
 

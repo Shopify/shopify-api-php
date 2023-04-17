@@ -1,6 +1,6 @@
 # Performing OAuth
 
-Once the library is set up for your project, you'll be able to use it to start adding functionality to your app. The first thing your app will need to do is to obtain an access token to the Admin API by performing the OAuth process. You can read our [OAuth tutorial](https://shopify.dev/tutorials/authenticate-with-oauth) to learn more about the process.
+Once the library is set up for your project, you'll be able to use it to start adding functionality to your app. The first thing your app will need to do is to obtain an access token to the Admin API by performing the OAuth process. You can read our [OAuth overview](https://shopify.dev/docs/apps/auth/oauth) to learn more about the process.
 
 Once you've implemented these actions in your app, please make sure to read our [notes on session handling](../issues.md#notes-on-session-handling).
 
@@ -57,7 +57,7 @@ The `Session` object provides the following methods to expose its data:
 | `getState` | `string` | The `state` of the session. This is mainly used for OAuth. |
 | `getScope` | `string \| null` | The effective API scopes enabled for this session. |
 | `getExpires` | `DateTime \| null` | The expiration date of the session, or null if it is offline. |
-| `isOnline` | `bool` | Whether the session is [online or offline](https://shopify.dev/concepts/about-apis/authentication#api-access-modes). |
+| `isOnline` | `bool` | Whether the session is [online or offline](https://shopify.dev/docs/apps/auth#api-access-modes). |
 | `getAccessToken` | `string \| null` | The Admin API access token for the session. |
 | `getOnlineAccessInfo` | `AccessTokenOnlineUserInfo \| null` | The data for the user associated with this session. Only applies to online sessions. |
 

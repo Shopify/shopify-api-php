@@ -13,7 +13,9 @@ use Shopify\Context;
 use Shopify\Exception\RestResourceException;
 use Shopify\Exception\RestResourceRequestException;
 
-abstract class Base
+// When upgrading to PHP 8.2, consider using the AllowDynamicProperties attribute
+// https://stitcher.io/blog/deprecated-dynamic-properties-in-php-82#a-better-alternative
+abstract class Base extends \stdClass
 {
     public static string $API_VERSION;
     public static ?array $NEXT_PAGE_QUERY = null;

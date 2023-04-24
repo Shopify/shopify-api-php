@@ -46,7 +46,13 @@ class Http
      */
     public function get(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
-        return $this->request($path, self::METHOD_GET, null, $headers, $query, $tries);
+        return $this->request(
+            path: $path,
+            method: self::METHOD_GET,
+            headers: $headers,
+            query: $query,
+            tries: $tries,
+        );
     }
 
     /**
@@ -71,7 +77,15 @@ class Http
         ?int $tries = null,
         string $dataType = self::DATA_TYPE_JSON
     ): HttpResponse {
-        return $this->request($path, self::METHOD_POST, $body, $headers, $query, $tries, $dataType);
+        return $this->request(
+            path: $path,
+            method: self::METHOD_POST,
+            body: $body,
+            headers: $headers,
+            query: $query,
+            tries: $tries,
+            dataType: $dataType,
+        );
     }
 
     /**
@@ -96,7 +110,15 @@ class Http
         ?int $tries = null,
         string $dataType = self::DATA_TYPE_JSON
     ): HttpResponse {
-        return $this->request($path, self::METHOD_PUT, $body, $headers, $query, $tries, $dataType);
+        return $this->request(
+            path: $path,
+            method: self::METHOD_PUT,
+            body: $body,
+            headers: $headers,
+            query: $query,
+            tries: $tries,
+            dataType: $dataType,
+        );
     }
 
     /**
@@ -114,12 +136,11 @@ class Http
     public function delete(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
         return $this->request(
-            $path,
-            self::METHOD_DELETE,
-            null,
-            $headers,
-            $query,
-            $tries,
+            path: $path,
+            method: self::METHOD_DELETE,
+            headers: $headers,
+            query: $query,
+            tries: $tries,
         );
     }
 

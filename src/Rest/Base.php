@@ -180,16 +180,30 @@ abstract class Base extends \stdClass
         $params = array_filter($params);
         switch ($httpMethod) {
             case "get":
-                $response = $client->get($path, [], $params);
+                $response = $client->get(
+                    path: $path,
+                    query: $params,
+                );
                 break;
             case "post":
-                $response = $client->post($path, $body, [], $params);
+                $response = $client->post(
+                    path: $path,
+                    body: $body,
+                    query: $params,
+                );
                 break;
             case "put":
-                $response = $client->put($path, $body, [], $params);
+                $response = $client->put(
+                    path: $path,
+                    body: $body,
+                    query: $params,
+                );
                 break;
             case "delete":
-                $response = $client->delete($path, [], $params);
+                $response = $client->delete(
+                    path: $path,
+                    query: $params,
+                );
                 break;
         }
 

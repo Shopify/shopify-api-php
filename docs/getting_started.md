@@ -29,14 +29,14 @@ You should call this method as early as possible in your application, as none of
 
 ```php
 Context::initialize(
-    $_ENV['SHOPIFY_API_KEY'],
-    $_ENV['SHOPIFY_API_SECRET'],
-    $_ENV['SHOPIFY_APP_SCOPES'],
-    $_ENV['SHOPIFY_APP_HOST_NAME'],
-    new FileSessionStorage('/tmp/php_sessions'),
-    '2021-04',
-    true,
-    false,
+    apiKey: $_ENV['SHOPIFY_API_KEY'],
+    apiSecretKey: $_ENV['SHOPIFY_API_SECRET'],
+    scopes: $_ENV['SHOPIFY_APP_SCOPES'],
+    hostName: $_ENV['SHOPIFY_APP_HOST_NAME'],
+    sessionStorage: new FileSessionStorage('/tmp/php_sessions'),
+    apiVersion: '2021-04',
+    isEmbeddedApp: true,
+    isPrivateApp: false,
 );
 ```
 

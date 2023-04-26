@@ -172,10 +172,11 @@ class Context
      *
      * @param string $message The message to log
      * @param string $level   One of the \Psr\Log\LogLevel::* consts, defaults to INFO
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
      *
      * @throws \Shopify\Exception\UninitializedContextException
      */
-    public static function log(string $message, string $level = LogLevel::INFO): void
+    public static function log(string $message, string $level = LogLevel::INFO, array $context = []): void
     {
         self::throwIfUninitialized();
 
@@ -183,6 +184,141 @@ class Context
             return;
         }
 
-        self::$LOGGER->log($level, $message);
+        self::$LOGGER->log($level, $message, $context);
+    }
+
+    /**
+     * Logs a message at DEBUG level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logDebug(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::DEBUG, $context);
+    }
+
+    /**
+     * Logs a message at INFO level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logInfo(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::INFO, $context);
+    }
+
+    /**
+     * Logs a message at NOTICE level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logNotice(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::NOTICE, $context);
+    }
+
+    /**
+     * Logs a message at WARNING level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logWarning(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::WARNING, $context);
+    }
+
+    /**
+     * Logs a message at ERROR level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logError(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::ERROR, $context);
+    }
+
+    /**
+     * Logs a message at ALERT level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logAlert(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::ALERT, $context);
+    }
+
+    /**
+     * Logs a message at EMERGENCY level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logEmergency(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::EMERGENCY, $context);
+    }
+
+    /**
+     * Logs a message at CRITICAL level
+     *
+     * @param string $message The message to log
+     * @param array $context  Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logCritical(string $message, array $context = []): void
+    {
+        self::log($message, LogLevel::CRITICAL, $context);
+    }
+
+    /**
+     * Log a deprecation message
+     *
+     * @param string $deprecatedFrom A version that will trigger the message once it has been reached
+     * @param string $message        The message to log
+     * @param array $context         Key/value pairs of contextual information supporting the log statement
+     *
+     * @throws UninitializedContextException
+     */
+    public static function logDeprecation(string $deprecatedFrom, string $message, array $context = []): void
+    {
+        if (!preg_match( '#^\d+.\d+.\d+$#', $deprecatedFrom)) {
+            throw new \Exception(sprintf('Encountered an invalid version: "%s"', $deprecatedFrom));
+        }
+
+        $currentVersion = Utils::getVersion();
+
+        if (version_compare($currentVersion, $deprecatedFrom, '<')) {
+            return;
+        }
+
+        $context = array_merge([
+            'current_version' => $currentVersion,
+            'deprecated_from' => $deprecatedFrom,
+        ],
+            $context
+        );
+
+        self::logWarning($message, $context);
     }
 }

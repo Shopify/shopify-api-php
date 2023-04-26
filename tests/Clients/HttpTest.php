@@ -6,6 +6,7 @@ namespace ShopifyTest\Clients;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LogLevel;
 use Shopify\Clients\Http;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
@@ -429,7 +430,7 @@ final class HttpTest extends BaseTestCase
         $this->assertThat($response, new HttpResponseMatcher(400, ['X-Is-Last-Test-Request' => [true]]));
     }
 
-    public function testDeprecatedRequestsAreLogged()
+    public function testDeprecatedRequestsAreLoggedWithinLimit()
     {
         $vfsRoot = vfsStream::setup('test');
 
@@ -438,7 +439,7 @@ final class HttpTest extends BaseTestCase
             ->setConstructorArgs([$this->domain])
             ->onlyMethods(['getApiDeprecationTimestampFilePath'])
             ->getMock();
-        $mockedClient->expects($this->once())
+        $mockedClient->expects($this->exactly(2))
             ->method('getApiDeprecationTimestampFilePath')
             ->willReturn(vfsStream::url('test/timestamp_file'));
 
@@ -451,20 +452,24 @@ final class HttpTest extends BaseTestCase
                 "https://$this->domain/test/path",
                 "GET",
             ),
+            new MockRequest(
+                $this->buildMockHttpResponse(200, null, ['X-Shopify-API-Deprecated-Reason' => 'Test reason']),
+                "https://$this->domain/test/path",
+                "GET",
+            )
         ]);
 
         $this->assertFalse($vfsRoot->hasChild('timestamp_file'));
         $mockedClient->get('test/path');
 
-        $this->assertTrue($testLogger->hasWarningThatContains(
-            <<<NOTICE
-            API Deprecation notice:
-                URL: https://test-shop.myshopify.io/test/path
-                Reason: Test reason
-            Stack trace:
-            NOTICE
-        ));
         $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
+        $this->assertTrue($testLogger->hasWarningThatContains('API Deprecation notice'));
+        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
+
+        $mockedClient->get('test/path');
+
+        $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
+        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
     }
 
     public function testDeprecationLogBackoffPeriod()

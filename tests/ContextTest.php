@@ -9,6 +9,7 @@ use ReflectionClass;
 use Shopify\ApiVersion;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
+use Shopify\Utils;
 use ShopifyTest\Auth\MockSessionStorage;
 
 final class ContextTest extends BaseTestCase
@@ -115,6 +116,74 @@ final class ContextTest extends BaseTestCase
 
         Context::log('Emerg log', LogLevel::EMERGENCY);
         $this->assertTrue($testLogger->hasEmergency('Emerg log'));
+    }
+
+    public function testLogHelper()
+    {
+        $testLogger = new LogMock();
+        Context::$LOGGER = $testLogger;
+
+        Context::logDebug('Debug log');
+        $this->assertTrue($testLogger->hasDebug('Debug log'));
+
+        Context::logInfo('Info log');
+        $this->assertTrue($testLogger->hasInfo('Info log'));
+
+        Context::logNotice('Notice log');
+        $this->assertTrue($testLogger->hasNotice('Notice log'));
+
+        Context::logWarning('Warning log');
+        $this->assertTrue($testLogger->hasWarning('Warning log'));
+
+        Context::logError('Err log');
+        $this->assertTrue($testLogger->hasError('Err log'));
+
+        Context::logCritical('Crit log');
+        $this->assertTrue($testLogger->hasCritical('Crit log'));
+
+        Context::logAlert('Alert log');
+        $this->assertTrue($testLogger->hasAlert('Alert log'));
+
+        Context::logEmergency('Emerg log');
+        $this->assertTrue($testLogger->hasEmergency('Emerg log'));
+    }
+
+    public function testLogDeprecation()
+    {
+        $testLogger = new LogMock();
+        Context::$LOGGER = $testLogger;
+
+        Context::logDeprecation('10.11.12', 'This message should not be logged.');
+        $this->assertFalse($testLogger->hasWarningRecords());
+
+        Context::logDeprecation('4.0.0', 'This message should be logged.');
+        $this->assertTrue($testLogger->hasWarning('This message should be logged.'));
+
+        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
+
+        $record = $testLogger->recordsByLevel[LogLevel::WARNING][0];
+
+        $this->assertArrayHasKey('context', $record);
+        $this->assertArrayHasKey('current_version', $record['context']);
+        $this->assertArrayHasKey('deprecated_from', $record['context']);
+        $this->assertEquals(Utils::getVersion(), $record['context']['current_version']);
+        $this->assertEquals('4.0.0', $record['context']['deprecated_from']);
+    }
+
+    public function testLogDeprecationExceptionText()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Encountered an invalid version: "abc"');
+
+        Context::logDeprecation('abc', 'This message should not be logged.');
+   }
+
+    public function testLogDeprecationExceptionTooComplexVersion()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Encountered an invalid version: "1.2.3-RC"');
+
+        Context::logDeprecation('1.2.3-RC', 'This message should not be logged.');
     }
 
     /**

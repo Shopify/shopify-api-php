@@ -406,7 +406,7 @@ final class UtilsTest extends BaseTestCase
     {
         $versionString = Utils::getVersion();
 
-        $this->assertMatchesRegularExpression( '#^\d+.\d+.\d+$#', $versionString);
+        $this->assertMatchesRegularExpression('#^\d+.\d+.\d+$#', $versionString);
     }
 
     private function encodeJwtPayload(): string

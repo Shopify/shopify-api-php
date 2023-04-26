@@ -176,7 +176,7 @@ final class ContextTest extends BaseTestCase
         $this->expectExceptionMessage('Encountered an invalid version: "abc"');
 
         Context::logDeprecation('abc', 'This message should not be logged.');
-   }
+    }
 
     public function testLogDeprecationExceptionTooComplexVersion()
     {

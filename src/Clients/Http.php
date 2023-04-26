@@ -251,7 +251,7 @@ class Http
      *
      * @return bool
      */
-    private function shouldLogApiDeprecation(): Bool
+    private function shouldLogApiDeprecation(): bool
     {
         $warningFilePath = $this->getApiDeprecationTimestampFilePath();
 

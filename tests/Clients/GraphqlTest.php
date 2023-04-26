@@ -22,9 +22,9 @@ final class GraphqlTest extends BaseTestCase
 
     /** @var array */
     private $testQueryArray = [
-          [
-              'shop' => 'name',
-          ],
+        [
+            'shop' => 'name',
+        ],
     ];
 
     /** @var string */
@@ -86,7 +86,7 @@ final class GraphqlTest extends BaseTestCase
     {
         $client = new Graphql('domain.myshopify.com', 'token');
         $this->expectException(\Shopify\Exception\MissingArgumentException::class);
-        $client->query('');
+        $client->query(data: '');
     }
 
     public function testCanQueryWithDataString()
@@ -108,7 +108,7 @@ final class GraphqlTest extends BaseTestCase
             )
         ]);
 
-        $response = $client->query($this->testQueryString);
+        $response = $client->query(data: $this->testQueryString);
         $this->assertThat(
             $response,
             new HttpResponseMatcher(200, [], json_decode($this->querySuccessResponse, true))
@@ -134,7 +134,7 @@ final class GraphqlTest extends BaseTestCase
             )
         ]);
 
-        $response = $client->query($this->testQueryArray);
+        $response = $client->query(data: $this->testQueryArray);
         $this->assertThat(
             $response,
             new HttpResponseMatcher(200, [], json_decode($this->querySuccessResponse, true))
@@ -161,7 +161,7 @@ final class GraphqlTest extends BaseTestCase
             )
         ]);
 
-        $response = $client->query($query);
+        $response = $client->query(data: $query);
 
         $this->assertThat(
             $response,
@@ -190,7 +190,7 @@ final class GraphqlTest extends BaseTestCase
             )
         ]);
 
-        $response = $client->query($this->testQueryString, [], $extraHeaders);
+        $response = $client->query(data: $this->testQueryString, extraHeaders: $extraHeaders);
         $this->assertThat(
             $response,
             new HttpResponseMatcher(200, [], json_decode($this->querySuccessResponse, true))
@@ -227,7 +227,7 @@ final class GraphqlTest extends BaseTestCase
             ]
         );
 
-        $response = $client->proxy($queryToProxy, $extraHeaders);
+        $response = $client->proxy(data: $queryToProxy, extraHeaders: $extraHeaders);
         $this->assertThat(
             $response,
             new HttpResponseMatcher(200, [], json_decode($this->querySuccessResponse, true))

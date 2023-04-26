@@ -44,7 +44,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $response = $client->get('test/path', $headers);
+        $response = $client->get(path: 'test/path', headers: $headers);
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -65,7 +65,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $response = $client->get('test/path', $headers, ["path" => "some_path"]);
+        $response = $client->get(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -87,9 +87,9 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
         $response = $client->get(
-            'test/path',
-            $headers,
-            ["array" => ["value"], "hash" => ["key1" => "value1", "key2" => "value2"]]
+            path: 'test/path',
+            headers: $headers,
+            query: ["array" => ["value"], "hash" => ["key1" => "value1", "key2" => "value2"]]
         );
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
@@ -121,7 +121,12 @@ final class HttpTest extends BaseTestCase
         $client = new Http($this->domain);
 
 
-        $response = $client->post('test/path', $this->product1, $headers, ["path" => "some_path"]);
+        $response = $client->post(
+            path: 'test/path',
+            body: $this->product1,
+            headers: $headers,
+            query: ["path" => "some_path"],
+        );
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -153,7 +158,12 @@ final class HttpTest extends BaseTestCase
         $client = new Http($this->domain);
 
 
-        $response = $client->put('test/path', $this->product1, $headers, ["path" => "some_path"]);
+        $response = $client->put(
+            path: 'test/path',
+            body: $this->product1,
+            headers: $headers,
+            query: ["path" => "some_path"],
+        );
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -176,7 +186,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $response = $client->delete('test/path', $headers, ["path" => "some_path"]);
+        $response = $client->delete(path: 'test/path', headers: $headers, query: ["path" => "some_path"]);
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -203,7 +213,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $response = $client->post('test/path', $body);
+        $response = $client->post(path: 'test/path', body: $body);
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -223,7 +233,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $client->get('test/path');
+        $client->get(path: 'test/path');
 
         $this->mockTransportRequests([
             new MockRequest(
@@ -238,7 +248,7 @@ final class HttpTest extends BaseTestCase
             ),
         ]);
 
-        $client->get('test/path', ['User-Agent' => "Extra user agent"]);
+        $client->get(path: 'test/path', headers: ['User-Agent' => "Extra user agent"]);
 
         Context::$USER_AGENT_PREFIX = 'Test default user agent';
 
@@ -255,7 +265,7 @@ final class HttpTest extends BaseTestCase
             ),
         ]);
 
-        $client->get('test/path');
+        $client->get(path: 'test/path');
 
         $userAgent = "^Extra user agent | Test default user agent | Shopify Admin API Library for PHP v$this->version$";
         $this->mockTransportRequests([
@@ -271,7 +281,7 @@ final class HttpTest extends BaseTestCase
             ),
         ]);
 
-        $client->get('test/path', ['User-Agent' => "Extra user agent"]);
+        $client->get(path: 'test/path', headers: ['User-Agent' => "Extra user agent"]);
     }
 
     public function testRequestThrowsErrorOnRequestFailure()
@@ -291,7 +301,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
         $this->expectException(\Shopify\Exception\HttpRequestException::class);
-        $client->get('test/path');
+        $client->get(path: 'test/path');
     }
 
     public function testRetryAfterCanBeFloat()
@@ -319,7 +329,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $response = $client->get('test/path', [], [], 2);
+        $response = $client->get(path: 'test/path', tries: 2);
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -358,7 +368,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $response = $client->get('test/path', [], [], 3);
+        $response = $client->get(path: 'test/path', tries: 3);
         $this->assertThat($response, new HttpResponseMatcher(200, [], $this->successResponse));
     }
 
@@ -397,7 +407,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $response = $client->get('test/path', [], [], 3);
+        $response = $client->get(path: 'test/path', tries: 3);
         $this->assertThat($response, new HttpResponseMatcher(500, ['X-Is-Last-Test-Request' => [true]]));
     }
 
@@ -425,7 +435,7 @@ final class HttpTest extends BaseTestCase
 
         $client = new Http($this->domain);
 
-        $response = $client->get('test/path', [], [], 10);
+        $response = $client->get(path: 'test/path', tries: 10);
         $this->assertThat($response, new HttpResponseMatcher(400, ['X-Is-Last-Test-Request' => [true]]));
     }
 

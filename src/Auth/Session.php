@@ -23,10 +23,10 @@ class Session
     private $onlineAccessInfo = null;
 
     public function __construct(
-        string $id,
-        string $shop,
-        bool $isOnline,
-        string $state
+        private string $id,
+        private string $shop,
+        private bool $isOnline,
+        private string $state
     ) {
         $this->id = $id;
         $this->shop = Utils::sanitizeShopDomain($shop);
@@ -146,8 +146,7 @@ class Session
      */
     public function isValid(): bool
     {
-        return (
-            Context::$SCOPES->equals($this->scope) &&
+        return (Context::$SCOPES->equals($this->scope) &&
             $this->accessToken &&
             (!$this->expires || ($this->expires > new DateTime()))
         );

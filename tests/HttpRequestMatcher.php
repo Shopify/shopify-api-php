@@ -53,7 +53,7 @@ class HttpRequestMatcher extends Constraint
         $this->identicalBody = $identicalBody;
     }
 
-    protected function matches($other): bool
+    public function matches($other): bool
     {
         if (!($other instanceof RequestInterface)) {
             return false;

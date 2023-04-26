@@ -13,7 +13,9 @@ use Shopify\Context;
 use Shopify\Exception\RestResourceException;
 use Shopify\Exception\RestResourceRequestException;
 
-abstract class Base
+// When upgrading to PHP 8.2, consider using the AllowDynamicProperties attribute
+// https://stitcher.io/blog/deprecated-dynamic-properties-in-php-82#a-better-alternative
+abstract class Base extends \stdClass
 {
     public static string $API_VERSION;
     public static ?array $NEXT_PAGE_QUERY = null;
@@ -178,16 +180,30 @@ abstract class Base
         $params = array_filter($params);
         switch ($httpMethod) {
             case "get":
-                $response = $client->get($path, [], $params);
+                $response = $client->get(
+                    path: $path,
+                    query: $params,
+                );
                 break;
             case "post":
-                $response = $client->post($path, $body, [], $params);
+                $response = $client->post(
+                    path: $path,
+                    body: $body,
+                    query: $params,
+                );
                 break;
             case "put":
-                $response = $client->put($path, $body, [], $params);
+                $response = $client->put(
+                    path: $path,
+                    body: $body,
+                    query: $params,
+                );
                 break;
             case "delete":
-                $response = $client->delete($path, [], $params);
+                $response = $client->delete(
+                    path: $path,
+                    query: $params,
+                );
                 break;
         }
 

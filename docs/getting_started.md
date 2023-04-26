@@ -34,7 +34,7 @@ Context::initialize(
     scopes: $_ENV['SHOPIFY_APP_SCOPES'],
     hostName: $_ENV['SHOPIFY_APP_HOST_NAME'],
     sessionStorage: new FileSessionStorage('/tmp/php_sessions'),
-    apiVersion: '2021-04',
+    apiVersion: '2023-04',
     isEmbeddedApp: true,
     isPrivateApp: false,
 );

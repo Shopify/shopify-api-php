@@ -39,7 +39,7 @@ $storefrontClient = new \Shopify\Clients\Storefront($shop, $storefrontAccessToke
 
 // Call query and pass your query as `data`
 $products = $storefrontClient->query(
-    <<<QUERY
+    data: <<<QUERY
     {
         products (first: 10) {
             edges {

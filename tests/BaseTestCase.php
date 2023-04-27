@@ -6,6 +6,7 @@ namespace ShopifyTest;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Client\ClientInterface;
 use Shopify\Clients\HttpClientFactory;
 use Shopify\Context;
@@ -26,11 +27,11 @@ class BaseTestCase extends TestCase
     {
         // Initialize Context before each test
         Context::initialize(
-            'ash',
-            'steffi',
-            ['sleepy', 'kitty'],
-            'www.my-friends-cats.com',
-            new MockSessionStorage(),
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'www.my-friends-cats.com',
+            sessionStorage: new MockSessionStorage(),
         );
         Context::$RETRY_TIME_IN_SECONDS = 0;
         $this->version = require dirname(__FILE__) . '/../src/version.php';
@@ -87,7 +88,7 @@ class BaseTestCase extends TestCase
                 $request->identicalBody
             );
 
-            $requestMatchers[] = [$matcher];
+            $requestMatchers[] = $matcher;
 
             $newResponses[] = $request->error ? 'TEST EXCEPTION' : new Response(
                 $request->response['statusCode'],
@@ -96,12 +97,15 @@ class BaseTestCase extends TestCase
             );
         }
 
+        /** @var MockObject */
         $client = $this->createMock(ClientInterface::class);
 
         $i = 0;
         $client->expects($this->exactly(count($requestMatchers)))
             ->method('sendRequest')
-            ->withConsecutive(...$requestMatchers)
+            ->with(self::callback(function ($request) use (&$i, $requestMatchers) {
+                return $requestMatchers[$i]->matches($request);
+            }))
             ->willReturnCallback(
                 function () use (&$i, $newResponses) {
                     $response = $newResponses[$i++];
@@ -113,6 +117,7 @@ class BaseTestCase extends TestCase
                 }
             );
 
+        /** @var MockObject */
         $factory = $this->createMock(HttpClientFactory::class);
 
         $factory->expects($this->any())

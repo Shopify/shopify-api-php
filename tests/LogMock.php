@@ -133,7 +133,7 @@ class LogMock
                 return call_user_func_array([$this, $genericMethod], $args);
             }
         }
-        throw new \BadMethodCallException('Call to undefined method ' . get_class($this) . '::' . $method . '()');
+        throw new \BadMethodCallException('Call to undefined method ' . $this::class . '::' . $method . '()');
     }
 
     public function reset()

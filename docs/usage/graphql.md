@@ -1,4 +1,5 @@
 # Make a GraphQL API call
+
 Once OAuth is complete, we can use the library's GraphQL client to make requests to the GraphQL Admin API. To do that, create an instance of `Graphql` using the current shop URL and, for non-private apps, the session `accessToken` in your app's endpoint.
 
 The GraphQL client's main method is `query`, which takes the following arguments and returns an `HttpResponse` object:
@@ -10,6 +11,7 @@ The GraphQL client's main method is `query`, which takes the following arguments
 | `tries` | `int \| null` | No | `1` | How many times to attempt the request |
 
 Example use of `query`
+
 ```php
 // Load current session to get `accessToken`
 $session = Shopify\Utils::loadCurrentSession($headers, $cookies, $isOnline);
@@ -29,12 +31,13 @@ $queryString = <<<QUERY
         }
     }
 QUERY;
-$response = $client->query($queryString);
+$response = $client->query(data: $queryString);
 
 // do something with the returned data
 ```
 
 Example with variables
+
 ```php
 // load current session and create GraphQL client like above example
 
@@ -53,9 +56,9 @@ $variables = [
         ["title" => "TARDIS"],
         ["descriptionHtml" => "Time and Relative Dimensions in Space"],
         ["productType" => "Time Lord technology"]
-    ]    
+    ]
 ];
-$response = $client->query(['query' => $queryUsingVariables, 'variables' => $variables]);
+$response = $client->query(data: ['query' => $queryUsingVariables, 'variables' => $variables]);
 
 // do something with the returned data
 ```

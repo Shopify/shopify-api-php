@@ -16,7 +16,13 @@ final class ContextTest extends BaseTestCase
 {
     public function testCanCreateContext()
     {
-        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], 'my-friends-cats', new MockSessionStorage());
+        Context::initialize(
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
+        );
 
         $this->assertEquals('ash', Context::$API_KEY);
         $this->assertEquals('steffi', Context::$API_SECRET_KEY);
@@ -34,7 +40,13 @@ final class ContextTest extends BaseTestCase
     // Context with different values has been set up in BaseTestCase
     public function testCanUpdateContext()
     {
-        Context::initialize('tuck', 'rocky', ['silly', 'doggo'], 'yay-for-doggos', new MockSessionStorage());
+        Context::initialize(
+            apiKey: 'tuck',
+            apiSecretKey: 'rocky',
+            scopes: ['silly', 'doggo'],
+            hostName: 'yay-for-doggos',
+            sessionStorage: new MockSessionStorage(),
+        );
 
         $this->assertEquals('tuck', Context::$API_KEY);
         $this->assertEquals('rocky', Context::$API_SECRET_KEY);
@@ -48,7 +60,13 @@ final class ContextTest extends BaseTestCase
         $this->expectExceptionMessage(
             'Cannot initialize Shopify API Library. Missing values for: apiKey, apiSecretKey, scopes, hostName'
         );
-        Context::initialize('', '', [], '', new MockSessionStorage());
+        Context::initialize(
+            apiKey: '',
+            apiSecretKey: '',
+            scopes: [],
+            hostName: '',
+            sessionStorage: new MockSessionStorage(),
+        );
     }
 
     public function testThrowsIfUninitialized()
@@ -67,14 +85,13 @@ final class ContextTest extends BaseTestCase
     public function testThrowsIfPrivateApp()
     {
         Context::initialize(
-            'ash',
-            'steffi',
-            ['sleepy', 'kitty'],
-            'my-friends-cats',
-            new MockSessionStorage(),
-            'unstable',
-            true,
-            true,
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
+            apiVersion: 'unstable',
+            isPrivateApp: true,
         );
         $this->expectException(\Shopify\Exception\PrivateAppException::class);
         $this->expectExceptionMessage('BOOOOOO');
@@ -191,7 +208,13 @@ final class ContextTest extends BaseTestCase
      */
     public function testCanSetHostScheme($host, $expectedScheme, $expectedHost)
     {
-        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], $host, new MockSessionStorage());
+        Context::initialize(
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: $host,
+            sessionStorage: new MockSessionStorage(),
+        );
 
         $this->assertEquals($expectedHost, Context::$HOST_NAME);
         $this->assertEquals($expectedScheme, Context::$HOST_SCHEME);
@@ -211,7 +234,13 @@ final class ContextTest extends BaseTestCase
     public function testFailsOnInvalidHost()
     {
         $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
-        Context::initialize('ash', 'steffi', ['sleepy', 'kitty'], 'not-a-host-!@#$%^&*()', new MockSessionStorage());
+        Context::initialize(
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'not-a-host-!@#$%^&*()',
+            sessionStorage: new MockSessionStorage(),
+        );
     }
 
     public function testCanSetCustomShopDomains()
@@ -219,18 +248,14 @@ final class ContextTest extends BaseTestCase
         $domains = ['*.special-domain-1.io', '*.special-domain-2.io'];
 
         Context::initialize(
-            'ash',
-            'steffi',
-            ['sleepy', 'kitty'],
-            'my-friends-cats',
-            new MockSessionStorage(),
-            ApiVersion::LATEST,
-            true,
-            false,
-            null,
-            '',
-            null,
-            $domains
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
+            apiVersion: ApiVersion::LATEST,
+            isPrivateApp: false,
+            customShopDomains: $domains,
         );
 
         $this->assertEquals($domains, Context::$CUSTOM_SHOP_DOMAINS);

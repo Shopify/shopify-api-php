@@ -402,6 +402,13 @@ final class UtilsTest extends BaseTestCase
         $this->assertEquals("https://$url/apps/my-app-key", Utils::getEmbeddedAppUrl(base64_encode($url)));
     }
 
+    public function testGetVersion()
+    {
+        $versionString = Utils::getVersion();
+
+        $this->assertMatchesRegularExpression('#^\d+.\d+.\d+$#', $versionString);
+    }
+
     private function encodeJwtPayload(): string
     {
         $payload = [

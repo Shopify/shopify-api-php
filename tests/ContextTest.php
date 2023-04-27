@@ -171,7 +171,7 @@ final class ContextTest extends BaseTestCase
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
 
-        Context::logDeprecation('10.11.12', 'This message should be logged.');
+        Context::logDeprecation('9999.8888.7777', 'This message should be logged.');
         $this->assertTrue($testLogger->hasWarning('This message should be logged.'));
 
         $record = $testLogger->recordsByLevel[LogLevel::WARNING][0];
@@ -180,7 +180,7 @@ final class ContextTest extends BaseTestCase
         $this->assertArrayHasKey('current_version', $record['context']);
         $this->assertArrayHasKey('deprecated_from', $record['context']);
         $this->assertEquals(Utils::getVersion(), $record['context']['current_version']);
-        $this->assertEquals('10.11.12', $record['context']['deprecated_from']);
+        $this->assertEquals('9999.8888.7777', $record['context']['deprecated_from']);
     }
 
     public function testLogDeprecationFeatureDeprecatedExceptionText()

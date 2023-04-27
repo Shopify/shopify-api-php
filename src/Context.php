@@ -9,6 +9,7 @@ use Psr\Log\LogLevel;
 use Shopify\Auth\Scopes;
 use Shopify\Auth\SessionStorage;
 use Shopify\Clients\HttpClientFactory;
+use Shopify\Exception\FeatureDeprecatedException;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\InvalidArgumentException;
 use Shopify\Exception\PrivateAppException;
@@ -299,6 +300,8 @@ class Context
      * @param array $context         Key/value pairs of contextual information supporting the log statement
      *
      * @throws UninitializedContextException
+     * @throws FeatureDeprecatedException
+     * @throws \Exception
      */
     public static function logDeprecation(string $deprecatedFrom, string $message, array $context = []): void
     {
@@ -307,9 +310,8 @@ class Context
         }
 
         $currentVersion = Utils::getVersion();
-
-        if (version_compare($currentVersion, $deprecatedFrom, '<')) {
-            return;
+        if (version_compare($currentVersion, $deprecatedFrom, '>=')) {
+            throw new FeatureDeprecatedException($deprecatedFrom);
         }
 
         $context = array_merge(

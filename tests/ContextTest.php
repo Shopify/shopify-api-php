@@ -9,6 +9,7 @@ use ReflectionClass;
 use Shopify\ApiVersion;
 use Shopify\Auth\Scopes;
 use Shopify\Context;
+use Shopify\Exception\FeatureDeprecatedException;
 use Shopify\Utils;
 use ShopifyTest\Auth\MockSessionStorage;
 
@@ -170,13 +171,8 @@ final class ContextTest extends BaseTestCase
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
 
-        Context::logDeprecation('10.11.12', 'This message should not be logged.');
-        $this->assertFalse($testLogger->hasWarningRecords());
-
-        Context::logDeprecation('4.0.0', 'This message should be logged.');
+        Context::logDeprecation('10.11.12', 'This message should be logged.');
         $this->assertTrue($testLogger->hasWarning('This message should be logged.'));
-
-        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
 
         $record = $testLogger->recordsByLevel[LogLevel::WARNING][0];
 
@@ -184,10 +180,18 @@ final class ContextTest extends BaseTestCase
         $this->assertArrayHasKey('current_version', $record['context']);
         $this->assertArrayHasKey('deprecated_from', $record['context']);
         $this->assertEquals(Utils::getVersion(), $record['context']['current_version']);
-        $this->assertEquals('4.0.0', $record['context']['deprecated_from']);
+        $this->assertEquals('10.11.12', $record['context']['deprecated_from']);
     }
 
-    public function testLogDeprecationExceptionText()
+    public function testLogDeprecationFeatureDeprecatedExceptionText()
+    {
+        $this->expectException(FeatureDeprecatedException::class);
+        $this->expectExceptionMessage('Feature was deprecated in version 1.0.0');
+
+        Context::logDeprecation('1.0.0', 'This message should not be logged because we trigger an exception first.');
+    }
+
+    public function testLogDeprecationVersionExceptionText()
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Encountered an invalid version: "abc"');

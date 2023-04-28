@@ -223,4 +223,14 @@ final class Utils
         $apiKey = Context::$API_KEY;
         return "https://$decodedHost/apps/$apiKey";
     }
+
+    /**
+     * Returns the semantic version of the library (Major.Minor.Patch) as a string
+     *
+     * @return string
+     */
+    public static function getVersion(): string
+    {
+        return require(__DIR__ . DIRECTORY_SEPARATOR . 'version.php');
+    }
 }

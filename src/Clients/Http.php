@@ -8,7 +8,6 @@ use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\Utils;
-use Psr\Log\LogLevel;
 use Shopify\Context;
 
 class Http
@@ -254,6 +253,27 @@ class Http
      */
     private function logApiDeprecation(string $url, string $reason): void
     {
+        if (!$this->shouldLogApiDeprecation()) {
+            return;
+        }
+
+        $e = new Exception();
+        $stackTrace = str_replace("\n", "\n    ", $e->getTraceAsString());
+
+        Context::logWarning('API Deprecation notice', [
+            'url' => $url,
+            'reason' => $reason,
+            'stack trace' => $stackTrace
+        ]);
+    }
+
+    /**
+     * Determines whether to log an API deprecation based on last logged time
+     *
+     * @return bool
+     */
+    private function shouldLogApiDeprecation(): bool
+    {
         $warningFilePath = $this->getApiDeprecationTimestampFilePath();
 
         $lastWarning = null;
@@ -262,28 +282,13 @@ class Http
         }
 
         if (time() - $lastWarning < self::DEPRECATION_ALERT_SECONDS) {
-            return;
+            $result = false;
+        } else {
+            $result = true;
+            file_put_contents($warningFilePath, time());
         }
 
-        file_put_contents($warningFilePath, time());
-
-        $e = new Exception();
-        $stackTrace = str_replace("\n", "\n    ", $e->getTraceAsString());
-
-        // For some reason, code coverage doesn't like the heredoc string, but there's no branching here so if the lines
-        // above are hit, so is this.
-        // @codeCoverageIgnoreStart
-        Context::log(
-            <<<NOTICE
-            API Deprecation notice:
-                URL: $url
-                Reason: $reason
-            Stack trace:
-                $stackTrace
-            NOTICE,
-            LogLevel::WARNING,
-        );
-        // @codeCoverageIgnoreEnd
+        return $result;
     }
 
     /**
@@ -293,6 +298,11 @@ class Http
      */
     public function getApiDeprecationTimestampFilePath(): string
     {
-        return dirname(__DIR__) . '/.last_api_deprecation_warning';
+        $filename = '.last_api_deprecation_warning';
+
+        return join(DIRECTORY_SEPARATOR, [
+            rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR),
+            ltrim($filename, DIRECTORY_SEPARATOR),
+        ]);
     }
 }

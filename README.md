@@ -69,3 +69,9 @@ To run linter:
 ```
 composer lint
 ```
+
+After having modified the `composer.json` file, make sure to run:
+```
+composer validate
+composer normalize
+```

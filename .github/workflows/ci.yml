@@ -29,6 +29,12 @@ jobs:
       - name: Run linter
         run: composer lint
 
+      - name: Run validation on composer.json
+        run: composer validate
+
+      - name: Run normalizer on composer.json
+        run: composer normalize --dry-run
+
       - name: Run tests
         run: composer test
 

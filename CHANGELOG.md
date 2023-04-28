@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [#236](https://github.com/Shopify/shopify-api-php/pull/236) [bugfix] Correct requirements in `composer.json`
 - [#262](https://github.com/Shopify/shopify-api-php/pull/262) ⚠️ [Breaking] Added support for PHP 8.2, and removed support for PHP 7.4
+- [#264](https://github.com/Shopify/shopify-api-php/pull/264) [Patch] Remove support for currently-non-existent versions of PHP (8.3+)
 
 ## v4.3.0 - 2023-04-12
 

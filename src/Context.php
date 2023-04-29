@@ -34,7 +34,7 @@ class Context
     /** @var bool */
     public static $IS_EMBEDDED_APP = true;
     /** @var bool */
-    public static $IS_PRIVATE_APP = false;
+    public static $IS_CUSTOM_APP = false;
     /** @var string|null */
     public static $PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = null;
     /** @var string */
@@ -61,8 +61,8 @@ class Context
      * @param SessionStorage       $sessionStorage                  Session storage strategy
      * @param string               $apiVersion                      App API key, defaults to unstable
      * @param bool                 $isEmbeddedApp                   Whether the app is an embedded app, defaults to true
-     * @param bool                 $isPrivateApp                    Whether the app is a private app, defaults to false
-     * @param string|null          $privateAppStorefrontAccessToken The Storefront API Access Token for a private app
+     * @param bool                 $isCustomStoreApp                Whether the app is a custom store app, defaults to false
+     * @param string|null          $privateAppStorefrontAccessToken The Storefront API Access Token for a custom store app
      * @param string               $userAgentPrefix                 Prefix for user agent header sent with a request
      * @param LoggerInterface|null $logger                          App logger, so the library can add its own logs to
      *                                                              it
@@ -78,7 +78,7 @@ class Context
         SessionStorage $sessionStorage,
         string $apiVersion = ApiVersion::LATEST,
         bool $isEmbeddedApp = true,
-        bool $isPrivateApp = false,
+        bool $isCustomStoreApp = false,
         string $privateAppStorefrontAccessToken = null,
         string $userAgentPrefix = '',
         LoggerInterface $logger = null,
@@ -130,7 +130,7 @@ class Context
         self::$HTTP_CLIENT_FACTORY = new HttpClientFactory();
         self::$API_VERSION = $apiVersion;
         self::$IS_EMBEDDED_APP = $isEmbeddedApp;
-        self::$IS_PRIVATE_APP = $isPrivateApp;
+        self::$IS_CUSTOM_APP = $isCustomStoreApp;
         self::$PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = $privateAppStorefrontAccessToken;
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
         self::$LOGGER = $logger;
@@ -163,7 +163,7 @@ class Context
      */
     public static function throwIfPrivateApp(string $message): void
     {
-        if (self::$IS_PRIVATE_APP) {
+        if (self::$IS_CUSTOM_APP) {
             throw new PrivateAppException($message);
         }
     }

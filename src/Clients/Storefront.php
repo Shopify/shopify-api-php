@@ -21,7 +21,7 @@ final class Storefront extends Graphql
      */
     protected function getAccessTokenHeader(): array
     {
-        $accessToken = Context::$IS_PRIVATE_APP ?
+        $accessToken = Context::$IS_CUSTOM_APP ?
             (Context::$PRIVATE_APP_STOREFRONT_ACCESS_TOKEN ?: $this->token) :
             $this->token;
         return [HttpHeaders::X_SHOPIFY_STOREFRONT_ACCESS_TOKEN, $accessToken];

@@ -61,6 +61,42 @@ final class Utils
     }
 
     /**
+     * Builds query strings that are compatible with Shopify's format for array handling
+     * Example: IDs = [1,2,3]
+     * PHP would generate:  ids[]=1&IDs[]=2&IDs[]=3
+     * Shopify expects:     ids=["1","2","3"] (URL encoded)
+     *
+     * @param array $params Array of query parameters
+     *
+     * @return string The URL encoded query string ("foo=bar&bar=foo")
+     */
+    public static function buildQueryString(array $params): string
+    {
+        // Exclude HMAC from query string
+        $params = array_filter($params, function ($key) {
+            return $key !== 'hmac';
+        }, ARRAY_FILTER_USE_KEY);
+
+        // Concatenate arrays to conform with Shopify
+        array_walk($params, function (&$value, $key) {
+            if (!is_array($value)) {
+                return;
+            }
+
+            $escapedValues = array_map(function ($value) {
+                return sprintf('"%s"', $value);
+            }, $value);
+            $concatenatedValues = implode(',', $escapedValues);
+            $encapsulatedValues = sprintf('[%s]', $concatenatedValues);
+
+            $value = $encapsulatedValues;
+        });
+
+        // Building the actual query using PHP's native function
+        return http_build_query($params);
+    }
+
+    /**
      * Determines if request is valid by processing secret key through an HMAC-SHA256 hash function
      *
      * @param array  $params array of parameters parsed from a URL
@@ -70,12 +106,14 @@ final class Utils
      */
     public static function validateHmac(array $params, string $secret): bool
     {
-        $hmac = $params['hmac'] ?? '';
-        unset($params['hmac']);
+        if (empty($params['hmac']) || empty($secret)) {
+            return false;
+        }
 
-        $computedHmac = hash_hmac('sha256', http_build_query($params), $secret);
-
-        return hash_equals($hmac, $computedHmac);
+        return hash_equals(
+            $params['hmac'],
+            hash_hmac('sha256', self::buildQueryString($params), $secret)
+        );
     }
 
     /**

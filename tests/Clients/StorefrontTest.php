@@ -55,7 +55,7 @@ final class StorefrontTest extends BaseTestCase
 
     public function testCanMakeRequestForPrivateApp()
     {
-        Context::$IS_PRIVATE_APP = true;
+        Context::$IS_CUSTOM_APP = true;
         Context::$PRIVATE_APP_STOREFRONT_ACCESS_TOKEN = 'private_token';
 
         $this->mockTransportRequests([
@@ -82,7 +82,7 @@ final class StorefrontTest extends BaseTestCase
 
     public function testCanUseTokenForPrivateAppRequest()
     {
-        Context::$IS_PRIVATE_APP = true;
+        Context::$IS_CUSTOM_APP = true;
 
         $this->mockTransportRequests([
             new MockRequest(

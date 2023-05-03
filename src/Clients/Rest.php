@@ -25,7 +25,7 @@ class Rest extends Http
         parent::__construct($domain);
         $this->accessToken = $accessToken;
 
-        if (!Context::$IS_PRIVATE_APP && !$this->accessToken) {
+        if (!Context::$IS_CUSTOM_APP && !$this->accessToken) {
             throw new MissingArgumentException('Missing access token when creating REST client');
         }
     }
@@ -43,7 +43,7 @@ class Rest extends Http
         string $dataType = self::DATA_TYPE_JSON
     ): RestResponse {
         $headers[HttpHeaders::X_SHOPIFY_ACCESS_TOKEN] =
-            Context::$IS_PRIVATE_APP ? Context::$API_SECRET_KEY : $this->accessToken;
+            Context::$IS_CUSTOM_APP ? Context::$API_SECRET_KEY : $this->accessToken;
 
         $response = parent::request($path, $method, $body, $headers, $query, $tries, $dataType);
 

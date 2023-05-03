@@ -26,7 +26,7 @@ class Graphql
         string $domain,
         ?string $token = null
     ) {
-        if (!Context::$IS_PRIVATE_APP && empty($token)) {
+        if (!Context::$IS_CUSTOM_APP && empty($token)) {
             throw new MissingArgumentException('Missing access token when creating GraphQL client');
         }
         $this->client = new Http($domain);
@@ -126,7 +126,7 @@ class Graphql
      */
     protected function getAccessTokenHeader(): array
     {
-        $accessToken = Context::$IS_PRIVATE_APP ? Context::$API_SECRET_KEY : $this->token;
+        $accessToken = Context::$IS_CUSTOM_APP ? Context::$API_SECRET_KEY : $this->token;
         return [HttpHeaders::X_SHOPIFY_ACCESS_TOKEN, $accessToken];
     }
 }

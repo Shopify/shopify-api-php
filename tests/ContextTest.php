@@ -92,7 +92,7 @@ final class ContextTest extends BaseTestCase
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
             apiVersion: 'unstable',
-            isPrivateApp: true,
+            isCustomStoreApp: true,
         );
         $this->expectException(\Shopify\Exception\PrivateAppException::class);
         $this->expectExceptionMessage('BOOOOOO');
@@ -258,7 +258,7 @@ final class ContextTest extends BaseTestCase
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
             apiVersion: ApiVersion::LATEST,
-            isPrivateApp: false,
+            isCustomStoreApp: false,
             customShopDomains: $domains,
         );
 

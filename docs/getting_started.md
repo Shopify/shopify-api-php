@@ -21,7 +21,7 @@ The first thing your app will need to do to use this library is to set up your c
 | `sessionStorage`  | `SessionStorage`  |    Yes    |      -       | Session storage strategy. Read our [notes on session handling](issues.md#notes-on-session-handling) for more information                                                             |
 | `apiVersion`      | `string`          |    No     | `'unstable'` | App API version, defaults to unstable                                                                                                                                                |
 | `isEmbeddedApp`   | `bool`            |    No     |    `true`    | Whether the app is an embedded app                                                                                                                                                   |
-| `isPrivateApp`    | `bool`            |    No     |   `false`    | Whether the app is a private app                                                                                                                                                     |
+| `isCustomStoreApp`    | `bool`            |    No     |   `false`    | Whether the app is a custom store app                                                                                                                                                     |
 | `userAgentPrefix` | `string`          |    No     |      -       | Prefix for user agent header sent with a request                                                                                                                                     |
 | `logger`          | `LoggerInterface` |    No     |      -       | App logger, so the library can add its own logs to it. Must implement the [PSR-3](https://www.php-fig.org/psr/psr-3/) `Psr\Log\LoggerInterface` interface from the `psr/log` package |
 
@@ -36,7 +36,7 @@ Context::initialize(
     sessionStorage: new FileSessionStorage('/tmp/php_sessions'),
     apiVersion: '2023-04',
     isEmbeddedApp: true,
-    isPrivateApp: false,
+    isCustomStoreApp: false,
 );
 ```
 

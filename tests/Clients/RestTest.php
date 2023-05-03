@@ -30,7 +30,7 @@ class RestTest extends BaseTestCase
 
     public function testInstantiateWithoutAccessTokenForPrivateApps()
     {
-        Context::$IS_PRIVATE_APP = true;
+        Context::$IS_CUSTOM_APP = true;
 
         $client = new Rest($this->domain);
         $this->assertNotNull($client);
@@ -38,7 +38,7 @@ class RestTest extends BaseTestCase
 
     public function testPrivateAppsUseApiSecretKeyAsAccessToken()
     {
-        Context::$IS_PRIVATE_APP = true;
+        Context::$IS_CUSTOM_APP = true;
 
         $headers = ['X-Test-Header' => 'test_value'];
 

@@ -376,7 +376,7 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        Context::$IS_PRIVATE_APP = true;
+        Context::$IS_CUSTOM_APP = true;
 
         $mockCookies = [
             OAuth::SESSION_ID_SIG_COOKIE_NAME => hash_hmac('sha256', $this->oauthSessionId, Context::$API_SECRET_KEY),
@@ -493,7 +493,7 @@ final class OAuthTest extends BaseTestCase
 
     public function testBeginFailsOnPrivateApp()
     {
-        Context::$IS_PRIVATE_APP = true;
+        Context::$IS_CUSTOM_APP = true;
 
         $this->expectexception(PrivateAppException::class);
         OAuth::begin('shopname', '/redirect', true);

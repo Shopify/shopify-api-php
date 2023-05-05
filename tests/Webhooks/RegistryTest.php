@@ -408,6 +408,29 @@ final class RegistryTest extends BaseTestCase
         $this->assertNull($response->getErrorMessage());
     }
 
+    public function testHandlesVarianceInWebhookTopicNames()
+    {
+        $handler = $this->getMockHandler();
+        $handler->expects($this->once())
+            ->method('handle')
+            ->with(
+                "DOMAIN_SUB_DOMAIN_SOMETHING_HAPPENED",
+                'test-shop.myshopify.io',
+                $this->processBody,
+            );
+
+        Registry::addHandler("DOMAIN_SUB_DOMAIN_SOMETHING_HAPPENED", $handler);
+
+        $processHeaders = [
+            HttpHeaders::X_SHOPIFY_HMAC => '/Redz4YXHLnSmmSN8grr5/Jl/Ua3d7yX3iWbjb8R8wo=',
+            HttpHeaders::X_SHOPIFY_TOPIC => 'domain.sub_domain.something_happened',
+            HttpHeaders::X_SHOPIFY_DOMAIN => 'test-shop.myshopify.io',
+        ];
+        $response = Registry::process($processHeaders, json_encode($this->processBody));
+        $this->assertTrue($response->isSuccess());
+        $this->assertNull($response->getErrorMessage());
+    }
+
     public function testProcessWebhookWithHandlerErrors()
     {
         $handler = $this->getMockHandler();

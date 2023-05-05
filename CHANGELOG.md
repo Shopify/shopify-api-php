@@ -14,6 +14,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - [#262](https://github.com/Shopify/shopify-api-php/pull/262) ⚠️ [Breaking] Added support for PHP 8.2, and removed support for PHP 7.4
 - [#264](https://github.com/Shopify/shopify-api-php/pull/264) [Patch] Remove support for currently-non-existent versions of PHP (8.3+)
 - [#272](https://github.com/Shopify/shopify-api-php/pull/272) ⚠️ [Breaking] Removed REST resources for 2022-01, update resources for remaining versions
+- [#270](https://github.com/Shopify/shopify-api-php/pull/270) [Patch] Add support for Event topic names
 
 ## v4.3.0 - 2023-04-12
 

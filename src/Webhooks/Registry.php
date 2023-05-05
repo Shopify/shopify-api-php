@@ -295,6 +295,6 @@ final class Registry
      */
     private static function convertTopic(string $topic): string
     {
-        return strtoupper(str_replace('/', '_', $topic));
+        return strtoupper(str_replace(['/', '.'], '_', $topic));
     }
 }

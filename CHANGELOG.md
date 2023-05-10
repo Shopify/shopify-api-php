@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v5.0.0 - 2023-05-10
+
 - [#269](https://github.com/Shopify/shopify-api-php/pull/269) [bugfix] Refactored query string building to account for Shopify-specific array format
 - [#236](https://github.com/Shopify/shopify-api-php/pull/236) [bugfix] Correct requirements in `composer.json`
 - [#262](https://github.com/Shopify/shopify-api-php/pull/262) ⚠️ [Breaking] Added support for PHP 8.2, and removed support for PHP 7.4

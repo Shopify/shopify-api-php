@@ -39,7 +39,7 @@ final class StorefrontAccessToken202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["storefront_access_token" => ["access_token" => "66ceed9ddc422ec3a23da93e942d4ddc", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2023-04-04T17:05:36-04:00", "id" => 1003303990, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/1003303990", "title" => "Test"]]
+                  ["storefront_access_token" => ["access_token" => "bac50afe906e84b04b95ffb1bee5ade6", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2023-02-02T09:35:37-05:00", "id" => 1003303990, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/1003303990", "title" => "Test"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/storefront_access_tokens.json",
                 "POST",
@@ -66,7 +66,7 @@ final class StorefrontAccessToken202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["storefront_access_tokens" => [["access_token" => "378d95641257a4ab3feff967ee234f4d", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2023-04-04T17:03:11-04:00", "id" => 755357713, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/755357713", "title" => "API Client Extension"]]]
+                  ["storefront_access_tokens" => [["access_token" => "378d95641257a4ab3feff967ee234f4d", "access_scope" => "unauthenticated_read_product_listings", "created_at" => "2023-02-02T09:09:49-05:00", "id" => 755357713, "admin_graphql_api_id" => "gid://shopify/StorefrontAccessToken/755357713", "title" => "API Client Extension"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/storefront_access_tokens.json",
                 "GET",

@@ -70,7 +70,7 @@ use Shopify\Rest\Base;
  * @property string|null $source_identifier
  * @property string|null $source_name
  * @property string|null $source_url
- * @property float|null $subtotal_price
+ * @property string|null $subtotal_price
  * @property array|null $subtotal_price_set
  * @property string|null $tags
  * @property array[]|null $tax_lines

@@ -20,7 +20,7 @@ use Shopify\Rest\Base;
  * @property string|null $message
  * @property int|null $order_id
  * @property string|null $recommendation
- * @property float|null $score
+ * @property string|null $score
  * @property string|null $source
  */
 class OrderRisk extends Base
@@ -42,6 +42,16 @@ class OrderRisk extends Base
      * @return string
      */
     protected static function getJsonBodyName(): string
+    {
+        return "risk";
+    }
+
+    /**
+
+     *
+     * @return string
+     */
+    protected static function getJsonResponseBodyName(): string
     {
         return "risk";
     }

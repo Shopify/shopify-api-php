@@ -39,9 +39,9 @@ final class CancellationRequest202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_order" => ["id" => 1046000783, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_requested", "status" => "in_progress", "supported_actions" => ["cancel_fulfillment_order", "create_fulfillment"], "destination" => ["id" => 1046000780, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@mail.example.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "+1(502)-459-2181", "province" => "Kentucky", "zip" => "40202"], "origin" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null], "line_items" => [["id" => 1058737487, "shop_id" => 548380009, "fulfillment_order_id" => 1046000783, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app"]]
+                  ["fulfillment_order" => ["id" => 1046000834, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_requested", "status" => "in_progress", "supported_actions" => ["cancel_fulfillment_order", "create_fulfillment"], "destination" => ["id" => 1046000825, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@mail.example.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "+1(502)-459-2181", "province" => "Kentucky", "zip" => "40202"], "origin" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null], "line_items" => [["id" => 1058737581, "shop_id" => 548380009, "fulfillment_order_id" => 1046000834, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000783/cancellation_request.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000834/cancellation_request.json",
                 "POST",
                 null,
                 [
@@ -52,7 +52,7 @@ final class CancellationRequest202204Test extends BaseTestCase
         ]);
 
         $cancellation_request = new CancellationRequest($this->test_session);
-        $cancellation_request->fulfillment_order_id = 1046000783;
+        $cancellation_request->fulfillment_order_id = 1046000834;
         $cancellation_request->message = "The customer changed his mind.";
         $cancellation_request->save();
     }
@@ -67,9 +67,9 @@ final class CancellationRequest202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_order" => ["id" => 1046000781, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_accepted", "status" => "cancelled", "supported_actions" => ["request_fulfillment", "create_fulfillment"], "destination" => ["id" => 1046000778, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@mail.example.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "+1(502)-459-2181", "province" => "Kentucky", "zip" => "40202"], "origin" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null], "line_items" => [["id" => 1058737485, "shop_id" => 548380009, "fulfillment_order_id" => 1046000781, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app"]]
+                  ["fulfillment_order" => ["id" => 1046000836, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_accepted", "status" => "cancelled", "supported_actions" => ["request_fulfillment", "create_fulfillment"], "destination" => ["id" => 1046000827, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@mail.example.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "+1(502)-459-2181", "province" => "Kentucky", "zip" => "40202"], "origin" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null], "line_items" => [["id" => 1058737583, "shop_id" => 548380009, "fulfillment_order_id" => 1046000836, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000781/cancellation_request/accept.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000836/cancellation_request/accept.json",
                 "POST",
                 null,
                 [
@@ -80,7 +80,7 @@ final class CancellationRequest202204Test extends BaseTestCase
         ]);
 
         $cancellation_request = new CancellationRequest($this->test_session);
-        $cancellation_request->fulfillment_order_id = 1046000781;
+        $cancellation_request->fulfillment_order_id = 1046000836;
         $cancellation_request->accept(
             [],
             ["cancellation_request" => ["message" => "We had not started any processing yet."]],
@@ -97,9 +97,9 @@ final class CancellationRequest202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_order" => ["id" => 1046000782, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_rejected", "status" => "in_progress", "supported_actions" => [], "destination" => ["id" => 1046000779, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@mail.example.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "+1(502)-459-2181", "province" => "Kentucky", "zip" => "40202"], "origin" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null], "line_items" => [["id" => 1058737486, "shop_id" => 548380009, "fulfillment_order_id" => 1046000782, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app"]]
+                  ["fulfillment_order" => ["id" => 1046000835, "shop_id" => 548380009, "order_id" => 450789469, "assigned_location_id" => 24826418, "request_status" => "cancellation_rejected", "status" => "in_progress", "supported_actions" => [], "destination" => ["id" => 1046000826, "address1" => "Chestnut Street 92", "address2" => "", "city" => "Louisville", "company" => null, "country" => "United States", "email" => "bob.norman@mail.example.com", "first_name" => "Bob", "last_name" => "Norman", "phone" => "+1(502)-459-2181", "province" => "Kentucky", "zip" => "40202"], "origin" => ["address1" => null, "address2" => null, "city" => null, "country_code" => "DE", "location_id" => 24826418, "name" => "Apple Api Shipwire", "phone" => null, "province" => null, "zip" => null], "line_items" => [["id" => 1058737582, "shop_id" => 548380009, "fulfillment_order_id" => 1046000835, "quantity" => 1, "line_item_id" => 518995019, "inventory_item_id" => 49148385, "fulfillable_quantity" => 1, "variant_id" => 49148385]], "outgoing_requests" => [], "fulfillment_service_handle" => "shipwire-app"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000782/cancellation_request/reject.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_orders/1046000835/cancellation_request/reject.json",
                 "POST",
                 null,
                 [
@@ -110,7 +110,7 @@ final class CancellationRequest202204Test extends BaseTestCase
         ]);
 
         $cancellation_request = new CancellationRequest($this->test_session);
-        $cancellation_request->fulfillment_order_id = 1046000782;
+        $cancellation_request->fulfillment_order_id = 1046000835;
         $cancellation_request->reject(
             [],
             ["cancellation_request" => ["message" => "We have already send the shipment out."]],

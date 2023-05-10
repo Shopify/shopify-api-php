@@ -13,15 +13,15 @@ use Shopify\Rest\Base;
 
 /**
  * @property int|null $api_client_id
- * @property float|null $balance
+ * @property Balance|null $balance
  * @property string|null $code
  * @property string|null $created_at
- * @property string|null $currency
+ * @property Currency|null $currency
  * @property int|null $customer_id
  * @property string|null $disabled_at
  * @property string|null $expires_on
  * @property int|null $id
- * @property float|null $initial_value
+ * @property string|null $initial_value
  * @property string|null $last_characters
  * @property int|null $line_item_id
  * @property string|null $note
@@ -33,7 +33,10 @@ use Shopify\Rest\Base;
 class GiftCard extends Base
 {
     public static string $API_VERSION = "2023-01";
-    protected static array $HAS_ONE = [];
+    protected static array $HAS_ONE = [
+        "balance" => Balance::class,
+        "currency" => Currency::class
+    ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
         ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "gift_cards/count.json"],

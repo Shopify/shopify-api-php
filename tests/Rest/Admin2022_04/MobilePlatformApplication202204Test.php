@@ -39,7 +39,7 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["mobile_platform_applications" => [["id" => 1066175998, "application_id" => "X1Y2.ca.domain.app", "platform" => "ios", "created_at" => "2023-04-04T17:29:45-04:00", "updated_at" => "2023-04-04T17:29:45-04:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null], ["id" => 1066175999, "application_id" => "com.example", "platform" => "android", "created_at" => "2023-04-04T17:29:45-04:00", "updated_at" => "2023-04-04T17:29:45-04:00", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "enabled_app_clips" => false, "app_clip_application_id" => null]]]
+                  ["mobile_platform_applications" => [["id" => 1066176000, "application_id" => "X1Y2.ca.domain.app", "platform" => "ios", "created_at" => "2023-02-02T09:54:36-05:00", "updated_at" => "2023-02-02T09:54:36-05:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null], ["id" => 1066176001, "application_id" => "com.example", "platform" => "android", "created_at" => "2023-02-02T09:54:36-05:00", "updated_at" => "2023-02-02T09:54:36-05:00", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "enabled_app_clips" => false, "app_clip_application_id" => null]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications.json",
                 "GET",
@@ -67,7 +67,7 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["mobile_platform_application" => ["id" => 1066176003, "application_id" => "com.example", "platform" => "android", "created_at" => "2023-04-04T17:29:53-04:00", "updated_at" => "2023-04-04T17:29:53-04:00", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "enabled_app_clips" => false, "app_clip_application_id" => null]]
+                  ["mobile_platform_application" => ["id" => 1066175998, "application_id" => "com.example", "platform" => "android", "created_at" => "2023-02-02T09:54:33-05:00", "updated_at" => "2023-02-02T09:54:33-05:00", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "enabled_app_clips" => false, "app_clip_application_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications.json",
                 "POST",
@@ -99,7 +99,7 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["mobile_platform_application" => ["id" => 1066175997, "application_id" => "X1Y2.ca.domain.app", "platform" => "ios", "created_at" => "2023-04-04T17:29:45-04:00", "updated_at" => "2023-04-04T17:29:45-04:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null]]
+                  ["mobile_platform_application" => ["id" => 1066175997, "application_id" => "X1Y2.ca.domain.app", "platform" => "ios", "created_at" => "2023-02-02T09:54:32-05:00", "updated_at" => "2023-02-02T09:54:32-05:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications.json",
                 "POST",
@@ -129,9 +129,9 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["mobile_platform_application" => ["id" => 1066175996, "application_id" => "X1Y2.ca.domain.app", "platform" => "ios", "created_at" => "2023-04-04T17:29:43-04:00", "updated_at" => "2023-04-04T17:29:43-04:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null]]
+                  ["mobile_platform_application" => ["id" => 1066176003, "application_id" => "X1Y2.ca.domain.app", "platform" => "ios", "created_at" => "2023-02-02T09:54:40-05:00", "updated_at" => "2023-02-02T09:54:40-05:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066175996.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066176003.json",
                 "GET",
                 null,
                 [
@@ -142,7 +142,7 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
 
         MobilePlatformApplication::find(
             $this->test_session,
-            1066175996,
+            1066176003,
             [],
             [],
         );
@@ -158,24 +158,24 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["mobile_platform_application" => ["application_id" => "com.example.news.app", "platform" => "android", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "id" => 1066176000, "created_at" => "2023-04-04T17:29:47-04:00", "updated_at" => "2023-04-04T17:29:48-04:00", "enabled_app_clips" => false, "app_clip_application_id" => null]]
+                  ["mobile_platform_application" => ["application_id" => "com.example.news.app", "platform" => "android", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "id" => 1066175999, "created_at" => "2023-02-02T09:54:34-05:00", "updated_at" => "2023-02-02T09:54:35-05:00", "enabled_app_clips" => false, "app_clip_application_id" => null]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066176000.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066175999.json",
                 "PUT",
                 null,
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["mobile_platform_application" => ["application_id" => "com.example.news.app", "platform" => "android", "created_at" => "2023-04-04T17:29:47-04:00", "updated_at" => "2023-04-04T17:29:47-04:00", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "enabled_app_clips" => false, "app_clip_application_id" => null]]),
+                json_encode(["mobile_platform_application" => ["application_id" => "com.example.news.app", "platform" => "android", "created_at" => "2023-02-02T09:54:34-05:00", "updated_at" => "2023-02-02T09:54:34-05:00", "sha256_cert_fingerprints" => ["14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => false, "enabled_app_clips" => false, "app_clip_application_id" => null]]),
             ),
         ]);
 
         $mobile_platform_application = new MobilePlatformApplication($this->test_session);
-        $mobile_platform_application->id = 1066176000;
+        $mobile_platform_application->id = 1066175999;
         $mobile_platform_application->application_id = "com.example.news.app";
         $mobile_platform_application->platform = "android";
-        $mobile_platform_application->created_at = "2023-04-04T17:29:47-04:00";
-        $mobile_platform_application->updated_at = "2023-04-04T17:29:47-04:00";
+        $mobile_platform_application->created_at = "2023-02-02T09:54:34-05:00";
+        $mobile_platform_application->updated_at = "2023-02-02T09:54:34-05:00";
         $mobile_platform_application->sha256_cert_fingerprints = [
             "14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"
         ];
@@ -196,24 +196,24 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["mobile_platform_application" => ["application_id" => "A1B2.ca.domain.app", "platform" => "ios", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "id" => 1066176002, "created_at" => "2023-04-04T17:29:50-04:00", "updated_at" => "2023-04-04T17:29:52-04:00", "enabled_app_clips" => false, "app_clip_application_id" => null]]
+                  ["mobile_platform_application" => ["application_id" => "A1B2.ca.domain.app", "platform" => "ios", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "id" => 1066175996, "created_at" => "2023-02-02T09:54:28-05:00", "updated_at" => "2023-02-02T09:54:30-05:00", "enabled_app_clips" => false, "app_clip_application_id" => null]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066176002.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066175996.json",
                 "PUT",
                 null,
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["mobile_platform_application" => ["application_id" => "A1B2.ca.domain.app", "platform" => "ios", "created_at" => "2023-04-04T17:29:50-04:00", "updated_at" => "2023-04-04T17:29:50-04:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null]]),
+                json_encode(["mobile_platform_application" => ["application_id" => "A1B2.ca.domain.app", "platform" => "ios", "created_at" => "2023-02-02T09:54:28-05:00", "updated_at" => "2023-02-02T09:54:28-05:00", "sha256_cert_fingerprints" => [], "enabled_universal_or_app_links" => true, "enabled_shared_webcredentials" => true, "enabled_app_clips" => false, "app_clip_application_id" => null]]),
             ),
         ]);
 
         $mobile_platform_application = new MobilePlatformApplication($this->test_session);
-        $mobile_platform_application->id = 1066176002;
+        $mobile_platform_application->id = 1066175996;
         $mobile_platform_application->application_id = "A1B2.ca.domain.app";
         $mobile_platform_application->platform = "ios";
-        $mobile_platform_application->created_at = "2023-04-04T17:29:50-04:00";
-        $mobile_platform_application->updated_at = "2023-04-04T17:29:50-04:00";
+        $mobile_platform_application->created_at = "2023-02-02T09:54:28-05:00";
+        $mobile_platform_application->updated_at = "2023-02-02T09:54:28-05:00";
         $mobile_platform_application->sha256_cert_fingerprints = [];
         $mobile_platform_application->enabled_universal_or_app_links = true;
         $mobile_platform_application->enabled_shared_webcredentials = true;
@@ -234,7 +234,7 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   []
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066176001.json",
+                "https://test-shop.myshopify.io/admin/api/2022-04/mobile_platform_applications/1066176002.json",
                 "DELETE",
                 null,
                 [
@@ -245,7 +245,7 @@ final class MobilePlatformApplication202204Test extends BaseTestCase
 
         MobilePlatformApplication::delete(
             $this->test_session,
-            1066176001,
+            1066176002,
             [],
             [],
         );

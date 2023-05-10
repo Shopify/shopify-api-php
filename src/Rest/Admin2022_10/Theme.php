@@ -18,6 +18,7 @@ use Shopify\Rest\Base;
  * @property bool|null $previewable
  * @property bool|null $processing
  * @property string|null $role
+ * @property string|null $src
  * @property int|null $theme_store_id
  * @property string|null $updated_at
  */

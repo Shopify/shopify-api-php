@@ -9,8 +9,6 @@ class ApiVersion
     /** @var string */
     public const UNSTABLE = "unstable";
     /** @var string */
-    public const JANUARY_2022 = "2022-01";
-    /** @var string */
     public const APRIL_2022 = "2022-04";
     /** @var string */
     public const JULY_2022 = "2022-07";
@@ -25,7 +23,6 @@ class ApiVersion
 
     private static $ALL_VERSIONS = [
         self::UNSTABLE,
-        self::JANUARY_2022,
         self::APRIL_2022,
         self::JULY_2022,
         self::OCTOBER_2022,

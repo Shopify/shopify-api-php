@@ -20,7 +20,7 @@ use Shopify\Rest\Base;
  * @property string|null $message
  * @property int|null $order_id
  * @property string|null $recommendation
- * @property float|null $score
+ * @property string|null $score
  * @property string|null $source
  */
 class OrderRisk extends Base

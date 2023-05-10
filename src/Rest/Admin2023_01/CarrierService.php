@@ -16,6 +16,7 @@ use Shopify\Rest\Base;
  * @property string|null $admin_graphql_api_id
  * @property string|null $callback_url
  * @property string|null $carrier_service_type
+ * @property string|null $format
  * @property int|null $id
  * @property string|null $name
  * @property bool|null $service_discovery

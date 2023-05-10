@@ -20,7 +20,7 @@ use Shopify\Rest\Base;
  * @property string|null $country
  * @property string|null $country_code
  * @property string|null $country_name
- * @property string|null $county_taxes
+ * @property bool|null $county_taxes
  * @property string|null $created_at
  * @property string|null $currency
  * @property string|null $customer_email

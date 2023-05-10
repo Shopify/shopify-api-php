@@ -15,12 +15,12 @@ use Shopify\Rest\Base;
  * @property mixed $carrier_shipping_rate_providers
  * @property Country[]|null $countries
  * @property int|null $id
- * @property int|null $location_group_id
+ * @property string|null $location_group_id
  * @property string|null $name
- * @property array|null $price_based_shipping_rates
- * @property int|null $profile_id
+ * @property array[]|null $price_based_shipping_rates
+ * @property string|null $profile_id
  * @property Province[]|null $provinces
- * @property array|null $weight_based_shipping_rates
+ * @property array[]|null $weight_based_shipping_rates
  */
 class ShippingZone extends Base
 {

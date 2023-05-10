@@ -39,7 +39,7 @@ final class UsageCharge202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["usage_charge" => ["id" => 1034618208, "description" => "Super Mega Plan 1000 emails", "price" => "1.00", "created_at" => "2023-04-04T17:21:41-04:00", "currency" => "USD", "billing_on" => null, "balance_used" => 11.0, "balance_remaining" => 89.0, "risk_level" => 0]]
+                  ["usage_charge" => ["id" => 1034618219, "description" => "Super Mega Plan 1000 emails", "price" => "1.00", "created_at" => "2023-05-09T20:28:48-04:00", "currency" => "USD", "billing_on" => null, "balance_used" => 11.0, "balance_remaining" => 89.0, "risk_level" => 0]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/recurring_application_charges/455696195/usage_charges.json",
                 "POST",
@@ -47,14 +47,14 @@ final class UsageCharge202301Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["usage_charge" => ["description" => "Super Mega Plan 1000 emails", "price" => 1.0]]),
+                json_encode(["usage_charge" => ["description" => "Super Mega Plan 1000 emails", "price" => "1.00"]]),
             ),
         ]);
 
         $usage_charge = new UsageCharge($this->test_session);
         $usage_charge->recurring_application_charge_id = 455696195;
         $usage_charge->description = "Super Mega Plan 1000 emails";
-        $usage_charge->price = 1.0;
+        $usage_charge->price = "1.00";
         $usage_charge->save();
     }
 
@@ -68,7 +68,7 @@ final class UsageCharge202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["usage_charges" => [["id" => 1034618209, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2023-04-04T17:21:41-04:00", "currency" => "USD", "billing_on" => null, "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]]
+                  ["usage_charges" => [["id" => 1034618215, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2023-05-09T20:28:43-04:00", "currency" => "USD", "billing_on" => null, "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/recurring_application_charges/455696195/usage_charges.json",
                 "GET",
@@ -96,9 +96,9 @@ final class UsageCharge202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["usage_charge" => ["id" => 1034618206, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2023-04-04T17:21:38-04:00", "currency" => "USD", "billing_on" => null, "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]
+                  ["usage_charge" => ["id" => 1034618214, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2023-05-09T20:28:36-04:00", "currency" => "USD", "billing_on" => null, "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-01/recurring_application_charges/455696195/usage_charges/1034618206.json",
+                "https://test-shop.myshopify.io/admin/api/2023-01/recurring_application_charges/455696195/usage_charges/1034618214.json",
                 "GET",
                 null,
                 [
@@ -109,7 +109,7 @@ final class UsageCharge202301Test extends BaseTestCase
 
         UsageCharge::find(
             $this->test_session,
-            1034618206,
+            1034618214,
             ["recurring_application_charge_id" => "455696195"],
             [],
         );

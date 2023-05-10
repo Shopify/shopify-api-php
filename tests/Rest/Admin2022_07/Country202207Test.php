@@ -122,7 +122,7 @@ final class Country202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["country" => ["id" => 1070231510, "name" => "France", "code" => "FR", "tax_name" => "TVA", "tax" => 0.2, "provinces" => []]]
+                  ["country" => ["id" => 1070231512, "name" => "France", "code" => "FR", "tax_name" => "TVA", "tax" => 0.2, "provinces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/countries.json",
                 "POST",

@@ -16,7 +16,7 @@ use Shopify\Rest\Base;
  * @property Currency|null $currency
  * @property string|null $description
  * @property int|null $id
- * @property int|null $price
+ * @property string|null $price
  * @property int|null $recurring_application_charge_id
  * @property string|null $updated_at
  */

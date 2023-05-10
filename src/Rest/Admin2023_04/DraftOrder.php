@@ -32,7 +32,7 @@ use Shopify\Rest\Base;
  * @property array|null $shipping_line
  * @property string|null $source_name
  * @property string|null $status
- * @property float|null $subtotal_price
+ * @property string|null $subtotal_price
  * @property string|null $tags
  * @property bool|null $tax_exempt
  * @property string[]|null $tax_exemptions

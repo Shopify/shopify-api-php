@@ -47,6 +47,16 @@ class OrderRisk extends Base
     }
 
     /**
+
+     *
+     * @return string
+     */
+    protected static function getJsonResponseBodyName(): string
+    {
+        return "risk";
+    }
+
+    /**
      * @param Session $session
      * @param int|string $id
      * @param array $urlIds Allowed indexes:

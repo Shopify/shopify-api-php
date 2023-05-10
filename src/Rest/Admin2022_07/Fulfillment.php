@@ -25,7 +25,9 @@ use Shopify\Rest\Base;
  * @property string|null $shipment_status
  * @property string|null $status
  * @property string|null $tracking_company
+ * @property string|null $tracking_number
  * @property string[]|null $tracking_numbers
+ * @property string|null $tracking_url
  * @property string[]|null $tracking_urls
  * @property string|null $updated_at
  * @property string|null $variant_inventory_management

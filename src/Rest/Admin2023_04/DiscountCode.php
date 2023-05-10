@@ -14,6 +14,7 @@ use Shopify\Rest\Base;
 /**
  * @property string $code
  * @property string|null $created_at
+ * @property array|null $errors
  * @property int|null $id
  * @property int|null $price_rule_id
  * @property string|null $updated_at

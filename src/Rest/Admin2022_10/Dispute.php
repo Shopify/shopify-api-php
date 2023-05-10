@@ -18,7 +18,7 @@ use Shopify\Rest\Base;
  * @property string|null $evidence_sent_on
  * @property string|null $finalized_on
  * @property int|null $id
- * @property int|null $network_reason_code
+ * @property string|null $network_reason_code
  * @property int|null $order_id
  * @property string|null $reason
  * @property string|null $status

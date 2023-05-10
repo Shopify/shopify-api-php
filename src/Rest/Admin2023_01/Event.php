@@ -12,7 +12,7 @@ use Shopify\Auth\Session;
 use Shopify\Rest\Base;
 
 /**
- * @property string|null $arguments
+ * @property string[]|null $arguments
  * @property string|null $body
  * @property string|null $created_at
  * @property string|null $description

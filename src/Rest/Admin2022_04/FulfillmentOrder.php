@@ -137,7 +137,9 @@ class FulfillmentOrder extends Base
 
     /**
      * @param mixed[] $params Allowed indexes:
-     *     fulfillment_hold
+     *     reason,
+     *     reason_notes,
+     *     notify_merchant
      * @param array|string $body
      *
      * @return array|null

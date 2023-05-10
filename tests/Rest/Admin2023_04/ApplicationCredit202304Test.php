@@ -39,7 +39,7 @@ final class ApplicationCredit202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credit" => ["id" => 1031636125, "amount" => "5.00", "description" => "application credit for refund", "test" => null, "currency" => "USD"]]
+                  ["application_credit" => ["id" => 1031636134, "amount" => "5.00", "description" => "application credit for refund", "test" => null, "currency" => "USD"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/application_credits.json",
                 "POST",
@@ -47,13 +47,13 @@ final class ApplicationCredit202304Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["application_credit" => ["description" => "application credit for refund", "amount" => 5.0]]),
+                json_encode(["application_credit" => ["description" => "application credit for refund", "amount" => "5.00"]]),
             ),
         ]);
 
         $application_credit = new ApplicationCredit($this->test_session);
         $application_credit->description = "application credit for refund";
-        $application_credit->amount = 5.0;
+        $application_credit->amount = "5.00";
         $application_credit->save();
     }
 
@@ -67,7 +67,7 @@ final class ApplicationCredit202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credit" => ["id" => 1031636129, "amount" => "5.00", "description" => "application credit for refund", "test" => true, "currency" => "USD"]]
+                  ["application_credit" => ["id" => 1031636131, "amount" => "5.00", "description" => "application credit for refund", "test" => true, "currency" => "USD"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/application_credits.json",
                 "POST",
@@ -75,13 +75,13 @@ final class ApplicationCredit202304Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["application_credit" => ["description" => "application credit for refund", "amount" => 5.0, "test" => true]]),
+                json_encode(["application_credit" => ["description" => "application credit for refund", "amount" => "5.00", "test" => true]]),
             ),
         ]);
 
         $application_credit = new ApplicationCredit($this->test_session);
         $application_credit->description = "application credit for refund";
-        $application_credit->amount = 5.0;
+        $application_credit->amount = "5.00";
         $application_credit->test = true;
         $application_credit->save();
     }

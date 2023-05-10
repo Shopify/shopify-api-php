@@ -12,7 +12,7 @@ use Shopify\Auth\Session;
 use Shopify\Rest\Base;
 
 /**
- * @property int|null $amount
+ * @property string|null $amount
  * @property Currency|null $currency
  * @property string|null $description
  * @property int|null $id

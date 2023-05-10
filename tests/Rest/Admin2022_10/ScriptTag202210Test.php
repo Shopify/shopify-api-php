@@ -39,7 +39,7 @@ final class ScriptTag202210Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tags" => [["id" => 421379493, "src" => "https://js.example.org/bar.js", "event" => "onload", "created_at" => "2023-04-04T17:13:27-04:00", "updated_at" => "2023-04-04T17:13:27-04:00", "display_scope" => "all"], ["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-04-04T17:13:27-04:00", "updated_at" => "2023-04-04T17:13:27-04:00", "display_scope" => "all"]]]
+                  ["script_tags" => [["id" => 421379493, "src" => "https://js.example.org/bar.js", "event" => "onload", "created_at" => "2023-02-02T09:09:49-05:00", "updated_at" => "2023-02-02T09:09:49-05:00", "display_scope" => "all"], ["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-02-02T09:09:49-05:00", "updated_at" => "2023-02-02T09:09:49-05:00", "display_scope" => "all"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-10/script_tags.json",
                 "GET",
@@ -67,7 +67,7 @@ final class ScriptTag202210Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tags" => [["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-04-04T17:13:27-04:00", "updated_at" => "2023-04-04T17:13:27-04:00", "display_scope" => "all"]]]
+                  ["script_tags" => [["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-02-02T09:09:49-05:00", "updated_at" => "2023-02-02T09:09:49-05:00", "display_scope" => "all"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-10/script_tags.json?since_id=421379493",
                 "GET",
@@ -95,7 +95,7 @@ final class ScriptTag202210Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tags" => [["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-04-04T17:13:27-04:00", "updated_at" => "2023-04-04T17:13:27-04:00", "display_scope" => "all"]]]
+                  ["script_tags" => [["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-02-02T09:09:49-05:00", "updated_at" => "2023-02-02T09:09:49-05:00", "display_scope" => "all"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-10/script_tags.json?src=https%3A%2F%2Fjs.example.org%2Ffoo.js",
                 "GET",
@@ -123,7 +123,7 @@ final class ScriptTag202210Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tag" => ["id" => 870402687, "src" => "https://example.com/my_script.js", "event" => "onload", "created_at" => "2023-04-04T17:17:15-04:00", "updated_at" => "2023-04-04T17:17:15-04:00", "display_scope" => "all", "cache" => false]]
+                  ["script_tag" => ["id" => 870402688, "src" => "https://example.com/my_script.js", "event" => "onload", "created_at" => "2023-02-02T09:14:37-05:00", "updated_at" => "2023-02-02T09:14:37-05:00", "display_scope" => "all", "cache" => false]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-10/script_tags.json",
                 "POST",
@@ -179,7 +179,7 @@ final class ScriptTag202210Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tag" => ["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-04-04T17:13:27-04:00", "updated_at" => "2023-04-04T17:13:27-04:00", "display_scope" => "all", "cache" => false]]
+                  ["script_tag" => ["id" => 596726825, "src" => "https://js.example.org/foo.js", "event" => "onload", "created_at" => "2023-02-02T09:09:49-05:00", "updated_at" => "2023-02-02T09:09:49-05:00", "display_scope" => "all", "cache" => false]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-10/script_tags/596726825.json",
                 "GET",
@@ -208,7 +208,7 @@ final class ScriptTag202210Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["script_tag" => ["src" => "https://somewhere-else.com/another.js", "cache" => false, "id" => 596726825, "event" => "onload", "created_at" => "2023-04-04T17:13:27-04:00", "updated_at" => "2023-04-04T17:17:18-04:00", "display_scope" => "all"]]
+                  ["script_tag" => ["src" => "https://somewhere-else.com/another.js", "cache" => false, "id" => 596726825, "event" => "onload", "created_at" => "2023-02-02T09:09:49-05:00", "updated_at" => "2023-02-02T09:14:53-05:00", "display_scope" => "all"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-10/script_tags/596726825.json",
                 "PUT",

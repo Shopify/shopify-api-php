@@ -29,8 +29,8 @@ You should call this method as early as possible in your application, as none of
 
 ```php
 Context::initialize(
-    apiKey: $_ENV['SHOPIFY_API_KEY'],
-    apiSecretKey: $_ENV['SHOPIFY_API_SECRET'],
+    apiKey: $_ENV['SHOPIFY_APP_API_KEY'],
+    apiSecretKey: $_ENV['SHOPIFY_APP_API_SECRET'],
     scopes: $_ENV['SHOPIFY_APP_SCOPES'],
     hostName: $_ENV['SHOPIFY_APP_HOST_NAME'],
     sessionStorage: new FileSessionStorage('/tmp/php_sessions'),

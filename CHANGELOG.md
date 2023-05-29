@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-- Fix the issue "Get Current Session ID process from Post Purchase Extension Token" [bugfix] 
+- PATCH: Fix the issue "Get Current Session ID process from Post Purchase Extension Token"
 
 ## v5.0.0 - 2023-05-10
 

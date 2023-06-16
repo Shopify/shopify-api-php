@@ -1,5 +1,5 @@
 {
-    "name": "shopify/shopify-api",
+    "name": "jonaswebdev/shopify-api",
     "description": "Shopify API Library for PHP",
     "license": "MIT",
     "type": "library",
@@ -18,7 +18,12 @@
         {
             "name": "Shopify Inc.",
             "email": "dev-tools-education@shopify.com"
-        }
+        },
+        {
+            "name": "Jonas Rosado",
+            "email": "jonaswebdev@gmail.com"
+        },
+
     ],
     "require": {
         "php": "~8.0.0 || ~8.1.0 || ~8.2.0",

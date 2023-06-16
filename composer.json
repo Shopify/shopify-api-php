@@ -1,6 +1,6 @@
 {
     "name": "jonaswebdev/shopify-api",
-    "description": "Shopify API Library for PHP",
+    "description": "Shopify API Library for PHP, include the fix to authentication from Post-purchase Extension requests.",
     "license": "MIT",
     "type": "library",
     "keywords": [

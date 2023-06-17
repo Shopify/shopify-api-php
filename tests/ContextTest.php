@@ -264,4 +264,23 @@ final class ContextTest extends BaseTestCase
 
         $this->assertEquals($domains, Context::$CUSTOM_SHOP_DOMAINS);
     }
+
+    public function testCanSetMaxTries()
+    {
+        $maxTries = 5;
+
+        Context::initialize(
+            apiKey: 'ash',
+            apiSecretKey: 'steffi',
+            scopes: ['sleepy', 'kitty'],
+            hostName: 'my-friends-cats',
+            sessionStorage: new MockSessionStorage(),
+            apiVersion: ApiVersion::LATEST,
+            isPrivateApp: false,
+            customShopDomains: [],
+            maxTries: $maxTries,
+        );
+
+        $this->assertEquals($maxTries, Context::$MAX_TRIES);
+    }
 }

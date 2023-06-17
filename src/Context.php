@@ -43,6 +43,8 @@ class Context
     public static $LOGGER = null;
     /** @var string[] */
     public static $CUSTOM_SHOP_DOMAINS = null;
+    /** @var int */
+    public static $MAX_TRIES = 1;
 
     /** @var int */
     public static $RETRY_TIME_IN_SECONDS = 1;
@@ -67,6 +69,7 @@ class Context
      * @param LoggerInterface|null $logger                          App logger, so the library can add its own logs to
      *                                                              it
      * @param string[]             $customShopDomains               One or more regexps to use when validating domains
+     * @param int                  $maxTries                        Maximum number of times to retry a HTTP request
      *
      * @throws \Shopify\Exception\MissingArgumentException
      */
@@ -82,7 +85,8 @@ class Context
         string $privateAppStorefrontAccessToken = null,
         string $userAgentPrefix = '',
         LoggerInterface $logger = null,
-        array $customShopDomains = []
+        array $customShopDomains = [],
+        int $maxTries = 1,
     ): void {
         $authScopes = new Scopes($scopes);
 
@@ -135,6 +139,7 @@ class Context
         self::$USER_AGENT_PREFIX = $userAgentPrefix;
         self::$LOGGER = $logger;
         self::$CUSTOM_SHOP_DOMAINS = $customShopDomains;
+        self::$MAX_TRIES = $maxTries;
 
         self::$IS_INITIALIZED = true;
     }

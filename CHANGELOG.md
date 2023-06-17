@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#282](https://github.com/Shopify/shopify-api-php/pull/282) Add support for a default `Context::$MAX_TRIES` setting to use in `Shopify\Clients\Http` requests
+
 ## v5.0.0 - 2023-05-10
 
 - [#269](https://github.com/Shopify/shopify-api-php/pull/269) [bugfix] Refactored query string building to account for Shopify-specific array format

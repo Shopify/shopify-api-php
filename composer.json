@@ -1,6 +1,6 @@
 {
-    "name": "jonaswebdev/shopify-api",
-    "description": "Shopify API Library for PHP, include the fix to authentication from Post-purchase Extension requests.",
+    "name": "shopify/shopify-api",
+    "description": "Shopify API Library for PHP",
     "license": "MIT",
     "type": "library",
     "keywords": [
@@ -18,10 +18,6 @@
         {
             "name": "Shopify Inc.",
             "email": "dev-tools-education@shopify.com"
-        },
-        {
-            "name": "Jonas Rosado",
-            "email": "jonaswebdev@gmail.com"
         }
     ],
     "require": {

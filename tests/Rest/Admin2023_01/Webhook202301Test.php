@@ -39,7 +39,7 @@ final class Webhook202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["webhooks" => [["id" => 4759306, "address" => "https://apple.com", "topic" => "orders/create", "created_at" => "2023-05-08T15:23:30-04:00", "updated_at" => "2023-05-08T15:23:30-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []], ["id" => 892403750, "address" => "https://example.org/fully_loaded_1", "topic" => "orders/cancelled", "created_at" => "2021-12-01T05:23:43-05:00", "updated_at" => "2021-12-01T05:23:43-05:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []], ["id" => 901431826, "address" => "https://apple.com/uninstall", "topic" => "app/uninstalled", "created_at" => "2023-05-08T15:23:30-04:00", "updated_at" => "2023-05-08T15:23:30-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []], ["id" => 1014196360, "address" => "https://example.org/app_uninstalled", "topic" => "app/uninstalled", "created_at" => "2023-05-08T15:23:30-04:00", "updated_at" => "2023-05-08T15:23:30-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]]
+                  ["webhooks" => [["id" => 4759306, "address" => "https://apple.com", "topic" => "orders/create", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []], ["id" => 892403750, "address" => "https://example.org/fully_loaded_1", "topic" => "orders/cancelled", "created_at" => "2021-12-01T05:23:43-05:00", "updated_at" => "2021-12-01T05:23:43-05:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []], ["id" => 901431826, "address" => "https://apple.com/uninstall", "topic" => "app/uninstalled", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []], ["id" => 1014196360, "address" => "https://example.org/app_uninstalled", "topic" => "app/uninstalled", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/webhooks.json",
                 "GET",
@@ -67,7 +67,7 @@ final class Webhook202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["webhooks" => [["id" => 1014196360, "address" => "https://example.org/app_uninstalled", "topic" => "app/uninstalled", "created_at" => "2023-05-08T15:23:30-04:00", "updated_at" => "2023-05-08T15:23:30-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]]
+                  ["webhooks" => [["id" => 1014196360, "address" => "https://example.org/app_uninstalled", "topic" => "app/uninstalled", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/webhooks.json?since_id=901431826",
                 "GET",
@@ -95,7 +95,7 @@ final class Webhook202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["webhook" => ["id" => 4368563255, "address" => "pubsub://projectName:topicName", "topic" => "customers/update", "created_at" => "2023-05-08T15:25:36-04:00", "updated_at" => "2023-05-08T15:25:36-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
+                  ["webhook" => ["id" => 5969010389, "address" => "pubsub://projectName:topicName", "topic" => "customers/update", "created_at" => "2023-07-05T19:09:46-04:00", "updated_at" => "2023-07-05T19:09:46-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/webhooks.json",
                 "POST",
@@ -124,7 +124,7 @@ final class Webhook202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["webhook" => ["id" => 4368563249, "address" => "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/755357713/example-event-source", "topic" => "customers/update", "created_at" => "2023-05-08T15:24:55-04:00", "updated_at" => "2023-05-08T15:24:55-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
+                  ["webhook" => ["id" => 5969010387, "address" => "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/755357713/example-event-source", "topic" => "customers/update", "created_at" => "2023-07-05T19:09:40-04:00", "updated_at" => "2023-07-05T19:09:40-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/webhooks.json",
                 "POST",
@@ -153,7 +153,7 @@ final class Webhook202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["webhook" => ["id" => 4368563279, "address" => "https://example.hostname.com/", "topic" => "orders/create", "created_at" => "2023-05-08T15:27:07-04:00", "updated_at" => "2023-05-08T15:27:07-04:00", "format" => "json", "fields" => ["id", "note"], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
+                  ["webhook" => ["id" => 5969010364, "address" => "https://example.hostname.com/", "topic" => "orders/create", "created_at" => "2023-07-05T19:08:01-04:00", "updated_at" => "2023-07-05T19:08:01-04:00", "format" => "json", "fields" => ["id", "note"], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/webhooks.json",
                 "POST",
@@ -242,7 +242,7 @@ final class Webhook202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["webhook" => ["id" => 4759306, "address" => "https://apple.com", "topic" => "orders/create", "created_at" => "2023-05-08T15:23:30-04:00", "updated_at" => "2023-05-08T15:23:30-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
+                  ["webhook" => ["id" => 4759306, "address" => "https://apple.com", "topic" => "orders/create", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/webhooks/4759306.json",
                 "GET",
@@ -271,7 +271,7 @@ final class Webhook202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["webhook" => ["id" => 4759306, "address" => "https://somewhere-else.com/", "topic" => "orders/create", "created_at" => "2023-05-08T15:23:30-04:00", "updated_at" => "2023-05-08T15:27:17-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
+                  ["webhook" => ["id" => 4759306, "address" => "https://somewhere-else.com/", "topic" => "orders/create", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:07:52-04:00", "format" => "json", "fields" => [], "metafield_namespaces" => [], "api_version" => "unstable", "private_metafield_namespaces" => []]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/webhooks/4759306.json",
                 "PUT",

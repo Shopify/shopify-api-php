@@ -156,7 +156,7 @@ final class FulfillmentService202204Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["fulfillment_service" => ["id" => 755357713, "name" => "New Fulfillment Service Name", "email" => null, "service_name" => "New Fulfillment Service Name", "handle" => "new-fulfillment-service-name", "fulfillment_orders_opt_in" => true, "include_pending_stock" => false, "provider_id" => null, "location_id" => 24826418, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/755357713"]]
+                  ["fulfillment_service" => ["id" => 755357713, "name" => "New Fulfillment Service Name", "email" => null, "service_name" => "New Fulfillment Service Name", "handle" => "mars-fulfillment", "fulfillment_orders_opt_in" => true, "include_pending_stock" => false, "provider_id" => null, "location_id" => 24826418, "callback_url" => "http://google.com/", "tracking_support" => true, "inventory_management" => true, "admin_graphql_api_id" => "gid://shopify/ApiFulfillmentService/755357713"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-04/fulfillment_services/755357713.json",
                 "PUT",

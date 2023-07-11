@@ -39,7 +39,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_cards" => [["id" => 766118925, "balance" => "25.00", "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:23:53-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => "2022-05-09", "template_suffix" => null, "last_characters" => "0e0e", "order_id" => null], ["id" => 10274553, "balance" => "0.00", "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:23:53-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0y0y", "order_id" => null]]]
+                  ["gift_cards" => [["id" => 766118925, "balance" => "25.00", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => "2022-07-05", "template_suffix" => null, "last_characters" => "0e0e", "order_id" => null], ["id" => 10274553, "balance" => "0.00", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0y0y", "order_id" => null]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards.json?status=enabled",
                 "GET",
@@ -67,7 +67,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_cards" => [["id" => 1035197676, "balance" => "100.00", "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:23:53-04:00", "currency" => "USD", "initial_value" => "100.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0d0d", "order_id" => null], ["id" => 766118925, "balance" => "25.00", "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:23:53-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => "2022-05-09", "template_suffix" => null, "last_characters" => "0e0e", "order_id" => null], ["id" => 10274553, "balance" => "0.00", "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:23:53-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0y0y", "order_id" => null]]]
+                  ["gift_cards" => [["id" => 1035197676, "balance" => "100.00", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "currency" => "USD", "initial_value" => "100.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0d0d", "order_id" => null], ["id" => 766118925, "balance" => "25.00", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => "2022-07-05", "template_suffix" => null, "last_characters" => "0e0e", "order_id" => null], ["id" => 10274553, "balance" => "0.00", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "currency" => "USD", "initial_value" => "50.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0y0y", "order_id" => null]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards.json",
                 "GET",
@@ -95,7 +95,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_card" => ["id" => 1035197676, "balance" => "100.00", "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:23:53-04:00", "currency" => "USD", "initial_value" => "100.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0d0d", "order_id" => null]]
+                  ["gift_card" => ["id" => 1035197676, "balance" => "100.00", "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00", "currency" => "USD", "initial_value" => "100.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "0d0d", "order_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards/1035197676.json",
                 "GET",
@@ -124,7 +124,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_card" => ["expires_on" => "2020-01-01", "template_suffix" => null, "initial_value" => "100.00", "balance" => "100.00", "customer_id" => null, "id" => 1035197676, "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:26:29-04:00", "currency" => "USD", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "note" => null, "last_characters" => "0d0d", "order_id" => null]]
+                  ["gift_card" => ["expires_on" => "2020-01-01", "template_suffix" => null, "initial_value" => "100.00", "balance" => "100.00", "customer_id" => null, "id" => 1035197676, "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:17:28-04:00", "currency" => "USD", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "note" => null, "last_characters" => "0d0d", "order_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards/1035197676.json",
                 "PUT",
@@ -152,7 +152,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_card" => ["note" => "Updating with a new note", "template_suffix" => null, "initial_value" => "100.00", "balance" => "100.00", "customer_id" => null, "id" => 1035197676, "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:26:49-04:00", "currency" => "USD", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "expires_on" => null, "last_characters" => "0d0d", "order_id" => null]]
+                  ["gift_card" => ["note" => "Updating with a new note", "template_suffix" => null, "initial_value" => "100.00", "balance" => "100.00", "customer_id" => null, "id" => 1035197676, "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:17:32-04:00", "currency" => "USD", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "expires_on" => null, "last_characters" => "0d0d", "order_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards/1035197676.json",
                 "PUT",
@@ -236,7 +236,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_card" => ["id" => 1063936318, "balance" => "100.00", "created_at" => "2023-05-09T20:26:39-04:00", "updated_at" => "2023-05-09T20:26:39-04:00", "currency" => "USD", "initial_value" => "100.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => 755357713, "user_id" => null, "customer_id" => null, "note" => "This is a note", "expires_on" => null, "template_suffix" => "gift_cards.birthday.liquid", "last_characters" => "mnop", "order_id" => null, "code" => "abcdefghijklmnop"]]
+                  ["gift_card" => ["id" => 1063936318, "balance" => "100.00", "created_at" => "2023-07-05T19:17:29-04:00", "updated_at" => "2023-07-05T19:17:29-04:00", "currency" => "USD", "initial_value" => "100.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => 755357713, "user_id" => null, "customer_id" => null, "note" => "This is a note", "expires_on" => null, "template_suffix" => "gift_cards.birthday.liquid", "last_characters" => "mnop", "order_id" => null, "code" => "abcdefghijklmnop"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards.json",
                 "POST",
@@ -266,7 +266,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_card" => ["id" => 1063936316, "balance" => "25.00", "created_at" => "2023-05-09T20:26:31-04:00", "updated_at" => "2023-05-09T20:26:31-04:00", "currency" => "USD", "initial_value" => "25.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => 755357713, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "32ed", "order_id" => null, "code" => "he9bdc83784g32ed"]]
+                  ["gift_card" => ["id" => 1063936321, "balance" => "25.00", "created_at" => "2023-07-05T19:17:39-04:00", "updated_at" => "2023-07-05T19:17:39-04:00", "currency" => "USD", "initial_value" => "25.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => 755357713, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "86eh", "order_id" => null, "code" => "gf9e652bdhe886eh"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards.json",
                 "POST",
@@ -293,7 +293,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_card" => ["disabled_at" => "2023-05-09T20:26:52-04:00", "template_suffix" => null, "initial_value" => "100.00", "balance" => "100.00", "customer_id" => null, "id" => 1035197676, "created_at" => "2023-05-09T20:23:53-04:00", "updated_at" => "2023-05-09T20:26:52-04:00", "currency" => "USD", "line_item_id" => null, "api_client_id" => null, "user_id" => null, "note" => null, "expires_on" => null, "last_characters" => "0d0d", "order_id" => null]]
+                  ["gift_card" => ["disabled_at" => "2023-07-05T19:17:24-04:00", "template_suffix" => null, "initial_value" => "100.00", "balance" => "100.00", "customer_id" => null, "id" => 1035197676, "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:17:24-04:00", "currency" => "USD", "line_item_id" => null, "api_client_id" => null, "user_id" => null, "note" => null, "expires_on" => null, "notify" => true, "last_characters" => "0d0d", "order_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards/1035197676/disable.json",
                 "POST",
@@ -323,7 +323,7 @@ final class GiftCard202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["gift_cards" => [["id" => 1063936317, "balance" => "10.00", "created_at" => "2023-05-09T20:26:33-04:00", "updated_at" => "2023-05-09T20:26:33-04:00", "currency" => "USD", "initial_value" => "10.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "mnop", "order_id" => null]]]
+                  ["gift_cards" => [["id" => 1063936316, "balance" => "10.00", "created_at" => "2023-07-05T19:17:19-04:00", "updated_at" => "2023-07-05T19:17:19-04:00", "currency" => "USD", "initial_value" => "10.00", "disabled_at" => null, "line_item_id" => null, "api_client_id" => null, "user_id" => null, "customer_id" => null, "note" => null, "expires_on" => null, "template_suffix" => null, "last_characters" => "mnop", "order_id" => null]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/gift_cards/search.json?query=last_characters%3Amnop",
                 "GET",

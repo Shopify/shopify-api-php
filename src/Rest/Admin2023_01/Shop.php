@@ -62,7 +62,7 @@ use Shopify\Rest\Base;
  * @property string|null $shop_owner
  * @property string|null $source
  * @property string|null $tax_shipping
- * @property string|null $taxes_included
+ * @property bool|null $taxes_included
  * @property string|null $timezone
  * @property bool|null $transactional_sms_disabled
  * @property string|null $updated_at

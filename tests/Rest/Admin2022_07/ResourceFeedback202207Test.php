@@ -39,7 +39,7 @@ final class ResourceFeedback202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["resource_feedback" => ["created_at" => "2023-02-02T10:00:53-05:00", "updated_at" => "2023-02-02T10:00:53-05:00", "resource_id" => 548380009, "resource_type" => "Shop", "resource_updated_at" => null, "messages" => ["is not connected. Connect your account to use this sales channel."], "feedback_generated_at" => "2023-02-02T10:00:51-05:00", "state" => "requires_action"]]
+                  ["resource_feedback" => ["created_at" => "2023-07-05T18:50:24-04:00", "updated_at" => "2023-07-05T18:50:24-04:00", "resource_id" => 548380009, "resource_type" => "Shop", "resource_updated_at" => null, "messages" => ["is not connected. Connect your account to use this sales channel."], "feedback_generated_at" => "2023-07-05T18:50:23-04:00", "state" => "requires_action"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/resource_feedback.json",
                 "POST",
@@ -47,7 +47,7 @@ final class ResourceFeedback202207Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["resource_feedback" => ["state" => "requires_action", "messages" => ["is not connected. Connect your account to use this sales channel."], "feedback_generated_at" => "2023-02-02T15:00:51.956827Z"]]),
+                json_encode(["resource_feedback" => ["state" => "requires_action", "messages" => ["is not connected. Connect your account to use this sales channel."], "feedback_generated_at" => "2023-07-05T22:50:23.908922Z"]]),
             ),
         ]);
 
@@ -56,7 +56,7 @@ final class ResourceFeedback202207Test extends BaseTestCase
         $resource_feedback->messages = [
             "is not connected. Connect your account to use this sales channel."
         ];
-        $resource_feedback->feedback_generated_at = "2023-02-02T15:00:51.956827Z";
+        $resource_feedback->feedback_generated_at = "2023-07-05T22:50:23.908922Z";
         $resource_feedback->save();
     }
 
@@ -70,7 +70,7 @@ final class ResourceFeedback202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["resource_feedback" => ["created_at" => "2023-02-02T10:00:54-05:00", "updated_at" => "2023-02-02T10:00:54-05:00", "resource_id" => 548380009, "resource_type" => "Shop", "resource_updated_at" => null, "messages" => [], "feedback_generated_at" => "2023-02-02T10:00:53-05:00", "state" => "success"]]
+                  ["resource_feedback" => ["created_at" => "2023-07-05T18:50:23-04:00", "updated_at" => "2023-07-05T18:50:23-04:00", "resource_id" => 548380009, "resource_type" => "Shop", "resource_updated_at" => null, "messages" => [], "feedback_generated_at" => "2023-07-05T18:50:22-04:00", "state" => "success"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/resource_feedback.json",
                 "POST",
@@ -78,13 +78,13 @@ final class ResourceFeedback202207Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["resource_feedback" => ["state" => "success", "feedback_generated_at" => "2023-02-02T15:00:53.508619Z"]]),
+                json_encode(["resource_feedback" => ["state" => "success", "feedback_generated_at" => "2023-07-05T22:50:22.338579Z"]]),
             ),
         ]);
 
         $resource_feedback = new ResourceFeedback($this->test_session);
         $resource_feedback->state = "success";
-        $resource_feedback->feedback_generated_at = "2023-02-02T15:00:53.508619Z";
+        $resource_feedback->feedback_generated_at = "2023-07-05T22:50:22.338579Z";
         $resource_feedback->save();
     }
 
@@ -98,7 +98,7 @@ final class ResourceFeedback202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["resource_feedback" => [["created_at" => "2023-02-02T10:00:58-05:00", "updated_at" => "2023-02-02T10:00:58-05:00", "resource_id" => 548380009, "resource_type" => "Shop", "resource_updated_at" => null, "messages" => ["is not connected. Connect your account to use this sales channel."], "feedback_generated_at" => "2023-02-02T09:00:58-05:00", "state" => "requires_action"]]]
+                  ["resource_feedback" => [["created_at" => "2023-07-05T18:50:24-04:00", "updated_at" => "2023-07-05T18:50:24-04:00", "resource_id" => 548380009, "resource_type" => "Shop", "resource_updated_at" => null, "messages" => ["is not connected. Connect your account to use this sales channel."], "feedback_generated_at" => "2023-07-05T17:50:24-04:00", "state" => "requires_action"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/resource_feedback.json",
                 "GET",

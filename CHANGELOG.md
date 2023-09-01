@@ -8,6 +8,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 - PATCH: Fix the issue "Get Current Session ID process from Post Purchase Extension Token"
 
+## v5.1.0 - 2023-07-11
+
+- [#285](https://github.com/Shopify/shopify-api-php/pull/285) [Minor] Adding support for 2023-07 API version
+
 ## v5.0.0 - 2023-05-10
 
 - [#269](https://github.com/Shopify/shopify-api-php/pull/269) [bugfix] Refactored query string building to account for Shopify-specific array format

@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - [#297](https://github.com/Shopify/shopify-api-php/pull/297) [Patch] Fix CustomerAddress methods, FulfillmentRequest save method
+- [#298](https://github.com/Shopify/shopify-api-php/pull/298) [Minor] Add a body field to the Webhook ProcessResponse class
 
 ## v5.1.0 - 2023-07-11
 

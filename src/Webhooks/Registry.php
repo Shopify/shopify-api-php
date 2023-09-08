@@ -152,10 +152,12 @@ final class Registry
         }
 
         try {
-            $handler->handle($topic, $shop, $body);
-            $response = new ProcessResponse(true);
+            $handlerResponse = $handler->handle($topic, $shop, $body);
+            $response = (new ProcessResponse(true))
+                ->setBody($handlerResponse);
         } catch (Exception $error) {
-            $response = new ProcessResponse(false, $error->getMessage());
+            $response = (new ProcessResponse(false))
+                ->setErrorMessage($error->getMessage());
         }
 
         return $response;

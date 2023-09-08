@@ -13,5 +13,5 @@ interface Handler
      * @param string $shop  The shop that triggered the event
      * @param array  $body  The payload of the webhook request from Shopify
      */
-    public function handle(string $topic, string $shop, array $body): void;
+    public function handle(string $topic, string $shop, array $body);
 }

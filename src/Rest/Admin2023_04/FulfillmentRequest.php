@@ -26,6 +26,19 @@ class FulfillmentRequest extends Base
     ];
 
     /**
+
+     *
+     * @return string[]
+     */
+    protected static function getJsonResponseBodyNames(): array
+    {
+        return [
+            "submitted_fulfillment_order",
+            "fulfillment_order"
+        ];
+    }
+
+    /**
      * @param mixed[] $params Allowed indexes:
      *     message
      * @param array|string $body

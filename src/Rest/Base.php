@@ -136,10 +136,10 @@ abstract class Base extends \stdClass
         return strtolower(preg_replace("/([a-z])([A-Z])/", "$1_$2", $className));
     }
 
-    protected static function getJsonResponseBodyName(): string
+    protected static function getJsonResponseBodyNames(): array
     {
         $className = preg_replace("/^([A-z_0-9]+\\\)*([A-z_]+)/", "$2", static::class);
-        return strtolower(preg_replace("/([a-z])([A-Z])/", "$1_$2", $className));
+        return [strtolower(preg_replace("/([a-z])([A-Z])/", "$1_$2", $className))];
     }
 
     /**
@@ -280,20 +280,23 @@ abstract class Base extends \stdClass
         $objects = [];
 
         $body = $response->getDecodedBody();
-        $className = static::getJsonResponseBodyName();
-        $pluralClass = self::pluralize($className);
+        $classNames = static::getJsonResponseBodyNames();
 
-        if (!empty($body)) {
-            if (array_key_exists($pluralClass, $body)) {
-                foreach ($body[$pluralClass] as $entry) {
-                    array_push($objects, self::createInstance($entry, $session));
+        foreach ($classNames as $className) {
+            $pluralClass = self::pluralize($className);
+
+            if (!empty($body)) {
+                if (array_key_exists($pluralClass, $body)) {
+                    foreach ($body[$pluralClass] as $entry) {
+                        array_push($objects, self::createInstance($entry, $session));
+                    }
+                } elseif (array_key_exists($className, $body) && array_key_exists(0, $body[$className])) {
+                    foreach ($body[$className] as $entry) {
+                        array_push($objects, self::createInstance($entry, $session));
+                    }
+                } elseif (array_key_exists($className, $body)) {
+                    array_push($objects, self::createInstance($body[$className], $session));
                 }
-            } elseif (array_key_exists($className, $body) && array_key_exists(0, $body[$className])) {
-                foreach ($body[$className] as $entry) {
-                    array_push($objects, self::createInstance($entry, $session));
-                }
-            } elseif (array_key_exists($className, $body)) {
-                array_push($objects, self::createInstance($body[$className], $session));
             }
         }
 

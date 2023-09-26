@@ -21,7 +21,7 @@ final class Scopes
         if (is_string($scopes)) {
             $scopesArray = explode(self::SCOPE_DELIMITER, $scopes);
         } else {
-            $scopesArray = $scopes;
+            $scopesArray = $scopes ?? [];
         }
 
         $scopesArray = array_unique(array_filter(array_map('trim', $scopesArray)));

@@ -13,7 +13,9 @@ class HttpDelivery extends DeliveryMethod
      */
     public function getCallbackAddress(string $path): string
     {
-        return 'https://' . Context::$HOST_NAME . '/' . ltrim($path, '/');
+        $rv =  'https://' . Context::$HOST_NAME . '/' . ltrim($path, '/');
+        var_dump($rv);
+        return $rv;
     }
 
     /**

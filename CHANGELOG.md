@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v5.2.0 - 2023-10-24
+
 - [#306](https://github.com/Shopify/shopify-api-php/pull/306) [Minor] Adding support for 2023-10 API version
 - [#297](https://github.com/Shopify/shopify-api-php/pull/297) [Patch] Fix CustomerAddress methods, FulfillmentRequest save method
 

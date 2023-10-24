@@ -12,7 +12,7 @@ use Shopify\Auth\Session;
 use Shopify\Rest\Base;
 
 /**
-
+ * @property array[]|null $balance
  */
 class Balance extends Base
 {

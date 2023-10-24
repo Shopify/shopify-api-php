@@ -6,31 +6,32 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest\Admin2022_07;
+namespace Shopify\Rest\Admin2023_10;
 
 use Shopify\Auth\Session;
 use Shopify\Rest\Base;
 
 /**
- * @property string|null $created_at
+ * @property string|null $code
  * @property int|null $id
  * @property string|null $name
- * @property string|null $query
- * @property string|null $updated_at
+ * @property Province[]|null $provinces
+ * @property float|null $tax
  */
-class CustomerSavedSearch extends Base
+class Country extends Base
 {
-    public static string $API_VERSION = "2022-07";
+    public static string $API_VERSION = "2023-10";
     protected static array $HAS_ONE = [];
-    protected static array $HAS_MANY = [];
+    protected static array $HAS_MANY = [
+        "provinces" => Province::class
+    ];
     protected static array $PATHS = [
-        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "customer_saved_searches/<id>.json"],
-        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "customer_saved_searches/count.json"],
-        ["http_method" => "get", "operation" => "customers", "ids" => ["id"], "path" => "customer_saved_searches/<id>/customers.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "customer_saved_searches.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "customer_saved_searches/<id>.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "customer_saved_searches.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "customer_saved_searches/<id>.json"]
+        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "countries/<id>.json"],
+        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "countries/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "countries.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "countries/<id>.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "countries.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "countries/<id>.json"]
     ];
 
     /**
@@ -40,14 +41,14 @@ class CustomerSavedSearch extends Base
      * @param mixed[] $params Allowed indexes:
      *     fields
      *
-     * @return CustomerSavedSearch|null
+     * @return Country|null
      */
     public static function find(
         Session $session,
         $id,
         array $urlIds = [],
         array $params = []
-    ): ?CustomerSavedSearch {
+    ): ?Country {
         $result = parent::baseFind(
             $session,
             array_merge(["id" => $id], $urlIds),
@@ -85,11 +86,10 @@ class CustomerSavedSearch extends Base
      * @param Session $session
      * @param array $urlIds
      * @param mixed[] $params Allowed indexes:
-     *     limit,
      *     since_id,
      *     fields
      *
-     * @return CustomerSavedSearch[]
+     * @return Country[]
      */
     public static function all(
         Session $session,
@@ -106,8 +106,7 @@ class CustomerSavedSearch extends Base
     /**
      * @param Session $session
      * @param array $urlIds
-     * @param mixed[] $params Allowed indexes:
-     *     since_id
+     * @param mixed[] $params
      *
      * @return array|null
      */
@@ -121,35 +120,6 @@ class CustomerSavedSearch extends Base
             "count",
             $session,
             [],
-            $params,
-            [],
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param Session $session
-     * @param int|string $id
-     * @param array $urlIds
-     * @param mixed[] $params Allowed indexes:
-     *     order,
-     *     limit,
-     *     fields
-     *
-     * @return array|null
-     */
-    public static function customers(
-        Session $session,
-        $id,
-        array $urlIds = [],
-        array $params = []
-    ): ?array {
-        $response = parent::request(
-            "get",
-            "customers",
-            $session,
-            array_merge(["id" => $id], $urlIds),
             $params,
             [],
         );

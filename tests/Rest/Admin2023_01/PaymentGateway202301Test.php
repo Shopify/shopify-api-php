@@ -39,7 +39,7 @@ final class PaymentGateway202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["payment_gateways" => [["disabled" => false, "id" => 431363653, "name" => "shopify_payments", "provider_id" => 87, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club"], "processing_method" => "direct", "service_name" => "Shopify Payments", "metadata" => ["google_pay_merchant_id" => 548380009], "created_at" => "2011-12-31T19:00:00-05:00", "updated_at" => "2023-07-05T19:12:34-04:00", "credential4" => null, "attachment" => null], ["disabled" => true, "id" => 170508070, "name" => "Cash on Delivery (COD)", "provider_id" => 140, "sandbox" => false, "supports_network_tokenization" => null, "type" => "ManualPaymentGateway", "enabled_card_brands" => [], "processing_method" => "manual", "service_name" => "Cash on Delivery (COD)", "metadata" => [], "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:05:24-04:00"]]]
+                  ["payment_gateways" => [["disabled" => true, "id" => 170508070, "name" => "Cash on Delivery (COD)", "provider_id" => 140, "sandbox" => false, "supports_network_tokenization" => null, "type" => "ManualPaymentGateway", "enabled_card_brands" => [], "processing_method" => "manual", "service_name" => "Cash on Delivery (COD)", "metadata" => [], "created_at" => "2023-10-03T13:17:01-04:00", "updated_at" => "2023-10-03T13:17:01-04:00"], ["disabled" => false, "id" => 431363653, "name" => "shopify_payments", "provider_id" => 87, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club"], "processing_method" => "direct", "service_name" => "Shopify Payments", "metadata" => ["google_pay_merchant_id" => 548380009], "created_at" => "2011-12-31T19:00:00-05:00", "updated_at" => "2023-10-03T13:17:30-04:00", "credential4" => null, "attachment" => null]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/payment_gateways.json",
                 "GET",
@@ -67,7 +67,7 @@ final class PaymentGateway202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["payment_gateways" => [["disabled" => false, "id" => 431363653, "name" => "shopify_payments", "provider_id" => 87, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club"], "processing_method" => "direct", "service_name" => "Shopify Payments", "metadata" => ["google_pay_merchant_id" => 548380009], "created_at" => "2011-12-31T19:00:00-05:00", "updated_at" => "2023-07-05T19:12:31-04:00", "credential4" => null, "attachment" => null]]]
+                  ["payment_gateways" => [["disabled" => false, "id" => 431363653, "name" => "shopify_payments", "provider_id" => 87, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club"], "processing_method" => "direct", "service_name" => "Shopify Payments", "metadata" => ["google_pay_merchant_id" => 548380009], "created_at" => "2011-12-31T19:00:00-05:00", "updated_at" => "2023-10-03T13:17:29-04:00", "credential4" => null, "attachment" => null]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/payment_gateways.json?disabled=false",
                 "GET",
@@ -95,7 +95,7 @@ final class PaymentGateway202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["payment_gateway" => ["disabled" => false, "id" => 1048196722, "name" => "authorize_net", "provider_id" => 7, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club", "jcb"], "processing_method" => "direct", "service_name" => "Authorize.net", "metadata" => [], "created_at" => "2023-07-05T19:12:33-04:00", "updated_at" => "2023-07-05T19:12:33-04:00", "credential1" => "someone@example.com", "credential3" => null, "credential4" => null, "attachment" => null]]
+                  ["payment_gateway" => ["disabled" => false, "id" => 1070028413, "name" => "authorize_net", "provider_id" => 7, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club", "jcb"], "processing_method" => "direct", "service_name" => "Authorize.net", "metadata" => [], "created_at" => "2023-10-03T13:17:32-04:00", "updated_at" => "2023-10-03T13:17:32-04:00", "credential1" => "someone@example.com", "credential3" => null, "credential4" => null, "attachment" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/payment_gateways.json",
                 "POST",
@@ -123,7 +123,7 @@ final class PaymentGateway202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["payment" => ["disabled" => false, "id" => 431363653, "name" => "shopify_payments", "provider_id" => 87, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club"], "processing_method" => "direct", "service_name" => "Shopify Payments", "metadata" => ["google_pay_merchant_id" => 548380009], "created_at" => "2011-12-31T19:00:00-05:00", "updated_at" => "2023-07-05T19:12:27-04:00", "credential4" => null, "attachment" => null]]
+                  ["payment" => ["disabled" => false, "id" => 431363653, "name" => "shopify_payments", "provider_id" => 87, "sandbox" => false, "supports_network_tokenization" => null, "type" => "DirectPaymentGateway", "enabled_card_brands" => ["visa", "master", "american_express", "discover", "diners_club"], "processing_method" => "direct", "service_name" => "Shopify Payments", "metadata" => ["google_pay_merchant_id" => 548380009], "created_at" => "2011-12-31T19:00:00-05:00", "updated_at" => "2023-10-03T13:17:30-04:00", "credential4" => null, "attachment" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/payment_gateways/431363653.json",
                 "GET",
@@ -152,7 +152,7 @@ final class PaymentGateway202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["payment_gateway" => ["disabled" => false, "id" => 170508070, "name" => "Cash on Delivery (COD)", "provider_id" => 140, "sandbox" => true, "supports_network_tokenization" => null, "type" => "ManualPaymentGateway", "enabled_card_brands" => [], "processing_method" => "manual", "service_name" => "Cash on Delivery (COD)", "metadata" => [], "created_at" => "2023-07-05T19:05:24-04:00", "updated_at" => "2023-07-05T19:12:34-04:00"]]
+                  ["payment_gateway" => ["disabled" => false, "id" => 170508070, "name" => "Cash on Delivery (COD)", "provider_id" => 140, "sandbox" => true, "supports_network_tokenization" => null, "type" => "ManualPaymentGateway", "enabled_card_brands" => [], "processing_method" => "manual", "service_name" => "Cash on Delivery (COD)", "metadata" => [], "created_at" => "2023-10-03T13:17:01-04:00", "updated_at" => "2023-10-03T13:17:29-04:00"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/payment_gateways/170508070.json",
                 "PUT",

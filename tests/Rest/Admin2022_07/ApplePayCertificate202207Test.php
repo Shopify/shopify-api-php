@@ -39,7 +39,7 @@ final class ApplePayCertificate202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["apple_pay_certificate" => ["id" => 1068938276, "status" => "issuing", "merchant_id" => null]]
+                  ["apple_pay_certificate" => ["id" => 1068938275, "status" => "issuing", "merchant_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/apple_pay_certificates.json",
                 "POST",
@@ -66,9 +66,9 @@ final class ApplePayCertificate202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["apple_pay_certificate" => ["id" => 1068938275, "status" => "csr", "merchant_id" => null]]
+                  ["apple_pay_certificate" => ["id" => 1068938276, "status" => "csr", "merchant_id" => null]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-07/apple_pay_certificates/1068938275.json",
+                "https://test-shop.myshopify.io/admin/api/2022-07/apple_pay_certificates/1068938276.json",
                 "GET",
                 null,
                 [
@@ -79,7 +79,7 @@ final class ApplePayCertificate202207Test extends BaseTestCase
 
         ApplePayCertificate::find(
             $this->test_session,
-            1068938275,
+            1068938276,
             [],
             [],
         );
@@ -127,7 +127,7 @@ final class ApplePayCertificate202207Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   []
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-07/apple_pay_certificates/1068938278.json",
+                "https://test-shop.myshopify.io/admin/api/2022-07/apple_pay_certificates/1068938274.json",
                 "DELETE",
                 null,
                 [
@@ -138,7 +138,7 @@ final class ApplePayCertificate202207Test extends BaseTestCase
 
         ApplePayCertificate::delete(
             $this->test_session,
-            1068938278,
+            1068938274,
             [],
             [],
         );
@@ -156,7 +156,7 @@ final class ApplePayCertificate202207Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   ["csr" => ["key" => "YXBwbGUtcGF5LWNzcg==\n"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2022-07/apple_pay_certificates/1068938274/csr.json",
+                "https://test-shop.myshopify.io/admin/api/2022-07/apple_pay_certificates/1068938278/csr.json",
                 "GET",
                 null,
                 [
@@ -167,7 +167,7 @@ final class ApplePayCertificate202207Test extends BaseTestCase
 
         ApplePayCertificate::csr(
             $this->test_session,
-            1068938274,
+            1068938278,
             [],
             [],
         );

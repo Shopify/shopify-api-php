@@ -39,7 +39,7 @@ final class GiftCardAdjustment202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["adjustments" => [["id" => 1064273908, "gift_card_id" => 1035197676, "api_client_id" => null, "user_id" => null, "order_transaction_id" => null, "number" => null, "amount" => "10.00", "processed_at" => null, "created_at" => "2023-07-05T18:38:03-04:00", "updated_at" => "2023-07-05T18:38:03-04:00", "note" => "Customer refilled gift card by \$10", "remote_transaction_ref" => null, "remote_transaction_url" => null]]]
+                  ["adjustments" => [["id" => 1064273908, "gift_card_id" => 1035197676, "api_client_id" => null, "user_id" => null, "order_transaction_id" => null, "number" => null, "amount" => "10.00", "processed_at" => null, "created_at" => "2023-07-11T17:47:36-04:00", "updated_at" => "2023-07-11T17:47:36-04:00", "note" => "Customer refilled gift card by \$10", "remote_transaction_ref" => null, "remote_transaction_url" => null]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/gift_cards/1035197676/adjustments.json",
                 "GET",
@@ -67,7 +67,7 @@ final class GiftCardAdjustment202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["adjustment" => ["id" => 1064273912, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "10.00", "processed_at" => "2023-07-05T18:40:27-04:00", "created_at" => "2023-07-05T18:40:27-04:00", "updated_at" => "2023-07-05T18:40:27-04:00", "note" => null, "remote_transaction_ref" => "gift_card_app_transaction_193402", "remote_transaction_url" => "http://example.com/my-gift-card-app/gift_card_adjustments/193402"]]
+                  ["adjustment" => ["id" => 1064273916, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "10.00", "processed_at" => "2023-07-11T18:16:44-04:00", "created_at" => "2023-07-11T18:16:44-04:00", "updated_at" => "2023-07-11T18:16:44-04:00", "note" => null, "remote_transaction_ref" => "gift_card_app_transaction_193402", "remote_transaction_url" => "http://example.com/my-gift-card-app/gift_card_adjustments/193402"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/gift_cards/1035197676/adjustments.json",
                 "POST",
@@ -97,7 +97,7 @@ final class GiftCardAdjustment202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["adjustment" => ["id" => 1064273911, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "10.00", "processed_at" => "2023-07-05T18:40:25-04:00", "created_at" => "2023-07-05T18:40:25-04:00", "updated_at" => "2023-07-05T18:40:25-04:00", "note" => "Customer refilled gift card by \$10", "remote_transaction_ref" => null, "remote_transaction_url" => null]]
+                  ["adjustment" => ["id" => 1064273915, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "10.00", "processed_at" => "2023-07-11T18:16:42-04:00", "created_at" => "2023-07-11T18:16:42-04:00", "updated_at" => "2023-07-11T18:16:42-04:00", "note" => "Customer refilled gift card by \$10", "remote_transaction_ref" => null, "remote_transaction_url" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/gift_cards/1035197676/adjustments.json",
                 "POST",
@@ -126,7 +126,7 @@ final class GiftCardAdjustment202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["adjustment" => ["id" => 1064273909, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "-20.00", "processed_at" => "2023-07-05T18:40:23-04:00", "created_at" => "2023-07-05T18:40:23-04:00", "updated_at" => "2023-07-05T18:40:23-04:00", "note" => "Customer spent \$20 via external service", "remote_transaction_ref" => null, "remote_transaction_url" => null]]
+                  ["adjustment" => ["id" => 1064273917, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "-20.00", "processed_at" => "2023-07-11T18:16:48-04:00", "created_at" => "2023-07-11T18:16:48-04:00", "updated_at" => "2023-07-11T18:16:48-04:00", "note" => "Customer spent \$20 via external service", "remote_transaction_ref" => null, "remote_transaction_url" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/gift_cards/1035197676/adjustments.json",
                 "POST",
@@ -155,7 +155,7 @@ final class GiftCardAdjustment202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["adjustment" => ["id" => 1064273910, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "10.00", "processed_at" => "2023-01-05T18:40:24-05:00", "created_at" => "2023-07-05T18:40:24-04:00", "updated_at" => "2023-07-05T18:40:24-04:00", "note" => null, "remote_transaction_ref" => null, "remote_transaction_url" => null]]
+                  ["adjustment" => ["id" => 1064273914, "gift_card_id" => 1035197676, "api_client_id" => 755357713, "user_id" => null, "order_transaction_id" => null, "number" => 1, "amount" => "10.00", "processed_at" => "2023-01-11T18:16:40-05:00", "created_at" => "2023-07-11T18:16:40-04:00", "updated_at" => "2023-07-11T18:16:40-04:00", "note" => null, "remote_transaction_ref" => null, "remote_transaction_url" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/gift_cards/1035197676/adjustments.json",
                 "POST",
@@ -163,14 +163,14 @@ final class GiftCardAdjustment202207Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["adjustment" => ["amount" => 10.0, "processed_at" => "2023-01-05T18:40:24-05:00"]]),
+                json_encode(["adjustment" => ["amount" => 10.0, "processed_at" => "2023-01-11T18:16:40-05:00"]]),
             ),
         ]);
 
         $gift_card_adjustment = new GiftCardAdjustment($this->test_session);
         $gift_card_adjustment->gift_card_id = 1035197676;
         $gift_card_adjustment->amount = 10.0;
-        $gift_card_adjustment->processed_at = "2023-01-05T18:40:24-05:00";
+        $gift_card_adjustment->processed_at = "2023-01-11T18:16:40-05:00";
         $gift_card_adjustment->save();
     }
 
@@ -184,7 +184,7 @@ final class GiftCardAdjustment202207Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["adjustment" => ["id" => 1064273908, "gift_card_id" => 1035197676, "api_client_id" => null, "user_id" => null, "order_transaction_id" => null, "number" => null, "amount" => "10.00", "processed_at" => null, "created_at" => "2023-07-05T18:38:03-04:00", "updated_at" => "2023-07-05T18:38:03-04:00", "note" => "Customer refilled gift card by \$10", "remote_transaction_ref" => null, "remote_transaction_url" => null]]
+                  ["adjustment" => ["id" => 1064273908, "gift_card_id" => 1035197676, "api_client_id" => null, "user_id" => null, "order_transaction_id" => null, "number" => null, "amount" => "10.00", "processed_at" => null, "created_at" => "2023-07-11T17:47:36-04:00", "updated_at" => "2023-07-11T17:47:36-04:00", "note" => "Customer refilled gift card by \$10", "remote_transaction_ref" => null, "remote_transaction_url" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2022-07/gift_cards/1035197676/adjustments/1064273908.json",
                 "GET",

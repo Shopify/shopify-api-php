@@ -23,7 +23,6 @@ use Shopify\Rest\Base;
  * @property string|null $inventory_management
  * @property string|null $inventory_policy
  * @property int|null $inventory_quantity
- * @property int|null $inventory_quantity_adjustment
  * @property int|null $old_inventory_quantity
  * @property array|null $option
  * @property int|null $position
@@ -53,8 +52,7 @@ class Variant extends Base
         ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "variants/<id>.json"]
     ];
     protected static array $READ_ONLY_ATTRIBUTES = [
-        "inventory_quantity",
-        "inventory_quantity_adjustment"
+        "inventory_quantity"
     ];
 
     /**

@@ -33,11 +33,13 @@ class AssignedFulfillmentOrder extends Base
     /**
 
      *
-     * @return string
+     * @return string[]
      */
-    protected static function getJsonResponseBodyName(): string
+    protected static function getJsonResponseBodyNames(): array
     {
-        return "fulfillment_order";
+        return [
+            "fulfillment_order"
+        ];
     }
 
     /**

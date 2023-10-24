@@ -6,48 +6,62 @@
 
 declare(strict_types=1);
 
-namespace Shopify\Rest\Admin2022_04;
+namespace Shopify\Rest\Admin2023_10;
 
 use Shopify\Auth\Session;
 use Shopify\Rest\Base;
 
 /**
+ * @property int|null $api_client_id
+ * @property Balance|null $balance
+ * @property string|null $code
  * @property string|null $created_at
+ * @property Currency|null $currency
+ * @property int|null $customer_id
+ * @property string|null $disabled_at
+ * @property string|null $expires_on
  * @property int|null $id
- * @property string|null $name
- * @property string|null $query
+ * @property string|null $initial_value
+ * @property string|null $last_characters
+ * @property int|null $line_item_id
+ * @property string|null $note
+ * @property int|null $order_id
+ * @property string|null $template_suffix
  * @property string|null $updated_at
+ * @property int|null $user_id
  */
-class CustomerSavedSearch extends Base
+class GiftCard extends Base
 {
-    public static string $API_VERSION = "2022-04";
-    protected static array $HAS_ONE = [];
+    public static string $API_VERSION = "2023-10";
+    protected static array $HAS_ONE = [
+        "balance" => Balance::class,
+        "currency" => Currency::class
+    ];
     protected static array $HAS_MANY = [];
     protected static array $PATHS = [
-        ["http_method" => "delete", "operation" => "delete", "ids" => ["id"], "path" => "customer_saved_searches/<id>.json"],
-        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "customer_saved_searches/count.json"],
-        ["http_method" => "get", "operation" => "customers", "ids" => ["id"], "path" => "customer_saved_searches/<id>/customers.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "customer_saved_searches.json"],
-        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "customer_saved_searches/<id>.json"],
-        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "customer_saved_searches.json"],
-        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "customer_saved_searches/<id>.json"]
+        ["http_method" => "get", "operation" => "count", "ids" => [], "path" => "gift_cards/count.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => [], "path" => "gift_cards.json"],
+        ["http_method" => "get", "operation" => "get", "ids" => ["id"], "path" => "gift_cards/<id>.json"],
+        ["http_method" => "get", "operation" => "search", "ids" => [], "path" => "gift_cards/search.json"],
+        ["http_method" => "post", "operation" => "disable", "ids" => ["id"], "path" => "gift_cards/<id>/disable.json"],
+        ["http_method" => "post", "operation" => "post", "ids" => [], "path" => "gift_cards.json"],
+        ["http_method" => "put", "operation" => "put", "ids" => ["id"], "path" => "gift_cards/<id>.json"]
     ];
 
     /**
      * @param Session $session
      * @param int|string $id
      * @param array $urlIds
-     * @param mixed[] $params Allowed indexes:
-     *     fields
+     * @param mixed[] $params
      *
-     * @return CustomerSavedSearch|null
+     * @return GiftCard|null
      */
     public static function find(
         Session $session,
         $id,
         array $urlIds = [],
         array $params = []
-    ): ?CustomerSavedSearch {
+    ): ?GiftCard {
         $result = parent::baseFind(
             $session,
             array_merge(["id" => $id], $urlIds),
@@ -58,38 +72,14 @@ class CustomerSavedSearch extends Base
 
     /**
      * @param Session $session
-     * @param int|string $id
-     * @param array $urlIds
-     * @param mixed[] $params
-     *
-     * @return array|null
-     */
-    public static function delete(
-        Session $session,
-        $id,
-        array $urlIds = [],
-        array $params = []
-    ): ?array {
-        $response = parent::request(
-            "delete",
-            "delete",
-            $session,
-            array_merge(["id" => $id], $urlIds),
-            $params,
-        );
-
-        return $response->getDecodedBody();
-    }
-
-    /**
-     * @param Session $session
      * @param array $urlIds
      * @param mixed[] $params Allowed indexes:
+     *     status,
      *     limit,
      *     since_id,
      *     fields
      *
-     * @return CustomerSavedSearch[]
+     * @return GiftCard[]
      */
     public static function all(
         Session $session,
@@ -107,7 +97,7 @@ class CustomerSavedSearch extends Base
      * @param Session $session
      * @param array $urlIds
      * @param mixed[] $params Allowed indexes:
-     *     since_id
+     *     status
      *
      * @return array|null
      */
@@ -130,28 +120,54 @@ class CustomerSavedSearch extends Base
 
     /**
      * @param Session $session
-     * @param int|string $id
      * @param array $urlIds
      * @param mixed[] $params Allowed indexes:
      *     order,
+     *     query,
      *     limit,
-     *     fields
+     *     fields,
+     *     created_at_min,
+     *     created_at_max,
+     *     updated_at_min,
+     *     updated_at_max
      *
      * @return array|null
      */
-    public static function customers(
+    public static function search(
         Session $session,
-        $id,
         array $urlIds = [],
         array $params = []
     ): ?array {
         $response = parent::request(
             "get",
-            "customers",
+            "search",
             $session,
-            array_merge(["id" => $id], $urlIds),
+            [],
             $params,
             [],
+        );
+
+        return $response->getDecodedBody();
+    }
+
+    /**
+     * @param mixed[] $params
+     * @param array|string $body
+     *
+     * @return array|null
+     */
+    public function disable(
+        array $params = [],
+        $body = []
+    ): ?array {
+        $response = parent::request(
+            "post",
+            "disable",
+            $this->session,
+            ["id" => $this->id],
+            $params,
+            $body,
+            $this,
         );
 
         return $response->getDecodedBody();

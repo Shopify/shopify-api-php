@@ -33,11 +33,11 @@
     "require": {
         "php": "^7.4 || ^8.0 || ^8.1",
         "ext-json": "*",
-        "ramsey/uuid": "^4.1",
+        "ramsey/uuid": "^3.9.7",
         "psr/log": "^1.1 || ^2.0 || ^3.0",
         "firebase/php-jwt": "^5.2 || ^6.2",
         "psr/http-client": "^1.0",
-        "guzzlehttp/guzzle": "^7.0",
+        "guzzlehttp/guzzle": "^6.5.8",
         "doctrine/inflector": "^2.0"
     },
     "require-dev": {

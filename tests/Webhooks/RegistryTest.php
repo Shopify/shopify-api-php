@@ -26,10 +26,11 @@ final class RegistryTest extends BaseTestCase
         parent::setUp();
 
         // Clean up the registry for every test
-        $reflection = new ReflectionClass(Registry::class);
+        $class = new Registry();
+        $reflection = new ReflectionClass($class);
         $property = $reflection->getProperty('REGISTRY');
         $property->setAccessible(true);
-        $property = $property->setValue([]);
+        $property->setValue($class, []);
     }
 
     public function testAddHandler()

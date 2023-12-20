@@ -74,10 +74,11 @@ final class ContextTest extends BaseTestCase
     {
         // ReflectionClass is used in this test as IS_INITIALIZED is a private static variable,
         // which would have been set as true due to previous tests
-        $reflectedContext = new ReflectionClass('Shopify\Context');
+        $class = new Context();
+        $reflectedContext = new ReflectionClass($class);
         $reflectedIsInitialized = $reflectedContext->getProperty('IS_INITIALIZED');
         $reflectedIsInitialized->setAccessible(true);
-        $reflectedIsInitialized->setValue(false);
+        $reflectedIsInitialized->setValue($class, false);
 
         $this->expectException(\Shopify\Exception\UninitializedContextException::class);
         Context::throwIfUninitialized();

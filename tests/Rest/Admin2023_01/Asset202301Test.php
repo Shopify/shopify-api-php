@@ -67,7 +67,7 @@ final class Asset202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["asset" => ["key" => "templates/index.liquid", "public_url" => null, "created_at" => "2010-07-12T15:31:50-04:00", "updated_at" => "2023-10-03T13:32:54-04:00", "content_type" => "application/x-liquid", "size" => 110, "checksum" => "cd71db2e14df976c8aa44b44c8dae77b", "theme_id" => 828155753]]
+                  ["asset" => ["key" => "templates/index.liquid", "public_url" => null, "created_at" => "2010-07-12T15:31:50-04:00", "updated_at" => "2024-01-02T09:03:26-05:00", "content_type" => "application/x-liquid", "size" => 110, "checksum" => "cd71db2e14df976c8aa44b44c8dae77b", "theme_id" => 828155753]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/themes/828155753/assets.json",
                 "PUT",
@@ -96,7 +96,7 @@ final class Asset202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["asset" => ["key" => "assets/empty.gif", "public_url" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/t/1/assets/empty.gif?v=1696354376", "created_at" => "2023-10-03T13:32:56-04:00", "updated_at" => "2023-10-03T13:32:56-04:00", "content_type" => "image/gif", "size" => 43, "checksum" => "45cf913e5d9d3c9b2058033056d3dd23", "theme_id" => 828155753]]
+                  ["asset" => ["key" => "assets/empty.gif", "public_url" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/t/1/assets/empty.gif?v=1704204207", "created_at" => "2024-01-02T09:03:27-05:00", "updated_at" => "2024-01-02T09:03:27-05:00", "content_type" => "image/gif", "size" => 43, "checksum" => "45cf913e5d9d3c9b2058033056d3dd23", "theme_id" => 828155753]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/themes/828155753/assets.json",
                 "PUT",
@@ -125,7 +125,7 @@ final class Asset202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["asset" => ["key" => "assets/bg-body.gif", "public_url" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/t/1/assets/bg-body.gif?v=1696354378", "created_at" => "2010-07-12T15:31:50-04:00", "updated_at" => "2023-10-03T13:32:58-04:00", "content_type" => "image/gif", "size" => 43, "checksum" => "45cf913e5d9d3c9b2058033056d3dd23", "theme_id" => 828155753]]
+                  ["asset" => ["key" => "assets/bg-body.gif", "public_url" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/t/1/assets/bg-body.gif?v=1704204204", "created_at" => "2010-07-12T15:31:50-04:00", "updated_at" => "2024-01-02T09:03:24-05:00", "content_type" => "image/gif", "size" => 43, "checksum" => "45cf913e5d9d3c9b2058033056d3dd23", "theme_id" => 828155753]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/themes/828155753/assets.json",
                 "PUT",
@@ -154,7 +154,7 @@ final class Asset202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["asset" => ["key" => "layout/alternate.liquid", "public_url" => null, "created_at" => "2023-10-03T13:32:52-04:00", "updated_at" => "2023-10-03T13:32:52-04:00", "content_type" => "application/x-liquid", "size" => 3049, "checksum" => "1879a06996941b2ff1ff485a1fe60a97", "theme_id" => 828155753]]
+                  ["asset" => ["key" => "layout/alternate.liquid", "public_url" => null, "created_at" => "2024-01-02T09:03:21-05:00", "updated_at" => "2024-01-02T09:03:21-05:00", "content_type" => "application/x-liquid", "size" => 3049, "checksum" => "1879a06996941b2ff1ff485a1fe60a97", "theme_id" => 828155753]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/themes/828155753/assets.json",
                 "PUT",

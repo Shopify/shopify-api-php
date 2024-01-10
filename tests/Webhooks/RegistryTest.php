@@ -29,7 +29,7 @@ final class RegistryTest extends BaseTestCase
         $reflection = new ReflectionClass(Registry::class);
         $property = $reflection->getProperty('REGISTRY');
         $property->setAccessible(true);
-        $property = $property->setValue([]);
+        $property = $property->setValue(null, []);
     }
 
     public function testAddHandler()

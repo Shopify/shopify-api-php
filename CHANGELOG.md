@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v5.3.0 - 2024-01-10
+
 - [#318](https://github.com/Shopify/shopify-api-php/pull/318) [Minor] Adding support for 2024-01 API version
 
 ## v5.2.0 - 2023-10-24

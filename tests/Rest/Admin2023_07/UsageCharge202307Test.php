@@ -39,7 +39,7 @@ final class UsageCharge202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["usage_charge" => ["id" => 1034618213, "description" => "Super Mega Plan 1000 emails", "price" => "1.00", "created_at" => "2023-10-03T13:21:00-04:00", "currency" => "USD", "balance_used" => 11.0, "balance_remaining" => 89.0, "risk_level" => 0]]
+                  ["usage_charge" => ["id" => 1034618213, "description" => "Super Mega Plan 1000 emails", "price" => "1.00", "created_at" => "2024-01-02T09:31:50-05:00", "currency" => "USD", "balance_used" => 11.0, "balance_remaining" => 89.0, "risk_level" => 0]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/recurring_application_charges/455696195/usage_charges.json",
                 "POST",
@@ -68,7 +68,7 @@ final class UsageCharge202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["usage_charges" => [["id" => 1034618208, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2023-10-03T13:20:57-04:00", "currency" => "USD", "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]]
+                  ["usage_charges" => [["id" => 1034618206, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2024-01-02T09:31:46-05:00", "currency" => "USD", "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/recurring_application_charges/455696195/usage_charges.json",
                 "GET",
@@ -96,9 +96,9 @@ final class UsageCharge202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["usage_charge" => ["id" => 1034618209, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2023-10-03T13:20:58-04:00", "currency" => "USD", "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]
+                  ["usage_charge" => ["id" => 1034618211, "description" => "Super Mega Plan Add-ons", "price" => "10.00", "created_at" => "2024-01-02T09:31:49-05:00", "currency" => "USD", "balance_used" => 10.0, "balance_remaining" => 90.0, "risk_level" => 0]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-07/recurring_application_charges/455696195/usage_charges/1034618209.json",
+                "https://test-shop.myshopify.io/admin/api/2023-07/recurring_application_charges/455696195/usage_charges/1034618211.json",
                 "GET",
                 null,
                 [
@@ -109,7 +109,7 @@ final class UsageCharge202307Test extends BaseTestCase
 
         UsageCharge::find(
             $this->test_session,
-            1034618209,
+            1034618211,
             ["recurring_application_charge_id" => "455696195"],
             [],
         );

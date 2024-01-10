@@ -59,13 +59,11 @@ use Shopify\Rest\Base;
  * @property string|null $order_status_url
  * @property array|null $original_total_additional_fees_set
  * @property array|null $original_total_duties_set
- * @property array|null $payment_details
  * @property string[]|null $payment_gateway_names
  * @property array|null $payment_terms
  * @property string|null $phone
  * @property string|null $presentment_currency
  * @property string|null $processed_at
- * @property string|null $processing_method
  * @property string|null $referring_site
  * @property Refund[]|null $refunds
  * @property array|null $shipping_address

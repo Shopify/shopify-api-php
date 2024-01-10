@@ -29,7 +29,7 @@ use Shopify\Rest\Base;
  * @property int|null $shop_id
  * @property string|null $status
  * @property string[]|null $supported_actions
- * @property array|null $updated_at
+ * @property string|null $updated_at
  */
 class FulfillmentOrder extends Base
 {
@@ -233,7 +233,8 @@ class FulfillmentOrder extends Base
     }
 
     /**
-     * @param mixed[] $params
+     * @param mixed[] $params Allowed indexes:
+     *     new_fulfill_at
      * @param array|string $body
      *
      * @return array|null

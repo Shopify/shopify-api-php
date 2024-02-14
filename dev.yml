@@ -1,7 +1,41 @@
 name: shopify-php-api
 up:
-  - homebrew:
-      - composer
+  - custom:
+      name: Add apt repository for php
+      met?: test -f /etc/apt/sources.list.d/ondrej-ubuntu-php-jammy.list
+      meet: sudo add-apt-repository -y ppa:ondrej/php
+  - custom:
+      name: Update apt
+      met?: 'apt-get update | grep -q "Reading package lists..."'
+      meet: sudo apt-get update
+  - custom:
+      name: Install PHP 8.2
+      met?: 'dpkg -l | grep -q "php8.2"'
+      meet: sudo apt-get install -y php8.2 libapache2-mod-php8.2 php8.2-cli php8.2-xml php8.2-cgi php8.2-zip
+  - custom:
+      name: Configure Ubuntu to use PHP 8.2
+      met?: 'php -v | grep -q "8.2"'
+      meet: sudo update-alternatives --set php /usr/bin/php8.2
+  - custom:
+      name: Configure Apache to use PHP 8.2
+      met?: test -f /etc/apache2/mods-enabled/php8.2.conf
+      meet: sudo a2dismod php8.1 && sudo a2enmod php8.2
+  - custom:
+      name: Configure ServerName in Apache2
+      met?: 'grep -q "ServerName 127.0.0.1" /etc/apache2/apache2.conf'
+      meet: echo "ServerName 127.0.0.1" | sudo tee -a
+  - custom:
+      name: Change Apache2 default port from 80 to 8123
+      met?: 'grep -q "Listen 8123" /etc/apache2/ports.conf'
+      meet: sudo sed -i 's/Listen 80/Listen 8123/' /etc/apache2/ports.conf
+  - custom:
+      name: Restart Apache2
+      met?: 'systemctl is-active --quiet apache2'
+      meet: sudo systemctl restart apache2
+  - custom:
+      name: Install composer
+      met?: 'which composer'
+      meet: curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
   - custom:
       name: Composer install
       met?: 'composer install --dry-run 2>&1 | grep -q "Nothing to install"'

@@ -3,6 +3,7 @@
 namespace ShopifyTest;
 
 use BadMethodCallException;
+
 /**
  * Used for testing purposes.
  *
@@ -126,7 +127,8 @@ class LogMock
 
     public function __call($method, $args)
     {
-        if (preg_match('/(.*)(Debug|Info|Notice|Warning|Error|Critical|Alert|Emergency)(.*)/', (string) $method, $matches) > 0) {
+        $regex = '/(.*)(Debug|Info|Notice|Warning|Error|Critical|Alert|Emergency)(.*)/';
+        if (preg_match($regex, (string) $method, $matches) > 0) {
             $genericMethod = $matches[1] . ('Records' !== $matches[3] ? 'Record' : '') . $matches[3];
             $level = strtolower($matches[2]);
             if (method_exists($this, $genericMethod)) {

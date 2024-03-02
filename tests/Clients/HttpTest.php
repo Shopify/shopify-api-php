@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Clients;
 
+use Shopify\Exception\HttpRequestException;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LogLevel;
@@ -301,7 +302,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $this->expectException(\Shopify\Exception\HttpRequestException::class);
+        $this->expectException(HttpRequestException::class);
         $client->get(path: 'test/path');
     }
 

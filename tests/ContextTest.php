@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace ShopifyTest;
 
+use Shopify\Exception\MissingArgumentException;
+use Shopify\Exception\UninitializedContextException;
+use Shopify\Exception\PrivateAppException;
+use Exception;
+use Shopify\Exception\InvalidArgumentException;
 use Psr\Log\LogLevel;
 use ReflectionClass;
 use Shopify\ApiVersion;
@@ -57,7 +62,7 @@ final class ContextTest extends BaseTestCase
 
     public function testThrowsIfMissingArguments()
     {
-        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
+        $this->expectException(MissingArgumentException::class);
         $this->expectExceptionMessage(
             'Cannot initialize Shopify API Library. Missing values for: apiKey, apiSecretKey, scopes, hostName'
         );
@@ -79,7 +84,7 @@ final class ContextTest extends BaseTestCase
         $reflectedIsInitialized->setAccessible(true);
         $reflectedIsInitialized->setValue(null, false);
 
-        $this->expectException(\Shopify\Exception\UninitializedContextException::class);
+        $this->expectException(UninitializedContextException::class);
         Context::throwIfUninitialized();
     }
 
@@ -94,7 +99,7 @@ final class ContextTest extends BaseTestCase
             apiVersion: 'unstable',
             isPrivateApp: true,
         );
-        $this->expectException(\Shopify\Exception\PrivateAppException::class);
+        $this->expectException(PrivateAppException::class);
         $this->expectExceptionMessage('BOOOOOO');
         Context::throwIfPrivateApp('BOOOOOO');
     }
@@ -193,7 +198,7 @@ final class ContextTest extends BaseTestCase
 
     public function testLogDeprecationVersionExceptionText()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Encountered an invalid version: "abc"');
 
         Context::logDeprecation('abc', 'This message should not be logged.');
@@ -201,7 +206,7 @@ final class ContextTest extends BaseTestCase
 
     public function testLogDeprecationExceptionTooComplexVersion()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Encountered an invalid version: "1.2.3-RC"');
 
         Context::logDeprecation('1.2.3-RC', 'This message should not be logged.');
@@ -237,7 +242,7 @@ final class ContextTest extends BaseTestCase
 
     public function testFailsOnInvalidHost()
     {
-        $this->expectException(\Shopify\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         Context::initialize(
             apiKey: 'ash',
             apiSecretKey: 'steffi',

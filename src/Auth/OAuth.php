@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Shopify\Auth;
 
+use Shopify\Exception\PrivateAppException;
+use Shopify\Exception\UninitializedContextException;
+use Shopify\Exception\OAuthCookieNotFoundException;
+use Psr\Http\Client\ClientExceptionInterface;
 use Shopify\Clients\Http;
 use Shopify\Clients\HttpHeaders;
 use Shopify\Clients\HttpResponse;
@@ -37,10 +41,10 @@ class OAuth
      * @param null|callable $setCookieFunction An optional override for setting cookie in response
      *
      * @return string The URL for OAuth redirection
-     * @throws \Shopify\Exception\CookieSetException
-     * @throws \Shopify\Exception\PrivateAppException
-     * @throws \Shopify\Exception\SessionStorageException
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws CookieSetException
+     * @throws PrivateAppException
+     * @throws SessionStorageException
+     * @throws UninitializedContextException
      */
     public static function begin(
         string $shop,
@@ -108,13 +112,13 @@ class OAuth
      * @param null|callable $setCookieFunction An optional override for setting cookie in response.
      *
      * @return Session
-     * @throws \Shopify\Exception\HttpRequestException
-     * @throws \Shopify\Exception\InvalidOAuthException
-     * @throws \Shopify\Exception\OAuthCookieNotFoundException
-     * @throws \Shopify\Exception\OAuthSessionNotFoundException
-     * @throws \Shopify\Exception\PrivateAppException
-     * @throws \Shopify\Exception\SessionStorageException
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws HttpRequestException
+     * @throws InvalidOAuthException
+     * @throws OAuthCookieNotFoundException
+     * @throws OAuthSessionNotFoundException
+     * @throws PrivateAppException
+     * @throws SessionStorageException
+     * @throws UninitializedContextException
      */
     public static function callback(array $cookies, array $query, ?callable $setCookieFunction = null): Session
     {
@@ -213,8 +217,8 @@ class OAuth
      * @param bool   $isOnline Whether to load online or offline sessions
      *
      * @return string The ID of the current session
-     * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\CookieNotFoundException
+     * @throws MissingArgumentException
+     * @throws CookieNotFoundException
      */
     public static function getCurrentSessionId(array $rawHeaders, array $cookies, bool $isOnline): string
     {
@@ -226,13 +230,13 @@ class OAuth
                     throw new MissingArgumentException('Missing Authorization key in headers array');
                 }
                 $auth = $headers->get('authorization');
-                preg_match('/^Bearer (.+)$/', $auth, $matches);
+                preg_match('/^Bearer (.+)$/', (string) $auth, $matches);
                 if (!$matches) {
                     throw new MissingArgumentException('Missing Bearer token in authorization header');
                 }
 
                 $jwtPayload = Utils::decodeSessionToken($matches[1]);
-                $shop = preg_replace('/^https:\/\//', '', $jwtPayload['dest']);
+                $shop = preg_replace('/^https:\/\//', '', (string) $jwtPayload['dest']);
                 if ($isOnline) {
                     $currentSessionId = self::getJwtSessionId($shop, $jwtPayload['sub']);
                 } else {
@@ -257,7 +261,7 @@ class OAuth
      * @param array $cookies The $cookies param from `callback`
      *
      * @return string The ID of the current session
-     * @throws \Shopify\Exception\CookieNotFoundException
+     * @throws CookieNotFoundException
      */
     private static function getCookieSessionId(array $cookies): string
     {
@@ -266,7 +270,7 @@ class OAuth
 
         $sessionId = null;
         if ($signature && $cookieId) {
-            $expectedSignature = hash_hmac('sha256', $cookieId, Context::$API_SECRET_KEY);
+            $expectedSignature = hash_hmac('sha256', (string) $cookieId, Context::$API_SECRET_KEY);
 
             if ($signature === $expectedSignature) {
                 $sessionId = $cookieId;
@@ -333,7 +337,7 @@ class OAuth
      * @param Session $session The current session
      *
      * @return bool
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws UninitializedContextException
      */
     private static function isCallbackQueryValid(array $query, Session $session): bool
     {
@@ -344,7 +348,7 @@ class OAuth
         return (
             ($code) &&
             ($sanitizedShop && strcmp($session->getShop(), $sanitizedShop) === 0) &&
-            ($state && strcmp($session->getState(), $state) === 0) &&
+            ($state && strcmp($session->getState(), (string) $state) === 0) &&
             Utils::validateHmac($query, Context::$API_SECRET_KEY)
         );
     }
@@ -356,7 +360,7 @@ class OAuth
      * @param Session $session The OAuth session
      *
      * @return AccessTokenResponse|AccessTokenOnlineResponse The access token exchanged for the OAuth code
-     * @throws \Shopify\Exception\HttpRequestException
+     * @throws HttpRequestException
      */
     private static function fetchAccessToken(
         array $query,
@@ -424,9 +428,9 @@ class OAuth
      * @param Http  $client
      * @param array $post The POST payload
      *
-     * @return \Shopify\Clients\HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @return HttpResponse
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      * @codeCoverageIgnore
      */
     public static function requestAccessToken(Http $client, array $post): HttpResponse

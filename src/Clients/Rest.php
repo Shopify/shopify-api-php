@@ -9,8 +9,7 @@ use Shopify\Exception\MissingArgumentException;
 
 class Rest extends Http
 {
-    /** @var string */
-    private $accessToken;
+    private readonly ?string $accessToken;
 
     /**
      * Rest Client constructor.
@@ -18,7 +17,7 @@ class Rest extends Http
      * @param string      $domain
      * @param string|null $accessToken
      *
-     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws MissingArgumentException
      */
     public function __construct(string $domain, ?string $accessToken = null)
     {
@@ -71,9 +70,9 @@ class Rest extends Http
     }
 
     /**
-     * @param \Shopify\Clients\HttpResponse $response
+     * @param HttpResponse $response
      *
-     * @return \Shopify\Clients\PageInfo|null
+     * @return PageInfo|null
      */
     private function getPageInfo(HttpResponse $response): ?PageInfo
     {

@@ -6,16 +6,11 @@ namespace Shopify\Auth;
 
 final class AccessTokenOnlineResponse extends AccessTokenResponse
 {
-    /** @var string */
-    protected $accessToken;
-    /** @var string */
-    protected $scope;
-    /** @var int */
-    private $expiresIn;
-    /** @var string */
-    private $associatedUserScope;
-    /** @var AccessTokenOnlineUserInfo|null */
-    private $associatedUser = null;
+    protected string $accessToken;
+    protected string $scope;
+    private readonly int $expiresIn;
+    private readonly string $associatedUserScope;
+    private readonly ?AccessTokenOnlineUserInfo $associatedUser;
 
     public function __construct(
         string $accessToken,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shopify\Auth;
 
+use Exception;
 use DateTime;
 use Shopify\Context;
 use Shopify\Utils;
@@ -94,7 +95,7 @@ class Session
     /**
      * @param string|int|DateTime $expires
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function setExpires($expires): void
     {

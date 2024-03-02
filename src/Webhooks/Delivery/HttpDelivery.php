@@ -2,6 +2,7 @@
 
 namespace Shopify\Webhooks\Delivery;
 
+use Shopify\Exception\InvalidArgumentException;
 use Shopify\Context;
 use Shopify\Utils;
 use Shopify\Webhooks\DeliveryMethod;
@@ -22,7 +23,7 @@ class HttpDelivery extends DeliveryMethod
      * @param string $topic
      *
      * @return string
-     * @throws \Shopify\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function buildCheckQuery(string $topic): string
     {

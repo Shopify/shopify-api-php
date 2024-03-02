@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Shopify\Clients;
 
+use Psr\Http\Client\ClientExceptionInterface;
+use Shopify\Exception\UninitializedContextException;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
@@ -23,8 +25,7 @@ class Http
     private const RETRIABLE_STATUS_CODES = [429, 500];
     private const DEPRECATION_ALERT_SECONDS = 60;
 
-    /** @var string */
-    private $domain;
+    private readonly string $domain;
 
     public function __construct(string $domain)
     {
@@ -40,8 +41,8 @@ class Http
      * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function get(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
@@ -65,8 +66,8 @@ class Http
      * @param string       $dataType The data type to expect in the response
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function post(
         string $path,
@@ -98,8 +99,8 @@ class Http
      * @param string       $dataType The data type to expect in the response
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function put(
         string $path,
@@ -129,8 +130,8 @@ class Http
      * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function delete(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
@@ -155,8 +156,8 @@ class Http
      * @param string            $dataType The data type of the request
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     protected function request(
         string $path,
@@ -249,7 +250,7 @@ class Http
      *
      * @param string $url    The URL that used a deprecated resource
      * @param string $reason The deprecation reason
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws UninitializedContextException
      */
     private function logApiDeprecation(string $url, string $reason): void
     {

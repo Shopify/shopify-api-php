@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Clients;
 
+use Shopify\Exception\MissingArgumentException;
 use Shopify\Clients\Rest;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
@@ -23,7 +24,7 @@ class RestTest extends BaseTestCase
 
     public function testFailsToInstantiateWithoutAccessTokenForNonPrivateApps()
     {
-        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
+        $this->expectException(MissingArgumentException::class);
 
         new Rest($this->domain);
     }

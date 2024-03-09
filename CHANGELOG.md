@@ -8,6 +8,13 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 - [#292](https://github.com/Shopify/shopify-api-php/pull/292) [Patch] Fix bug where null can be passed to param 3 of setcookie() 
 
+## v5.3.0 - 2024-01-10
+
+- [#318](https://github.com/Shopify/shopify-api-php/pull/318) [Minor] Adding support for 2024-01 API version
+
+## v5.2.0 - 2023-10-24
+
+- [#306](https://github.com/Shopify/shopify-api-php/pull/306) [Minor] Adding support for 2023-10 API version
 - [#297](https://github.com/Shopify/shopify-api-php/pull/297) [Patch] Fix CustomerAddress methods, FulfillmentRequest save method
 
 ## v5.1.0 - 2023-07-11

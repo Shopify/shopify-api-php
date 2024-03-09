@@ -24,6 +24,7 @@ use Shopify\Rest\Base;
  * @property array|null $client_details
  * @property string|null $closed_at
  * @property array|null $company
+ * @property string|null $confirmation_number
  * @property string|null $created_at
  * @property string|null $currency
  * @property string|null $current_subtotal_price

@@ -39,7 +39,7 @@ final class ApplicationCredit202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credit" => ["id" => 1031636128, "amount" => "5.00", "description" => "application credit for refund", "test" => null, "currency" => "USD"]]
+                  ["application_credit" => ["id" => 1031636129, "amount" => "5.00", "description" => "application credit for refund", "test" => null, "currency" => "USD"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/application_credits.json",
                 "POST",
@@ -67,7 +67,7 @@ final class ApplicationCredit202304Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["application_credit" => ["id" => 1031636127, "amount" => "5.00", "description" => "application credit for refund", "test" => true, "currency" => "USD"]]
+                  ["application_credit" => ["id" => 1031636126, "amount" => "5.00", "description" => "application credit for refund", "test" => true, "currency" => "USD"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-04/application_credits.json",
                 "POST",

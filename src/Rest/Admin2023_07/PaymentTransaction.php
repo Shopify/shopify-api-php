@@ -12,6 +12,7 @@ use Shopify\Auth\Session;
 use Shopify\Rest\Base;
 
 /**
+ * @property array[]|null $adjustment_order_transactions
  * @property string|null $amount
  * @property Currency|null $currency
  * @property string|null $fee
@@ -22,7 +23,7 @@ use Shopify\Rest\Base;
  * @property string|null $processed_at
  * @property int|null $source_id
  * @property int|null $source_order_id
- * @property int|null $source_order_transaction_id
+ * @property string|null $source_order_transaction_id
  * @property string|null $source_type
  * @property bool|null $test
  * @property string|null $type

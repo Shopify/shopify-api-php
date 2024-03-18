@@ -80,6 +80,27 @@ abstract class DeliveryMethod
         QUERY;
     }
 
+    public function buildDeleteQuery(
+        string $topic,
+        string $callbackAddress,
+        string $webhookId
+    ): string {
+        $mutationName = $this->getDeletionMutationName();
+        $identifier = "id: \"$webhookId\"";
+
+        return <<<QUERY
+        mutation webhookSubscription {
+            $mutationName($identifier) {
+                userErrors {
+                    field
+                    message
+                }
+                deletedWebhookSubscriptionId
+            }
+        }
+        QUERY;
+    }
+
     /**
      * Checks if the given result was successful.
      *
@@ -90,6 +111,7 @@ abstract class DeliveryMethod
      */
     public function isSuccess(array $result, ?string $webhookId = null): bool
     {
-        return !empty($result['data'][$this->getMutationName($webhookId)]['webhookSubscription']);
+        return !empty($result['data'][$this->getMutationName($webhookId)]['webhookSubscription'])
+            || !empty($result['data'][$this->getDeletionMutationName()]['deletedWebhookSubscriptionId']);
     }
 }

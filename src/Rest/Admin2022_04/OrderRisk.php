@@ -49,11 +49,13 @@ class OrderRisk extends Base
     /**
 
      *
-     * @return string
+     * @return string[]
      */
-    protected static function getJsonResponseBodyName(): string
+    protected static function getJsonResponseBodyNames(): array
     {
-        return "risk";
+        return [
+            "risk"
+        ];
     }
 
     /**

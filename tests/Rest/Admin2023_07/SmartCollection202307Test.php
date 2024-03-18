@@ -39,7 +39,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collections" => [["id" => 1063001314, "handle" => "ipods-1", "title" => "IPods", "updated_at" => "2023-07-05T18:38:37-04:00", "body_html" => null, "published_at" => "2023-07-05T18:38:37-04:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "title", "relation" => "starts_with", "condition" => "iPod"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001314"]]]
+                  ["smart_collections" => [["id" => 1063001321, "handle" => "ipods-1", "title" => "IPods", "updated_at" => "2024-01-02T09:29:35-05:00", "body_html" => null, "published_at" => "2024-01-02T09:29:35-05:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "title", "relation" => "starts_with", "condition" => "iPod"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001321"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json?since_id=482865238",
                 "GET",
@@ -67,7 +67,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collections" => [["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:03-04:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1688596683"]]]]
+                  ["smart_collections" => [["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:28:43-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1704205723"]]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json",
                 "GET",
@@ -95,7 +95,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collections" => [["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:03-04:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1688596683"]]]]
+                  ["smart_collections" => [["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:28:43-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1704205723"]]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json?product_id=632910392",
                 "GET",
@@ -123,9 +123,9 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collections" => [["id" => 1063001315, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2023-07-05T18:38:38-04:00", "body_html" => null, "published_at" => "2023-07-05T18:38:38-04:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001315"], ["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:03-04:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1688596683"]]]]
+                  ["smart_collections" => [["id" => 1063001316, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2024-01-02T09:29:25-05:00", "body_html" => null, "published_at" => "2024-01-02T09:29:25-05:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001316"], ["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:28:43-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1704205723"]]]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json?ids=482865238%2C1063001315",
+                "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json?ids=482865238%2C1063001316",
                 "GET",
                 null,
                 [
@@ -137,7 +137,7 @@ final class SmartCollection202307Test extends BaseTestCase
         SmartCollection::all(
             $this->test_session,
             [],
-            ["ids" => "482865238,1063001315"],
+            ["ids" => "482865238,1063001316"],
         );
     }
 
@@ -207,7 +207,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "products_count" => 2, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:03-04:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1688596683"]]]
+                  ["smart_collection" => ["id" => 482865238, "handle" => "smart-ipods", "title" => "Smart iPods", "updated_at" => "2008-02-01T19:00:00-05:00", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "products_count" => 2, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:28:43-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1704205723"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections/482865238.json",
                 "GET",
@@ -236,7 +236,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 482865238, "published_at" => null, "updated_at" => "2023-07-05T18:38:56-04:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:03-04:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1688596683"]]]
+                  ["smart_collection" => ["title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 482865238, "published_at" => null, "updated_at" => "2024-01-02T09:29:34-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:28:43-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1704205723"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections/482865238.json",
                 "PUT",
@@ -264,7 +264,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 482865238, "published_at" => "2023-07-05T18:39:01-04:00", "updated_at" => "2023-07-05T18:39:01-04:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:03-04:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1688596683"]]]
+                  ["smart_collection" => ["title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "id" => 482865238, "published_at" => "2024-01-02T09:29:21-05:00", "updated_at" => "2024-01-02T09:29:21-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:28:43-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1704205723"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections/482865238.json",
                 "PUT",
@@ -292,7 +292,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["body_html" => "<p>The best selling ipod ever</p>", "handle" => "smart-ipods", "updated_at" => "2023-07-05T18:38:42-04:00", "id" => 482865238, "sort_order" => "manual", "title" => "Smart iPods", "disjunctive" => false, "template_suffix" => null, "published_at" => "2008-02-01T19:00:00-05:00", "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238"]]
+                  ["smart_collection" => ["body_html" => "<p>The best selling ipod ever</p>", "handle" => "smart-ipods", "updated_at" => "2024-01-02T09:29:29-05:00", "id" => 482865238, "sort_order" => "manual", "title" => "Smart iPods", "disjunctive" => false, "template_suffix" => null, "published_at" => "2008-02-01T19:00:00-05:00", "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections/482865238.json",
                 "PUT",
@@ -300,14 +300,14 @@ final class SmartCollection202307Test extends BaseTestCase
                 [
                     "X-Shopify-Access-Token: this_is_a_test_token",
                 ],
-                json_encode(["smart_collection" => ["image" => "", "updated_at" => "2023-07-05T18:38:42-04:00", "title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238"]]),
+                json_encode(["smart_collection" => ["image" => "", "updated_at" => "2024-01-02T09:29:28-05:00", "title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238"]]),
             ),
         ]);
 
         $smart_collection = new SmartCollection($this->test_session);
         $smart_collection->id = 482865238;
         $smart_collection->image = "";
-        $smart_collection->updated_at = "2023-07-05T18:38:42-04:00";
+        $smart_collection->updated_at = "2024-01-02T09:29:28-05:00";
         $smart_collection->title = "Smart iPods";
         $smart_collection->handle = "smart-ipods";
         $smart_collection->body_html = "<p>The best selling ipod ever</p>";
@@ -337,7 +337,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["updated_at" => "2023-07-05T18:38:59-04:00", "id" => 482865238, "title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:59-04:00", "alt" => "Rails logo", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/fd43f2c8883f6e9b680e3295fd990d2c.gif?v=1688596739"]]]
+                  ["smart_collection" => ["updated_at" => "2024-01-02T09:29:45-05:00", "id" => 482865238, "title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:29:45-05:00", "alt" => "Rails logo", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/fd43f2c8883f6e9b680e3295fd990d2c.gif?v=1704205785"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections/482865238.json",
                 "PUT",
@@ -368,7 +368,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["updated_at" => "2023-07-05T18:38:50-04:00", "id" => 482865238, "title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["alt" => "Rails logo", "created_at" => "2023-07-05T18:38:49-04:00", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/rails_logo20230705-19607-55plro.gif?v=1688596730"]]]
+                  ["smart_collection" => ["updated_at" => "2024-01-02T09:29:43-05:00", "id" => 482865238, "title" => "Smart iPods", "handle" => "smart-ipods", "body_html" => "<p>The best selling ipod ever</p>", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["alt" => "Rails logo", "created_at" => "2024-01-02T09:29:42-05:00", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/rails_logo20240102-28582-qpb548.gif?v=1704205783"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections/482865238.json",
                 "PUT",
@@ -398,7 +398,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["body_html" => "<p>5000 songs in your pocket</p>", "title" => "Smart iPods", "handle" => "smart-ipods", "id" => 482865238, "updated_at" => "2023-07-05T18:38:34-04:00", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2023-07-05T18:38:03-04:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1688596683"]]]
+                  ["smart_collection" => ["body_html" => "<p>5000 songs in your pocket</p>", "title" => "Smart iPods", "handle" => "smart-ipods", "id" => 482865238, "updated_at" => "2024-01-02T09:29:43-05:00", "published_at" => "2008-02-01T19:00:00-05:00", "sort_order" => "manual", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "type", "relation" => "equals", "condition" => "Cult Products"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/482865238", "image" => ["created_at" => "2024-01-02T09:28:43-05:00", "alt" => "MP3 Player 8gb", "width" => 123, "height" => 456, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/ipod_nano_8gb.jpg?v=1704205723"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections/482865238.json",
                 "PUT",
@@ -455,7 +455,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["id" => 1063001318, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2023-07-05T18:38:46-04:00", "body_html" => null, "published_at" => "2023-07-05T18:38:46-04:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001318", "image" => ["created_at" => "2023-07-05T18:38:46-04:00", "alt" => "iPod", "width" => 1, "height" => 1, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/df3e567d6f16d040326c7a0ea29a4f41.gif?v=1688596726"]]]
+                  ["smart_collection" => ["id" => 1063001311, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2024-01-02T09:29:19-05:00", "body_html" => null, "published_at" => "2024-01-02T09:29:19-05:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001311", "image" => ["created_at" => "2024-01-02T09:29:19-05:00", "alt" => "iPod", "width" => 1, "height" => 1, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/df3e567d6f16d040326c7a0ea29a4f41.gif?v=1704205759"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json",
                 "POST",
@@ -493,7 +493,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["id" => 1063001319, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2023-07-05T18:38:51-04:00", "body_html" => null, "published_at" => "2023-07-05T18:38:50-04:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001319", "image" => ["created_at" => "2023-07-05T18:38:51-04:00", "alt" => "Rails Logo", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/rails_logo20230705-19607-27hlwp.gif?v=1688596731"]]]
+                  ["smart_collection" => ["id" => 1063001327, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2024-01-02T09:29:48-05:00", "body_html" => null, "published_at" => "2024-01-02T09:29:48-05:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001327", "image" => ["created_at" => "2024-01-02T09:29:48-05:00", "alt" => "Rails Logo", "width" => 110, "height" => 140, "src" => "https://cdn.shopify.com/s/files/1/0005/4838/0009/collections/rails_logo20240102-28582-5fqs02.gif?v=1704205788"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json",
                 "POST",
@@ -531,7 +531,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["id" => 1063001317, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2023-07-05T18:38:45-04:00", "body_html" => null, "published_at" => null, "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001317"]]
+                  ["smart_collection" => ["id" => 1063001326, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2024-01-02T09:29:46-05:00", "body_html" => null, "published_at" => null, "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001326"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json",
                 "POST",
@@ -566,7 +566,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["id" => 1063001322, "handle" => "ipods-1", "title" => "IPods", "updated_at" => "2023-07-05T18:38:57-04:00", "body_html" => null, "published_at" => "2023-07-05T18:38:57-04:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "title", "relation" => "starts_with", "condition" => "iPod"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001322"]]
+                  ["smart_collection" => ["id" => 1063001313, "handle" => "ipods-1", "title" => "IPods", "updated_at" => "2024-01-02T09:29:21-05:00", "body_html" => null, "published_at" => "2024-01-02T09:29:21-05:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "title", "relation" => "starts_with", "condition" => "iPod"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001313"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json",
                 "POST",
@@ -600,7 +600,7 @@ final class SmartCollection202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["smart_collection" => ["id" => 1063001323, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2023-07-05T18:39:00-04:00", "body_html" => null, "published_at" => "2023-07-05T18:39:00-04:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001323"]]
+                  ["smart_collection" => ["id" => 1063001325, "handle" => "macbooks", "title" => "Macbooks", "updated_at" => "2024-01-02T09:29:41-05:00", "body_html" => null, "published_at" => "2024-01-02T09:29:41-05:00", "sort_order" => "best-selling", "template_suffix" => null, "disjunctive" => false, "rules" => [["column" => "vendor", "relation" => "equals", "condition" => "Apple"]], "published_scope" => "web", "admin_graphql_api_id" => "gid://shopify/Collection/1063001325"]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/smart_collections.json",
                 "POST",

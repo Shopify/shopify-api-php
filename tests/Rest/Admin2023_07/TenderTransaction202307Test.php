@@ -39,7 +39,7 @@ final class TenderTransaction202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["tender_transactions" => [["id" => 1011222843, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"], ["id" => 1011222842, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
+                  ["tender_transactions" => [["id" => 1011222837, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"], ["id" => 1011222836, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/tender_transactions.json",
                 "GET",
@@ -67,9 +67,9 @@ final class TenderTransaction202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["tender_transactions" => [["id" => 1011222835, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
+                  ["tender_transactions" => [["id" => 1011222829, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-07/tender_transactions.json?since_id=1011222834",
+                "https://test-shop.myshopify.io/admin/api/2023-07/tender_transactions.json?since_id=1011222828",
                 "GET",
                 null,
                 [
@@ -81,7 +81,7 @@ final class TenderTransaction202307Test extends BaseTestCase
         TenderTransaction::all(
             $this->test_session,
             [],
-            ["since_id" => "1011222834"],
+            ["since_id" => "1011222828"],
         );
     }
 
@@ -95,7 +95,7 @@ final class TenderTransaction202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["tender_transactions" => [["id" => 1011222848, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"], ["id" => 1011222849, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
+                  ["tender_transactions" => [["id" => 1011222830, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"], ["id" => 1011222831, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/tender_transactions.json?order=processed_at+ASC",
                 "GET",
@@ -123,7 +123,7 @@ final class TenderTransaction202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["tender_transactions" => [["id" => 1011222837, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
+                  ["tender_transactions" => [["id" => 1011222833, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-07T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/tender_transactions.json?processed_at_min=2005-08-06+10%3A22%3A51+-0400",
                 "GET",
@@ -151,7 +151,7 @@ final class TenderTransaction202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["tender_transactions" => [["id" => 1011222846, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
+                  ["tender_transactions" => [["id" => 1011222826, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/tender_transactions.json?processed_at_max=2005-08-06+10%3A22%3A51+-0400",
                 "GET",
@@ -179,7 +179,7 @@ final class TenderTransaction202307Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["tender_transactions" => [["id" => 1011222828, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
+                  ["tender_transactions" => [["id" => 1011222834, "order_id" => 450789469, "amount" => "250.94", "currency" => "USD", "user_id" => null, "test" => false, "processed_at" => "2005-08-05T10:22:51-04:00", "remote_reference" => "authorization-key", "payment_details" => null, "payment_method" => "credit_card"]]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-07/tender_transactions.json?processed_at_max=2005-08-05+10%3A22%3A51+-0400",
                 "GET",

@@ -39,7 +39,7 @@ final class ApplePayCertificate202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["apple_pay_certificate" => ["id" => 1068938276, "status" => "issuing", "merchant_id" => null]]
+                  ["apple_pay_certificate" => ["id" => 1068938278, "status" => "issuing", "merchant_id" => null]]
                 )),
                 "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates.json",
                 "POST",
@@ -66,9 +66,9 @@ final class ApplePayCertificate202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["apple_pay_certificate" => ["id" => 1068938275, "status" => "csr", "merchant_id" => null]]
+                  ["apple_pay_certificate" => ["id" => 1068938274, "status" => "csr", "merchant_id" => null]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938275.json",
+                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938274.json",
                 "GET",
                 null,
                 [
@@ -79,7 +79,7 @@ final class ApplePayCertificate202301Test extends BaseTestCase
 
         ApplePayCertificate::find(
             $this->test_session,
-            1068938275,
+            1068938274,
             [],
             [],
         );
@@ -95,9 +95,9 @@ final class ApplePayCertificate202301Test extends BaseTestCase
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, json_encode(
-                  ["apple_pay_certificate" => ["id" => 1068938277, "status" => "completed", "merchant_id" => "merchant.something"]]
+                  ["apple_pay_certificate" => ["id" => 1068938276, "status" => "completed", "merchant_id" => "merchant.something"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938277.json",
+                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938276.json",
                 "PUT",
                 null,
                 [
@@ -108,7 +108,7 @@ final class ApplePayCertificate202301Test extends BaseTestCase
         ]);
 
         $apple_pay_certificate = new ApplePayCertificate($this->test_session);
-        $apple_pay_certificate->id = 1068938277;
+        $apple_pay_certificate->id = 1068938276;
         $apple_pay_certificate->status = "completed";
         $apple_pay_certificate->merchant_id = "merchant.something";
         $apple_pay_certificate->encoded_signed_certificate = "MIIEZzCCBA6gAwIBAgIIWGMideLkDJAwCgYIKoZIzj0EAwIwgYAxNDAyBgNV\nBAMMK0FwcGxlIFdvcmxkd2lkZSBEZXZlbG9wZXIgUmVsYXRpb25zIENBIC0g\nRzIxJjAkBgNVBAsMHUFwcGxlIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRMw\nEQYDVQQKDApBcHBsZSBJbmMuMQswCQYDVQQGEwJVUzAeFw0xNDEyMDgyMTMy\nMDBaFw0xNzAxMDYyMTMyMDBaMIGZMSowKAYKCZImiZPyLGQBAQwabWVyY2hh\nbnQuY29tLm5vcm1vcmUuamFzb24xMDAuBgNVBAMMJ01lcmNoYW50IElEOiBt\nZXJjaGFudC5jb20ubm9ybW9yZS5qYXNvbjETMBEGA1UECwwKNVVZMzJOTE5O\nOTEXMBUGA1UECgwOSm9zaHVhIFRlc3NpZXIxCzAJBgNVBAYTAkNBMFkwEwYH\nKoZIzj0CAQYIKoZIzj0DAQcDQgAEAxDDCvzG6MnsZSJOtbr0hr3MRq+4HzTZ\nx8J4FD34E3kU5CallEnZLBmnzfqmjP8644SO28LLJxvWBnrg7lHFtaOCAlUw\nggJRMEcGCCsGAQUFBwEBBDswOTA3BggrBgEFBQcwAYYraHR0cDovL29jc3Au\nYXBwbGUuY29tL29jc3AwNC1hcHBsZXd3ZHJjYTIwMTAdBgNVHQ4EFgQUkPsO\nKEKvhL/takKomy5GWXtCd8wwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSE\ntoTMOoZichZZlOgao71I3zrfCzCCAR0GA1UdIASCARQwggEQMIIBDAYJKoZI\nhvdjZAUBMIH+MIHDBggrBgEFBQcCAjCBtgyBs1JlbGlhbmNlIG9uIHRoaXMg\nY2VydGlmaWNhdGUgYnkgYW55IHBhcnR5IGFzc3VtZXMgYWNjZXB0YW5jZSBv\nZiB0aGUgdGhlbiBhcHBsaWNhYmxlIHN0YW5kYXJkIHRlcm1zIGFuZCBjb25k\naXRpb25zIG9mIHVzZSwgY2VydGlmaWNhdGUgcG9saWN5IGFuZCBjZXJ0aWZp\nY2F0aW9uIHByYWN0aWNlIHN0YXRlbWVudHMuMDYGCCsGAQUFBwIBFipodHRw\nOi8vd3d3LmFwcGxlLmNvbS9jZXJ0aWZpY2F0ZWF1dGhvcml0eS8wNgYDVR0f\nBC8wLTAroCmgJ4YlaHR0cDovL2NybC5hcHBsZS5jb20vYXBwbGV3d2RyY2Ey\nLmNybDAOBgNVHQ8BAf8EBAMCAygwTwYJKoZIhvdjZAYgBEIMQDM0NTBBMjhB\nOTlGRjIyRkI5OTdDRERFODU1REREOTI5NTE4RjVGMDdBQUM4NzdDMzRCQjM3\nODFCQTg2MzkyNjIwCgYIKoZIzj0EAwIDRwAwRAIgZ/oNx0gCc/PM4pYhOWL2\nCecFQrIgzHr/fZd8qcy3Be8CIEQCaAPpmvQrXEX0hFexoYMHtOHY9dgN2D8L\nNKpVyn3t\n";
@@ -127,7 +127,7 @@ final class ApplePayCertificate202301Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   []
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938278.json",
+                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938275.json",
                 "DELETE",
                 null,
                 [
@@ -138,7 +138,7 @@ final class ApplePayCertificate202301Test extends BaseTestCase
 
         ApplePayCertificate::delete(
             $this->test_session,
-            1068938278,
+            1068938275,
             [],
             [],
         );
@@ -156,7 +156,7 @@ final class ApplePayCertificate202301Test extends BaseTestCase
                 $this->buildMockHttpResponse(200, json_encode(
                   ["csr" => ["key" => "YXBwbGUtcGF5LWNzcg==\n"]]
                 )),
-                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938274/csr.json",
+                "https://test-shop.myshopify.io/admin/api/2023-01/apple_pay_certificates/1068938277/csr.json",
                 "GET",
                 null,
                 [
@@ -167,7 +167,7 @@ final class ApplePayCertificate202301Test extends BaseTestCase
 
         ApplePayCertificate::csr(
             $this->test_session,
-            1068938274,
+            1068938277,
             [],
             [],
         );

@@ -55,6 +55,19 @@ class CustomerAddress extends Base
     }
 
     /**
+
+     *
+     * @return string[]
+     */
+    protected static function getJsonResponseBodyNames(): array
+    {
+        return [
+            "customer_address",
+            "address"
+        ];
+    }
+
+    /**
      * @param Session $session
      * @param int|string $id
      * @param array $urlIds Allowed indexes:

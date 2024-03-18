@@ -77,7 +77,7 @@ final class ContextTest extends BaseTestCase
         $reflectedContext = new ReflectionClass('Shopify\Context');
         $reflectedIsInitialized = $reflectedContext->getProperty('IS_INITIALIZED');
         $reflectedIsInitialized->setAccessible(true);
-        $reflectedIsInitialized->setValue(false);
+        $reflectedIsInitialized->setValue(null, false);
 
         $this->expectException(\Shopify\Exception\UninitializedContextException::class);
         Context::throwIfUninitialized();

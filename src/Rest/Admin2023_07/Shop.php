@@ -16,7 +16,6 @@ use Shopify\Rest\Base;
  * @property string|null $address2
  * @property bool|null $checkout_api_supported
  * @property string|null $city
- * @property string|null $cookie_consent_level
  * @property string|null $country
  * @property string|null $country_code
  * @property string|null $country_name

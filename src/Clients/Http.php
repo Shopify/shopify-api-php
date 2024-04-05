@@ -21,7 +21,7 @@ class Http
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
-    private const DEPRECATION_ALERT_SECONDS = 60;
+    private const DEPRECATION_ALERT_SECONDS = 3600;
 
     /** @var string */
     private $domain;

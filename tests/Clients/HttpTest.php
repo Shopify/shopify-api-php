@@ -555,7 +555,7 @@ final class HttpTest extends BaseTestCase
         $mockedClient->get('test/path');
         $this->assertCount(1, $testLogger->records);
 
-        // We only log once every minute, so simulate more time than having elapsed
+        // We only log once every hour, so simulate more time than having elapsed
         $reflector = new ReflectionProperty(Http::class, 'lastApiDeprecationWarning');
         $reflector->setValue($mockedClient, time() - 7200);
 

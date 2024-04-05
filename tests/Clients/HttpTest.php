@@ -442,16 +442,13 @@ final class HttpTest extends BaseTestCase
 
     public function testDeprecatedRequestsAreLoggedWithinLimit()
     {
-        $vfsRoot = vfsStream::setup('test');
+        $this->markTestSkipped('For now there is no back-off implemented');
 
         /** @var MockObject|Http */
         $mockedClient = $this->getMockBuilder(Http::class)
             ->setConstructorArgs([$this->domain])
-            ->onlyMethods(['getApiDeprecationTimestampFilePath'])
+            ->onlyMethods([])
             ->getMock();
-        $mockedClient->expects($this->exactly(2))
-            ->method('getApiDeprecationTimestampFilePath')
-            ->willReturn(vfsStream::url('test/timestamp_file'));
 
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
@@ -469,31 +466,28 @@ final class HttpTest extends BaseTestCase
             )
         ]);
 
-        $this->assertFalse($vfsRoot->hasChild('timestamp_file'));
+        // TODO: assert that no flag/value exists for "last deprecation warning"
         $mockedClient->get('test/path');
 
-        $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
+        // TODO: assert that a flag/value exists for "last deprecation warning"
         $this->assertTrue($testLogger->hasWarningThatContains('API Deprecation notice'));
         $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
 
         $mockedClient->get('test/path');
 
-        $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
+        // TODO: assert that a flag/value exists for "last deprecation warning"
         $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
     }
 
     public function testDeprecationLogBackoffPeriod()
     {
-        vfsStream::setup('test');
+        $this->markTestSkipped('For now there is no back-off implemented');
 
         /** @var MockObject|Http */
         $mockedClient = $this->getMockBuilder(Http::class)
             ->setConstructorArgs([$this->domain])
-            ->onlyMethods(['getApiDeprecationTimestampFilePath'])
+            ->onlyMethods([])
             ->getMock();
-        $mockedClient->expects($this->exactly(3))
-            ->method('getApiDeprecationTimestampFilePath')
-            ->willReturn(vfsStream::url('test/timestamp_file'));
 
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
@@ -525,7 +519,7 @@ final class HttpTest extends BaseTestCase
         $this->assertCount(1, $testLogger->records);
 
         // We only log once every minute, so simulate more time than having elapsed
-        file_put_contents(vfsStream::url('test/timestamp_file'), time() - 70);
+        // TODO: reset the flag/value for "last deprecation warning"
 
         $mockedClient->get('test/path');
         $this->assertCount(2, $testLogger->records);

@@ -274,27 +274,14 @@ class Http
      */
     private function shouldLogApiDeprecation(): bool
     {
-        $warningFilePath = $this->getApiDeprecationTimestampFilePath();
-
-        $lastWarning = null;
-        if (file_exists($warningFilePath)) {
-            $lastWarning = (int)(file_get_contents($warningFilePath));
-        }
-
-        if (time() - $lastWarning < self::DEPRECATION_ALERT_SECONDS) {
-            $result = false;
-        } else {
-            $result = true;
-            file_put_contents($warningFilePath, time());
-        }
-
-        return $result;
+        return true;
     }
 
     /**
      * Fetches the path to the file holding the timestamp of the last API deprecation warning we logged.
      *
      * @codeCoverageIgnore This is mocked in tests so we don't use real files
+     * @deprecated 5.3.1 This method is no longer used internally.
      */
     public function getApiDeprecationTimestampFilePath(): string
     {

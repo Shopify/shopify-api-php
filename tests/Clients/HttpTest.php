@@ -7,6 +7,7 @@ namespace ShopifyTest\Clients;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LogLevel;
+use ReflectionProperty;
 use Shopify\Clients\Http;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
@@ -442,8 +443,6 @@ final class HttpTest extends BaseTestCase
 
     public function testDeprecatedRequestsAreLoggedWithinLimit()
     {
-        $this->markTestSkipped('For now there is no back-off implemented');
-
         /** @var MockObject|Http */
         $mockedClient = $this->getMockBuilder(Http::class)
             ->setConstructorArgs([$this->domain])
@@ -466,23 +465,48 @@ final class HttpTest extends BaseTestCase
             )
         ]);
 
-        // TODO: assert that no flag/value exists for "last deprecation warning"
+        $reflector = new ReflectionProperty(Http::class, 'lastApiDeprecationWarning');
+
+        $this->assertEquals(
+            0,
+            $reflector->getValue($mockedClient),
+            'Last API deprecation warning time starts out unset'
+        );
+
         $mockedClient->get('test/path');
 
-        // TODO: assert that a flag/value exists for "last deprecation warning"
-        $this->assertTrue($testLogger->hasWarningThatContains('API Deprecation notice'));
-        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
+        $this->assertTrue(
+            $testLogger->hasWarningThatContains('API Deprecation notice'),
+            'Logger has API deprecation message'
+        );
+        $this->assertCount(
+            1,
+            $testLogger->recordsByLevel[LogLevel::WARNING],
+            'Logger has exactly one warning'
+        );
+        $this->assertGreaterThan(
+            0,
+            $reflector->getValue($mockedClient),
+            'Last API deprecation warning time is set'
+        );
 
+        $lastApiDeprecationWarning = $reflector->getValue($mockedClient);
         $mockedClient->get('test/path');
 
-        // TODO: assert that a flag/value exists for "last deprecation warning"
-        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
+        $this->assertEquals(
+            $lastApiDeprecationWarning,
+            $reflector->getValue($mockedClient),
+            'Last API deprecation warning time is unchanged'
+        );
+        $this->assertCount(
+            1,
+            $testLogger->recordsByLevel[LogLevel::WARNING],
+            'Logger still has exactly one warning'
+        );
     }
 
     public function testDeprecationLogBackoffPeriod()
     {
-        $this->markTestSkipped('For now there is no back-off implemented');
-
         /** @var MockObject|Http */
         $mockedClient = $this->getMockBuilder(Http::class)
             ->setConstructorArgs([$this->domain])
@@ -519,7 +543,8 @@ final class HttpTest extends BaseTestCase
         $this->assertCount(1, $testLogger->records);
 
         // We only log once every minute, so simulate more time than having elapsed
-        // TODO: reset the flag/value for "last deprecation warning"
+        $reflector = new ReflectionProperty(Http::class, 'lastApiDeprecationWarning');
+        $reflector->setValue($mockedClient, time() - 7200);
 
         $mockedClient->get('test/path');
         $this->assertCount(2, $testLogger->records);

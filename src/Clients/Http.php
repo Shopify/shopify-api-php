@@ -26,6 +26,8 @@ class Http
     /** @var string */
     private $domain;
 
+    private int $lastApiDeprecationWarning = 0;
+
     public function __construct(string $domain)
     {
         $this->domain = $domain;
@@ -274,6 +276,13 @@ class Http
      */
     private function shouldLogApiDeprecation(): bool
     {
+        $secondsSinceLastAlert = time() - $this->lastApiDeprecationWarning;
+        if ($secondsSinceLastAlert < self::DEPRECATION_ALERT_SECONDS) {
+            return false;
+        }
+
+        $this->lastApiDeprecationWarning = time();
+
         return true;
     }
 

@@ -276,12 +276,26 @@ class Http
      */
     private function shouldLogApiDeprecation(): bool
     {
+        if (function_exists('apcu_enabled') && apcu_enabled()) {
+            $apcuKey = 'shopify/shopify-api/last-api-deprecation-warning';
+        } else {
+            $apcuKey = null;
+        }
+
+        if ($this->lastApiDeprecationWarning === 0 && $apcuKey) {
+            $this->lastApiDeprecationWarning = (int) apcu_fetch($apcuKey);
+        }
+
         $secondsSinceLastAlert = time() - $this->lastApiDeprecationWarning;
         if ($secondsSinceLastAlert < self::DEPRECATION_ALERT_SECONDS) {
             return false;
         }
 
         $this->lastApiDeprecationWarning = time();
+
+        if ($apcuKey) {
+            apcu_store($apcuKey, $this->lastApiDeprecationWarning, self::DEPRECATION_ALERT_SECONDS);
+        }
 
         return true;
     }

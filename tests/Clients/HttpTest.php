@@ -452,6 +452,10 @@ final class HttpTest extends BaseTestCase
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
 
+        if (function_exists('apcu_enabled') && apcu_enabled()) {
+            apcu_delete('shopify/shopify-api/last-api-deprecation-warning');
+        }
+
         $this->mockTransportRequests([
             new MockRequest(
                 $this->buildMockHttpResponse(200, null, ['X-Shopify-API-Deprecated-Reason' => 'Test reason']),
@@ -516,7 +520,16 @@ final class HttpTest extends BaseTestCase
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
 
+        if (function_exists('apcu_enabled') && apcu_enabled()) {
+            apcu_delete('shopify/shopify-api/last-api-deprecation-warning');
+        }
+
         $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, null, ['X-Shopify-API-Deprecated-Reason' => 'Test reason']),
+                "https://$this->domain/test/path",
+                "GET",
+            ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, null, ['X-Shopify-API-Deprecated-Reason' => 'Test reason']),
                 "https://$this->domain/test/path",
@@ -546,6 +559,15 @@ final class HttpTest extends BaseTestCase
         $reflector = new ReflectionProperty(Http::class, 'lastApiDeprecationWarning');
         $reflector->setValue($mockedClient, time() - 7200);
 
+        $mockedClient->get('test/path');
+        $this->assertCount(2, $testLogger->records);
+
+        if (!function_exists('apcu_enabled') || !apcu_enabled()) {
+            $this->markTestSkipped('APCu is not enabled and is required for the correct testing of this feature.');
+        }
+
+        // Set the internal value back to its initial state. The class should read the stored value from APCu.
+        $reflector->setValue($mockedClient, 0);
         $mockedClient->get('test/path');
         $this->assertCount(2, $testLogger->records);
     }

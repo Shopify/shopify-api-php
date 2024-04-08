@@ -304,7 +304,7 @@ class Http
      * Fetches the path to the file holding the timestamp of the last API deprecation warning we logged.
      *
      * @codeCoverageIgnore This is mocked in tests so we don't use real files
-     * @deprecated 5.3.1 This method is no longer used internally.
+     * @deprecated 5.4.1 This method is no longer used internally.
      */
     public function getApiDeprecationTimestampFilePath(): string
     {

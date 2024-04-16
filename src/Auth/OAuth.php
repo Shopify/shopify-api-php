@@ -12,6 +12,7 @@ use Shopify\Exception\CookieNotFoundException;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\InvalidArgumentException;
+use Shopify\Exception\InvalidJwtPayloadException;
 use Shopify\Exception\InvalidOAuthException;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\OAuthSessionNotFoundException;
@@ -232,7 +233,15 @@ class OAuth
                 }
 
                 $jwtPayload = Utils::decodeSessionToken($matches[1]);
-                $shop = preg_replace('/^https:\/\//', '', $jwtPayload['dest']);
+
+                if (!empty($jwtPayload['dest'])) {
+                    $shop = preg_replace('/^https:\/\//', '', $jwtPayload['dest']);
+                } elseif (!empty($jwtPayload['input_data']->shop->domain)) {
+                    $shop = preg_replace('/^https:\/\//', '', $jwtPayload['input_data']->shop->domain);
+                } else {
+                    throw new InvalidJwtPayloadException('Missing shop value in JWT payload');
+                }
+
                 if ($isOnline) {
                     $currentSessionId = self::getJwtSessionId($shop, $jwtPayload['sub']);
                 } else {

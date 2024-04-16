@@ -13,6 +13,7 @@ use Shopify\Context;
 use Shopify\Exception\CookieSetException;
 use Shopify\Exception\HttpRequestException;
 use Shopify\Exception\InvalidArgumentException;
+use Shopify\Exception\InvalidJwtPayloadException;
 use Shopify\Exception\InvalidOAuthException;
 use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\OAuthSessionNotFoundException;
@@ -672,4 +673,60 @@ final class OAuthTest extends BaseTestCase
         ];
         return JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
     }
+
+
+    private function encodeJwtPayloadFromPostPurchaseExtension(): string
+    {
+        $shop = new stdClass();
+        $shop->domain = "https://exampleshop.myshopify.com";
+        $inputData = new stdClass();
+        $inputData->shop = $shop;
+
+        $payload = [
+            "iss" => "https://exampleshop.myshopify.com/admin",
+            "sub" => "42",
+            "input_data" => $inputData,
+            "iat" => 1591764998,
+        ];
+
+        return JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
+    }
+
+    private function encodeInvalidJwtPayloadFromPostPurchaseExtension(): string
+    {
+        $payload = [
+            "iss" => "https://exampleshop.myshopify.com/admin",
+            "sub" => "42",
+            "iat" => 1591764998,
+        ];
+
+        return JWT::encode($payload, Context::$API_SECRET_KEY, 'HS256');
+    }
+
+
+    public function testGetCurrentSessionIdFromPostPurchaseTokenForOnlineShop()
+    {
+        $token = $this->encodeJwtPayloadFromPostPurchaseExtension();
+
+        $currentSessionId = OAuth::getCurrentSessionId(['Authorization' => "Bearer $token"], [], true);
+        $this->assertEquals('exampleshop.myshopify.com_42', $currentSessionId);
+    }
+
+    public function testGetCurrentSessionIdFromPostPurchaseTokenForOfflineShop()
+    {
+        $token = $this->encodeJwtPayloadFromPostPurchaseExtension();
+
+        $currentSessionId = OAuth::getCurrentSessionId(['Authorization' => "Bearer $token"], [], false);
+        $this->assertEquals('offline_exampleshop.myshopify.com', $currentSessionId);
+    }
+
+    public function testGetCurrentSessionIdFromPostPurchaseTokenInvalidJwtPayloadException()
+    {
+        $token = $this->encodeInvalidJwtPayloadFromPostPurchaseExtension();
+
+        $this->expectException(InvalidJwtPayloadException::class);
+        $this->expectExceptionMessage('Missing shop value in JWT payload');
+        $currentSessionId = OAuth::getCurrentSessionId(['Authorization' => "Bearer $token"], [], true);
+    }
+
 }

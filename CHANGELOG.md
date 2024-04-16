@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- PATCH: Fix the issue "Get Current Session ID process from Post Purchase Extension Token"
 
 - [#332](https://github.com/Shopify/shopify-api-php/pull/332) [Patch] Avoid writing to system temporary directory when an API deprecation is encountered
 

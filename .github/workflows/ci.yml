@@ -4,7 +4,7 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     env:
-      PHP_INI_VALUES: assert.exception=1, zend.assertions=1
+      PHP_INI_VALUES: assert.exception=1, zend.assertions=1, apc.enable_cli=1
     strategy:
       fail-fast: false
       matrix:
@@ -21,6 +21,7 @@ jobs:
           tools: composer:v2, phpcs
           coverage: xdebug
           ini-values: ${{ env.PHP_INI_VALUES }}
+          extensions: apcu
 
       - name: Install dependencies with composer
         run: composer update --no-ansi --no-interaction --no-progress

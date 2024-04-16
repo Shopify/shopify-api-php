@@ -23,9 +23,11 @@ class Http
     public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
-    private const DEPRECATION_ALERT_SECONDS = 60;
+    private const DEPRECATION_ALERT_SECONDS = 3600;
 
     private readonly string $domain;
+
+    private int $lastApiDeprecationWarning = 0;
 
     public function __construct(string $domain)
     {
@@ -275,27 +277,35 @@ class Http
      */
     private function shouldLogApiDeprecation(): bool
     {
-        $warningFilePath = $this->getApiDeprecationTimestampFilePath();
-
-        $lastWarning = null;
-        if (file_exists($warningFilePath)) {
-            $lastWarning = (int)(file_get_contents($warningFilePath));
-        }
-
-        if (time() - $lastWarning < self::DEPRECATION_ALERT_SECONDS) {
-            $result = false;
+        if (function_exists('apcu_enabled') && apcu_enabled()) {
+            $apcuKey = 'shopify/shopify-api/last-api-deprecation-warning';
         } else {
-            $result = true;
-            file_put_contents($warningFilePath, time());
+            $apcuKey = null;
         }
 
-        return $result;
+        if ($this->lastApiDeprecationWarning === 0 && $apcuKey) {
+            $this->lastApiDeprecationWarning = (int) apcu_fetch($apcuKey);
+        }
+
+        $secondsSinceLastAlert = time() - $this->lastApiDeprecationWarning;
+        if ($secondsSinceLastAlert < self::DEPRECATION_ALERT_SECONDS) {
+            return false;
+        }
+
+        $this->lastApiDeprecationWarning = time();
+
+        if ($apcuKey) {
+            apcu_store($apcuKey, $this->lastApiDeprecationWarning, self::DEPRECATION_ALERT_SECONDS);
+        }
+
+        return true;
     }
 
     /**
      * Fetches the path to the file holding the timestamp of the last API deprecation warning we logged.
      *
      * @codeCoverageIgnore This is mocked in tests so we don't use real files
+     * @deprecated 5.4.1 This method is no longer used internally.
      */
     public function getApiDeprecationTimestampFilePath(): string
     {

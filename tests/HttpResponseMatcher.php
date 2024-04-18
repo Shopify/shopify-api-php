@@ -9,12 +9,9 @@ use Shopify\Clients\HttpResponse;
 
 class HttpResponseMatcher extends Constraint
 {
-    /** @var int */
-    private $statusCode = 200;
-    /** @var array */
-    private $headers = [];
-    /** @var array|null */
-    private $decodedBody = null;
+    private readonly int $statusCode;
+    private readonly array $headers;
+    private readonly ?array $decodedBody;
 
     /**
      * HttpResponseMatcher constructor.

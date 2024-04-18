@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Auth;
 
+use Shopify\Exception\CookieNotFoundException;
+use Exception;
 use Firebase\JWT\JWT;
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
@@ -191,7 +193,7 @@ final class OAuthTest extends BaseTestCase
     {
         $this->createTestSession(false);
 
-        $this->expectException(\Shopify\Exception\CookieNotFoundException::class);
+        $this->expectException(CookieNotFoundException::class);
         $this->expectExceptionMessage('Could not find the current session id in the cookies');
         OAuth::callback([], []);
     }
@@ -204,7 +206,7 @@ final class OAuthTest extends BaseTestCase
             OAuth::SESSION_ID_SIG_COOKIE_NAME => "Not the right signature",
             OAuth::SESSION_ID_COOKIE_NAME => $this->oauthSessionId,
         ];
-        $this->expectException(\Shopify\Exception\CookieNotFoundException::class);
+        $this->expectException(CookieNotFoundException::class);
         $this->expectExceptionMessage('Could not find the current session id in the cookies');
         OAuth::callback($mockCookies, []);
     }
@@ -550,7 +552,7 @@ final class OAuthTest extends BaseTestCase
     public function testGetCurrentSessionIdRaisesCookieNotFoundException()
     {
         Context::$IS_EMBEDDED_APP = false;
-        $this->expectException(\Shopify\Exception\CookieNotFoundException::class);
+        $this->expectException(CookieNotFoundException::class);
         $this->expectExceptionMessage('Could not find the current session id in the cookies');
 
         OAuth::getCurrentSessionId([], [], true);
@@ -629,8 +631,8 @@ final class OAuthTest extends BaseTestCase
      * @param string $sessionId The id of the session
      * @param bool   $isOnline  Whether the expected session is online
      *
-     * @return \Shopify\Auth\Session
-     * @throws \Exception
+     * @return Session
+     * @throws Exception
      */
     private function buildExpectedSession(string $sessionId, bool $isOnline = true): Session
     {

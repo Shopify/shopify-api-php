@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Shopify\Clients;
 
+use Shopify\Exception\HttpRequestException;
+use Psr\Http\Client\ClientExceptionInterface;
+use Shopify\Exception\UninitializedContextException;
 use Shopify\Context;
 use Shopify\Exception\MissingArgumentException;
 
 class Graphql
 {
-    /** @var Http */
-    private $client;
-    /** @var string|null */
-    protected $token;
+    private readonly Http $client;
+    protected ?string $token;
 
     /**
      * GraphQL Client constructor.
@@ -20,7 +21,7 @@ class Graphql
      * @param string      $domain
      * @param string|null $token
      *
-     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws MissingArgumentException
      */
     public function __construct(
         string $domain,
@@ -42,8 +43,8 @@ class Graphql
      * @param int|null       $tries        How many times to attempt the request
      *
      * @return HttpResponse
-     * @throws \Shopify\Exception\HttpRequestException
-     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws HttpRequestException
+     * @throws MissingArgumentException
      */
     public function query(
         $data,
@@ -82,10 +83,10 @@ class Graphql
      * @param array    $extraHeaders Any extra headers to send along with the request
      * @param int|null $tries        How many times to attempt the request
      *
-     * @return \Shopify\Clients\HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @return HttpResponse
+     * @throws ClientExceptionInterface
+     * @throws MissingArgumentException
+     * @throws UninitializedContextException
      */
     public function proxy(
         string $data,

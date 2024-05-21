@@ -28,6 +28,8 @@ use Ramsey\Uuid\Uuid;
  */
 class OAuth
 {
+    public const STATE_COOKIE_NAME = 'shopify_app_state';
+    public const STATE_SIG_COOKIE_NAME = 'shopify_app_state_sig';
     public const SESSION_ID_COOKIE_NAME = 'shopify_session_id';
     public const SESSION_ID_SIG_COOKIE_NAME = 'shopify_session_id_sig';
     public const ACCESS_TOKEN_POST_PATH = '/admin/oauth/access_token';
@@ -64,37 +66,26 @@ class OAuth
         $redirectPath = trim(strtolower($redirectPath));
         $redirectPath = ($redirectPath[0] == '/') ? $redirectPath : '/' . $redirectPath;
 
-        $mySessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($sanitizedShop);
+        $state = Uuid::uuid4()->toString();
 
-        $cookieSet = self::setCookieSessionId($setCookieFunction, $mySessionId, strtotime('+1 minute'));
+        $cookieSet = self::setCookieState($setCookieFunction, $state, strtotime('+1 minute'));
         if (!$cookieSet) {
             throw new CookieSetException(
                 'OAuth Cookie could not be saved.'
             );
         }
 
-        $session = new Session($mySessionId, $sanitizedShop, $isOnline, Uuid::uuid4()->toString());
-
         if ($isOnline) {
-            $session->setExpires(strtotime('+1 minute'));
             $grantOptions = 'per-user';
         } else {
             $grantOptions = '';
-        }
-
-        $sessionStored = Context::$SESSION_STORAGE->storeSession($session);
-
-        if (!$sessionStored) {
-            throw new SessionStorageException(
-                'OAuth Session could not be saved. Please check your session storage functionality.'
-            );
         }
 
         $query = [
             'client_id' => Context::$API_KEY,
             'scope' => Context::$SCOPES->toString(),
             'redirect_uri' => Context::$HOST_SCHEME . '://' . Context::$HOST_NAME . $redirectPath,
-            'state' => $session->getState(),
+            'state' => $state,
             'grant_options[]' => $grantOptions,
         ];
 
@@ -125,19 +116,18 @@ class OAuth
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp('OAuth is not allowed for private apps');
 
-        $cookieSessionId = self::getCookieSessionId($cookies);
-        $session = Context::$SESSION_STORAGE->loadSession($cookieSessionId);
-        if (!$session) {
-            throw new OAuthSessionNotFoundException(
-                'You may have taken more than 60 seconds to complete the OAuth process and the session cannot be found'
-            );
-        }
-
-        if (!self::isCallbackQueryValid($query, $session)) {
+        $cookieState = self::getCookieState($cookies);
+        if (!self::isCallbackQueryValid($query, $cookieState)) {
             throw new InvalidOAuthException('Invalid OAuth callback.');
         }
 
-        $response = self::fetchAccessToken($query, $session);
+        $sanitizedShop = Utils::sanitizeShopDomain($query['shop'] ?? '');
+        $response = self::fetchAccessToken($query, $sanitizedShop);
+
+        $isOnline = $response instanceof AccessTokenOnlineResponse;
+
+        $sessionId = $isOnline ? Uuid::uuid4()->toString() : self::getOfflineSessionId($sanitizedShop);
+        $session = new Session($sessionId, $sanitizedShop, $isOnline, '');
 
         $session->setAccessToken($response->getAccessToken());
         $session->setScope($response->getScope());
@@ -151,15 +141,7 @@ class OAuth
             // JWT.
             if (Context::$IS_EMBEDDED_APP) {
                 $jwtSessionId = self::getJwtSessionId($session->getShop(), $session->getOnlineAccessInfo()->getId());
-                $jwtSession = $session->clone($jwtSessionId);
-
-                $sessionDeleted = Context::$SESSION_STORAGE->deleteSession($session->getId());
-                if (!$sessionDeleted) {
-                    throw new SessionStorageException(
-                        'OAuth Session could not be deleted. Please check your session storage functionality.',
-                    );
-                }
-                $session = $jwtSession;
+                $session = $session->clone($jwtSessionId);
             }
         }
 
@@ -173,13 +155,13 @@ class OAuth
         $sessionExpiration = ($session->getExpires() ? (int)$session->getExpires()->format('U') : null);
         $cookieSet = self::setCookieSessionId(
             $setCookieFunction,
-            $cookieSessionId,
+            $session->getId(),
             Context::$IS_EMBEDDED_APP ? time() : $sessionExpiration
         );
+        $cookieSet = $cookieSet &&  self::setCookieState($setCookieFunction, $cookieState, time());
+
         if (!$cookieSet) {
-            throw new CookieSetException(
-                'OAuth Cookie could not be saved.'
-            );
+            throw new CookieSetException('OAuth Cookie could not be saved.');
         }
 
         return $session;
@@ -256,6 +238,44 @@ class OAuth
     }
 
     /**
+     * Fetches the current state from the given cookies.
+     *
+     * @param array $cookies The $cookies param from `callback`
+     *
+     * @return string The state for the current OAuth process
+     * @throws CookieNotFoundException
+     */
+    private static function getCookieState(array $cookies): string
+    {
+        $value = self::getCookie($cookies, self::STATE_COOKIE_NAME, self::STATE_SIG_COOKIE_NAME);
+        if (!$value) {
+            throw new CookieNotFoundException(
+                'You may have taken more than 60 seconds to complete the OAuth process and need to start over'
+            );
+        }
+
+        return (string)$value;
+    }
+
+    /**
+     * Sets the state for OAuth in the right cookie.
+     *
+     * @param null|callable $setCookieFunction An optional override for setting cookie in response
+     * @param string        $state             The ID of the session to save
+     * @param int           $expiration        Epoch timestamp (in s) when the cookie expires
+     *
+     * @return bool Whether the cookie was successfully set
+     */
+    private static function setCookieState(?callable $setCookieFunction, $state, $expiration): bool
+    {
+        $signature = hash_hmac('sha256', $state, Context::$API_SECRET_KEY);
+        $signatureCookie = new OAuthCookie($signature, self::STATE_SIG_COOKIE_NAME, $expiration, true, true);
+        $cookie = new OAuthCookie($state, self::STATE_COOKIE_NAME, $expiration, true, true);
+
+        return self::setCookie($setCookieFunction, $cookie, $signatureCookie);
+    }
+
+    /**
      * Fetches the current session ID from the given cookies.
      *
      * @param array $cookies The $cookies param from `callback`
@@ -265,18 +285,7 @@ class OAuth
      */
     private static function getCookieSessionId(array $cookies): string
     {
-        $signature = $cookies[self::SESSION_ID_SIG_COOKIE_NAME] ?? null;
-        $cookieId = $cookies[self::SESSION_ID_COOKIE_NAME] ?? null;
-
-        $sessionId = null;
-        if ($signature && $cookieId) {
-            $expectedSignature = hash_hmac('sha256', (string) $cookieId, Context::$API_SECRET_KEY);
-
-            if ($signature === $expectedSignature) {
-                $sessionId = $cookieId;
-            }
-        }
-
+        $sessionId = self::getCookie($cookies, self::SESSION_ID_COOKIE_NAME, self::SESSION_ID_SIG_COOKIE_NAME);
         if (!$sessionId) {
             throw new CookieNotFoundException("Could not find the current session id in the cookies");
         }
@@ -299,6 +308,40 @@ class OAuth
         $signatureCookie = new OAuthCookie($signature, self::SESSION_ID_SIG_COOKIE_NAME, $expiration, true, true);
         $cookie = new OAuthCookie($sessionId, self::SESSION_ID_COOKIE_NAME, $expiration, true, true);
 
+        return self::setCookie($setCookieFunction, $cookie, $signatureCookie);
+    }
+
+    /**
+     * Fetches the value of a cookie.
+     *
+     * @param array  $cookies        The cookies array
+     * @param string $name           The name of the cookie
+     * @param string $signatureName  The name of the signature cookie
+     *
+     * @return string|null The value of the cookie, or null if it's invalid or missing
+     */
+    private static function getCookie(array $cookies, string $name, string $signatureName): string | null
+    {
+        $signature = $cookies[$signatureName] ?? null;
+        $cookieId = $cookies[$name] ?? null;
+
+        $value = null;
+        if ($signature && $cookieId) {
+            $expectedSignature = hash_hmac('sha256', (string) $cookieId, Context::$API_SECRET_KEY);
+
+            if ($signature === $expectedSignature) {
+                $value = $cookieId;
+            }
+        }
+
+        return $value;
+    }
+
+    private static function setCookie(
+        ?callable $setCookieFunction,
+        OAuthCookie $cookie,
+        OAuthCookie $signatureCookie
+    ): bool {
         if ($setCookieFunction) {
             $cookieSet = $setCookieFunction($signatureCookie);
             $cookieSet = $cookieSet && $setCookieFunction($cookie);
@@ -333,13 +376,13 @@ class OAuth
     /**
      * Checks whether the given query parameters are from a valid callback request.
      *
-     * @param array   $query   The URL query parameters
-     * @param Session $session The current session
+     * @param array       $query       The URL query parameters
+     * @param string|null $stateCookie The value of the cookie containing the OAuth state
      *
      * @return bool
      * @throws UninitializedContextException
      */
-    private static function isCallbackQueryValid(array $query, Session $session): bool
+    private static function isCallbackQueryValid(array $query, string | null $stateCookie): bool
     {
         $sanitizedShop = Utils::sanitizeShopDomain($query['shop'] ?? '');
         $state = $query['state'] ?? '';
@@ -347,8 +390,8 @@ class OAuth
 
         return (
             ($code) &&
-            ($sanitizedShop && strcmp($session->getShop(), $sanitizedShop) === 0) &&
-            ($state && strcmp($session->getState(), (string) $state) === 0) &&
+            ($sanitizedShop) &&
+            ($state && $stateCookie && strcmp($stateCookie, (string) $state) === 0) &&
             Utils::validateHmac($query, Context::$API_SECRET_KEY)
         );
     }
@@ -356,32 +399,31 @@ class OAuth
     /**
      * Fetches the access token for the given OAuth session, using the query parameters returned by Shopify
      *
-     * @param array   $query   The URL query params from the OAuth callback
-     * @param Session $session The OAuth session
+     * @param array  $query The URL query params from the OAuth callback
+     * @param string $shop  The request shop
      *
      * @return AccessTokenResponse|AccessTokenOnlineResponse The access token exchanged for the OAuth code
      * @throws HttpRequestException
      */
-    private static function fetchAccessToken(
-        array $query,
-        Session $session
-    ) {
+    private static function fetchAccessToken(array $query, string $shop)
+    {
         $post = [
             'client_id' => Context::$API_KEY,
             'client_secret' => Context::$API_SECRET_KEY,
             'code' => $query['code'],
         ];
 
-        $client = new Http($session->getShop());
+        $client = new Http($shop);
         $response = self::requestAccessToken($client, $post);
         if ($response->getStatusCode() !== 200) {
             throw new HttpRequestException("Failed to get access token: {$response->getDecodedBody()}");
         }
 
-        if ($session->isOnline()) {
-            return self::buildAccessTokenOnlineResponse($response->getDecodedBody());
+        $body = $response->getDecodedBody();
+        if (array_key_exists('associated_user', $body) && $body['associated_user']) {
+            return self::buildAccessTokenOnlineResponse($body);
         } else {
-            return self::buildAccessTokenResponse($response->getDecodedBody());
+            return self::buildAccessTokenResponse($body);
         }
     }
 

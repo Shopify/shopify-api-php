@@ -35,7 +35,7 @@ class OAuth
     public const ACCESS_TOKEN_POST_PATH = '/admin/oauth/access_token';
 
     /**
-     * Initializes a session and cookie for the OAuth process, and returns the authorization url
+     * Begins the OAuth process by setting the appropriate cookies, and returns the authorization url
      *
      * @param string        $shop              A Shopify domain name or hostname
      * @param string        $redirectPath      Redirect path for callback
@@ -68,7 +68,7 @@ class OAuth
 
         $state = Uuid::uuid4()->toString();
 
-        $cookieSet = self::setCookieState($setCookieFunction, $state, strtotime('+1 minute'));
+        $cookieSet = self::setStateCookie($setCookieFunction, $state, strtotime('+1 minute'));
         if (!$cookieSet) {
             throw new CookieSetException(
                 'OAuth Cookie could not be saved.'
@@ -116,7 +116,7 @@ class OAuth
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp('OAuth is not allowed for private apps');
 
-        $cookieState = self::getCookieState($cookies);
+        $cookieState = self::getStateCookie($cookies);
         if (!self::isCallbackQueryValid($query, $cookieState)) {
             throw new InvalidOAuthException('Invalid OAuth callback.');
         }
@@ -153,12 +153,12 @@ class OAuth
         }
 
         $sessionExpiration = ($session->getExpires() ? (int)$session->getExpires()->format('U') : null);
-        $cookieSet = self::setCookieSessionId(
+        $cookieSet = self::setSessionIdCookie(
             $setCookieFunction,
             $session->getId(),
             Context::$IS_EMBEDDED_APP ? time() : $sessionExpiration
         );
-        $cookieSet = $cookieSet &&  self::setCookieState($setCookieFunction, $cookieState, time());
+        $cookieSet = $cookieSet && self::setStateCookie($setCookieFunction, $cookieState, time());
 
         if (!$cookieSet) {
             throw new CookieSetException('OAuth Cookie could not be saved.');
@@ -231,7 +231,7 @@ class OAuth
             if (!$cookies) {
                 throw new CookieNotFoundException('Could not find the current session id in the cookies');
             }
-            $currentSessionId = self::getCookieSessionId($cookies);
+            $currentSessionId = self::getSessionIdCookie($cookies);
         }
 
         return $currentSessionId;
@@ -245,7 +245,7 @@ class OAuth
      * @return string The state for the current OAuth process
      * @throws CookieNotFoundException
      */
-    private static function getCookieState(array $cookies): string
+    private static function getStateCookie(array $cookies): string
     {
         $value = self::getCookie($cookies, self::STATE_COOKIE_NAME, self::STATE_SIG_COOKIE_NAME);
         if (!$value) {
@@ -266,7 +266,7 @@ class OAuth
      *
      * @return bool Whether the cookie was successfully set
      */
-    private static function setCookieState(?callable $setCookieFunction, $state, $expiration): bool
+    private static function setStateCookie(?callable $setCookieFunction, $state, $expiration): bool
     {
         $signature = hash_hmac('sha256', $state, Context::$API_SECRET_KEY);
         $signatureCookie = new OAuthCookie($signature, self::STATE_SIG_COOKIE_NAME, $expiration, true, true);
@@ -283,7 +283,7 @@ class OAuth
      * @return string The ID of the current session
      * @throws CookieNotFoundException
      */
-    private static function getCookieSessionId(array $cookies): string
+    private static function getSessionIdCookie(array $cookies): string
     {
         $sessionId = self::getCookie($cookies, self::SESSION_ID_COOKIE_NAME, self::SESSION_ID_SIG_COOKIE_NAME);
         if (!$sessionId) {
@@ -302,7 +302,7 @@ class OAuth
      *
      * @return bool Whether the cookie was successfully set
      */
-    private static function setCookieSessionId(?callable $setCookieFunction, $sessionId, $expiration): bool
+    private static function setSessionIdCookie(?callable $setCookieFunction, $sessionId, $expiration): bool
     {
         $signature = hash_hmac('sha256', $sessionId, Context::$API_SECRET_KEY);
         $signatureCookie = new OAuthCookie($signature, self::SESSION_ID_SIG_COOKIE_NAME, $expiration, true, true);

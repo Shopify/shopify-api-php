@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v5.5.1 - 2024-05-24
+
 - [#345](https://github.com/Shopify/shopify-api-php/pull/345) [Patch] Stop storing a session in the database when beginning OAuth, only when completing it
 
 ## v5.5.0 - 2024-04-18

@@ -6,22 +6,14 @@ namespace Shopify\Auth;
 
 final class AccessTokenOnlineUserInfo
 {
-    /** @var int */
-    private $id;
-    /** @var string */
-    private $firstName;
-    /** @var string */
-    private $lastName;
-    /** @var string */
-    private $email;
-    /** @var bool */
-    private $emailVerified;
-    /** @var bool */
-    private $accountOwner;
-    /** @var string */
-    private $locale;
-    /** @var bool */
-    private $collaborator;
+    private readonly int $id;
+    private readonly string $firstName;
+    private readonly string $lastName;
+    private readonly string $email;
+    private readonly bool $emailVerified;
+    private readonly bool $accountOwner;
+    private readonly string $locale;
+    private readonly bool $collaborator;
 
     public function __construct(
         int $id,

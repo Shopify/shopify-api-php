@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Shopify\Webhooks;
 
+use Psr\Http\Client\ClientExceptionInterface;
+use Shopify\Exception\UninitializedContextException;
+use Shopify\Exception\HttpRequestException;
+use Shopify\Exception\MissingArgumentException;
 use Exception;
 use Shopify\Clients\Graphql;
 use Shopify\Clients\HttpHeaders;
@@ -64,11 +68,11 @@ final class Registry
      * @param string        $accessToken    The access token to use for requests
      * @param string|null   $deliveryMethod The delivery method for this webhook. Defaults to HTTP
      *
-     * @return \Shopify\Webhooks\RegisterResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\InvalidArgumentException
-     * @throws \Shopify\Exception\UninitializedContextException
-     * @throws \Shopify\Exception\WebhookRegistrationException
+     * @return RegisterResponse
+     * @throws ClientExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws UninitializedContextException
+     * @throws WebhookRegistrationException
      */
     public static function register(
         string $path,
@@ -145,8 +149,8 @@ final class Registry
      *
      * @return ProcessResponse
      *
-     * @throws \Shopify\Exception\InvalidWebhookException
-     * @throws \Shopify\Exception\MissingWebhookHandlerException
+     * @throws InvalidWebhookException
+     * @throws MissingWebhookHandlerException
      */
     public static function process(array $rawHeaders, string $rawBody): ProcessResponse
     {
@@ -184,16 +188,16 @@ final class Registry
      * Checks if Shopify already has a callback set for this webhook via a GraphQL check, and checks if we need to
      * update our subscription if one exists.
      *
-     * @param \Shopify\Clients\Graphql         $client
+     * @param Graphql $client
      * @param string                           $topic
      * @param string                           $callbackAddress
-     * @param \Shopify\Webhooks\DeliveryMethod $method
+     * @param DeliveryMethod $method
      *
      * @return array
      *
-     * @throws \Shopify\Exception\HttpRequestException
-     * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\WebhookRegistrationException
+     * @throws HttpRequestException
+     * @throws MissingArgumentException
+     * @throws WebhookRegistrationException
      */
     private static function isWebhookRegistrationNeeded(
         Graphql $client,
@@ -226,17 +230,17 @@ final class Registry
     /**
      * Creates or updates a webhook subscription in Shopify by firing the appropriate GraphQL query.
      *
-     * @param \Shopify\Clients\Graphql         $client
+     * @param Graphql $client
      * @param string                           $topic
      * @param string                           $callbackAddress
-     * @param \Shopify\Webhooks\DeliveryMethod $deliveryMethod
+     * @param DeliveryMethod $deliveryMethod
      * @param string|null                      $webhookId
      *
      * @return array
      *
-     * @throws \Shopify\Exception\HttpRequestException
-     * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\WebhookRegistrationException
+     * @throws HttpRequestException
+     * @throws MissingArgumentException
+     * @throws WebhookRegistrationException
      */
     private static function sendRegisterRequest(
         Graphql $client,
@@ -310,7 +314,7 @@ final class Registry
      *
      * @return HttpHeaders The parsed headers
      *
-     * @throws \Shopify\Exception\InvalidWebhookException
+     * @throws InvalidWebhookException
      */
     private static function parseProcessHeaders(array $rawHeaders): HttpHeaders
     {
@@ -337,7 +341,7 @@ final class Registry
      * @param string $rawBody The HTTP request body
      * @param string $hmac    The HMAC from the HTTP headers
      *
-     * @throws \Shopify\Exception\InvalidWebhookException
+     * @throws InvalidWebhookException
      */
     private static function validateProcessHmac(string $rawBody, string $hmac): void
     {

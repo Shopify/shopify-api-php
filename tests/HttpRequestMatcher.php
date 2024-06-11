@@ -7,22 +7,15 @@ use Psr\Http\Message\RequestInterface;
 
 class HttpRequestMatcher extends Constraint
 {
-    /** @var string */
-    private $url;
-    /** @var string */
-    private $method;
-    /** @var string */
-    private $userAgent;
-    /** @var array */
-    private $headers = [];
-    /** @var string|null */
-    private $body = null;
-    /** @var bool */
-    private $allowOtherHeaders = true;
+    private readonly string|array $url;
+    private readonly string $method;
+    private readonly string $userAgent;
+    private readonly array $headers;
+    private readonly ?string $body;
+    private readonly bool $allowOtherHeaders;
     /** @var mixed */
     private $bodyDiff;
-    /** @var bool */
-    private $identicalBody;
+    private readonly bool $identicalBody;
 
     /**
      * HttpRequestMatcher constructor.
@@ -85,7 +78,7 @@ class HttpRequestMatcher extends Constraint
         }
 
         foreach ($this->headers as $expectedHeader) {
-            $header = explode(':', $expectedHeader, 2);
+            $header = explode(':', (string) $expectedHeader, 2);
 
             $matchedHeaderValue = $request->getHeaderLine(trim($header[0])) === trim($header[1]);
             if (!($request->hasHeader(trim($header[0])) && $matchedHeaderValue)) {

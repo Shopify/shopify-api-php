@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Clients;
 
+use Shopify\Exception\HttpRequestException;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LogLevel;
+use ReflectionProperty;
 use Shopify\Clients\Http;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
@@ -301,7 +303,7 @@ final class HttpTest extends BaseTestCase
         ]);
 
         $client = new Http($this->domain);
-        $this->expectException(\Shopify\Exception\HttpRequestException::class);
+        $this->expectException(HttpRequestException::class);
         $client->get(path: 'test/path');
     }
 
@@ -442,19 +444,18 @@ final class HttpTest extends BaseTestCase
 
     public function testDeprecatedRequestsAreLoggedWithinLimit()
     {
-        $vfsRoot = vfsStream::setup('test');
-
         /** @var MockObject|Http */
         $mockedClient = $this->getMockBuilder(Http::class)
             ->setConstructorArgs([$this->domain])
-            ->onlyMethods(['getApiDeprecationTimestampFilePath'])
+            ->onlyMethods([])
             ->getMock();
-        $mockedClient->expects($this->exactly(2))
-            ->method('getApiDeprecationTimestampFilePath')
-            ->willReturn(vfsStream::url('test/timestamp_file'));
 
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
+
+        if (function_exists('apcu_enabled') && apcu_enabled()) {
+            apcu_delete('shopify/shopify-api/last-api-deprecation-warning');
+        }
 
         $this->mockTransportRequests([
             new MockRequest(
@@ -469,36 +470,67 @@ final class HttpTest extends BaseTestCase
             )
         ]);
 
-        $this->assertFalse($vfsRoot->hasChild('timestamp_file'));
+        $reflector = new ReflectionProperty(Http::class, 'lastApiDeprecationWarning');
+
+        $this->assertEquals(
+            0,
+            $reflector->getValue($mockedClient),
+            'Last API deprecation warning time starts out unset'
+        );
+
         $mockedClient->get('test/path');
 
-        $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
-        $this->assertTrue($testLogger->hasWarningThatContains('API Deprecation notice'));
-        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
+        $this->assertTrue(
+            $testLogger->hasWarningThatContains('API Deprecation notice'),
+            'Logger has API deprecation message'
+        );
+        $this->assertCount(
+            1,
+            $testLogger->recordsByLevel[LogLevel::WARNING],
+            'Logger has exactly one warning'
+        );
+        $this->assertGreaterThan(
+            0,
+            $reflector->getValue($mockedClient),
+            'Last API deprecation warning time is set'
+        );
 
+        $lastApiDeprecationWarning = $reflector->getValue($mockedClient);
         $mockedClient->get('test/path');
 
-        $this->assertTrue($vfsRoot->hasChild('timestamp_file'));
-        $this->assertCount(1, $testLogger->recordsByLevel[LogLevel::WARNING]);
+        $this->assertEquals(
+            $lastApiDeprecationWarning,
+            $reflector->getValue($mockedClient),
+            'Last API deprecation warning time is unchanged'
+        );
+        $this->assertCount(
+            1,
+            $testLogger->recordsByLevel[LogLevel::WARNING],
+            'Logger still has exactly one warning'
+        );
     }
 
     public function testDeprecationLogBackoffPeriod()
     {
-        vfsStream::setup('test');
-
         /** @var MockObject|Http */
         $mockedClient = $this->getMockBuilder(Http::class)
             ->setConstructorArgs([$this->domain])
-            ->onlyMethods(['getApiDeprecationTimestampFilePath'])
+            ->onlyMethods([])
             ->getMock();
-        $mockedClient->expects($this->exactly(3))
-            ->method('getApiDeprecationTimestampFilePath')
-            ->willReturn(vfsStream::url('test/timestamp_file'));
 
         $testLogger = new LogMock();
         Context::$LOGGER = $testLogger;
 
+        if (function_exists('apcu_enabled') && apcu_enabled()) {
+            apcu_delete('shopify/shopify-api/last-api-deprecation-warning');
+        }
+
         $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, null, ['X-Shopify-API-Deprecated-Reason' => 'Test reason']),
+                "https://$this->domain/test/path",
+                "GET",
+            ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, null, ['X-Shopify-API-Deprecated-Reason' => 'Test reason']),
                 "https://$this->domain/test/path",
@@ -524,9 +556,19 @@ final class HttpTest extends BaseTestCase
         $mockedClient->get('test/path');
         $this->assertCount(1, $testLogger->records);
 
-        // We only log once every minute, so simulate more time than having elapsed
-        file_put_contents(vfsStream::url('test/timestamp_file'), time() - 70);
+        // We only log once every hour, so simulate more time than having elapsed
+        $reflector = new ReflectionProperty(Http::class, 'lastApiDeprecationWarning');
+        $reflector->setValue($mockedClient, time() - 7200);
 
+        $mockedClient->get('test/path');
+        $this->assertCount(2, $testLogger->records);
+
+        if (!function_exists('apcu_enabled') || !apcu_enabled()) {
+            $this->markTestSkipped('APCu is not enabled and is required for the correct testing of this feature.');
+        }
+
+        // Set the internal value back to its initial state. The class should read the stored value from APCu.
+        $reflector->setValue($mockedClient, 0);
         $mockedClient->get('test/path');
         $this->assertCount(2, $testLogger->records);
     }

@@ -6,8 +6,7 @@ namespace Shopify\Clients;
 
 class RestResponse extends HttpResponse
 {
-    /** @var PageInfo|null */
-    private $pageInfo = null;
+    private readonly ?PageInfo $pageInfo;
 
     /**
      * {@inheritDoc}
@@ -25,7 +24,7 @@ class RestResponse extends HttpResponse
     }
 
     /**
-     * @return \Shopify\Clients\PageInfo|null Pagination Information
+     * @return PageInfo|null Pagination Information
      */
     public function getPageInfo(): ?PageInfo
     {

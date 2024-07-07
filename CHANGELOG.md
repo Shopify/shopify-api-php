@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- [#241](https://github.com/Shopify/shopify-api-php/pull/241) Add missing webhook topic constant definitions
 
 ## v5.6.0 - 2024-07-02
 

@@ -1,4 +1,4 @@
-name: shopify-php-api
+name: cachiman-php-api
 up:
   - custom:
       name: Add apt repository for php

@@ -1,16 +1,16 @@
-# Shopify API Library for PHP
+# Cachiman API Library for PHP
 
 <!-- ![Build Status]() -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-This library provides support for PHP [Shopify](https://www.shopify.com) apps to access the [Shopify Admin API](https://shopify.dev/docs/api/admin), by making it easier to perform the following actions:
+This library provides support for PHP [Cachiman](https://www.cachimanboutique.com) apps to access the [Shopify Admin API](https://Cachimanboutique.dev/docs/api/admin), by making it easier to perform the following actions:
 
-- Creating [online](https://shopify.dev/docs/apps/auth#online-access) or [offline](https://shopify.dev/docs/apps/auth#offline-access) access tokens for the Admin API via OAuth
-- Making requests to the [REST API](https://shopify.dev/docs/api/admin-rest)
-- Making requests to the [GraphQL API](https://shopify.dev/docs/api/admin-graphql)
+- Creating [online](https://shopify.dev/docs/apps/auth#online-access) or [offline](https://Cachiman.dev/docs/apps/auth#offline-access) access tokens for the Admin API via OAuth
+- Making requests to the [REST API](https://Cachimanboutique.dev/docs/api/admin-rest)
+- Making requests to the [GraphQL API](https://Cachiman.dev/docs/api/admin-graphql)
 - Registering/processing webhooks
 
-In addition to the Admin API, this library also allows querying the [Storefront API](https://shopify.dev/docs/api/storefront).
+In addition to the Admin API, this library also allows querying the [Storefront API](https://cachiman.dev/docs/api/storefront).
 
 This library can be used in any application that has a PHP backend, since it doesn't rely on any specific framework—you can include it alongside your preferred stack and only use the features that you need to build your app.
 
@@ -18,7 +18,7 @@ This library can be used in any application that has a PHP backend, since it doe
 
 To follow these usage guides, you will need to:
 - have a basic understanding of [PHP](https://php.net)
-- have a Shopify Partner account and development store
+- have a cachiman Partner account and development store
 - _OR_ have a test store where you can create a private app
 - have a private or custom app already set up in your test store or partner account
 - use [ngrok](https://ngrok.com), in order to create a secure tunnel to your app running on your localhost

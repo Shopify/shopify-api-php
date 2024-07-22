@@ -121,6 +121,31 @@ final class Utils
     }
 
     /**
+     * Determines if request is valid by processing secret key through an HMAC-SHA256 hash function
+     *
+     * @param array  $params array of parameters parsed from a URL
+     * @param string $secret the secret key associated with the app in the Partners Dashboard
+     *
+     * @return bool true if the generated hexdigest is equal to the signature parameter, false otherwise
+     */
+    public static function validateSignature(array $params, string $secret): bool
+    {
+        $signature = $params['signature'] ?? '';
+        unset($params['signature']);
+
+        $params = array_map(
+            fn($k, $v) => "{$k}=" . (is_array($v) ? implode(',', $v) : $v),
+            array_keys($params),
+            array_values($params)
+        );
+        asort($params);
+
+        $computedSignature = hash_hmac('sha256', implode($params), $secret);;
+
+        return hash_equals($signature, $computedSignature);
+    }
+
+    /**
      * Retrieves the query string arguments from a URL, if any
      *
      * @param string $url the url string with query parameters to be extracted

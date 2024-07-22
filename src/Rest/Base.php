@@ -60,7 +60,13 @@ abstract class Base extends stdClass
         }
     }
 
-    public function save($updateObject = false): void
+    /**
+     * @param bool $updateObject
+     * @return array|string|null
+     * @throws RestResourceRequestException
+     * @throws \JsonException
+     */
+    public function save(bool $updateObject = false)
     {
         $data = self::dataDiff($this->toArray(true), $this->originalState);
 
@@ -74,11 +80,18 @@ abstract class Base extends stdClass
 
             self::createInstance($body[$this->getJsonBodyName()], $this->session, $this);
         }
+
+        return $response->getDecodedBody();
     }
 
-    public function saveAndUpdate(): void
+    /**
+     * @return array|string|null
+     * @throws RestResourceRequestException
+     * @throws \JsonException
+     */
+    public function saveAndUpdate()
     {
-        $this->save(true);
+        return $this->save(true);
     }
 
     public function __get(string $name)

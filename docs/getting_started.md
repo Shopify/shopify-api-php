@@ -28,15 +28,15 @@ The first thing your app will need to do to use this library is to set up your c
 You should call this method as early as possible in your application, as none of the library's features are available until it is initialized. Below is an example call to `initialize`:
 
 ```php
-Context::initialize(
-    apiKey: $_ENV['SHOPIFY_API_KEY'],
-    apiSecretKey: $_ENV['SHOPIFY_API_SECRET'],
-    scopes: $_ENV['SHOPIFY_APP_SCOPES'],
-    hostName: $_ENV['SHOPIFY_APP_HOST_NAME'],
-    sessionStorage: new FileSessionStorage('/tmp/php_sessions'),
-    apiVersion: '2023-04',
-    isEmbeddedApp: true,
-    isPrivateApp: false,
+Shopify\Context::initialize(
+    'apiKey'=> $_ENV['SHOPIFY_API_KEY'],
+    'apiSecretKey'=> $_ENV['SHOPIFY_API_SECRET'],
+    'scopes'=> $_ENV['SHOPIFY_APP_SCOPES'],
+    'hostName'=> $_ENV['SHOPIFY_APP_HOST_NAME'],
+    'sessionStorage'=> new FileSessionStorage('/tmp/php_sessions'),
+    'apiVersion'=> '2023-04',
+    'isEmbeddedApp'=> true,
+    'isPrivateApp'=> false,
 );
 ```
 

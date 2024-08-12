@@ -189,7 +189,7 @@ final class Registry
         $checkResponse = $client->query(data: $method->buildCheckQuery($topic));
 
         $checkStatusCode = $checkResponse->getStatusCode();
-        $checkBody = $checkResponse->getDecodedBody();    
+        $checkBody = $checkResponse->getDecodedBody();
 
         if ($checkStatusCode !== 200) {
             $checkBodyString = json_encode($checkBody, JSON_PRETTY_PRINT);

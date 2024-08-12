@@ -189,10 +189,10 @@ final class Registry
         $checkResponse = $client->query(data: $method->buildCheckQuery($topic));
 
         $checkStatusCode = $checkResponse->getStatusCode();
-        $checkBody = $checkResponse->getDecodedBody();
-        $checkBodyString = json_encode($checkBody, JSON_PRETTY_PRINT);
+        $checkBody = $checkResponse->getDecodedBody();    
 
         if ($checkStatusCode !== 200) {
+            $checkBodyString = json_encode($checkBody, JSON_PRETTY_PRINT);
             throw new WebhookRegistrationException(
                 <<<ERROR
                 Failed to check if webhook was already registered (status code $checkStatusCode):

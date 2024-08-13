@@ -192,10 +192,11 @@ final class Registry
         $checkBody = $checkResponse->getDecodedBody();
 
         if ($checkStatusCode !== 200) {
+            $checkBodyString = json_encode($checkBody, JSON_PRETTY_PRINT);
             throw new WebhookRegistrationException(
                 <<<ERROR
                 Failed to check if webhook was already registered (status code $checkStatusCode):
-                $checkBody
+                $checkBodyString
                 ERROR
             );
         }

@@ -77,7 +77,9 @@ final class Registry
         string $topic,
         string $shop,
         string $accessToken,
-        ?string $deliveryMethod = self::DELIVERY_METHOD_HTTP
+        ?string $deliveryMethod = self::DELIVERY_METHOD_HTTP,
+        array $fields = [],
+        array $metafieldNamespaces = []
     ): RegisterResponse {
         /** @var DeliveryMethod */
         $method = null;
@@ -114,7 +116,9 @@ final class Registry
                 $topic,
                 $callbackAddress,
                 $method,
-                $webhookId
+                $webhookId,
+                $fields,
+                $metafieldNamespaces
             );
             $registered = $method->isSuccess($body, $webhookId);
         }
@@ -228,10 +232,14 @@ final class Registry
         string $topic,
         string $callbackAddress,
         DeliveryMethod $deliveryMethod,
-        ?string $webhookId
+        ?string $webhookId,
+        array $fields = [],
+        array $metafieldNamespaces = []
     ): array {
+        $registerQuery = $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId, $fields, $metafieldNamespaces);
+
         $registerResponse = $client->query(
-            data: $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId),
+            data: $registerQuery,
         );
 
         $statusCode = $registerResponse->getStatusCode();

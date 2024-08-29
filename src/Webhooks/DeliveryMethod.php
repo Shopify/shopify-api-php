@@ -56,18 +56,21 @@ abstract class DeliveryMethod
      *
      * @return string
      */
-    public function buildRegisterQuery(
-        string $topic,
-        string $callbackAddress,
-        ?string $webhookId = null
-    ): string {
-        $mutationName = $this->getMutationName($webhookId);
-        $identifier = $webhookId ? "id: \"$webhookId\"" : "topic: $topic";
-        $webhookSubscriptionArgs = $this->queryEndpoint($callbackAddress);
+    public function buildRegisterQuery(string $topic, string $callbackAddress, ?string $webhookId, array $fields = [], array $metafieldNamespaces = []): string
+    {
+        $fieldsQuery = !empty($fields) ? 'fields: [' . implode(',', $fields) . ']' : '';
+        $metafieldNamespacesQuery = !empty($metafieldNamespaces) ? 'metafieldNamespaces: [' . implode(',', $metafieldNamespaces) . ']' : '';
 
         return <<<QUERY
-        mutation webhookSubscription {
-            $mutationName($identifier, webhookSubscription: $webhookSubscriptionArgs) {
+        mutation {
+            webhookSubscriptionCreate(
+                topic: "$topic",
+                webhookSubscription: {
+                    callbackUrl: "$callbackAddress"
+                    $fieldsQuery
+                    $metafieldNamespacesQuery
+                }
+            ) {
                 userErrors {
                     field
                     message
@@ -77,8 +80,9 @@ abstract class DeliveryMethod
                 }
             }
         }
-        QUERY;
+    QUERY;
     }
+
 
     /**
      * Checks if the given result was successful.

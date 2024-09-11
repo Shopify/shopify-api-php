@@ -59,12 +59,14 @@ final class Registry
     /**
      * Registers a new webhook for this app with Shopify.
      *
-     * @param string        $path           The URL path for the callback. If using EventBridge, this is the full
-     *                                      resource address
-     * @param string        $topic          The topic to subscribe to. May be a string or a value from the Topics class
-     * @param string        $shop           The shop to use for requests
-     * @param string        $accessToken    The access token to use for requests
-     * @param string|null   $deliveryMethod The delivery method for this webhook. Defaults to HTTP
+     * @param string        $path               The URL path for the callback. If using EventBridge, this is the full
+     *                                           resource address
+     * @param string        $topic               The topic to subscribe to. May be a string or a value from the Topics class
+     * @param string        $shop                The shop to use for requests
+     * @param string        $accessToken         The access token to use for requests
+     * @param string|null   $deliveryMethod      The delivery method for this webhook. Defaults to HTTP
+     * @param array         $fields              The fields to request in the webhook
+     * @param array         $metafieldNamespaces The metafield namespaces to request in the webhook
      *
      * @return RegisterResponse
      * @throws ClientExceptionInterface
@@ -236,7 +238,7 @@ final class Registry
         array $fields = [],
         array $metafieldNamespaces = []
     ): array {
-        $registerQuery = $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId, $fields, $metafieldNamespaces);
+        $registerQuery = $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId, $fields, metafieldNamespaces: $metafieldNamespaces);
 
         $registerResponse = $client->query(
             data: $registerQuery,

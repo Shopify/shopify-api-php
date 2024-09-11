@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v5.6.1 - 2024-09-06
+
+- [#366](https://github.com/Shopify/shopify-api-php/pull/366) [Patch] Updated webhook subscription topic constants
+
 ## v5.6.0 - 2024-07-02
 
 - [#354](https://github.com/Shopify/shopify-api-php/pull/354) [Minor] Adding support for 2024-07 API version

@@ -77,7 +77,7 @@ final class BaseRestResourceTest extends BaseTestCase
             ),
         ]);
 
-        $resource = FakeResource::find($this->session, 1, [ "param" => "0"]);
+        $resource = FakeResource::find($this->session, 1, ["param" => "0"]);
         $this->assertEquals([1, "attribute"], [$resource->id, $resource->attribute]);
     }
 

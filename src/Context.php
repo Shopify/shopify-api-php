@@ -108,10 +108,6 @@ class Context
             );
         }
 
-        if (!ApiVersion::isValid($apiVersion)) {
-            throw new InvalidArgumentException("Invalid API version: $apiVersion");
-        }
-
         if (!preg_match("/http(s)?:\/\//", $hostName)) {
             $hostName = "https://$hostName";
         }

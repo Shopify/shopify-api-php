@@ -178,7 +178,6 @@ abstract class Base extends stdClass
 
         $client = new Rest($session->getShop(), $session->getAccessToken());
 
-        $params = array_filter($params);
         switch ($httpMethod) {
             case "get":
                 $response = $client->get(

@@ -262,7 +262,6 @@ final class ContextTest extends BaseTestCase
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
-            apiVersion: ApiVersion::LATEST,
             isPrivateApp: false,
             customShopDomains: $domains,
         );

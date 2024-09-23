@@ -77,7 +77,7 @@ class Context
         $scopes,
         string $hostName,
         SessionStorage $sessionStorage,
-        string $apiVersion = ApiVersion::LATEST,
+        string $apiVersion = '2024-10',
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
         string $privateAppStorefrontAccessToken = null,
@@ -106,10 +106,6 @@ class Context
             throw new MissingArgumentException(
                 "Cannot initialize Shopify API Library. Missing values for: $missing"
             );
-        }
-
-        if (!ApiVersion::isValid($apiVersion)) {
-            throw new InvalidArgumentException("Invalid API version: $apiVersion");
         }
 
         if (!preg_match("/http(s)?:\/\//", $hostName)) {

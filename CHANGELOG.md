@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+## v5.6.1 - 2024-09-06
+
+- [#370](https://github.com/Shopify/shopify-api-php/pull/370) [Patch] Fix params set to zero being removed from request payload
 
 ## v5.6.1 - 2024-09-06
 

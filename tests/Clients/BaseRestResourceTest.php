@@ -63,6 +63,24 @@ final class BaseRestResourceTest extends BaseTestCase
         $this->assertEquals([1, "attribute"], [$resource->id, $resource->attribute]);
     }
 
+    public function testFindsWithFalseyParams()
+    {
+        $body = ["fake_resource" => ["id" => 1, "attribute" => "attribute"]];
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $body),
+                "{$this->prefix}/fake_resources/1.json?zero_param=0",
+                "GET",
+                null,
+                ["X-Shopify-Access-Token: access-token"],
+            ),
+        ]);
+
+        $resource = FakeResource::find($this->session, 1, ["zero_param" => "0", "empty_param" => ""]);
+        $this->assertEquals([1, "attribute"], [$resource->id, $resource->attribute]);
+    }
+
     public function testFindsResourceAndChildrenById()
     {
         $body = ["fake_resource" => [

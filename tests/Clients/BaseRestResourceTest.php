@@ -63,7 +63,7 @@ final class BaseRestResourceTest extends BaseTestCase
         $this->assertEquals([1, "attribute"], [$resource->id, $resource->attribute]);
     }
 
-    public function testCanUseFalseyParams()
+    public function testFindsWithFalseyParams()
     {
         $body = ["fake_resource" => ["id" => 1, "attribute" => "attribute"]];
 

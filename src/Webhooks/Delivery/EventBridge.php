@@ -83,6 +83,6 @@ class EventBridge extends DeliveryMethod
      */
     protected function queryEndpoint(string $address): string
     {
-        return "{arn: \"$address\"}";
+        return "arn: \"$address\"";
     }
 }

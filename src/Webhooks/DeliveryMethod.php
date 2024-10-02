@@ -80,29 +80,23 @@ abstract class DeliveryMethod
         array $fields = [],
         array $metafieldNamespaces = []
     ): string {
-        // Use the mutation name based on the presence of the webhookId
         $mutationName = $this->getMutationName($webhookId);
-
-        // If updating, use the webhookId; if creating, use the topic
-        $identifier = $webhookId ? "id: \"$webhookId\"" : "topic: \"$topic\"";
-
-        // Prepare optional fields and metafield namespaces
-        $fieldsQuery = !empty($fields) ? 'fields: [' . implode(',', $fields) . ']' : '';
-        $metafieldNamespacesQuery = !empty($metafieldNamespaces) ? 'metafieldNamespaces: [' . implode(',', $metafieldNamespaces) . ']' : '';
-
-        // Assemble the webhook subscription arguments
+        $identifier = $webhookId ? "id: \"$webhookId\"" : "topic: $topic";
         $webhookSubscriptionArgs = $this->queryEndpoint($callbackAddress);
+
+        $query = "$identifier, webhookSubscription: {{$webhookSubscriptionArgs}}";
+
+        if (!empty($fields)) {
+            $query .= ', fields: [' . implode(',', $fields) . ']';
+        }
+
+        if (!empty($metafieldNamespaces)) {
+            $query .= ', metafieldNamespaces: [' . implode(',', $metafieldNamespaces) . ']';
+        }
 
         return <<<QUERY
         mutation webhookSubscription {
-            $mutationName(
-                $identifier, 
-                webhookSubscription: {
-                    callbackUrl: "$callbackAddress"
-                    $fieldsQuery
-                    $metafieldNamespacesQuery
-                }
-            ) {
+            $mutationName($query) {
                 userErrors {
                     field
                     message

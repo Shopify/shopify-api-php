@@ -19,6 +19,7 @@ use Shopify\Exception\WebhookRegistrationException;
 use Shopify\Utils;
 use Shopify\Webhooks\Delivery\EventBridge;
 use Shopify\Webhooks\Delivery\HttpDelivery;
+use Shopify\Webhooks\Delivery\HttpDeliveryRaw;
 use Shopify\Webhooks\Delivery\PubSub;
 
 /**
@@ -29,6 +30,7 @@ final class Registry
     public const DELIVERY_METHOD_HTTP = 'http';
     public const DELIVERY_METHOD_EVENT_BRIDGE = 'eventbridge';
     public const DELIVERY_METHOD_PUB_SUB = 'pubsub';
+    public const DELIVERY_METHOD_RAW = 'raw';
 
     /** @var Handler[] */
     private static $REGISTRY = [];
@@ -91,6 +93,9 @@ final class Registry
             case self::DELIVERY_METHOD_HTTP:
                 $method = new HttpDelivery();
                 break;
+            case self::DELIVERY_METHOD_RAW:
+                $method = new HttpDeliveryRaw();
+                break;
             default:
                 throw new InvalidArgumentException("Unrecognized delivery method '$deliveryMethod'");
         }
@@ -105,6 +110,20 @@ final class Registry
             $callbackAddress,
             $method
         );
+
+        // unregister if empty path is passed (not sure what $webhookId is
+        // when no registration exists, but assuming it will be false-ish
+        if (empty($path) && $webhookId) {
+            $body = self::sendDeleteRequest(
+                $client,
+                $topic,
+                $callbackAddress,
+                $method,
+                $webhookId
+            );
+            $registered = $method->isSuccess($body, $webhookId);
+            return new RegisterResponse($registered, $body);
+        }
 
         $registered = true;
         $body = null;
@@ -191,6 +210,7 @@ final class Registry
         $checkStatusCode = $checkResponse->getStatusCode();
         $checkBody = $checkResponse->getDecodedBody();
 
+        print_r($checkBody);
         if ($checkStatusCode !== 200) {
             $checkBodyString = json_encode($checkBody, JSON_PRETTY_PRINT);
             throw new WebhookRegistrationException(
@@ -236,6 +256,46 @@ final class Registry
 
         $statusCode = $registerResponse->getStatusCode();
         $body = $registerResponse->getDecodedBody();
+        if ($statusCode !== 200) {
+            throw new WebhookRegistrationException(
+                <<<ERROR
+                Failed to register webhook with Shopify (status code $statusCode):
+                $body
+                ERROR
+            );
+        }
+
+        return $body;
+    }
+
+    /**
+     * Deletes a webhook subscription in Shopify by firing the appropriate GraphQL query.
+     *
+     * @param \Shopify\Clients\Graphql         $client
+     * @param string                           $topic
+     * @param string                           $callbackAddress
+     * @param \Shopify\Webhooks\DeliveryMethod $deliveryMethod
+     * @param string|null                      $webhookId
+     *
+     * @return array
+     *
+     * @throws \Shopify\Exception\HttpRequestException
+     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws \Shopify\Exception\WebhookRegistrationException
+     */
+    private static function sendDeleteRequest(
+        Graphql $client,
+        string $topic,
+        string $callbackAddress,
+        DeliveryMethod $deliveryMethod,
+        string $webhookId
+    ): array {
+        $deleteResponse = $client->query(
+            data: $deliveryMethod->buildDeleteQuery($topic, $callbackAddress, $webhookId),
+        );
+
+        $statusCode = $deleteResponse->getStatusCode();
+        $body = $deleteResponse->getDecodedBody();
         if ($statusCode !== 200) {
             throw new WebhookRegistrationException(
                 <<<ERROR

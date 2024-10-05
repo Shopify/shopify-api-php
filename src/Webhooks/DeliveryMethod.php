@@ -15,7 +15,6 @@ abstract class DeliveryMethod
 
     /**
      * Builds the mutation name to be used depending on the delivery method and webhook id.
-     * 
      * If the $webhookId is null, it is assumed that the mutation name is for creating a new subscription.
      * Otherwise, it is for updating an existing subscription.
      *
@@ -37,7 +36,6 @@ abstract class DeliveryMethod
 
     /**
      * Builds a GraphQL query to check whether this topic is already registered for the shop.
-     * 
      * This query checks for existing webhook subscriptions for a specific topic.
      *
      * @param string $topic The topic to check.
@@ -48,7 +46,6 @@ abstract class DeliveryMethod
 
     /**
      * Parses the result of the check query and returns the webhookId and current delivery address.
-     * 
      * This method interprets the response to extract meaningful data, like the webhook ID and its delivery address.
      *
      * @param array $body The response body from the GraphQL query.
@@ -59,10 +56,8 @@ abstract class DeliveryMethod
 
     /**
      * Assembles a GraphQL query for registering or updating a webhook subscription.
-     * 
      * This method now supports adding additional optional fields and metafield namespaces,
      * which allows further customization of the webhook subscription.
-     * 
      * The operation (create/update) is determined by the webhookId.
      *
      * @param string      $topic               The topic for the webhook subscription.
@@ -84,7 +79,7 @@ abstract class DeliveryMethod
         $identifier = $webhookId ? "id: \"$webhookId\"" : "topic: $topic";
         $webhookSubscriptionArgs = $this->queryEndpoint($callbackAddress);
 
-        $query = "$identifier, webhookSubscription: {{$webhookSubscriptionArgs}}";
+        $query = "$identifier, webhookSubscription: {{$webhookSubscriptionArgs}";
 
         if (!empty($fields)) {
             $query .= ', fields: [' . implode(',', $fields) . ']';
@@ -93,6 +88,8 @@ abstract class DeliveryMethod
         if (!empty($metafieldNamespaces)) {
             $query .= ', metafieldNamespaces: [' . implode(',', $metafieldNamespaces) . ']';
         }
+
+        $query .= "}";
 
         return <<<QUERY
         mutation webhookSubscription {
@@ -108,7 +105,6 @@ abstract class DeliveryMethod
         }
         QUERY;
     }
-
     /**
      * Checks if the given result indicates a successful registration or update of the webhook subscription.
      * 

@@ -82,11 +82,11 @@ abstract class DeliveryMethod
         $query = "$identifier, webhookSubscription: {{$webhookSubscriptionArgs}";
 
         if (!empty($fields)) {
-            $query .= ', fields: [' . implode(',', $fields) . ']';
+            $query .= ' fields: [' . implode(',', $fields) . ']';
         }
 
         if (!empty($metafieldNamespaces)) {
-            $query .= ', metafieldNamespaces: [' . implode(',', $metafieldNamespaces) . ']';
+            $query .= ' metafieldNamespaces: [' . implode(',', $metafieldNamespaces) . ']';
         }
 
         $query .= "}";

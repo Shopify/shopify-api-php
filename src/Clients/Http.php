@@ -20,7 +20,6 @@ class Http
     public const METHOD_DELETE = 'DELETE';
 
     public const DATA_TYPE_JSON = 'application/json';
-    public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
     private const DEPRECATION_ALERT_SECONDS = 3600;

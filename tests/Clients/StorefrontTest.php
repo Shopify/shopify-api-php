@@ -38,7 +38,7 @@ final class StorefrontTest extends BaseTestCase
                 'POST',
                 null,
                 [
-                    'Content-Type: application/graphql',
+                    'Content-Type: application/json',
                     'X-Shopify-Storefront-Access-Token: test_token',
                 ],
                 $this->query,
@@ -65,7 +65,7 @@ final class StorefrontTest extends BaseTestCase
                 'POST',
                 null,
                 [
-                    'Content-Type: application/graphql',
+                    'Content-Type: application/json',
                     'X-Shopify-Storefront-Access-Token: private_token',
                 ],
                 $this->query,
@@ -91,7 +91,7 @@ final class StorefrontTest extends BaseTestCase
                 'POST',
                 null,
                 [
-                    'Content-Type: application/graphql',
+                    'Content-Type: application/json',
                     'X-Shopify-Storefront-Access-Token: test_token',
                 ],
                 $this->query,

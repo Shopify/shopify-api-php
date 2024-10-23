@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [#379](https://github.com/Shopify/shopify-api-php/pull/379) [Patch] Fix GraphQL `Content-Type` header to be `application/json`
+
 ## v5.7.0 - 2024-10-22
 - [#371](https://github.com/Shopify/shopify-api-php/pull/371) [Minor] Remove API version validation to allow more flexibility of API version. And add support for 2024-10 API version
 - [#370](https://github.com/Shopify/shopify-api-php/pull/370) [Patch] Fix params set to zero being removed from request payload

@@ -6,8 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-- [#381](https://github.com/Shopify/shopify-api-php/pull/381) [Minor] Adding support for 2024-10 API version
 
+## v5.8.0 - 2024-11-08
+- [#381](https://github.com/Shopify/shopify-api-php/pull/381) [Minor] Adding support for 2024-10 API version
 - [#379](https://github.com/Shopify/shopify-api-php/pull/379) [Patch] Fix GraphQL `Content-Type` header to be `application/json`
 
 ## v5.7.0 - 2024-10-22

@@ -77,7 +77,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->httpCheckQuery,
+                json_encode(['query' => $this->httpCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerAddResponse),
@@ -85,7 +85,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerAddQuery,
+                json_encode(['query' => $this->registerAddQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseExisting),
@@ -93,7 +93,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->httpCheckQuery,
+                json_encode(['query' => $this->httpCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerUpdateResponse),
@@ -101,7 +101,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerUpdateQuery,
+                json_encode(['query' => $this->registerUpdateQuery]),
             ),
         ]);
 
@@ -123,7 +123,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->eventBridgeCheckQuery,
+                json_encode(['query' => $this->eventBridgeCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerAddEventBridgeResponse),
@@ -131,7 +131,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerAddEventBridgeQuery,
+                json_encode(['query' => $this->registerAddEventBridgeQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkEventBridgeResponseExisting),
@@ -139,7 +139,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->eventBridgeCheckQuery,
+                json_encode(['query' => $this->eventBridgeCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerUpdateEventBridgeResponse),
@@ -147,7 +147,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerUpdateEventBridgeQuery,
+                json_encode(['query' => $this->registerUpdateEventBridgeQuery]),
             ),
         ]);
 
@@ -182,7 +182,7 @@ final class RegistryTest extends BaseTestCase
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
-                    $this->pubSubCheckQuery,
+                    json_encode(['query' => $this->pubSubCheckQuery]),
                 ),
                 new MockRequest(
                     $this->buildMockHttpResponse(200, $this->registerPubSubResponse),
@@ -190,7 +190,7 @@ final class RegistryTest extends BaseTestCase
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
-                    $this->registerPubSubQuery,
+                    json_encode(['query' => $this->registerPubSubQuery]),
                 ),
                 new MockRequest(
                     $this->buildMockHttpResponse(200, $this->pubSubWebhookCheckResponse),
@@ -198,7 +198,7 @@ final class RegistryTest extends BaseTestCase
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
-                    $this->pubSubCheckQuery,
+                    json_encode(['query' => $this->pubSubCheckQuery]),
                 ),
                 new MockRequest(
                     $this->buildMockHttpResponse(200, $this->registerUpdatePubSubResponse),
@@ -206,7 +206,7 @@ final class RegistryTest extends BaseTestCase
                     "POST",
                     "Shopify Admin API Library for PHP v",
                     ['X-Shopify-Access-Token: real_token'],
-                    $this->registerUpdatePubSubQuery,
+                    json_encode(['query' => $this->registerUpdatePubSubQuery]),
                 ),
             ]
         );
@@ -243,7 +243,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->legacyCheckQuery,
+                json_encode(['query' => $this->legacyCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerAddResponse),
@@ -251,7 +251,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerAddQuery,
+                json_encode(['query' => $this->registerAddQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->legacyCheckResponseExisting),
@@ -259,7 +259,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->legacyCheckQuery,
+                json_encode(['query' => $this->legacyCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerUpdateResponse),
@@ -267,7 +267,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerUpdateQuery,
+                json_encode(['query' => $this->registerUpdateQuery]),
             ),
         ]);
 
@@ -289,7 +289,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->httpCheckQuery,
+                json_encode(['query' => $this->httpCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->registerAddResponse),
@@ -297,7 +297,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerAddQuery,
+                json_encode(['query' => $this->registerAddQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(200, $this->checkResponseExisting),
@@ -305,7 +305,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->httpCheckQuery,
+                json_encode(['query' => $this->httpCheckQuery]),
             ),
         ]);
 
@@ -355,7 +355,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->httpCheckQuery,
+                json_encode(['query' => $this->httpCheckQuery]),
             ),
         ]);
 
@@ -373,7 +373,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->httpCheckQuery,
+                json_encode(['query' => $this->httpCheckQuery]),
             ),
             new MockRequest(
                 $this->buildMockHttpResponse(403),
@@ -381,7 +381,7 @@ final class RegistryTest extends BaseTestCase
                 "POST",
                 "Shopify Admin API Library for PHP v",
                 ['X-Shopify-Access-Token: real_token'],
-                $this->registerAddQuery,
+                json_encode(['query' => $this->registerAddQuery]),
             ),
         ]);
 

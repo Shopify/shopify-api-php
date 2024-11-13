@@ -61,6 +61,8 @@ class Graphql
 
         if (is_array($data)) {
             $data = json_encode($data);
+        } else {
+            $data = json_encode([ "query" => $data ]);
         }
 
         return $this->client->post(

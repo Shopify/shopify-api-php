@@ -87,6 +87,6 @@ class PubSub extends DeliveryMethod
     {
         $addressWithoutProtocol = explode("//", $address);
         list($project, $topic) = explode(":", $addressWithoutProtocol[1]);
-        return "{pubSubProject: \"$project\", pubSubTopic: \"$topic\"}";
+        return "pubSubProject: \"$project\", pubSubTopic: \"$topic\"";
     }
 }

@@ -65,6 +65,16 @@ final class MockSessionStorage implements SessionStorage
     }
 
     /**
+     * Retrieves all sessions in this storage.
+     *
+     * @return array
+     */
+    public function getAllSessions(): array
+    {
+        return $this->testSessions;
+    }
+
+    /**
      * Retrieves the calls made to this class for assertions.
      *
      * @return array

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shopify;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Shopify\Auth\Scopes;
@@ -68,7 +69,7 @@ class Context
      *                                                              it
      * @param string[]             $customShopDomains               One or more regexps to use when validating domains
      *
-     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws MissingArgumentException
      */
     public static function initialize(
         string $apiKey,
@@ -107,10 +108,6 @@ class Context
             );
         }
 
-        if (!ApiVersion::isValid($apiVersion)) {
-            throw new InvalidArgumentException("Invalid API version: $apiVersion");
-        }
-
         if (!preg_match("/http(s)?:\/\//", $hostName)) {
             $hostName = "https://$hostName";
         }
@@ -142,7 +139,7 @@ class Context
     /**
      * Throws exception if initialize() has not been called
      *
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws UninitializedContextException
      */
     public static function throwIfUninitialized(): void
     {
@@ -159,7 +156,7 @@ class Context
      *
      * @param string $message Message to output with the exception
      *
-     * @throws \Shopify\Exception\PrivateAppException
+     * @throws PrivateAppException
      */
     public static function throwIfPrivateApp(string $message): void
     {
@@ -175,7 +172,7 @@ class Context
      * @param string $level   One of the \Psr\Log\LogLevel::* consts, defaults to INFO
      * @param array $context  Key/value pairs of contextual information supporting the log statement
      *
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws UninitializedContextException
      */
     public static function log(string $message, string $level = LogLevel::INFO, array $context = []): void
     {
@@ -301,12 +298,12 @@ class Context
      *
      * @throws UninitializedContextException
      * @throws FeatureDeprecatedException
-     * @throws \Exception
+     * @throws Exception
      */
     public static function logDeprecation(string $deprecatedFrom, string $message, array $context = []): void
     {
         if (!preg_match('#^\d+.\d+.\d+$#', $deprecatedFrom)) {
-            throw new \Exception(sprintf('Encountered an invalid version: "%s"', $deprecatedFrom));
+            throw new Exception(sprintf('Encountered an invalid version: "%s"', $deprecatedFrom));
         }
 
         $currentVersion = Utils::getVersion();

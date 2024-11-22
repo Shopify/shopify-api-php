@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Shopify;
 
+use Shopify\Exception\UninitializedContextException;
+use Shopify\Exception\CookieNotFoundException;
+use Shopify\Exception\MissingArgumentException;
+use Psr\Http\Client\ClientExceptionInterface;
 use Shopify\Context;
 use Shopify\Auth\OAuth;
 use Shopify\Auth\Session;
@@ -53,7 +57,7 @@ final class Utils
         }
         $name = preg_replace("/\A(https?\:\/\/)/", '', $name);
 
-        if (preg_match("/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.{$allowedDomainsRegexp}\z/", $name)) {
+        if (preg_match("/\A[a-zA-Z0-9][a-zA-Z0-9\-]*\.{$allowedDomainsRegexp}\z/", (string) $name)) {
             return $name;
         } else {
             return null;
@@ -140,7 +144,7 @@ final class Utils
      * @param string $referenceVersion The version to check
      *
      * @return bool
-     * @throws \Shopify\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function isApiVersionCompatible(string $referenceVersion): bool
     {
@@ -166,7 +170,7 @@ final class Utils
      * @param bool   $includeExpired Optionally include expired sessions, defaults to false
      *
      * @return Session|null If exists, the most recent session
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws UninitializedContextException
      */
     public static function loadOfflineSession(string $shop, bool $includeExpired = false): ?Session
     {
@@ -190,8 +194,8 @@ final class Utils
      * @param bool  $isOnline   Whether to load online or offline sessions
      *
      * @return Session|null The session or null if the session can't be found
-     * @throws \Shopify\Exception\CookieNotFoundException
-     * @throws \Shopify\Exception\MissingArgumentException
+     * @throws CookieNotFoundException
+     * @throws MissingArgumentException
      */
     public static function loadCurrentSession(array $rawHeaders, array $cookies, bool $isOnline): ?Session
     {
@@ -222,11 +226,11 @@ final class Utils
      * @param string $rawBody    The raw HTTP request payload
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\CookieNotFoundException
-     * @throws \Shopify\Exception\MissingArgumentException
-     * @throws \Shopify\Exception\SessionNotFoundException
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws CookieNotFoundException
+     * @throws MissingArgumentException
+     * @throws SessionNotFoundException
+     * @throws UninitializedContextException
      */
     public static function graphqlProxy(array $rawHeaders, array $cookies, string $rawBody): HttpResponse
     {

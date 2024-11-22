@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ShopifyTest\Clients;
 
+use Shopify\Exception\MissingArgumentException;
 use Shopify\Clients\Graphql;
 use Shopify\Context;
 use ShopifyTest\BaseTestCase;
@@ -78,14 +79,14 @@ final class GraphqlTest extends BaseTestCase
 
     public function testPublicAppThrowsWithoutToken()
     {
-        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
+        $this->expectException(MissingArgumentException::class);
         new Graphql('domain.myshopify.com');
     }
 
     public function testThrowsIfQueryMissing()
     {
         $client = new Graphql('domain.myshopify.com', 'token');
-        $this->expectException(\Shopify\Exception\MissingArgumentException::class);
+        $this->expectException(MissingArgumentException::class);
         $client->query(data: '');
     }
 
@@ -100,11 +101,11 @@ final class GraphqlTest extends BaseTestCase
                 'POST',
                 "Shopify Admin API Library for PHP v$this->version",
                 [
-                    'Content-Type: application/graphql',
-                    'Content-Length: ' . strlen($this->testQueryString),
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen(json_encode(['query' => $this->testQueryString])),
                     'X-Shopify-Access-Token: token'
                 ],
-                $this->testQueryString
+                json_encode(['query' => $this->testQueryString])
             )
         ]);
 
@@ -181,12 +182,12 @@ final class GraphqlTest extends BaseTestCase
                 'POST',
                 "Shopify Admin API Library for PHP v$this->version",
                 [
-                    'Content-Type: application/graphql',
-                    'Content-Length: ' . strlen($this->testQueryString),
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen(json_encode(['query' => $this->testQueryString])),
                     'Extra-Extra: hear_all_about_it',
                     'X-Shopify-Access-Token: token'
                 ],
-                $this->testQueryString
+                json_encode(['query' => $this->testQueryString])
             )
         ]);
 

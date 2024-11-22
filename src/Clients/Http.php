@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Shopify\Clients;
 
+use Psr\Http\Client\ClientExceptionInterface;
+use Shopify\Exception\UninitializedContextException;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
@@ -18,13 +20,13 @@ class Http
     public const METHOD_DELETE = 'DELETE';
 
     public const DATA_TYPE_JSON = 'application/json';
-    public const DATA_TYPE_GRAPHQL = 'application/graphql';
 
     private const RETRIABLE_STATUS_CODES = [429, 500];
-    private const DEPRECATION_ALERT_SECONDS = 60;
+    private const DEPRECATION_ALERT_SECONDS = 3600;
 
-    /** @var string */
-    private $domain;
+    private readonly string $domain;
+
+    private int $lastApiDeprecationWarning = 0;
 
     public function __construct(string $domain)
     {
@@ -40,8 +42,8 @@ class Http
      * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function get(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
@@ -65,8 +67,8 @@ class Http
      * @param string       $dataType The data type to expect in the response
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function post(
         string $path,
@@ -98,8 +100,8 @@ class Http
      * @param string       $dataType The data type to expect in the response
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function put(
         string $path,
@@ -129,8 +131,8 @@ class Http
      * @param int|null $tries   How many times to attempt the request
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     public function delete(string $path, array $headers = [], array $query = [], ?int $tries = null): HttpResponse
     {
@@ -155,8 +157,8 @@ class Http
      * @param string            $dataType The data type of the request
      *
      * @return HttpResponse
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws ClientExceptionInterface
+     * @throws UninitializedContextException
      */
     protected function request(
         string $path,
@@ -249,7 +251,7 @@ class Http
      *
      * @param string $url    The URL that used a deprecated resource
      * @param string $reason The deprecation reason
-     * @throws \Shopify\Exception\UninitializedContextException
+     * @throws UninitializedContextException
      */
     private function logApiDeprecation(string $url, string $reason): void
     {
@@ -274,27 +276,35 @@ class Http
      */
     private function shouldLogApiDeprecation(): bool
     {
-        $warningFilePath = $this->getApiDeprecationTimestampFilePath();
-
-        $lastWarning = null;
-        if (file_exists($warningFilePath)) {
-            $lastWarning = (int)(file_get_contents($warningFilePath));
-        }
-
-        if (time() - $lastWarning < self::DEPRECATION_ALERT_SECONDS) {
-            $result = false;
+        if (function_exists('apcu_enabled') && apcu_enabled()) {
+            $apcuKey = 'shopify/shopify-api/last-api-deprecation-warning';
         } else {
-            $result = true;
-            file_put_contents($warningFilePath, time());
+            $apcuKey = null;
         }
 
-        return $result;
+        if ($this->lastApiDeprecationWarning === 0 && $apcuKey) {
+            $this->lastApiDeprecationWarning = (int) apcu_fetch($apcuKey);
+        }
+
+        $secondsSinceLastAlert = time() - $this->lastApiDeprecationWarning;
+        if ($secondsSinceLastAlert < self::DEPRECATION_ALERT_SECONDS) {
+            return false;
+        }
+
+        $this->lastApiDeprecationWarning = time();
+
+        if ($apcuKey) {
+            apcu_store($apcuKey, $this->lastApiDeprecationWarning, self::DEPRECATION_ALERT_SECONDS);
+        }
+
+        return true;
     }
 
     /**
      * Fetches the path to the file holding the timestamp of the last API deprecation warning we logged.
      *
      * @codeCoverageIgnore This is mocked in tests so we don't use real files
+     * @deprecated 5.4.1 This method is no longer used internally.
      */
     public function getApiDeprecationTimestampFilePath(): string
     {

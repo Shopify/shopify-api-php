@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shopify\Rest;
 
+use stdClass;
 use Shopify\Auth\Session;
 use Shopify\Clients\Rest;
 use Shopify\Clients\RestResponse;
@@ -15,7 +16,7 @@ use Shopify\Exception\RestResourceRequestException;
 
 // When upgrading to PHP 8.2, consider using the AllowDynamicProperties attribute
 // https://stitcher.io/blog/deprecated-dynamic-properties-in-php-82#a-better-alternative
-abstract class Base extends \stdClass
+abstract class Base extends stdClass
 {
     public static string $API_VERSION;
     public static ?array $NEXT_PAGE_QUERY = null;
@@ -133,13 +134,13 @@ abstract class Base extends \stdClass
     protected static function getJsonBodyName(): string
     {
         $className = preg_replace("/^([A-z_0-9]+\\\)*([A-z_]+)/", "$2", static::class);
-        return strtolower(preg_replace("/([a-z])([A-Z])/", "$1_$2", $className));
+        return strtolower((string) preg_replace("/([a-z])([A-Z])/", "$1_$2", (string) $className));
     }
 
     protected static function getJsonResponseBodyNames(): array
     {
         $className = preg_replace("/^([A-z_0-9]+\\\)*([A-z_]+)/", "$2", static::class);
-        return [strtolower(preg_replace("/([a-z])([A-Z])/", "$1_$2", $className))];
+        return [strtolower((string) preg_replace("/([a-z])([A-Z])/", "$1_$2", (string) $className))];
     }
 
     /**
@@ -177,7 +178,10 @@ abstract class Base extends \stdClass
 
         $client = new Rest($session->getShop(), $session->getAccessToken());
 
-        $params = array_filter($params);
+        $params = array_filter($params, function ($value) {
+            return $value !== "";
+        });
+
         switch ($httpMethod) {
             case "get":
                 $response = $client->get(
@@ -258,7 +262,7 @@ abstract class Base extends \stdClass
                 function ($matches) use ($urlIds) {
                     return $urlIds[$matches[2]];
                 },
-                $path["path"]
+                (string) $path["path"]
             );
         }
 

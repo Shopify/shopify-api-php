@@ -101,11 +101,11 @@ final class GraphqlTest extends BaseTestCase
                 'POST',
                 "Shopify Admin API Library for PHP v$this->version",
                 [
-                    'Content-Type: application/graphql',
-                    'Content-Length: ' . strlen($this->testQueryString),
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen(json_encode(['query' => $this->testQueryString])),
                     'X-Shopify-Access-Token: token'
                 ],
-                $this->testQueryString
+                json_encode(['query' => $this->testQueryString])
             )
         ]);
 
@@ -182,12 +182,12 @@ final class GraphqlTest extends BaseTestCase
                 'POST',
                 "Shopify Admin API Library for PHP v$this->version",
                 [
-                    'Content-Type: application/graphql',
-                    'Content-Length: ' . strlen($this->testQueryString),
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen(json_encode(['query' => $this->testQueryString])),
                     'Extra-Extra: hear_all_about_it',
                     'X-Shopify-Access-Token: token'
                 ],
-                $this->testQueryString
+                json_encode(['query' => $this->testQueryString])
             )
         ]);
 

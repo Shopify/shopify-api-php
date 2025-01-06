@@ -60,10 +60,9 @@ class Graphql
         $extraHeaders[$accessTokenHeader] = $accessToken;
 
         if (is_array($data)) {
-            $dataType = Http::DATA_TYPE_JSON;
             $data = json_encode($data);
         } else {
-            $dataType = Http::DATA_TYPE_GRAPHQL;
+            $data = json_encode([ "query" => $data ]);
         }
 
         return $this->client->post(
@@ -72,7 +71,6 @@ class Graphql
             $extraHeaders,
             $query,
             $tries,
-            $dataType,
         );
     }
 

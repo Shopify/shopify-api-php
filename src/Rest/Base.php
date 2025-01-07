@@ -41,7 +41,7 @@ abstract class Base extends stdClass
     private array $setProps;
     protected Session $session;
 
-    public function __construct(Session $session, array $fromData = null)
+    public function __construct(Session $session, ?array $fromData = null)
     {
         if (Context::$API_VERSION !== static::$API_VERSION) {
             $contextVersion = Context::$API_VERSION;
@@ -172,7 +172,7 @@ abstract class Base extends stdClass
         array $ids = [],
         array $params = [],
         array $body = [],
-        self $entity = null
+        ?self $entity = null
     ): RestResponse {
         $path = static::getPath($httpMethod, $operation, $ids, $entity);
 
@@ -234,7 +234,7 @@ abstract class Base extends stdClass
         string $httpMethod,
         string $operation,
         array $ids,
-        self $entity = null
+        ?self $entity = null
     ): ?string {
         $match = null;
 

@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 - [#393](https://github.com/Shopify/shopify-api-php/pull/393) [Minor] Add support for 2025-01 API version REST resources
+- [#367](https://github.com/Shopify/shopify-api-php/pull/367) [Patch] Allow uppercase characters in redirect URI
 
 ## v5.8.1 - 2024-11-13
 - [#387](https://github.com/Shopify/shopify-api-php/pull/387) [Patch] Fix GraphQL request to properly encode query string

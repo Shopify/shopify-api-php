@@ -51,10 +51,10 @@ class BaseTestCase extends TestCase
      * @return array
      */
     protected function buildMockHttpResponse(
-        int $statusCode = null,
+        ?int $statusCode = null,
         $body = null,
         array $headers = [],
-        string $error = null
+        ?string $error = null
     ): array {
         if ($body && !is_string($body)) {
             $body = json_encode($body);

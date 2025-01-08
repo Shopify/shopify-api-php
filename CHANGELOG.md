@@ -11,6 +11,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## v5.8.1 - 2024-11-13
 - [#387](https://github.com/Shopify/shopify-api-php/pull/387) [Patch] Fix GraphQL request to properly encode query string
+- [#394](https://github.com/Shopify/shopify-api-php/pull/394) [Patch] Remove implicit nullability to support PHP 8.4
 
 ## v5.8.0 - 2024-11-12
 - [#381](https://github.com/Shopify/shopify-api-php/pull/381) [Minor] Adding support for 2024-10 API version

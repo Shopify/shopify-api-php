@@ -80,9 +80,9 @@ class Context
         string $apiVersion = ApiVersion::LATEST,
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
-        string $privateAppStorefrontAccessToken = null,
+        ?string $privateAppStorefrontAccessToken = null,
         string $userAgentPrefix = '',
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         array $customShopDomains = []
     ): void {
         $authScopes = new Scopes($scopes);

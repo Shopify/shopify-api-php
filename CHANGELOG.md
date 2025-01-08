@@ -5,13 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## v5.9.0 - 2025-01-08
 - [#393](https://github.com/Shopify/shopify-api-php/pull/393) [Minor] Add support for 2025-01 API version REST resources
 - [#367](https://github.com/Shopify/shopify-api-php/pull/367) [Patch] Allow uppercase characters in redirect URI
+- [#394](https://github.com/Shopify/shopify-api-php/pull/394) [Patch] Remove implicit nullability to support PHP 8.4
 
 ## v5.8.1 - 2024-11-13
 - [#387](https://github.com/Shopify/shopify-api-php/pull/387) [Patch] Fix GraphQL request to properly encode query string
-- [#394](https://github.com/Shopify/shopify-api-php/pull/394) [Patch] Remove implicit nullability to support PHP 8.4
 
 ## v5.8.0 - 2024-11-12
 - [#381](https://github.com/Shopify/shopify-api-php/pull/381) [Minor] Adding support for 2024-10 API version

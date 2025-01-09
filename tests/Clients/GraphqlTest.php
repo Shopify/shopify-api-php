@@ -201,11 +201,12 @@ final class GraphqlTest extends BaseTestCase
     public function testProxyForwardsBodyAsJsonType()
     {
         $queryToProxy = <<<QUERY
+        <<<QUERY
         {
-          "variables": {},
-          "query": "{\nshop {\n    name\n    __typename\n  }\n}"
+            "variables": {},
+            "query": "{\nshop {\n    name\n    __typename\n  }\n}"
         }
-        QUERY;
+        QUERY; // phpcs:ignore
 
         $extraHeaders = ['Extra-Extra' => 'hear_all_about_it'];
         $client = new Graphql($this->domain, 'token');

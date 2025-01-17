@@ -63,7 +63,7 @@ class OAuth
             throw new InvalidArgumentException("Invalid shop domain: $shop");
         }
 
-        $redirectPath = trim(strtolower($redirectPath));
+        $redirectPath = trim($redirectPath);
         $redirectPath = ($redirectPath[0] == '/') ? $redirectPath : '/' . $redirectPath;
 
         $state = Uuid::uuid4()->toString();

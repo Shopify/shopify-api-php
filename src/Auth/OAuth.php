@@ -152,7 +152,7 @@ class OAuth
             );
         }
 
-        $sessionExpiration = ($session->getExpires() ? (int)$session->getExpires()->format('U') : null);
+        $sessionExpiration = ($session->getExpires() ? (int)$session->getExpires()->format('U') : 0);
         $cookieSet = self::setSessionIdCookie(
             $setCookieFunction,
             $session->getId(),

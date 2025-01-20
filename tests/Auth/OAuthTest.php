@@ -183,7 +183,7 @@ final class OAuthTest extends BaseTestCase
         } elseif ($isOnline) {
             $this->assertEquals($expectedSession->getExpires()->format('U'), $cookieExpiration);
         } else {
-            $this->assertNull($cookieExpiration);
+            $this->assertEquals(0, $cookieExpiration);
         }
     }
 

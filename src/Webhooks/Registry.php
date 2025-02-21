@@ -186,7 +186,9 @@ final class Registry
         string $callbackAddress,
         DeliveryMethod $method
     ): array {
-        $checkResponse = $client->query(data: $method->buildCheckQuery($topic));
+        $checkResponse = $client->query([
+            'query' => $method->buildCheckQuery($topic),
+        ]);
 
         $checkStatusCode = $checkResponse->getStatusCode();
         $checkBody = $checkResponse->getDecodedBody();
@@ -230,9 +232,9 @@ final class Registry
         DeliveryMethod $deliveryMethod,
         ?string $webhookId
     ): array {
-        $registerResponse = $client->query(
-            data: $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId),
-        );
+        $registerResponse = $client->query([
+            'query' => $deliveryMethod->buildRegisterQuery($topic, $callbackAddress, $webhookId)
+        ]);
 
         $statusCode = $registerResponse->getStatusCode();
         $body = $registerResponse->getDecodedBody();

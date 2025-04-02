@@ -33,5 +33,7 @@ class ApiVersion
     /** @var string */
     public const JANUARY_2025 = "2025-01";
     /** @var string */
-    public const LATEST = self::JANUARY_2025;
+    public const APRIL_2025 = "2025-04";
+    /** @var string */
+    public const LATEST = self::APRIL_2025;
 }

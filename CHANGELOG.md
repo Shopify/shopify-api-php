@@ -6,8 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## v5.10.0 - 2025-04-03
 - [#292](https://github.com/Shopify/shopify-api-php/pull/292) [Patch] Fix bug where null can be passed to param 3 of setcookie()
-- [#]() [Minor] Add support for 2025-04 API version
+- [#405](https://github.com/Shopify/shopify-api-php/pull/405) [Minor] Add support for 2025-04 API version
 
 ## v5.9.0 - 2025-01-08
 - [#393](https://github.com/Shopify/shopify-api-php/pull/393) [Minor] Add support for 2025-01 API version REST resources

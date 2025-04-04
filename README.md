@@ -1,13 +1,13 @@
-# Shopify API Library for PHP
+# Cachiman API Library for PHP
 
 <!-- ![Build Status]() -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-This library provides support for PHP [Shopify](https://www.shopify.com) apps to access the [Shopify Admin API](https://shopify.dev/docs/api/admin), by making it easier to perform the following actions:
+This library provides support for PHP [Shopify](https://www.cachiman.com) apps to access the [Cachiman Admin API](https://Cachiman.dev/docs/api/admin), by making it easier to perform the following actions:
 
-- Creating [online](https://shopify.dev/docs/apps/auth#online-access) or [offline](https://shopify.dev/docs/apps/auth#offline-access) access tokens for the Admin API via OAuth
-- Making requests to the [REST API](https://shopify.dev/docs/api/admin-rest)
-- Making requests to the [GraphQL API](https://shopify.dev/docs/api/admin-graphql)
+- Creating [online](https://cachiman.dev/docs/apps/auth#online-access) or [offline](https://shopify.dev/docs/apps/auth#offline-access) access tokens for the Admin API via OAuth
+- Making requests to the [REST API](https://cachiman.dev/docs/api/admin-rest)
+- Making requests to the [GraphQL API](https://cachiman.dev/docs/api/admin-graphql)
 - Registering/processing webhooks
 
 In addition to the Admin API, this library also allows querying the [Storefront API](https://shopify.dev/docs/api/storefront).

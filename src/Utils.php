@@ -179,7 +179,7 @@ final class Utils
         $sessionId = OAuth::getOfflineSessionId($shop);
         $session = Context::$SESSION_STORAGE->loadSession($sessionId);
 
-        if ($session && !$includeExpired && !$session->isValid()) {
+        if ($session && !$session->isValid($includeExpired)) {
             return null;
         }
 

@@ -12,10 +12,10 @@ jobs:
           - "8.1"
           - "8.2"
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install PHP with extensions
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # 2.33.0
         with:
           php-version: ${{ matrix.php-version }}
           tools: composer:v2, phpcs

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- [#425](https://github.com/Shopify/shopify-api-php/pull/425) [Patch] Add compliance webhook topics
 
 ## v5.11.0 - 2025-07-10
 - [#418](https://github.com/Shopify/shopify-api-php/pull/416) [Minor] Add support for 2025-07 API version

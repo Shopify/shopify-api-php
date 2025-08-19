@@ -7,6 +7,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v5.11.0 - 2025-07-10
+- [#418](https://github.com/Shopify/shopify-api-php/pull/416) [Minor] Add support for 2025-07 API version
+
 ## v5.10.0 - 2025-04-03
 - [#292](https://github.com/Shopify/shopify-api-php/pull/292) [Patch] Fix bug where null can be passed to param 3 of setcookie()
 - [#405](https://github.com/Shopify/shopify-api-php/pull/405) [Minor] Add support for 2025-04 API version

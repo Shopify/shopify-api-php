@@ -69,5 +69,9 @@ class ApiVersion
     /**
      * @var string
      */
-    public const LATEST = self::JULY_2025;
+    public const OCTOBER_2025 = "2025-10";
+    /**
+     * @var string
+     */
+    public const LATEST = self::OCTOBER_2025;
 }

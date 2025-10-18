@@ -36,6 +36,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - [#354](https://github.com/Shopify/shopify-api-php/pull/354) [Minor] Adding support for 2024-07 API version
 
+- [#304](https://github.com/Shopify/shopify-api-php/pull/304) [Minor] Raw URLs for Webhooks, deletion on empty path
+
 ## v5.5.1 - 2024-05-24
 
 - [#345](https://github.com/Shopify/shopify-api-php/pull/345) [Patch] Stop storing a session in the database when beginning OAuth, only when completing it

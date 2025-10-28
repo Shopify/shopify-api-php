@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 - [#425](https://github.com/Shopify/shopify-api-php/pull/425) [Patch] Add compliance webhook topics
+- [#433](https://github.com/Shopify/shopify-api-php/pull/433) [Minor] Add support for 2025-10 API version
 
 ## v5.11.0 - 2025-07-10
 - [#418](https://github.com/Shopify/shopify-api-php/pull/416) [Minor] Add support for 2025-07 API version

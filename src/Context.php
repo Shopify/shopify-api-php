@@ -60,7 +60,7 @@ class Context
      * @param string|array         $scopes                          App scopes
      * @param string               $hostName                        App host name e.g. www.google.ca. May include scheme
      * @param SessionStorage       $sessionStorage                  Session storage strategy
-     * @param string               $apiVersion                      App API key, defaults to unstable
+     * @param string               $apiVersion                      App API version
      * @param bool                 $isEmbeddedApp                   Whether the app is an embedded app, defaults to true
      * @param bool                 $isPrivateApp                    Whether the app is a private app, defaults to false
      * @param string|null          $privateAppStorefrontAccessToken The Storefront API Access Token for a private app
@@ -77,7 +77,7 @@ class Context
         $scopes,
         string $hostName,
         SessionStorage $sessionStorage,
-        string $apiVersion = ApiVersion::LATEST,
+        string $apiVersion,
         bool $isEmbeddedApp = true,
         bool $isPrivateApp = false,
         ?string $privateAppStorefrontAccessToken = null,
@@ -93,6 +93,7 @@ class Context
             'apiSecretKey' => $apiSecretKey,
             'scopes' => implode((array)$scopes),
             'hostName' => $hostName,
+            'apiVersion' => $apiVersion,
         ];
         $missing = array();
         foreach ($requiredValues as $key => $value) {

@@ -28,6 +28,7 @@ final class ContextTest extends BaseTestCase
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
+            apiVersion: self::TEST_API_VERSION,
         );
 
         $this->assertEquals('ash', Context::$API_KEY);
@@ -52,6 +53,7 @@ final class ContextTest extends BaseTestCase
             scopes: ['silly', 'doggo'],
             hostName: 'yay-for-doggos',
             sessionStorage: new MockSessionStorage(),
+            apiVersion: self::TEST_API_VERSION,
         );
 
         $this->assertEquals('tuck', Context::$API_KEY);
@@ -64,7 +66,8 @@ final class ContextTest extends BaseTestCase
     {
         $this->expectException(MissingArgumentException::class);
         $this->expectExceptionMessage(
-            'Cannot initialize Shopify API Library. Missing values for: apiKey, apiSecretKey, scopes, hostName'
+            'Cannot initialize Shopify API Library. ' .
+            'Missing values for: apiKey, apiSecretKey, scopes, hostName, apiVersion'
         );
         Context::initialize(
             apiKey: '',
@@ -72,6 +75,7 @@ final class ContextTest extends BaseTestCase
             scopes: [],
             hostName: '',
             sessionStorage: new MockSessionStorage(),
+            apiVersion: '',
         );
     }
 
@@ -96,7 +100,7 @@ final class ContextTest extends BaseTestCase
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
-            apiVersion: 'unstable',
+            apiVersion: self::TEST_API_VERSION,
             isPrivateApp: true,
         );
         $this->expectException(PrivateAppException::class);
@@ -223,6 +227,7 @@ final class ContextTest extends BaseTestCase
             scopes: ['sleepy', 'kitty'],
             hostName: $host,
             sessionStorage: new MockSessionStorage(),
+            apiVersion: self::TEST_API_VERSION,
         );
 
         $this->assertEquals($expectedHost, Context::$HOST_NAME);
@@ -249,6 +254,7 @@ final class ContextTest extends BaseTestCase
             scopes: ['sleepy', 'kitty'],
             hostName: 'not-a-host-!@#$%^&*()',
             sessionStorage: new MockSessionStorage(),
+            apiVersion: self::TEST_API_VERSION,
         );
     }
 
@@ -262,7 +268,7 @@ final class ContextTest extends BaseTestCase
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
-            apiVersion: ApiVersion::LATEST,
+            apiVersion: self::TEST_API_VERSION,
             isPrivateApp: false,
             customShopDomains: $domains,
         );

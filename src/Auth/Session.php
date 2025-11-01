@@ -145,11 +145,11 @@ class Session
      *
      * @return bool
      */
-    public function isValid(): bool
+    public function isValid(bool $includeExpired = false): bool
     {
         return (Context::$SCOPES->equals($this->scope) &&
             $this->accessToken &&
-            (!$this->expires || ($this->expires > new DateTime()))
+            ($includeExpired || !$this->expires || ($this->expires > new DateTime()))
         );
     }
 }

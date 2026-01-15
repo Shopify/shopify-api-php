@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Sleep before a retry rather than after each try.
 
 ## v6.0.0 - 2025-10-28
 - ⚠️ [Breaking] Remove `ApiVersion::LATEST` constant to prevent semver violations. The `apiVersion` parameter is now required in `Context::initialize()`. Developers must explicitly specify API versions. See the [migration guide](BREAKING_CHANGES_FOR_V6.md#removal-of-apiversionlatest-constant) for details.

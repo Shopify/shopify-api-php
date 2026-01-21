@@ -7,6 +7,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v6.1.0 - 2026-01-16
+- [#450](https://github.com/Shopify/shopify-api-php/pull/450) [Minor] Add support for 2026-01 API version
+
 ## v6.0.0 - 2025-10-28
 - ⚠️ [Breaking] Remove `ApiVersion::LATEST` constant to prevent semver violations. The `apiVersion` parameter is now required in `Context::initialize()`. Developers must explicitly specify API versions. See the [migration guide](BREAKING_CHANGES_FOR_V6.md#removal-of-apiversionlatest-constant) for details.
 - [#425](https://github.com/Shopify/shopify-api-php/pull/425) [Patch] Add compliance webhook topics

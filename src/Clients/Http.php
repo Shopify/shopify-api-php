@@ -213,6 +213,9 @@ class Http
         $currentTries = 0;
         do {
             $currentTries++;
+            if ($currentTries > 1) {
+                usleep((int)($retryAfter * 1000000));
+            }
 
             $response = HttpResponse::fromResponse($client->sendRequest($request));
 
@@ -220,8 +223,6 @@ class Http
                 $retryAfter = $response->hasHeader(HttpHeaders::RETRY_AFTER)
                     ? $response->getHeaderLine(HttpHeaders::RETRY_AFTER)
                     : Context::$RETRY_TIME_IN_SECONDS;
-
-                usleep((int)($retryAfter * 1000000));
             } else {
                 break;
             }

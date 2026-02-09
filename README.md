@@ -1,3 +1,5 @@
+**Note:** We've released a new experimental package for PHP. Please read [rethinking our support for PHP & Python packages](https://community.shopify.dev/t/rethinking-support-for-php-python-packages/28325). The new PHP package supports the latest Shopify platform features and we'd love your feedback. Please see [shopify-app-php](packagist.org/packages/shopify/shopify-app-php) to get started.
+
 # Shopify API Library for PHP
 
 <!-- ![Build Status]() -->

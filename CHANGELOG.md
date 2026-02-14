@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- Sleep before a retry rather than after each try.
 
 ## v6.1.0 - 2026-01-21
 - [#450](https://github.com/Shopify/shopify-api-php/pull/450) [Minor] Add support for 2026-01 API version

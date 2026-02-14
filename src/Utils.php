@@ -116,7 +116,7 @@ final class Utils
 
         return hash_equals(
             $params['hmac'],
-            hash_hmac('sha256', self::buildQueryString($params), $secret)
+            hash_hmac('sha256', urldecode(self::buildQueryString($params)), $secret)
         );
     }
 

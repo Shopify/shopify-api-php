@@ -147,7 +147,7 @@ final class UtilsTest extends BaseTestCase
         $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
         $params = Utils::getQueryParams($url);
         $secret = 'test-secret';
-        $params['hmac'] = hash_hmac('sha256', http_build_query($params), $secret);
+        $params['hmac'] = hash_hmac('sha256', urldecode(http_build_query($params)), $secret);
 
         $this->assertEquals(true, Utils::validateHmac(
             $params,
@@ -161,7 +161,7 @@ final class UtilsTest extends BaseTestCase
         $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&&shop=some-shop.myshopify.com&state=0.6784241404160823&timestamp=1337178173';
         $params = Utils::getQueryParams($url);
         $secret = 'test-secret';
-        $params['hmac'] = hash_hmac('sha256', http_build_query($params), $secret);
+        $params['hmac'] = hash_hmac('sha256', urldecode(http_build_query($params)), $secret);
 
         // Check with a wrong secret
         $this->assertEquals(false, Utils::validateHmac(
@@ -173,6 +173,31 @@ final class UtilsTest extends BaseTestCase
         $params['foo'] = 'bar';
         $this->assertEquals(false, Utils::validateHmac(
             $params,
+            $secret
+        ));
+    }
+
+    public function testHmacOfEncodedUriComponents()
+    {
+        $state = base64_encode(json_encode(['id' => '0123456789', 'for' => 'some-shop']));
+        // phpcs:ignore
+        $url = 'https://123456.ngrok.io/auth/shopify/callback?code=0907a61c0c8d55e99db179b68161bc00&state=' . $state . '&shop=some-shop.myshopify.com&timestamp=1337178173';
+        $params = Utils::getQueryParams($url);
+        $secret = 'test-secret';
+
+        $paramsWrong = $params + ['hmac' => hash_hmac('sha256', http_build_query($params), $secret)];
+        $paramsRight = $params + ['hmac' => hash_hmac('sha256', urldecode(http_build_query($params)), $secret)];
+
+        // Check with the encoded version of the URI (wrong)
+        $this->assertEquals(false, Utils::validateHmac(
+            $paramsWrong,
+            $secret
+        ));
+
+
+        // Check with the decoded version of the URI
+        $this->assertEquals(true, Utils::validateHmac(
+            $paramsRight,
             $secret
         ));
     }

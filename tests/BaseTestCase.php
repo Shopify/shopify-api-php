@@ -24,6 +24,9 @@ class BaseTestCase extends TestCase
      */
     protected const TEST_API_VERSION = ApiVersion::OCTOBER_2025;
 
+    protected const TEST_API_SECRET = '7008c5f4da4718b9b45d26d3fcbbb157';
+    protected const TEST_API_SECRET_ALT = 'b4f15c37e89a23d6c701f4e82a9d5f0b';
+
     /** @var string */
     protected $domain = 'test-shop.myshopify.io';
     /** @var string */
@@ -34,7 +37,7 @@ class BaseTestCase extends TestCase
         // Initialize Context before each test
         Context::initialize(
             apiKey: 'ash',
-            apiSecretKey: 'steffi',
+            apiSecretKey: self::TEST_API_SECRET,
             scopes: ['sleepy', 'kitty'],
             hostName: 'www.my-friends-cats.com',
             sessionStorage: new MockSessionStorage(),

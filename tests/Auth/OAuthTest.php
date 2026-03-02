@@ -32,7 +32,7 @@ final class OAuthTest extends BaseTestCase
     /** @var array */
     private $codeRequestBody = [
         'client_id' => 'ash',
-        'client_secret' => 'steffi',
+        'client_secret' => self::TEST_API_SECRET,
         'code' => 'real_code',
     ];
 
@@ -145,7 +145,7 @@ final class OAuthTest extends BaseTestCase
             'shop' => $this->domain,
             'state' => '1234',
             'code' => 'real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $actualSession = OAuth::callback($mockCookies, $mockQuery, $cookieCallback);
 
@@ -260,7 +260,7 @@ final class OAuthTest extends BaseTestCase
         ];
         $mockQuery = [
             'state' => '1234',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectException(InvalidOAuthException::class);
         $this->expectExceptionMessage('Invalid OAuth callback.');
@@ -277,7 +277,7 @@ final class OAuthTest extends BaseTestCase
             'shop' => 'not-a-valid.domain',
             'state' => '1234',
             'code' => 'real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectException(InvalidOAuthException::class);
         $this->expectExceptionMessage('Invalid OAuth callback.');
@@ -293,7 +293,7 @@ final class OAuthTest extends BaseTestCase
         $mockQuery = [
             'shop' => $this->domain,
             'code' => 'real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectException(InvalidOAuthException::class);
         $this->expectExceptionMessage('Invalid OAuth callback.');
@@ -310,7 +310,7 @@ final class OAuthTest extends BaseTestCase
             'shop' => $this->domain,
             'state' => '4321',
             'code' => 'real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectException(InvalidOAuthException::class);
         $this->expectExceptionMessage('Invalid OAuth callback.');
@@ -326,7 +326,7 @@ final class OAuthTest extends BaseTestCase
         $mockQuery = [
             'shop' => $this->domain,
             'state' => '1234',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectException(InvalidOAuthException::class);
         $this->expectExceptionMessage('Invalid OAuth callback.');
@@ -343,7 +343,7 @@ final class OAuthTest extends BaseTestCase
             'shop' => $this->domain,
             'state' => '1234',
             'code' => 'not_the_real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectException(InvalidOAuthException::class);
         $this->expectExceptionMessage('Invalid OAuth callback.');
@@ -362,7 +362,7 @@ final class OAuthTest extends BaseTestCase
             'shop' => $this->domain,
             'state' => '1234',
             'code' => 'real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectException(PrivateAppException::class);
         OAuth::callback($mockCookies, $mockQuery);
@@ -392,7 +392,7 @@ final class OAuthTest extends BaseTestCase
             'shop' => $this->domain,
             'state' => '1234',
             'code' => 'real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
 
         $storage->failNextCalls('store');
@@ -422,7 +422,7 @@ final class OAuthTest extends BaseTestCase
             'shop' => $this->domain,
             'state' => '1234',
             'code' => 'real_code',
-            'hmac' => '0b19b6077391191829e442a97aafd7730323041e585f738415a77894c41c0a5b',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
         ];
         $this->expectexception(HttpRequestException::class);
         OAuth::callback($mockCookies, $mockQuery);

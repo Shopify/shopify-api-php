@@ -24,7 +24,7 @@ final class ContextTest extends BaseTestCase
     {
         Context::initialize(
             apiKey: 'ash',
-            apiSecretKey: 'steffi',
+            apiSecretKey: self::TEST_API_SECRET,
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
@@ -32,7 +32,7 @@ final class ContextTest extends BaseTestCase
         );
 
         $this->assertEquals('ash', Context::$API_KEY);
-        $this->assertEquals('steffi', Context::$API_SECRET_KEY);
+        $this->assertEquals(self::TEST_API_SECRET, Context::$API_SECRET_KEY);
         $this->assertEquals(new Scopes(['sleepy', 'kitty']), Context::$SCOPES);
         $this->assertEquals('my-friends-cats', Context::$HOST_NAME);
         $this->assertEquals('https', Context::$HOST_SCHEME);
@@ -49,7 +49,7 @@ final class ContextTest extends BaseTestCase
     {
         Context::initialize(
             apiKey: 'tuck',
-            apiSecretKey: 'rocky',
+            apiSecretKey: self::TEST_API_SECRET_ALT,
             scopes: ['silly', 'doggo'],
             hostName: 'yay-for-doggos',
             sessionStorage: new MockSessionStorage(),
@@ -57,7 +57,7 @@ final class ContextTest extends BaseTestCase
         );
 
         $this->assertEquals('tuck', Context::$API_KEY);
-        $this->assertEquals('rocky', Context::$API_SECRET_KEY);
+        $this->assertEquals(self::TEST_API_SECRET_ALT, Context::$API_SECRET_KEY);
         $this->assertEquals(new Scopes(['silly', 'doggo']), Context::$SCOPES);
         $this->assertEquals('yay-for-doggos', Context::$HOST_NAME);
     }
@@ -96,7 +96,7 @@ final class ContextTest extends BaseTestCase
     {
         Context::initialize(
             apiKey: 'ash',
-            apiSecretKey: 'steffi',
+            apiSecretKey: self::TEST_API_SECRET,
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),
@@ -223,7 +223,7 @@ final class ContextTest extends BaseTestCase
     {
         Context::initialize(
             apiKey: 'ash',
-            apiSecretKey: 'steffi',
+            apiSecretKey: self::TEST_API_SECRET,
             scopes: ['sleepy', 'kitty'],
             hostName: $host,
             sessionStorage: new MockSessionStorage(),
@@ -250,7 +250,7 @@ final class ContextTest extends BaseTestCase
         $this->expectException(InvalidArgumentException::class);
         Context::initialize(
             apiKey: 'ash',
-            apiSecretKey: 'steffi',
+            apiSecretKey: self::TEST_API_SECRET,
             scopes: ['sleepy', 'kitty'],
             hostName: 'not-a-host-!@#$%^&*()',
             sessionStorage: new MockSessionStorage(),
@@ -264,7 +264,7 @@ final class ContextTest extends BaseTestCase
 
         Context::initialize(
             apiKey: 'ash',
-            apiSecretKey: 'steffi',
+            apiSecretKey: self::TEST_API_SECRET,
             scopes: ['sleepy', 'kitty'],
             hostName: 'my-friends-cats',
             sessionStorage: new MockSessionStorage(),

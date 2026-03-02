@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- [#456](https://github.com/Shopify/shopify-api-php/pull/456) [Patch] Update firebase/php-jwt to ^7.0 to address security vulnerability (GHSA-2x45-7fc3-mxwq)
 
 ## v6.1.0 - 2026-01-21
 - [#450](https://github.com/Shopify/shopify-api-php/pull/450) [Minor] Add support for 2026-01 API version

@@ -94,6 +94,6 @@ class HttpDelivery extends DeliveryMethod
      */
     protected function queryEndpoint(string $address): string
     {
-        return "{callbackUrl: \"$address\"}";
+        return "callbackUrl: \"$address\"";
     }
 }

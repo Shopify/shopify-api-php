@@ -13,7 +13,7 @@ The `ApiVersion::LATEST` constant has been removed to prevent semantic versionin
 $apiVersion = ApiVersion::LATEST;
 
 // After (v6+)
-$apiVersion = '2025-07'; // Explicitly specify the version you want to use
+$apiVersion = '2026-04'; // Explicitly specify the version you want to use
 ```
 
 **In your Context::initialize():**
@@ -38,7 +38,7 @@ Context::initialize(
     scopes: $_ENV['SHOPIFY_APP_SCOPES'],
     hostName: $_ENV['SHOPIFY_APP_HOST_NAME'],
     sessionStorage: new FileSessionStorage('/tmp/php_sessions'),
-    apiVersion: '2025-07', // Now required - explicitly specify the version
+    apiVersion: '2026-04', // Now required - explicitly specify the version
 );
 ```
 
@@ -51,10 +51,11 @@ use Shopify\ApiVersion;
 
 // Available constants (as of this release):
 ApiVersion::UNSTABLE      // "unstable"
+ApiVersion::APRIL_2026    // "2026-04"
+ApiVersion::JANUARY_2026  // "2026-01"
+ApiVersion::OCTOBER_2025  // "2025-10"
 ApiVersion::JULY_2025     // "2025-07"
 ApiVersion::APRIL_2025    // "2025-04"
-ApiVersion::JANUARY_2025  // "2025-01"
-ApiVersion::OCTOBER_2024  // "2024-10"
 // ... and older versions
 ```
 
@@ -63,7 +64,7 @@ Or you can use string literals directly:
 ```php
 Context::initialize(
     // ... other parameters
-    apiVersion: '2025-07',
+    apiVersion: '2026-04',
 );
 ```
 

@@ -21,7 +21,7 @@ public const LATEST = self::JULY_2025;  // Update from previous latest
 
 **Naming Convention:**
 - Format: `{MONTH}_{YEAR}`
-- Examples: `APRIL_2025`, `JULY_2025`, `OCTOBER_2025`
+- Examples: `OCTOBER_2025`, `JANUARY_2026`, `APRIL_2026`
 
 ## Step 2: Create Directory Structure
 

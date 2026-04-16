@@ -36,6 +36,7 @@ final class ContextTest extends BaseTestCase
         $this->assertEquals(new Scopes(['sleepy', 'kitty']), Context::$SCOPES);
         $this->assertEquals('my-friends-cats', Context::$HOST_NAME);
         $this->assertEquals('https', Context::$HOST_SCHEME);
+        $this->assertEquals(self::TEST_API_VERSION, Context::$API_VERSION);
 
         // This should not trigger the exception
         Context::throwIfUninitialized();

@@ -74,4 +74,8 @@ class ApiVersion
      * @var string
      */
     public const JANUARY_2026 = "2026-01";
+    /**
+     * @var string
+     */
+    public const APRIL_2026 = "2026-04";
 }

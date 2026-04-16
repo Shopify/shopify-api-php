@@ -22,7 +22,7 @@ class BaseTestCase extends TestCase
     /**
      * API version to use for tests. Uses the latest available version.
      */
-    protected const TEST_API_VERSION = ApiVersion::OCTOBER_2025;
+    protected const TEST_API_VERSION = ApiVersion::APRIL_2026;
 
     protected const TEST_API_SECRET = '7008c5f4da4718b9b45d26d3fcbbb157';
     protected const TEST_API_SECRET_ALT = 'b4f15c37e89a23d6c701f4e82a9d5f0b';

@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- [Patch] Fix `Session::isValid()` to use inclusion-based scope validation so sessions with all configured scopes plus additional granted scopes are not incorrectly rejected. Aligns PHP SDK behaviour with the Node SDK.
+
 ## v6.1.1 - 2026-03-02
 - [#456](https://github.com/Shopify/shopify-api-php/pull/456) [Patch] Update firebase/php-jwt to ^7.0 to address security vulnerability (GHSA-2x45-7fc3-mxwq)
 

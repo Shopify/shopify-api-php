@@ -99,7 +99,22 @@ final class SessionTest extends BaseTestCase
         $this->assertTrue($session->isValid());
     }
 
-    public function testIsValidReturnsFalseIfScopesHaveChanged()
+    public function testIsValidReturnsTrueWhenSessionHasAdditionalGrantedScopes()
+    {
+        // Sessions with all configured scopes PLUS extra granted scopes must still be valid.
+        // This mirrors the Node SDK's inclusion-based scope check and prevents
+        // Utils::loadOfflineSession() from returning null for sessions that include optional scopes.
+        Context::$SCOPES = new Scopes('read_products');
+
+        $session = new Session('12345', 'my-shop.myshopify.io', true, '1234');
+        $session->setScope('read_products,write_orders');
+        $session->setExpires(strtotime('+10 minutes'));
+        $session->setAccessToken('totally_real_token');
+
+        $this->assertTrue($session->isValid());
+    }
+
+    public function testIsValidReturnsFalseIfScopesAreMissing()
     {
         Context::$SCOPES = new Scopes('read_products,write_orders');
 

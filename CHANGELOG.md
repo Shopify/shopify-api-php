@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 - [Deprecated] This package is deprecated in favor of [`shopify/shopify-app-php`](https://packagist.org/packages/shopify/shopify-app-php), which supports the latest Shopify platform features. It is now marked abandoned via the Composer `abandoned` flag. It will keep working for existing users, but no new features or security fixes are planned. See the [shopify-app-php README](https://github.com/Shopify/shopify-app-php#readme) to upgrade.
+- [Patch] Cast `Content-Length` header value to `string` in `Http::request()` to avoid a `guzzlehttp/psr7` 2.11 deprecation (`Passing int to MessageInterface::withHeader() is deprecated`) and stay compatible with `guzzlehttp/psr7` 3.0
 
 ## v6.1.1 - 2026-03-02
 - [#456](https://github.com/Shopify/shopify-api-php/pull/456) [Patch] Update firebase/php-jwt to ^7.0 to address security vulnerability (GHSA-2x45-7fc3-mxwq)

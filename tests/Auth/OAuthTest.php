@@ -8,6 +8,7 @@ use Shopify\Exception\CookieNotFoundException;
 use Exception;
 use Firebase\JWT\JWT;
 use Shopify\Auth\OAuth;
+use Shopify\Auth\RequestedTokenType;
 use Shopify\Auth\Session;
 use Shopify\Auth\AccessTokenOnlineUserInfo;
 use Shopify\Auth\OAuthCookie;
@@ -58,6 +59,15 @@ final class OAuthTest extends BaseTestCase
     private $offlineResponse = [
         'access_token' => 'some access token',
         'scope' => 'read_products',
+    ];
+
+    /** @var array */
+    private $offlineExpiringResponse = [
+        'access_token' => 'some access token',
+        'scope' => 'read_products',
+        'expires_in' => 3600,
+        'refresh_token' => 'some refresh token',
+        'refresh_token_expires_in' => 7776000,
     ];
 
     /**
@@ -519,6 +529,212 @@ final class OAuthTest extends BaseTestCase
         $this->expectExceptionMessage('Missing headers argument for embedded app');
         $currentSessionId = OAuth::getCurrentSessionId([], [], false);
         $this->assertEquals('offline_exampleshop.myshopify.com', $currentSessionId);
+    }
+
+    /**
+     * @dataProvider tokenExchangeProvider
+     */
+    public function testTokenExchange(bool $isOnline, bool $expiring)
+    {
+        $storage = new MockSessionStorage();
+        Context::$SESSION_STORAGE = $storage;
+
+        $requestedTokenType = $isOnline
+            ? RequestedTokenType::ONLINE_ACCESS_TOKEN
+            : RequestedTokenType::OFFLINE_ACCESS_TOKEN;
+
+        $expectedBody = [
+            'client_id' => 'ash',
+            'client_secret' => self::TEST_API_SECRET,
+            'grant_type' => OAuth::TOKEN_EXCHANGE_GRANT_TYPE,
+            'subject_token' => 'a session token',
+            'subject_token_type' => OAuth::ID_TOKEN_TYPE,
+            'requested_token_type' => $requestedTokenType,
+        ];
+        if (!$isOnline) {
+            $expectedBody['expiring'] = $expiring ? '1' : '0';
+        }
+
+        $response = $isOnline ? $this->onlineResponse : (
+            $expiring ? $this->offlineExpiringResponse : $this->offlineResponse
+        );
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $response),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($expectedBody),
+            ),
+        ]);
+
+        $session = OAuth::tokenExchange($this->domain, 'a session token', $requestedTokenType, $expiring);
+
+        $this->assertEquals('some access token', $session->getAccessToken());
+        $this->assertEquals('read_products', $session->getScope());
+        $this->assertEquals($isOnline, $session->isOnline());
+        $this->assertNotNull($storage->loadSession($session->getId()));
+
+        if ($isOnline) {
+            $this->assertEquals(OAuth::getJwtSessionId($this->domain, '1'), $session->getId());
+            $this->assertNotNull($session->getOnlineAccessInfo());
+        } else {
+            $this->assertEquals(OAuth::getOfflineSessionId($this->domain), $session->getId());
+            if ($expiring) {
+                $this->assertEquals('some refresh token', $session->getRefreshToken());
+                $this->assertNotNull($session->getExpires());
+                $this->assertNotNull($session->getRefreshTokenExpiresAt());
+            } else {
+                $this->assertNull($session->getRefreshToken());
+                $this->assertNull($session->getExpires());
+            }
+        }
+    }
+
+    public function tokenExchangeProvider(): array
+    {
+        return [
+            'Online'                     => [true, false],
+            'Offline, non-expiring'      => [false, false],
+            'Offline, expiring'          => [false, true],
+        ];
+    }
+
+    public function testTokenExchangeFailsForPrivateApp()
+    {
+        Context::$IS_PRIVATE_APP = true;
+
+        $this->expectException(PrivateAppException::class);
+        OAuth::tokenExchange($this->domain, 'a session token', RequestedTokenType::OFFLINE_ACCESS_TOKEN);
+    }
+
+    public function testTokenExchangeFailsIfRequestFails()
+    {
+        $expectedBody = [
+            'client_id' => 'ash',
+            'client_secret' => self::TEST_API_SECRET,
+            'grant_type' => OAuth::TOKEN_EXCHANGE_GRANT_TYPE,
+            'subject_token' => 'a session token',
+            'subject_token_type' => OAuth::ID_TOKEN_TYPE,
+            'requested_token_type' => RequestedTokenType::OFFLINE_ACCESS_TOKEN,
+            'expiring' => '0',
+        ];
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(400, ''),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($expectedBody),
+            ),
+        ]);
+
+        $this->expectException(HttpRequestException::class);
+        OAuth::tokenExchange($this->domain, 'a session token', RequestedTokenType::OFFLINE_ACCESS_TOKEN);
+    }
+
+    public function testRefreshAccessToken()
+    {
+        $storage = new MockSessionStorage();
+        Context::$SESSION_STORAGE = $storage;
+
+        $session = new Session(OAuth::getOfflineSessionId($this->domain), $this->domain, false, '');
+        $session->setAccessToken('old access token');
+        $session->setScope('read_products');
+        $session->setRefreshToken('old refresh token');
+
+        $expectedBody = [
+            'client_id' => 'ash',
+            'client_secret' => self::TEST_API_SECRET,
+            'grant_type' => OAuth::REFRESH_TOKEN_GRANT_TYPE,
+            'refresh_token' => 'old refresh token',
+        ];
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $this->offlineExpiringResponse),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($expectedBody),
+            ),
+        ]);
+
+        $newSession = OAuth::refreshAccessToken($session);
+
+        $this->assertEquals($session->getId(), $newSession->getId());
+        $this->assertEquals('some access token', $newSession->getAccessToken());
+        $this->assertEquals('some refresh token', $newSession->getRefreshToken());
+        $this->assertNotNull($newSession->getExpires());
+        $this->assertNotNull($newSession->getRefreshTokenExpiresAt());
+        $this->assertNotNull($storage->loadSession($newSession->getId()));
+    }
+
+    public function testRefreshAccessTokenFailsForOnlineSession()
+    {
+        $session = new Session('some-id', $this->domain, true, '');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The refresh token grant is only supported for offline sessions');
+        OAuth::refreshAccessToken($session);
+    }
+
+    public function testRefreshAccessTokenFailsWithoutRefreshToken()
+    {
+        $session = new Session(OAuth::getOfflineSessionId($this->domain), $this->domain, false, '');
+        $session->setAccessToken('old access token');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Session does not have a refresh token to use for this grant');
+        OAuth::refreshAccessToken($session);
+    }
+
+    public function testCallbackWithExpiringOfflineAccessToken()
+    {
+        $storage = new MockSessionStorage();
+        Context::$SESSION_STORAGE = $storage;
+
+        /** @var OAuthCookie[] */
+        $cookiesSet = [];
+        $cookieCallback = function (OAuthCookie $cookie) use (&$cookiesSet) {
+            $cookiesSet[$cookie->getName()] = $cookie;
+            return !empty($cookie->getValue());
+        };
+
+        $expectedBody = array_merge($this->codeRequestBody, ['expiring' => '1']);
+
+        $this->mockTransportRequests([
+            new MockRequest(
+                $this->buildMockHttpResponse(200, $this->offlineExpiringResponse),
+                "https://test-shop.myshopify.io/admin/oauth/access_token",
+                "POST",
+                "^Shopify Admin API Library for PHP v",
+                ['Content-Type: application/json'],
+                json_encode($expectedBody),
+            ),
+        ]);
+
+        $mockCookies = [
+            OAuth::STATE_SIG_COOKIE_NAME => hash_hmac('sha256', $this->state, Context::$API_SECRET_KEY),
+            OAuth::STATE_COOKIE_NAME => $this->state,
+        ];
+        $mockQuery = [
+            'shop' => $this->domain,
+            'state' => '1234',
+            'code' => 'real_code',
+            'hmac' => 'b104858f49be2f9dda979fb07f107e0ab337e0e0f32682560dbe9f03c25b5129',
+        ];
+
+        $session = OAuth::callback($mockCookies, $mockQuery, $cookieCallback, true);
+
+        $this->assertEquals('some refresh token', $session->getRefreshToken());
+        $this->assertNotNull($session->getExpires());
+        $this->assertNotNull($session->getRefreshTokenExpiresAt());
     }
 
     /**

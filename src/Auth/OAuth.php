@@ -33,6 +33,9 @@ class OAuth
     public const SESSION_ID_COOKIE_NAME = 'shopify_session_id';
     public const SESSION_ID_SIG_COOKIE_NAME = 'shopify_session_id_sig';
     public const ACCESS_TOKEN_POST_PATH = '/admin/oauth/access_token';
+    public const TOKEN_EXCHANGE_GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:token-exchange';
+    public const REFRESH_TOKEN_GRANT_TYPE = 'refresh_token';
+    public const ID_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:id_token';
 
     /**
      * Begins the OAuth process by setting the appropriate cookies, and returns the authorization url
@@ -96,11 +99,15 @@ class OAuth
      * Performs the OAuth callback steps, checking the returned parameters and fetching the access token, preparing the
      * session for further usage. If successful, the updated session is returned.
      *
-     * @param array         $cookies           HTTP request cookies, from which the OAuth session will be loaded. This
-     *                                         must be a hash of cookie name => value pairs. Value will be forcibly cast
-     *                                         to string so objects that implement toString will also work.
-     * @param array         $query             The HTTP request URL query values.
-     * @param null|callable $setCookieFunction An optional override for setting cookie in response.
+     * @param array         $cookies                    HTTP request cookies, from which the OAuth session will be
+     *                                                  loaded. This must be a hash of cookie name => value pairs.
+     *                                                  Value will be forcibly cast to string so objects that
+     *                                                  implement toString will also work.
+     * @param array         $query                      The HTTP request URL query values.
+     * @param null|callable $setCookieFunction          An optional override for setting cookie in response.
+     * @param bool          $expiringOfflineAccessToken Whether to request an expiring offline access token (with a
+     *                                                  refresh token) instead of a non-expiring one. Has no effect
+     *                                                  for online sessions.
      *
      * @return Session
      * @throws HttpRequestException
@@ -111,8 +118,12 @@ class OAuth
      * @throws SessionStorageException
      * @throws UninitializedContextException
      */
-    public static function callback(array $cookies, array $query, ?callable $setCookieFunction = null): Session
-    {
+    public static function callback(
+        array $cookies,
+        array $query,
+        ?callable $setCookieFunction = null,
+        bool $expiringOfflineAccessToken = false
+    ): Session {
         Context::throwIfUninitialized();
         Context::throwIfPrivateApp('OAuth is not allowed for private apps');
 
@@ -122,7 +133,7 @@ class OAuth
         }
 
         $sanitizedShop = Utils::sanitizeShopDomain($query['shop'] ?? '');
-        $response = self::fetchAccessToken($query, $sanitizedShop);
+        $response = self::fetchAccessToken($query, $sanitizedShop, $expiringOfflineAccessToken);
 
         $isOnline = $response instanceof AccessTokenOnlineResponse;
 
@@ -143,6 +154,10 @@ class OAuth
                 $jwtSessionId = self::getJwtSessionId($session->getShop(), $session->getOnlineAccessInfo()->getId());
                 $session = $session->clone($jwtSessionId);
             }
+        } else {
+            // Offline sessions only carry expiry/refresh token data when the authorization code request included
+            // `expiring=1`. For non-expiring offline tokens, these fields are simply absent from the response.
+            self::applyOfflineTokenLifecycle($session, $response);
         }
 
         $sessionStored = Context::$SESSION_STORAGE->storeSession($session);
@@ -165,6 +180,149 @@ class OAuth
         }
 
         return $session;
+    }
+
+    /**
+     * Exchanges a session token (the Shopify id token provided by App Bridge) for an access token, using the
+     * OAuth 2.0 token exchange grant. This is the recommended way for embedded apps to authenticate, since it
+     * doesn't require redirecting the merchant through the authorization code grant flow.
+     *
+     * @param string $shop               A Shopify domain name or hostname
+     * @param string $sessionToken       The session token (id token) provided by App Bridge, either from the
+     *                                   `Authorization` header or the `id_token` URL param
+     * @param string $requestedTokenType The type of token being requested, one of the RequestedTokenType constants
+     * @param bool   $expiring           Whether the requested offline access token should be expiring (with a
+     *                                   refresh token). Has no effect when requesting an online access token.
+     *
+     * @return Session
+     * @throws HttpRequestException
+     * @throws PrivateAppException
+     * @throws SessionStorageException
+     * @throws UninitializedContextException
+     */
+    public static function tokenExchange(
+        string $shop,
+        string $sessionToken,
+        string $requestedTokenType,
+        bool $expiring = false
+    ): Session {
+        Context::throwIfUninitialized();
+        Context::throwIfPrivateApp('OAuth is not allowed for private apps');
+
+        $sanitizedShop = Utils::sanitizeShopDomain($shop);
+        if (!isset($sanitizedShop)) {
+            throw new InvalidArgumentException("Invalid shop domain: $shop");
+        }
+
+        $post = [
+            'client_id' => Context::$API_KEY,
+            'client_secret' => Context::$API_SECRET_KEY,
+            'grant_type' => self::TOKEN_EXCHANGE_GRANT_TYPE,
+            'subject_token' => $sessionToken,
+            'subject_token_type' => self::ID_TOKEN_TYPE,
+            'requested_token_type' => $requestedTokenType,
+        ];
+
+        if ($requestedTokenType === RequestedTokenType::OFFLINE_ACCESS_TOKEN) {
+            $post['expiring'] = $expiring ? '1' : '0';
+        }
+
+        $client = new Http($sanitizedShop);
+        $response = self::requestAccessToken($client, $post);
+        if ($response->getStatusCode() !== 200) {
+            throw new HttpRequestException("Failed to exchange token: {$response->getDecodedBody()}");
+        }
+
+        $body = $response->getDecodedBody();
+        if (array_key_exists('associated_user', $body) && $body['associated_user']) {
+            $tokenResponse = self::buildAccessTokenOnlineResponse($body);
+        } else {
+            $tokenResponse = self::buildAccessTokenResponse($body);
+        }
+
+        $isOnline = $tokenResponse instanceof AccessTokenOnlineResponse;
+        $sessionId = $isOnline
+            ? self::getJwtSessionId($sanitizedShop, $tokenResponse->getAssociatedUser()->getId())
+            : self::getOfflineSessionId($sanitizedShop);
+
+        $session = new Session($sessionId, $sanitizedShop, $isOnline, '');
+        $session->setAccessToken($tokenResponse->getAccessToken());
+        $session->setScope($tokenResponse->getScope());
+
+        if ($isOnline) {
+            /** @var AccessTokenOnlineResponse $tokenResponse */
+            $session->setExpires(time() + $tokenResponse->getExpiresIn());
+            $session->setOnlineAccessInfo($tokenResponse->getAssociatedUser());
+        } else {
+            self::applyOfflineTokenLifecycle($session, $tokenResponse);
+        }
+
+        $sessionStored = Context::$SESSION_STORAGE->storeSession($session);
+        if (!$sessionStored) {
+            throw new SessionStorageException(
+                'OAuth Session could not be saved. Please check your session storage functionality.',
+            );
+        }
+
+        return $session;
+    }
+
+    /**
+     * Uses a session's refresh token to obtain a new access token for an expiring offline access token, without
+     * requiring merchant interaction. Shopify rotates the refresh token on every use, so the returned session's
+     * refresh token must be persisted; the previous refresh token becomes unusable immediately.
+     *
+     * @param Session $session An offline session with a refresh token, as set by `tokenExchange` or `callback`
+     *
+     * @return Session The updated session, with a new access token, refresh token, and expiry times
+     * @throws HttpRequestException
+     * @throws InvalidArgumentException
+     * @throws PrivateAppException
+     * @throws SessionStorageException
+     * @throws UninitializedContextException
+     */
+    public static function refreshAccessToken(Session $session): Session
+    {
+        Context::throwIfUninitialized();
+        Context::throwIfPrivateApp('OAuth is not allowed for private apps');
+
+        if ($session->isOnline()) {
+            throw new InvalidArgumentException('The refresh token grant is only supported for offline sessions');
+        }
+
+        $refreshToken = $session->getRefreshToken();
+        if (!$refreshToken) {
+            throw new InvalidArgumentException('Session does not have a refresh token to use for this grant');
+        }
+
+        $post = [
+            'client_id' => Context::$API_KEY,
+            'client_secret' => Context::$API_SECRET_KEY,
+            'grant_type' => self::REFRESH_TOKEN_GRANT_TYPE,
+            'refresh_token' => $refreshToken,
+        ];
+
+        $client = new Http($session->getShop());
+        $response = self::requestAccessToken($client, $post);
+        if ($response->getStatusCode() !== 200) {
+            throw new HttpRequestException("Failed to refresh access token: {$response->getDecodedBody()}");
+        }
+
+        $tokenResponse = self::buildAccessTokenResponse($response->getDecodedBody());
+
+        $newSession = $session->clone($session->getId());
+        $newSession->setAccessToken($tokenResponse->getAccessToken());
+        $newSession->setScope($tokenResponse->getScope());
+        self::applyOfflineTokenLifecycle($newSession, $tokenResponse);
+
+        $sessionStored = Context::$SESSION_STORAGE->storeSession($newSession);
+        if (!$sessionStored) {
+            throw new SessionStorageException(
+                'OAuth Session could not be saved. Please check your session storage functionality.',
+            );
+        }
+
+        return $newSession;
     }
 
     /**
@@ -399,19 +557,24 @@ class OAuth
     /**
      * Fetches the access token for the given OAuth session, using the query parameters returned by Shopify
      *
-     * @param array  $query The URL query params from the OAuth callback
-     * @param string $shop  The request shop
+     * @param array  $query    The URL query params from the OAuth callback
+     * @param string $shop     The request shop
+     * @param bool   $expiring Whether to request an expiring offline access token (with a refresh token)
      *
      * @return AccessTokenResponse|AccessTokenOnlineResponse The access token exchanged for the OAuth code
      * @throws HttpRequestException
      */
-    private static function fetchAccessToken(array $query, string $shop)
+    private static function fetchAccessToken(array $query, string $shop, bool $expiring = false)
     {
         $post = [
             'client_id' => Context::$API_KEY,
             'client_secret' => Context::$API_SECRET_KEY,
             'code' => $query['code'],
         ];
+
+        if ($expiring) {
+            $post['expiring'] = '1';
+        }
 
         $client = new Http($shop);
         $response = self::requestAccessToken($client, $post);
@@ -461,7 +624,33 @@ class OAuth
      */
     private static function buildAccessTokenResponse(array $body): AccessTokenResponse
     {
-        return new AccessTokenResponse($body['access_token'], $body['scope']);
+        return new AccessTokenResponse(
+            $body['access_token'],
+            $body['scope'],
+            $body['expires_in'] ?? null,
+            $body['refresh_token'] ?? null,
+            $body['refresh_token_expires_in'] ?? null,
+        );
+    }
+
+    /**
+     * Applies expiry and refresh token data from an offline access token response to a session, when present.
+     * Non-expiring offline tokens simply won't have this data in their response.
+     *
+     * @param Session               $session  The offline session to update
+     * @param AccessTokenResponse   $response The token response returned by Shopify
+     */
+    private static function applyOfflineTokenLifecycle(Session $session, AccessTokenResponse $response): void
+    {
+        if ($response->getExpiresIn() !== null) {
+            $session->setExpires(time() + $response->getExpiresIn());
+        }
+        if ($response->getRefreshToken() !== null) {
+            $session->setRefreshToken($response->getRefreshToken());
+        }
+        if ($response->getRefreshTokenExpiresIn() !== null) {
+            $session->setRefreshTokenExpiresAt(time() + $response->getRefreshTokenExpiresIn());
+        }
     }
 
     /**

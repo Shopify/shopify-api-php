@@ -31,6 +31,8 @@ final class SessionTest extends BaseTestCase
             true,
         );
         $session->setOnlineAccessInfo($onlineAccessInfo);
+        $session->setRefreshToken('some_refresh_token');
+        $session->setRefreshTokenExpiresAt('January 26, 2021');
 
         $this->assertEquals('12345', $session->getId());
         $this->assertEquals('my-shop.myshopify.io', $session->getShop());
@@ -40,6 +42,8 @@ final class SessionTest extends BaseTestCase
         $this->assertTrue($session->isOnline());
         $this->assertEquals('24ssdf243u2ohfd21', $session->getAccessToken());
         $this->assertEquals($onlineAccessInfo, $session->getOnlineAccessInfo());
+        $this->assertEquals('some_refresh_token', $session->getRefreshToken());
+        $this->assertEquals('2021-01-26', $session->getRefreshTokenExpiresAt()->format('Y-m-d'));
     }
 
     public function testSetExpiresValues()
@@ -75,6 +79,8 @@ final class SessionTest extends BaseTestCase
             true,
         );
         $session->setOnlineAccessInfo($onlineAccessInfo);
+        $session->setRefreshToken('some_refresh_token');
+        $session->setRefreshTokenExpiresAt('January 26, 2021');
 
         $newSession = $session->clone('54321');
         $this->assertNotEquals($session->getId(), $newSession->getId());
@@ -85,6 +91,8 @@ final class SessionTest extends BaseTestCase
         $this->assertEquals($session->getExpires(), $newSession->getExpires());
         $this->assertEquals($session->getAccessToken(), $newSession->getAccessToken());
         $this->assertEquals($session->getOnlineAccessInfo(), $newSession->getOnlineAccessInfo());
+        $this->assertEquals($session->getRefreshToken(), $newSession->getRefreshToken());
+        $this->assertEquals($session->getRefreshTokenExpiresAt(), $newSession->getRefreshTokenExpiresAt());
     }
 
     public function testIsValidReturnsTrue()

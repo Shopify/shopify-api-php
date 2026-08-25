@@ -1,4 +1,5 @@
-**Note:** We've released a new experimental package for PHP. Please read [rethinking our support for PHP & Python packages](https://community.shopify.dev/t/rethinking-support-for-php-python-packages/28325). The new PHP package supports the latest Shopify platform features and we'd love your feedback. Please see [shopify-app-php](https://packagist.org/packages/shopify/shopify-app-php) to get started.
+> [!WARNING]
+> **This package is deprecated and no longer maintained.** Use [`shopify/shopify-app-php`](https://packagist.org/packages/shopify/shopify-app-php) instead, which supports the latest Shopify platform features. It will keep working for existing users, but no new features or security fixes are planned. See the [`shopify-app-php` README](https://github.com/Shopify/shopify-app-php#readme) to upgrade. For background, see [rethinking our support for PHP & Python packages](https://community.shopify.dev/t/rethinking-support-for-php-python-packages/28325).
 
 # Shopify API Library for PHP
 

@@ -382,7 +382,7 @@ abstract class Base extends stdClass
                         $diff[$key1] = $recursiveDiff;
                     }
                 } else {
-                    if ($value1 != $data2[$key1]) {
+                    if ($value1 != $data2[$key1] || $key1 === static::$PRIMARY_KEY) {
                         $diff[$key1] = $value1;
                     }
                 }

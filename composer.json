@@ -3,6 +3,7 @@
     "description": "Shopify API Library for PHP",
     "license": "MIT",
     "type": "library",
+    "abandoned": "shopify/shopify-app-php",
     "keywords": [
         "shopify",
         "node",

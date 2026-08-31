@@ -207,7 +207,7 @@ class Http
             $request = $request
                 ->withBody($stream)
                 ->withHeader(HttpHeaders::CONTENT_TYPE, $dataType)
-                ->withHeader(HttpHeaders::CONTENT_LENGTH, mb_strlen($bodyString));
+                ->withHeader(HttpHeaders::CONTENT_LENGTH, (string) mb_strlen($bodyString));
         }
 
         $currentTries = 0;

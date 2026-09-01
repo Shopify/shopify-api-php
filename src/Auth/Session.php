@@ -143,11 +143,18 @@ class Session
     /**
      * Checks whether this session has all of the necessary settings to make requests to Shopify.
      *
+     * A session is considered valid when its granted scopes include all of the app's configured
+     * scopes (the session may have additional granted scopes beyond those required), it has an
+     * access token, and it has not expired. This inclusion-based check aligns with the Node SDK's
+     * scope validation behaviour and avoids rejecting valid sessions that were granted optional or
+     * additional scopes beyond the configured set.
+     *
      * @return bool
      */
     public function isValid(): bool
     {
-        return (Context::$SCOPES->equals($this->scope) &&
+        $sessionScopes = new Scopes($this->scope ?? []);
+        return ($sessionScopes->has(Context::$SCOPES) &&
             $this->accessToken &&
             (!$this->expires || ($this->expires > new DateTime()))
         );

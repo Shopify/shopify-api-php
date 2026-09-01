@@ -177,6 +177,44 @@ final class UtilsTest extends BaseTestCase
         ));
     }
 
+    public function testValidSignature()
+    {
+        // phpcs:ignore
+        $url = 'https://123456.ngrok.io?extra%5B%5D=1&extra%5B%5D=2&shop=some-shop.myshopify.com&path_prefix=%2Fapps%2Fawesome_reviews&timestamp=1337178173';
+        $params = Utils::getQueryParams($url);
+        $secret = 'test-secret';
+        $sortedParams = 'extra=1,2path_prefix=/apps/awesome_reviewsshop=some-shop.myshopify.comtimestamp=1337178173';
+        $params['signature'] = hash_hmac('sha256', $sortedParams, $secret);
+
+        $this->assertEquals(true, Utils::validateSignature(
+            $params,
+            $secret
+        ));
+    }
+
+    public function testInvalidSignature()
+    {
+        // phpcs:ignore
+        $url = 'https://123456.ngrok.io?extra%5B%5D=1&extra%5B%5D=2&shop=some-shop.myshopify.com&path_prefix=%2Fapps%2Fawesome_reviews&timestamp=1337178173';
+        $params = Utils::getQueryParams($url);
+        $secret = 'test-secret';
+        $sortedParams = 'extra=1,2path_prefix=/apps/awesome_reviewsshop=some-shop.myshopify.comtimestamp=1337178173';
+        $params['signature'] = hash_hmac('sha256', $sortedParams, $secret);
+
+        // Check with a wrong secret
+        $this->assertEquals(false, Utils::validateHmac(
+            $params,
+            $secret . 'wrong'
+        ));
+
+        // Check with the correct secret but with an altered request
+        $params['foo'] = 'bar';
+        $this->assertEquals(false, Utils::validateHmac(
+            $params,
+            $secret
+        ));
+    }
+
     public function testGetValidQueryParams()
     {
         $params = [

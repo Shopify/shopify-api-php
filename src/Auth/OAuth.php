@@ -351,21 +351,27 @@ class OAuth
             $cookieSet = setcookie(
                 $signatureCookie->getName(),
                 $signatureCookie->getValue(),
-                $signatureCookie->getExpire(),
-                "",
-                "",
-                $signatureCookie->isSecure(),
-                $signatureCookie->isHttpOnly(),
+                [
+                    'expires' => $signatureCookie->getExpire(),
+                    'path' => "",
+                    'domain' => "",
+                    'secure' => $signatureCookie->isSecure(),
+                    'httponly' => $signatureCookie->isHttpOnly(),
+                    'samesite' => "none"
+                ],
             );
 
             $cookieSet = $cookieSet && setcookie(
                 $cookie->getName(),
                 $cookie->getValue(),
-                $cookie->getExpire(),
-                "",
-                "",
-                $cookie->isSecure(),
-                $cookie->isHttpOnly(),
+                [
+                    'expires' => $signatureCookie->getExpire(),
+                    'path' => "",
+                    'domain' => "",
+                    'secure' => $signatureCookie->isSecure(),
+                    'httponly' => $signatureCookie->isHttpOnly(),
+                    'samesite' => "none"
+                ],
             );
             // @codeCoverageIgnoreEnd
         }
